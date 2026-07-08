@@ -236,6 +236,9 @@
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
             const [showCountryDrop, setShowCountryDrop] = useState(false);
 
+            // Dynamic reactive session state setup
+            const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_current_phone') || '');
+
             // Authentication Fields
             const [phone, setPhone] = useState('');
             const [username, setUsername] = useState('');
@@ -298,28 +301,42 @@
                 return fullPhone.replace(/[^0-9]/g, "");
             };
 
-            // Restore login session from Firebase on boot
+            // Dynamic Firebase Listener Setup triggered on Session Setup / Reactivity
             useEffect(() => {
-                const localSession = localStorage.getItem('steven_win_current_phone');
-                if (localSession) {
-                    setIsLoading(true);
-                    db.ref('users/' + getSanitizedPath(localSession)).on('value', (snapshot) => {
-                        if (snapshot.exists()) {
-                            const userData = snapshot.val();
-                            setCurrentUser(userData);
-                            setBalance(userData.balance || 0.00);
-                            setDailyClaimed(userData.dailyClaimed || false); 
-                            setMyBets(userData.bets ? Object.values(userData.bets) : []);
-                            setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
-                            setWithdrawHistory(userData.withdrawals ? Object.values(userData.withdrawals) : []);
-                            setView('home');
-                        } else {
-                            localStorage.removeItem('steven_win_current_phone');
-                        }
-                        setIsLoading(false);
-                    });
+                if (!sessionPhone) {
+                    setCurrentUser(null);
+                    setBalance(0.00);
+                    setDailyClaimed(false);
+                    setMyBets([]);
+                    setDepositHistory([]);
+                    setWithdrawHistory([]);
+                    return;
                 }
-            }, []);
+
+                setIsLoading(true);
+                const sanitized = getSanitizedPath(sessionPhone);
+                const userRef = db.ref('users/' + sanitized);
+
+                const handleData = (snapshot) => {
+                    if (snapshot.exists()) {
+                        const userData = snapshot.val();
+                        setCurrentUser(userData);
+                        setBalance(userData.balance || 0.00);
+                        setDailyClaimed(userData.dailyClaimed || false);
+                        setMyBets(userData.bets ? Object.values(userData.bets) : []);
+                        setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
+                        setWithdrawHistory(userData.withdrawals ? Object.values(userData.withdrawals) : []);
+                        setView('home');
+                    } else {
+                        localStorage.removeItem('steven_win_current_phone');
+                        setSessionPhone('');
+                    }
+                    setIsLoading(false);
+                };
+
+                userRef.on('value', handleData);
+                return () => userRef.off('value', handleData);
+            }, [sessionPhone]);
 
             // Independent Live Game Clocks with custom Draw System
             useEffect(() => {
@@ -631,24 +648,22 @@
                                     setIsLoading(false);
                                     return;
                                 }
-                                setCurrentUser(userObj);
-                                setBalance(userObj.balance || 0.00);
-                                setDailyClaimed(userObj.dailyClaimed || false);
-                                setMyBets(userObj.bets ? Object.values(userObj.bets) : []);
-                                setDepositHistory(userObj.deposits ? Object.values(userObj.deposits) : []);
-                                setWithdrawHistory(userObj.withdrawals ? Object.values(userObj.withdrawals) : []);
                                 localStorage.setItem('steven_win_current_phone', fullPhone);
-                                setView('home');
+                                setSessionPhone(fullPhone); // Triggers dynamic listener natively
                                 showToast(`Welcome, ${userObj.username}`, 'success');
                             } else {
                                 showToast('Incorrect password entered', 'error');
+                                setIsLoading(false);
                             }
                         } else {
                             showToast('No account associated with this number', 'error');
+                            setIsLoading(false);
                         }
                     })
-                    .catch(() => showToast('Database sync failure', 'error'))
-                    .finally(() => setIsLoading(false));
+                    .catch(() => {
+                        showToast('Database sync failure', 'error');
+                        setIsLoading(false);
+                    });
             };
 
             const processDeposit = (e) => {
@@ -699,7 +714,7 @@
                 });
             };
 
-            // SECURE PROFESSIONAL WITHDRAW ENGINE
+            // SECURE PROFESSIONAL WITHDRAW ENGINE (DYNAMIC STATE CONTROL)
             const processWithdrawal = (e) => {
                 e.preventDefault();
                 const amt = parseFloat(withdrawAmount);
@@ -1280,7 +1295,7 @@
                         </div>
                     )}
 
-                    {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (FIXED STATE BINDINGS) */}
+                    {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (STATE FIXINGS COMPLETE) */}
                     {view === 'withdraw' && (
                         <div className="flex-1 flex flex-col bg-slate-50 justify-between">
                             <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
@@ -1315,7 +1330,7 @@
                                             <div>
                                                 <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1.5">Withdraw Amount (Min ৳100)</label>
                                                 <div className="grid grid-cols-4 gap-2">
-                                                    {['200', '500', '1000', '2000'].map(val => (
+                                                    {['100', '500', '1000', '5000'].map(val => (
                                                         <button 
                                                             type="button" 
                                                             key={val} 
@@ -1338,8 +1353,8 @@
                                             <div>
                                                 <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1">Select Wallet Mode</label>
                                                 <div className="grid grid-cols-2 gap-2">
-                                                    <button type="button" onClick={() => setWithdrawType('Personal')} className={`py-2 rounded-xl text-xs font-bold border ${withdrawType === 'Personal' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Personal</button>
-                                                    <button type="button" onClick={() => setWithdrawType('Agent')} className={`py-2 rounded-xl text-xs font-bold border ${withdrawType === 'Agent' ? 'bg-emerald-50 text-emerald-700 border-emerald-300' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Agent</button>
+                                                    <button type="button" onClick={() => setWithdrawType('Personal')} className={`py-2 rounded-xl text-xs font-bold border transition-all ${withdrawType === 'Personal' ? 'bg-[#e2136e]/10 text-[#e2136e] border-[#e2136e]' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Personal</button>
+                                                    <button type="button" onClick={() => setWithdrawType('Agent')} className={`py-2 rounded-xl text-xs font-bold border transition-all ${withdrawType === 'Agent' ? 'bg-[#e2136e] text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Agent</button>
                                                 </div>
                                             </div>
 
@@ -1489,16 +1504,16 @@
                                 <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                     <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                         {[
-                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
-                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
-                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
-                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                            { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' }
+                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
+                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
+                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
+                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
+                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
+                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                            { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' }
                                         ].map(ball => (
                                             <button 
                                                 key={ball.val} 
@@ -1655,15 +1670,15 @@
                             <Icon name="home" className="w-6 h-6" />
                             <span className="text-[10px] font-bold">Home</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
                             <Icon name="gift" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Activity</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
                             <Icon name="percent" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Promo</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Account</span>
                         </button>
