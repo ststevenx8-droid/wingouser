@@ -1,4 +1,10 @@
-  <!DOCTYPE html>
+Daily Check-in বোনাস দাবি করার অ্যামাউন্টটি পরিবর্তন করে ৳০.০০ (0.00) করে দেওয়া
+হয়েছে। বোনাস রিকোয়েস্ট সফলভাবে সাবমিট হবে এবং ডেটাবেজে ক্লেইমড হিসেবে রেজিস্টার
+হবে, তবে ব্যালেন্সে কোনো টাকা যোগ হবে না (৳০.০০ যোগ হবে)।
+
+সম্পূর্ণ কোডটি নিচে দেওয়া হলো:
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -176,7 +182,7 @@
             headphones: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
                     <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
                 </svg>
             ),
             refreshCw: (props) => (
@@ -306,7 +312,7 @@
                             const userData = snapshot.val();
                             setCurrentUser(userData);
                             setBalance(userData.balance || 0.00);
-                            setDailyClaimed(userData.dailyClaimed || false); // Sync Claim Limit state
+                            setDailyClaimed(userData.dailyClaimed || false); 
                             setMyBets(userData.bets ? Object.values(userData.bets) : []);
                             setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
                             setWithdrawHistory(userData.withdrawals ? Object.values(userData.withdrawals) : []);
@@ -574,7 +580,7 @@
                                 username: username,
                                 password: password,
                                 balance: 0.00,
-                                dailyClaimed: false, // Default false
+                                dailyClaimed: false, 
                                 deposits: [],
                                 withdrawals: [],
                                 bets: []
@@ -750,7 +756,7 @@
                 });
             };
 
-            // STRICT SINGLE TIME DAILY BONUS CLAIM SYSTEM
+            // STRICT SINGLE TIME DAILY BONUS CLAIM SYSTEM - SET TO ৳0.00 REWARD
             const handleDailyBonusClaim = () => {
                 if (dailyClaimed) {
                     showToast('Already Claimed! Bonus is restricted to once per user.', 'error');
@@ -761,7 +767,7 @@
                     return;
                 }
 
-                const nextBalance = balance + 10.00;
+                const nextBalance = balance + 0.00; // Updated to 0.00
                 setBalance(nextBalance);
                 setDailyClaimed(true);
 
@@ -770,7 +776,7 @@
                     balance: nextBalance,
                     dailyClaimed: true
                 }).then(() => {
-                    showToast('Claim Successful! ৳10.00 added to balance.', 'success');
+                    showToast('Claim Successful! ৳0.00 added to balance.', 'success');
                 });
             };
 
@@ -994,7 +1000,7 @@
                         </div>
                     )}
 
-                    {/* VIEW: HOME - ACTIVITY NAV (STRICT ONCE BONUS LIMIT CLAIMABLE) */}
+                    {/* VIEW: HOME - ACTIVITY NAV (STRICT ONCE BONUS LIMIT CLAIMABLE - SET TO ৳0.00 REWARD) */}
                     {view === 'home' && activeNav === 'activity' && (
                         <div className="flex-1 flex flex-col justify-start">
                             <div className="bg-white px-4 py-3 flex justify-between items-center border-b border-gray-100 shadow-sm">
@@ -1023,7 +1029,7 @@
                                     {dailyClaimed ? (
                                         <button disabled className="w-full py-2.5 bg-slate-200 text-slate-500 font-extrabold rounded-xl text-xs uppercase cursor-not-allowed border border-slate-300">Already Claimed Today</button>
                                     ) : (
-                                        <button onClick={handleDailyBonusClaim} className="w-full py-2.5 bg-gradient-to-r from-violet-600 to-[#8a2be2] hover:from-violet-500 text-white font-extrabold rounded-xl text-xs uppercase transition-all">Claim ৳10.00 Now</button>
+                                        <button onClick={handleDailyBonusClaim} className="w-full py-2.5 bg-gradient-to-r from-violet-600 to-[#8a2be2] hover:from-violet-500 text-white font-extrabold rounded-xl text-xs uppercase transition-all">Claim ৳0.00 Now</button>
                                     )}
                                 </div>
                             </div>
@@ -1487,16 +1493,16 @@
                                 <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                     <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                         {[
-                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
-                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
-                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' }
+                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' }
                                         ].map(ball => (
                                             <button 
                                                 key={ball.val} 
@@ -1653,15 +1659,15 @@
                             <Icon name="home" className="w-6 h-6" />
                             <span className="text-[10px] font-bold">Home</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="gift" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Activity</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="percent" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Promo</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Account</span>
                         </button>
