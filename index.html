@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +49,7 @@
 </head>
 <body class="flex justify-center items-center min-h-screen w-full">
 
-    <!-- Responsive Container: Fullscreen on mobile, centered card on large displays -->
+    <!-- Responsive Container -->
     <div id="app" class="relative w-full h-screen md:max-w-md bg-[#f5f6fa] shadow-2xl flex flex-col overflow-hidden transition-all duration-300">
         <div id="root" class="h-full w-full flex flex-col overflow-y-auto"></div>
     </div>
@@ -90,7 +88,6 @@
             { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' }
         ];
 
-        // Custom High-Performance SVG Icon Dictionary
         const Icons = {
             checkCircle: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -321,7 +318,7 @@
                     if (snapshot.exists()) {
                         const userData = snapshot.val();
                         setCurrentUser(userData);
-                        setBalance(userData.balance || 0.00);
+                        setBalance(Number(userData.balance || 0));
                         setDailyClaimed(userData.dailyClaimed || false);
                         setMyBets(userData.bets ? Object.values(userData.bets) : []);
                         setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
@@ -497,74 +494,18 @@
                 }
             };
 
-            const showToast = (message, type = 'success') => {
-                setToast({ show: true, message, type });
-                setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+            const generateReferralCode = () => {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let code = 'STX';
+                for (let i = 0; i < 4; i++) {
+                    code += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return code;
             };
 
-            // Premium Crown Logo (Vector Graphic)
-            const StevenXLogoVector = () => (
-                <div className="flex flex-col items-center">
-                    <svg viewBox="0 0 500 500" className="w-28 h-28 drop-shadow-[0_0_15px_rgba(138,43,226,0.6)]" xmlns="http://www.w3.org/2000/svg">
-                        <defs>
-                            <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#ba55d3"/>
-                                <stop offset="50%" stopColor="#8a2be2"/>
-                                <stop offset="100%" stopColor="#4b0082"/>
-                            </linearGradient>
-                            <linearGradient id="silverGloss" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="#ffffff"/>
-                                <stop offset="30%" stopColor="#b0c4de"/>
-                                <stop offset="70%" stopColor="#708090"/>
-                                <stop offset="100%" stopColor="#3a4f5f"/>
-                            </linearGradient>
-                        </defs>
-                        
-                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2">
-                            <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
-                            <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
-                            <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
-                            <path d="M 125 270 C 80 290, 50 260, 60 210 C 80 235, 105 250, 135 252 Z" />
-                        </g>
-
-                        <g transform="translate(500,0) scale(-1,1)" fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2">
-                            <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
-                            <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
-                            <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
-                            <path d="M 125 270 C 80 290, 50 260, 60 210 C 80 235, 105 250, 135 252 Z" />
-                        </g>
-
-                        <circle cx="250" cy="250" r="140" fill="#0d111b" stroke="url(#purpleGlow)" strokeWidth="8" />
-                        <circle cx="250" cy="250" r="130" fill="none" stroke="url(#silverGloss)" strokeWidth="3" />
-
-                        <path d="M 190 130 L 210 80 L 235 110 L 250 65 L 265 110 L 290 80 L 310 130 Z" fill="url(#silverGloss)" stroke="url(#purpleGlow)" strokeWidth="3" />
-                        <polygon points="242,100 250,85 258,100 250,115" fill="url(#purpleGlow)"/>
-
-                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="4">
-                            <path d="M 170 160 L 220 160 L 290 320 L 330 320 L 330 340 L 280 340 L 210 180 L 170 180 Z" />
-                            <path d="M 330 160 L 280 160 L 245 235 L 280 315 L 250 340 L 170 340 L 170 320 L 220 320 L 255 250 Z" />
-                        </g>
-                    </svg>
-                    <span className="text-3xl font-black bg-gradient-to-r from-white via-[#b0c4de] to-[#8a2be2] bg-clip-text text-transparent uppercase tracking-widest font-sans mt-2">STEVENX</span>
-                    <span className="text-[9px] font-extrabold text-indigo-400 tracking-[0.25em] uppercase mt-1">TRADE . WIN . GROW</span>
-                </div>
-            );
-
-            const BkashOfficialLogo = () => (
-                <svg viewBox="0 0 350 120" className="h-10 w-auto" xmlns="http://www.w3.org/2000/svg">
-                    <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
-                    <text x="65" y="90" fontFamily="'Poppins', sans-serif" fontWeight="600" fontSize="78" fill="#231f20">Kash</text>
-                    <g transform="translate(245, 10)">
-                        <polygon points="10,12 80,18 64,52" fill="#bc1055" />
-                        <polygon points="10,12 64,52 14,24" fill="#8e0a3f" />
-                        <polygon points="80,18 112,62 64,52" fill="#e2136e" />
-                        <polygon points="64,52 74,75 42,98" fill="#a00d4c" />
-                        <polygon points="64,52 74,75 125,58" fill="#ff248a" />
-                        <polygon points="80,18 132,44 112,62" fill="#f03e8c" />
-                        <polygon points="132,44 148,38 142,48" fill="#e2136e" />
-                    </g>
-                </svg>
-            );
+            const generateSTXId = () => {
+                return 'STX-ID-' + Math.floor(1000 + Math.random() * 9000);
+            };
 
             const handleSignupSubmit = (e) => {
                 e.preventDefault();
@@ -587,12 +528,16 @@
                             showToast('This phone number is already registered!', 'error');
                             setIsLoading(false);
                         } else {
+                            const referralCode = generateReferralCode();
+                            const stxId = generateSTXId();
                             const newUser = {
                                 phone: fullPhone,
                                 countryCode: selectedCountry.code,
                                 username: username,
                                 password: password,
                                 balance: 0.00,
+                                referralCode: referralCode,
+                                stxId: stxId,
                                 dailyClaimed: false, 
                                 deposits: [],
                                 withdrawals: [],
@@ -601,16 +546,26 @@
 
                             db.ref('users/' + sanitized).set(newUser)
                                 .then(() => {
+                                    // Save code mapping link for quick promo queries
+                                    db.ref('promo_codes/' + referralCode).set(sanitized);
+
+                                    // Referral Reward Process
                                     if (promoCode.trim()) {
-                                        const sanitizedPromo = getSanitizedPath(promoCode.trim());
-                                        db.ref('users/' + sanitizedPromo).once('value')
+                                        const promo = promoCode.trim().toUpperCase();
+                                        db.ref('promo_codes/' + promo).once('value')
                                             .then((promoSnapshot) => {
                                                 if (promoSnapshot.exists()) {
-                                                    const referrerObj = promoSnapshot.val();
-                                                    const updatedRefBal = parseFloat(referrerObj.balance || 0) + 1.00;
-                                                    db.ref('users/' + sanitizedPromo).update({
-                                                        balance: updatedRefBal
-                                                    });
+                                                    const referrerSanitizedPhone = promoSnapshot.val();
+                                                    db.ref('users/' + referrerSanitizedPhone).once('value')
+                                                        .then((refUserSnap) => {
+                                                            if (refUserSnap.exists()) {
+                                                                const referrerObj = refUserSnap.val();
+                                                                const updatedRefBal = Number(referrerObj.balance || 0) + 10.00;
+                                                                db.ref('users/' + referrerSanitizedPhone).update({
+                                                                    balance: updatedRefBal
+                                                                });
+                                                            }
+                                                        });
                                                 }
                                             });
                                     }
@@ -649,7 +604,7 @@
                                     return;
                                 }
                                 localStorage.setItem('steven_win_current_phone', fullPhone);
-                                setSessionPhone(fullPhone); // Triggers dynamic listener natively
+                                setSessionPhone(fullPhone); 
                                 showToast(`Welcome, ${userObj.username}`, 'success');
                             } else {
                                 showToast('Incorrect password entered', 'error');
@@ -714,7 +669,6 @@
                 });
             };
 
-            // SECURE PROFESSIONAL WITHDRAW ENGINE (DYNAMIC STATE CONTROL)
             const processWithdrawal = (e) => {
                 e.preventDefault();
                 const amt = parseFloat(withdrawAmount);
@@ -767,7 +721,6 @@
                 });
             };
 
-            // STRICT SINGLE TIME DAILY BONUS CLAIM SYSTEM - SET TO ৳0.00 REWARD
             const handleDailyBonusClaim = () => {
                 if (dailyClaimed) {
                     showToast('Already Claimed! Bonus is restricted to once per user.', 'error');
@@ -960,7 +913,7 @@
                                             <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Promo / Referral Code</label>
                                             <div className="relative">
                                                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="gift" className="w-4 h-4" /></span>
-                                                <input type="text" placeholder="e.g. +880186XXXXXXX" value={promoCode} onChange={e => setPromoCode(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono"/>
+                                                <input type="text" placeholder="e.g. STXWXYZ" value={promoCode} onChange={e => setPromoCode(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono uppercase"/>
                                             </div>
                                         </div>
                                     </>
@@ -1069,17 +1022,17 @@
                                         <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center text-emerald-600"><Icon name="percent" className="w-5 h-5" /></div>
                                         <div>
                                             <span className="font-bold text-slate-800 block text-xs">Referral System Active</span>
-                                            <span className="text-[10px] text-slate-400 block">Get ৳1.00 for every signup using your code</span>
+                                            <span className="text-[10px] text-slate-400 block">Get ৳10.00 for every signup using your code</span>
                                         </div>
                                     </div>
                                     <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/60 font-mono text-center">
                                         <span className="text-[10px] text-slate-500 block uppercase font-bold tracking-wider mb-0.5">Your Referral Code</span>
-                                        <span className="text-sm font-black text-slate-800">{currentUser ? currentUser.phone : 'Verify Account First'}</span>
+                                        <span className="text-sm font-black text-[#8a2be2] tracking-wider">{currentUser && currentUser.referralCode ? currentUser.referralCode : 'STX0000'}</span>
                                     </div>
                                     <button 
                                         onClick={() => {
-                                            if (!currentUser) return;
-                                            navigator.clipboard.writeText(currentUser.phone);
+                                            if (!currentUser || !currentUser.referralCode) return;
+                                            navigator.clipboard.writeText(currentUser.referralCode);
                                             showToast('Referral code copied to clipboard!', 'success');
                                         }} 
                                         disabled={!currentUser}
@@ -1105,11 +1058,18 @@
                                     </div>
 
                                     <h2 className="text-sm font-bold">{currentUser ? currentUser.username : 'Guest User'}</h2>
-                                    <p className="text-[9px] text-slate-400">{currentUser ? currentUser.phone : 'Not Verified'}</p>
+                                    <p className="text-[11px] text-slate-400 mt-0.5">Phone: {currentUser ? currentUser.phone : 'Not Verified'}</p>
+                                    
+                                    {/* STX ID DISPLAY */}
+                                    <div className="bg-[#8a2be2]/10 border border-[#8a2be2]/30 px-3 py-1 rounded-full mt-2">
+                                        <span className="text-[10px] text-indigo-300 font-extrabold font-mono tracking-widest">
+                                            {currentUser && currentUser.stxId ? currentUser.stxId : 'STX-ID-4321'}
+                                        </span>
+                                    </div>
 
                                     <div className="mt-4 bg-[#141b2d] border border-slate-800 text-white rounded-2xl py-3 px-6 w-full text-center shadow-sm">
                                         <span className="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Account Balance</span>
-                                        <span className="text-xl font-black text-[#fccd11]">৳{balance.toFixed(2)}</span>
+                                        <span className="text-xl font-black text-[#fccd11]">৳{Number(balance).toFixed(2)}</span>
                                     </div>
                                 </div>
 
@@ -1154,6 +1114,16 @@
                                         </div>
                                         <span className="text-[10px] text-sky-600 font-bold bg-sky-100/50 py-1 px-2 rounded-full">@Kaisarvai007</span>
                                     </a>
+
+                                    {/* DEVELOPER CREDIT SECTION */}
+                                    <div className="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-2xl text-center space-y-2">
+                                        <p className="text-[10px] text-slate-400 leading-relaxed font-sans uppercase font-bold tracking-wide">
+                                            THIS WEBSITE DEVELOPER IS BY SPEEDOX KK AND YOU MAKE WEBSITE IN LOW PRICE TO CONTACT TELEGRAM
+                                        </p>
+                                        <a href="https://t.me/kaisarvai007" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-1.5 bg-[#8a2be2] hover:bg-purple-700 text-white text-[11px] font-black rounded-lg uppercase tracking-widest transition-all">
+                                            @kaisarvai007
+                                        </a>
+                                    </div>
 
                                     <button onClick={handleLogout} className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 py-3 px-4 rounded-xl flex items-center justify-between border border-rose-100 transition-colors mt-6">
                                         <span className="text-xs font-bold">Sign Out from Device</span>
@@ -1273,7 +1243,7 @@
                                             depositHistory.map(item => (
                                                 <div key={item.id} className="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-xs font-black text-[#e2136e]">৳{item.amount.toFixed(2)}</span>
+                                                        <span className="text-xs font-black text-[#e2136e]">৳{Number(item.amount).toFixed(2)}</span>
                                                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                             item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
                                                             item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
@@ -1295,7 +1265,7 @@
                         </div>
                     )}
 
-                    {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (STATE FIXINGS COMPLETE) */}
+                    {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN */}
                     {view === 'withdraw' && (
                         <div className="flex-1 flex flex-col bg-slate-50 justify-between">
                             <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
@@ -1322,7 +1292,7 @@
                                             </div>
                                             <div className="flex justify-between text-xs pt-1">
                                                 <span className="text-slate-500 font-bold">Withdrawable Balance:</span>
-                                                <span className="font-black text-emerald-600">৳{balance.toFixed(2)}</span>
+                                                <span className="font-black text-emerald-600">৳{Number(balance).toFixed(2)}</span>
                                             </div>
                                         </div>
 
@@ -1354,7 +1324,7 @@
                                                 <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1">Select Wallet Mode</label>
                                                 <div className="grid grid-cols-2 gap-2">
                                                     <button type="button" onClick={() => setWithdrawType('Personal')} className={`py-2 rounded-xl text-xs font-bold border transition-all ${withdrawType === 'Personal' ? 'bg-[#e2136e]/10 text-[#e2136e] border-[#e2136e]' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Personal</button>
-                                                    <button type="button" onClick={() => setWithdrawType('Agent')} className={`py-2 rounded-xl text-xs font-bold border transition-all ${withdrawType === 'Agent' ? 'bg-[#e2136e] text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Agent</button>
+                                                    <button type="button" onClick={() => setWithdrawType('Agent')} className={`py-2 rounded-xl text-xs font-bold border transition-all ${withdrawType === 'Agent' ? 'bg-[#e2136e]/10 text-[#e2136e] border-[#e2136e]' : 'bg-white border-slate-200 text-slate-600'}`}>bKash Agent</button>
                                                 </div>
                                             </div>
 
@@ -1390,7 +1360,7 @@
                                             withdrawHistory.map(item => (
                                                 <div key={item.id} className="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-xs font-black text-emerald-600">৳{item.amount.toFixed(2)}</span>
+                                                        <span className="text-xs font-black text-emerald-600">৳{Number(item.amount).toFixed(2)}</span>
                                                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                             item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
                                                             item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
@@ -1457,7 +1427,7 @@
                                 <div className="bg-gradient-to-r from-violet-700 to-indigo-950 text-white rounded-2xl p-4 shadow-sm flex justify-between items-center border border-indigo-900/40">
                                     <div>
                                         <span className="text-[9px] text-slate-300 uppercase tracking-wider block">SX Wallet Balance</span>
-                                        <span className="text-xl font-black text-secondary">৳{balance.toFixed(2)}</span>
+                                        <span className="text-xl font-black text-secondary">৳{Number(balance).toFixed(2)}</span>
                                     </div>
                                     <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
                                 </div>
@@ -1504,15 +1474,15 @@
                                 <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                     <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                         {[
-                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
-                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
-                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
                                             { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' }
                                         ].map(ball => (
                                             <button 
@@ -1670,15 +1640,15 @@
                             <Icon name="home" className="w-6 h-6" />
                             <span className="text-[10px] font-bold">Home</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="gift" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Activity</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="percent" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Promo</span>
                         </button>
-                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                        <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Account</span>
                         </button>
