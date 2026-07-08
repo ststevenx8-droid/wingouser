@@ -275,6 +275,7 @@
             const [betValue, setBetValue] = useState(null);
             const [multiplier, setMultiplier] = useState(1);
             const [selectedUnit, setSelectedUnit] = useState(10);
+            const [customBetInput, setCustomBetInput] = useState(''); // Custom Bet input state
             const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
             const [gameSubTab, setGameSubTab] = useState('history');
             const [myBets, setMyBets] = useState([]);
@@ -683,6 +684,10 @@
 
             const confirmBetPlacement = () => {
                 const totalCost = selectedUnit * multiplier;
+                if (totalCost <= 0) {
+                    showToast('Please enter a valid bet amount!', 'error');
+                    return;
+                }
                 if (totalCost > balance) {
                     showToast('Insufficient balance!', 'error');
                     setIsBetSheetOpen(false);
@@ -754,6 +759,9 @@
                     return;
                 }
                 setBetValue(selection);
+                setSelectedUnit(10);
+                setMultiplier(1);
+                setCustomBetInput(''); // Reset custom input field
                 setIsBetSheetOpen(true);
             };
 
@@ -889,10 +897,10 @@
                                 {/* Clickable Wingo Game Launch Button */}
                                 <div onClick={() => setView('game')} className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-all">
                                     <div className="flex items-center space-x-3.5">
-                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-[#8a2be2] flex items-center justify-center text-white font-black shadow-sm border border-violet-400 text-lg">SX</div>
+                                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-[#8a2be2] flex items-center justify-center text-white font-extrabold shadow-sm border border-violet-400 text-lg">SX</div>
                                         <div>
-                                            <span className="font-extrabold text-slate-800 font-sans block text-sm">Wingo Game Mode</span>
-                                            <span className="text-[10px] bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-full font-bold">30s / 1m / 2m Live Rounds</span>
+                                            <span className="font-bold text-gray-800 font-sans block text-sm">Wingo Game Mode</span>
+                                            <span className="text-[10px] bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-full font-bold">30s / 1m / 2m Live</span>
                                         </div>
                                     </div>
                                     <div className="flex items-center space-x-1.5">
@@ -1254,7 +1262,7 @@
                     {/* DYNAMIC BET PLACEMENT POPUP SHEET */}
                     {isBetSheetOpen && (
                         <div className="absolute inset-0 bg-slate-900/60 z-50 flex flex-col justify-end">
-                            <div className="bg-white rounded-t-[2rem] p-5 space-y-4">
+                            <div className="bg-white rounded-t-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto">
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-xs font-bold text-slate-800">Confirm Bet Details</h3>
                                     <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
@@ -1272,15 +1280,43 @@
                                 </div>
 
                                 <div className="space-y-2">
-                                    <span className="text-[10px] font-bold text-slate-400 block">Set Unit Multiplier (Quantity):</span>
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex space-x-1">
-                                            {[10, 50, 100].map(val => (
-                                                <button key={val} onClick={() => setSelectedUnit(val)} className={`px-3 py-1.5 rounded-lg border text-xs font-bold ${selectedUnit === val ? 'bg-primary text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}>
-                                                    ৳{val}
-                                                </button>
-                                            ))}
-                                        </div>
+                                    <span className="text-[10px] font-bold text-slate-400 block">Select Preset Bet Amount:</span>
+                                    <div className="flex flex-wrap gap-1.5">
+                                        {[10, 50, 100, 500, 1000, 5000].map(val => (
+                                            <button 
+                                                key={val} 
+                                                onClick={() => { setSelectedUnit(val); setCustomBetInput(''); }} 
+                                                className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${selectedUnit === val && !customBetInput ? 'bg-primary text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}
+                                            >
+                                                ৳{val}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Manual Balance Input box */}
+                                    <div className="mt-2.5">
+                                        <span className="text-[10px] font-bold text-slate-400 block mb-1">Or Enter Custom Amount (৳):</span>
+                                        <input 
+                                            type="number" 
+                                            min="1"
+                                            placeholder="e.g. 250" 
+                                            value={customBetInput} 
+                                            onChange={e => {
+                                                const val = e.target.value;
+                                                setCustomBetInput(val);
+                                                if (val && parseFloat(val) > 0) {
+                                                    setSelectedUnit(parseFloat(val));
+                                                } else {
+                                                    setSelectedUnit(0);
+                                                }
+                                            }} 
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold text-slate-800 focus:outline-none"
+                                        />
+                                    </div>
+
+                                    {/* Multiplier Adjustment */}
+                                    <div className="flex items-center justify-between pt-1">
+                                        <span className="text-[10px] font-bold text-slate-400">Set Multiplier (Qty):</span>
                                         <div className="flex items-center space-x-2">
                                             <button onClick={() => setMultiplier(prev => Math.max(1, prev - 1))} className="w-7 h-7 rounded bg-slate-100 text-slate-600 font-bold">-</button>
                                             <span className="font-bold text-xs">{multiplier}</span>
@@ -1289,7 +1325,7 @@
                                     </div>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-2">
+                                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block">Total cost:</span>
                                         <span className="text-xl font-black text-emerald-600">৳{(selectedUnit * multiplier).toFixed(2)}</span>
