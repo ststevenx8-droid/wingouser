@@ -32,9 +32,6 @@
         }
     </script>
     
-    <!-- Lucide Icons CDN -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -90,6 +87,139 @@
             { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
             { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' }
         ];
+
+        // Custom High-Performance SVG Icon Dictionary
+        const Icons = {
+            checkCircle: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+            ),
+            user: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                </svg>
+            ),
+            chevronDown: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polyline points="6 9 12 15 18 9" />
+                </svg>
+            ),
+            lock: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+            ),
+            shieldCheck: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                </svg>
+            ),
+            gift: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polyline points="20 12 20 22 4 22 4 12" />
+                    <rect x="2" y="7" width="20" height="5" />
+                    <line x1="12" y1="22" x2="12" y2="7" />
+                    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+                    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+                </svg>
+            ),
+            download: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+            ),
+            smile: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                    <line x1="9" y1="9" x2="9.01" y2="9" />
+                    <line x1="15" y1="9" x2="15.01" y2="9" />
+                </svg>
+            ),
+            chevronLeft: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            ),
+            chevronRight: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polyline points="9 18 15 12 9 6" />
+                </svg>
+            ),
+            wallet: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" />
+                </svg>
+            ),
+            receipt: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1Z" />
+                    <path d="M16 8H8" />
+                    <path d="M16 12H8" />
+                    <path d="M13 16H8" />
+                </svg>
+            ),
+            logOut: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                    <polyline points="16 17 21 12 16 7" />
+                    <line x1="21" y1="12" x2="9" y2="12" />
+                </svg>
+            ),
+            headphones: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
+                </svg>
+            ),
+            refreshCw: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polyline points="23 4 23 10 17 10" />
+                    <polyline points="1 20 1 14 7 14" />
+                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                </svg>
+            ),
+            info: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="16" x2="12" y2="12" />
+                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+            ),
+            x: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            ),
+            home: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+            ),
+            percent: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <line x1="19" y1="5" x2="5" y2="19" />
+                    <circle cx="6.5" cy="6.5" r="2.5" />
+                    <circle cx="17.5" cy="17.5" r="2.5" />
+                </svg>
+            )
+        };
+
+        const Icon = ({ name, className = "w-4 h-4", ...props }) => {
+            const formattedName = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+            const IconComponent = Icons[formattedName];
+            if (!IconComponent) return null;
+            return <IconComponent className={className} {...props} />;
+        };
 
         function App() {
             const [view, setView] = useState('auth'); 
@@ -154,7 +284,7 @@
                 return fullPhone.replace(/[^0-9]/g, "");
             };
 
-            // Restore login session from Firebase dynamically on boot
+            // Restore login session from Firebase on boot
             useEffect(() => {
                 const localSession = localStorage.getItem('steven_win_current_phone');
                 if (localSession) {
@@ -175,7 +305,7 @@
                 }
             }, []);
 
-            // Independent Live Game Clocks with built-in 99% Loss Logic
+            // Independent Live Game Clocks with custom Draw System
             useEffect(() => {
                 const clockInterval = setInterval(() => {
                     setTimer30s(prev => {
@@ -206,7 +336,7 @@
                 return () => clearInterval(clockInterval);
             }, [period30s, period1m, period2m, myBets, currentUser, balance]);
 
-            // DYNAMIC PLAYER OPPOSITION DRAWER (ADVANCED 99% DEFEAT SYSTEM)
+            // Player Opposition Drawer (99% Defeat System)
             const determineOutcomeWithLossParameters = (mode, currentPeriod) => {
                 const activeBets = myBets.filter(b => b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -214,10 +344,9 @@
                     return Math.floor(Math.random() * 10);
                 }
 
-                // Roll a 100-sided percentage selector
                 const controlRoll = Math.random() * 100;
 
-                // 99% Defeat enforcement parameter active
+                // Defeat enforcement parameter
                 if (controlRoll <= 99) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
@@ -251,7 +380,6 @@
                     }
                 }
 
-                // 1% standard deviation roll
                 return Math.floor(Math.random() * 10);
             };
 
@@ -261,7 +389,6 @@
                 else if (mode === '1min') currentPeriod = period1m;
                 else currentPeriod = period2m;
 
-                // Calculate outcome with active 99% defeat parameters
                 const drawNumber = determineOutcomeWithLossParameters(mode, currentPeriod);
 
                 let drawColor = '';
@@ -344,7 +471,7 @@
                 setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
             };
 
-            // PREMIUM STEVENX WINGED CROWN LOGO (VECTOR GRAPHIC)
+            // Premium Crown Logo (Vector Graphic)
             const StevenXLogoVector = () => (
                 <div className="flex flex-col items-center">
                     <svg viewBox="0 0 500 500" className="w-28 h-28 drop-shadow-[0_0_15px_rgba(138,43,226,0.6)]" xmlns="http://www.w3.org/2000/svg">
@@ -382,20 +509,20 @@
                         <path d="M 190 130 L 210 80 L 235 110 L 250 65 L 265 110 L 290 80 L 310 130 Z" fill="url(#silverGloss)" stroke="url(#purpleGlow)" strokeWidth="3" />
                         <polygon points="242,100 250,85 258,100 250,115" fill="url(#purpleGlow)"/>
 
-                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" stroke-width="4">
+                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="4">
                             <path d="M 170 160 L 220 160 L 290 320 L 330 320 L 330 340 L 280 340 L 210 180 L 170 180 Z" />
                             <path d="M 330 160 L 280 160 L 245 235 L 280 315 L 250 340 L 170 340 L 170 320 L 220 320 L 255 250 Z" />
                         </g>
                     </svg>
-                    <span class="text-3xl font-black bg-gradient-to-r from-white via-[#b0c4de] to-[#8a2be2] bg-clip-text text-transparent uppercase tracking-widest font-sans mt-2">STEVENX</span>
-                    <span class="text-[9px] font-extrabold text-indigo-400 tracking-[0.25em] uppercase mt-1">TRADE . WIN . GROW</span>
+                    <span className="text-3xl font-black bg-gradient-to-r from-white via-[#b0c4de] to-[#8a2be2] bg-clip-text text-transparent uppercase tracking-widest font-sans mt-2">STEVENX</span>
+                    <span className="text-[9px] font-extrabold text-indigo-400 tracking-[0.25em] uppercase mt-1">TRADE . WIN . GROW</span>
                 </div>
             );
 
             const BkashOfficialLogo = () => (
                 <svg viewBox="0 0 350 120" className="h-10 w-auto" xmlns="http://www.w3.org/2000/svg">
-                    <text x="10" y="90" font-family="'Poppins', sans-serif" font-weight="800" font-size="88" fill="#e2136e">b</text>
-                    <text x="65" y="90" font-family="'Poppins', sans-serif" font-weight="600" font-size="78" fill="#231f20">Kash</text>
+                    <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
+                    <text x="65" y="90" fontFamily="'Poppins', sans-serif" fontWeight="600" fontSize="78" fill="#231f20">Kash</text>
                     <g transform="translate(245, 10)">
                         <polygon points="10,12 80,18 64,52" fill="#bc1055" />
                         <polygon points="10,12 64,52 14,24" fill="#8e0a3f" />
@@ -644,7 +771,7 @@
                     {/* Toast Notification overlay */}
                     {toast.show && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold flex items-center space-x-2 bg-slate-900 text-white border-slate-700 animate-bounce">
-                            <i data-lucide="check-circle" className="w-4 h-4 text-secondary"></i>
+                            <Icon name="check-circle" className="w-4 h-4 text-secondary" />
                             <span>{toast.message}</span>
                         </div>
                     )}
@@ -666,7 +793,7 @@
                                     <div>
                                         <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Nickname</label>
                                         <div className="relative">
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="user" className="w-4 h-4"></i></span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="user" className="w-4 h-4" /></span>
                                             <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                         </div>
                                     </div>
@@ -682,7 +809,7 @@
                                         >
                                             <span>{selectedCountry.flag}</span>
                                             <span>{selectedCountry.code}</span>
-                                            <i data-lucide="chevron-down" className="w-3.5 h-3.5"></i>
+                                            <Icon name="chevron-down" className="w-3.5 h-3.5" />
                                         </button>
                                         <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} className="flex-1 bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
 
@@ -707,7 +834,7 @@
                                 <div>
                                     <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Password</label>
                                     <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="lock" className="w-4 h-4"></i></span>
+                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="lock" className="w-4 h-4" /></span>
                                         <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                     </div>
                                 </div>
@@ -716,8 +843,8 @@
                                     <>
                                         <div>
                                             <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Confirm Password</label>
-                                            <div class="relative">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="shield-check" className="w-4 h-4"></i></span>
+                                            <div className="relative">
+                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="shield-check" className="w-4 h-4" /></span>
                                                 <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                             </div>
                                         </div>
@@ -725,7 +852,7 @@
                                         <div>
                                             <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Promo / Referral Code</label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="gift" className="w-4 h-4"></i></span>
+                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="gift" className="w-4 h-4" /></span>
                                                 <input type="text" placeholder="e.g. +880186XXXXXXX" value={promoCode} onChange={e => setPromoCode(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono"/>
                                             </div>
                                         </div>
@@ -745,13 +872,13 @@
                             <div className="bg-white px-4 py-3 flex justify-between items-center border-b border-gray-100 shadow-sm">
                                 <h1 className="text-xl font-black text-[#8a2be2] tracking-widest font-sans flex items-center">
                                     <div className="w-7 h-7 bg-slate-950 rounded-lg flex items-center justify-center border border-[#8a2be2] mr-2">
-                                        <span class="text-base font-extrabold text-[#fccd11]">S</span>
+                                        <span className="text-base font-extrabold text-[#fccd11]">S</span>
                                     </div>
                                     STEVENX
                                 </h1>
                                 <div className="flex space-x-3 text-slate-700 items-center">
-                                    <button className="hover:text-[#8a2be2]"><i data-lucide="download" className="w-5 h-5 stroke-[2.5]"></i></button>
-                                    <button className="hover:text-[#8a2be2]"><i data-lucide="smile" className="w-5 h-5 stroke-[2.5]"></i></button>
+                                    <button className="hover:text-[#8a2be2]"><Icon name="download" className="w-5 h-5" /></button>
+                                    <button className="hover:text-[#8a2be2]"><Icon name="smile" className="w-5 h-5" /></button>
                                 </div>
                             </div>
 
@@ -763,8 +890,8 @@
                                         <span className="text-[10px] bg-gray-100 text-slate-500 px-3 py-1 rounded-full font-bold">ALL 3</span>
                                     </div>
                                     <div className="flex space-x-1">
-                                        <button className="w-8 h-8 rounded-lg bg-violet-50 text-[#8a2be2] flex items-center justify-center"><i data-lucide="chevron-left" className="w-5 h-5 stroke-[3]"></i></button>
-                                        <button className="w-8 h-8 rounded-lg bg-secondary text-slate-900 flex items-center justify-center"><i data-lucide="chevron-right" className="w-5 h-5 stroke-[3]"></i></button>
+                                        <button className="w-8 h-8 rounded-lg bg-violet-50 text-[#8a2be2] flex items-center justify-center"><Icon name="chevron-left" className="w-5 h-5" /></button>
+                                        <button className="w-8 h-8 rounded-lg bg-secondary text-slate-900 flex items-center justify-center"><Icon name="chevron-right" className="w-5 h-5" /></button>
                                     </div>
                                 </div>
 
@@ -812,7 +939,7 @@
                             <div className="p-4 space-y-3 flex-1">
                                 <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                     <div className="flex items-center space-x-3">
-                                        <i data-lucide="wallet" className="w-5 h-5 text-[#8a2be2]"></i>
+                                        <Icon name="wallet" className="w-5 h-5 text-[#8a2be2]" />
                                         <span className="text-xs font-bold text-slate-800 font-sans">bKash Fast Deposit</span>
                                     </div>
                                     <span className="text-[9px] bg-rose-50 text-rose-600 py-1 px-2.5 rounded-full font-bold">Add BDT</span>
@@ -820,7 +947,7 @@
 
                                 <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                     <div className="flex items-center space-x-3">
-                                        <i data-lucide="receipt" className="w-5 h-5 text-indigo-500"></i>
+                                        <Icon name="receipt" className="w-5 h-5 text-indigo-500" />
                                         <span className="text-xs font-bold text-slate-800 font-sans">My Deposits History</span>
                                     </div>
                                     <span className="text-[9px] bg-slate-100 text-slate-700 py-1 px-2.5 rounded-full font-bold">Details</span>
@@ -828,7 +955,7 @@
 
                                 <button onClick={handleLogout} className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 py-3 px-4 rounded-xl flex items-center justify-between border border-rose-100 transition-colors mt-6">
                                     <span className="text-xs font-bold">Sign Out from Device</span>
-                                    <i data-lucide="log-out" className="w-4 h-4"></i>
+                                    <Icon name="log-out" className="w-4 h-4" />
                                 </button>
                             </div>
                             {renderSharedNav()}
@@ -841,7 +968,7 @@
                             <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
                                 <div className="flex items-center">
                                     <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
-                                        <i data-lucide="chevron-left" className="w-6 h-6"></i>
+                                        <Icon name="chevron-left" className="w-6 h-6" />
                                     </button>
                                     <h1 className="text-sm font-bold text-slate-800">bKash Deposit Portal</h1>
                                 </div>
@@ -862,7 +989,7 @@
                                             </div>
                                             
                                             <div className="p-3 bg-rose-50/50 rounded-xl border border-rose-100 space-y-2">
-                                                <div class="flex items-center justify-between">
+                                                <div className="flex items-center justify-between">
                                                     <div>
                                                         <span className="text-[10px] text-slate-500 block">bKash SendMoney Agent:</span>
                                                         <span className="text-sm font-black text-slate-800 font-mono">01860909272</span>
@@ -937,7 +1064,7 @@
                                         <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">My Historical Deposits</h3>
                                         {depositHistory.length === 0 ? (
                                             <div className="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
-                                                <i data-lucide="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
+                                                <Icon name="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2" />
                                                 <span>No historical deposit receipts found.</span>
                                             </div>
                                         ) : (
@@ -971,7 +1098,7 @@
                         <div className="flex-1 flex flex-col bg-slate-50 justify-between">
                             <div className="bg-[#fccd11] px-4 py-3 flex items-center justify-between shadow-md">
                                 <button onClick={() => setView('home')} className="text-slate-900 hover:text-black">
-                                    <i data-lucide="chevron-left" className="w-8 h-8 stroke-[3]"></i>
+                                    <Icon name="chevron-left" className="w-8 h-8" />
                                 </button>
                                 
                                 <div className="flex flex-col items-center">
@@ -982,8 +1109,8 @@
                                 </div>
 
                                 <div className="flex space-x-3 text-slate-900">
-                                    <button><i data-lucide="headphones" className="w-5 h-5"></i></button>
-                                    <button><i data-lucide="refresh-cw" className="w-5 h-5"></i></button>
+                                    <button><Icon name="headphones" className="w-5 h-5" /></button>
+                                    <button><Icon name="refresh-cw" className="w-5 h-5" /></button>
                                 </div>
                             </div>
 
@@ -1034,11 +1161,11 @@
                                             <span className="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
                                         </div>
 
-                                        <div class="text-right">
+                                        <div className="text-right">
                                             <span className="text-[9px] font-bold block text-slate-700">Time remaining</span>
                                             <div className="flex justify-end space-x-1 mt-1 font-mono">
                                                 {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                    <span key={index} className={`px-1.5 bg-slate-950 text-yellow-400 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : ''}`}>
+                                                    <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
                                                         {char}
                                                     </span>
                                                 ))}
@@ -1053,7 +1180,7 @@
                                     <button onClick={() => openBetConfirmation('red')} className="bg-gameRed text-white py-3 rounded-xl font-bold text-xs">Red</button>
                                 </div>
 
-                                {/* PREMIUM GLOSSY COLOURED BALLS SELECTION PANEL (MATCHES UPLOADED DESIGN IMAGE ACCURATELY) */}
+                                {/* PREMIUM GLOSSY COLOURED BALLS SELECTION PANEL */}
                                 <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                     <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                         {[
@@ -1107,7 +1234,7 @@
                                             <div className="space-y-2 text-[10px]">
                                                 {myBets.filter(b => b.mode === activeGameTab).length === 0 ? (
                                                     <div className="text-center py-8 text-slate-400">
-                                                        <i data-lucide="info" className="w-6 h-6 mx-auto mb-1 opacity-50"></i>
+                                                        <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
                                                         <span>No bets logged in this mode yet.</span>
                                                     </div>
                                                 ) : (
@@ -1141,7 +1268,7 @@
                             <div className="bg-white rounded-t-[2rem] p-5 space-y-4">
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-xs font-bold text-slate-800">Confirm Bet Details</h3>
-                                    <button onClick={() => setIsBetSheetOpen(false)}><i data-lucide="x" className="w-5 h-5 text-slate-400"></i></button>
+                                    <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
                                 </div>
 
                                 <div className="p-3 bg-slate-50 rounded-xl flex justify-between text-xs">
@@ -1191,22 +1318,22 @@
                 return (
                     <div className="bg-white border-t border-gray-200 py-2.5 px-4 flex justify-between items-center relative z-20">
                         <button onClick={() => { setView('home'); setActiveNav('home'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'home' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
-                            <i data-lucide="home" className="w-6 h-6"></i>
+                            <Icon name="home" className="w-6 h-6" />
                             <span className="text-[10px] font-bold">Home</span>
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('activity'); }} className="flex flex-col items-center space-y-1 text-slate-400">
-                            <i data-lucide="gift" className="w-6 h-6"></i>
+                            <Icon name="gift" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Activity</span>
                         </button>
                         
                         <div className="w-16"></div>
 
                         <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className="flex flex-col items-center space-y-1 text-slate-400">
-                            <i data-lucide="percent" className="w-6 h-6"></i>
+                            <Icon name="percent" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Promo</span>
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
-                            <i data-lucide="user" className="w-6 h-6"></i>
+                            <Icon name="user" className="w-6 h-6" />
                             <span className="text-[10px] font-medium">Account</span>
                         </button>
                     </div>
@@ -1225,14 +1352,6 @@
         const container = document.getElementById('root');
         const root = ReactDOM.createRoot(container);
         root.render(<App />);
-
-        setInterval(() => {
-            if (typeof lucide !== 'undefined') {
-                try {
-                    lucide.createIcons();
-                } catch (e) {}
-            }
-        }, 1000);
     </script>
 </body>
 </html>
