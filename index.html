@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEVEN WIN - Premium Gaming Platform</title>
+    
+    <!-- Firebase SDK (Compat Version) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0c7a3d',
+                        secondary: '#fccd11',
+                        darkGreen: '#064e26',
+                        goldHover: '#e0b50f',
+                        gameGreen: '#18b660',
+                        gameRed: '#f34242',
+                        gameViolet: '#9c27b0',
+                        bkashPink: '#e2136e',
+                        bkashBlack: '#231f20',
+                        stevenXPurple: '#8a2be2'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0b0f19;
+            user-select: none;
+        }
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center min-h-screen">
+
+    <!-- Mobile Device Frame Container -->
+    <div id="app" class="relative w-full max-w-md h-[920px] bg-[#f5f6fa] rounded-3xl shadow-2xl overflow-hidden border-8 border-slate-800 flex flex-col">
+        <div id="root" class="h-full w-full flex flex-col overflow-y-auto"></div>
+    </div>
+
+    <!-- React and Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Firebase Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBchtm5yS1ZuW1b-5DWAIncTysOv09bYX0",
+            authDomain: "stevenx-4ef00.firebaseapp.com",
+            databaseURL: "https://stevenx-4ef00-default-rtdb.firebaseio.com",
+            projectId: "stevenx-4ef00",
+            storageBucket: "stevenx-4ef00.firebasestorage.app"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        const COUNTRIES = [
+            { code: '+880', name: 'Bangladesh', flag: '🇧🇩' },
+            { code: '+63', name: 'Philippines', flag: '🇵🇭' },
+            { code: '+91', name: 'India', flag: '🇮🇳' },
+            { code: '+92', name: 'Pakistan', flag: '🇵🇰' },
+            { code: '+60', name: 'Malaysia', flag: '🇲🇾' },
+            { code: '+971', name: 'UAE', flag: '🇦🇪' },
+            { code: '+1', name: 'United States', flag: '🇺🇸' },
+            { code: '+44', name: 'United Kingdom', flag: '🇬🇧' },
+            { code: '+966', name: 'Saudi Arabia', flag: '🇸🇦' }
+        ];
+
+        function App() {
+            const [view, setView] = useState('auth'); 
+            const [authTab, setAuthTab] = useState('login'); 
+            const [currentUser, setCurrentUser] = useState(null);
+            const [activeNav, setActiveNav] = useState('home'); 
+            const [balance, setBalance] = useState(0.00); 
+            const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+            const [isLoading, setIsLoading] = useState(false);
+            const [adminMode, setAdminMode] = useState(false); 
+            const [adminClickCount, setAdminClickCount] = useState(0); 
+
+            // Country Selector States
+            const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+            const [showCountryDrop, setShowCountryDrop] = useState(false);
+
+            // Authentication Fields
+            const [phone, setPhone] = useState('');
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [promoCode, setPromoCode] = useState('');
+
+            // Deposit Form States
+            const [depositAmount, setDepositAmount] = useState('500');
+            const [senderNumber, setSenderNumber] = useState('');
+            const [transactionId, setTransactionId] = useState('');
+            const [isDepositing, setIsDepositing] = useState(false);
+            const [depositTab, setDepositTab] = useState('new'); 
+
+            // Active Game View State
+            const [activeGameTab, setActiveGameTab] = useState('30sec'); 
+
+            // Timers & Periods
+            const [timer30s, setTimer30s] = useState(30);
+            const [timer1m, setTimer1m] = useState(60);
+            const [timer2m, setTimer2m] = useState(120);
+
+            const [period30s, setPeriod30s] = useState('20260708100051482');
+            const [period1m, setPeriod1m] = useState('20260708200031105');
+            const [period2m, setPeriod2m] = useState('20260708300021105');
+
+            const [drawHistory30s, setDrawHistory30s] = useState([
+                { period: '20260708100051481', number: 2, size: 'Small', color: 'red' },
+                { period: '20260708100051480', number: 5, size: 'Big', color: 'violet-green' }
+            ]);
+            const [drawHistory1m, setDrawHistory1m] = useState([
+                { period: '20260708200031104', number: 7, size: 'Big', color: 'green' }
+            ]);
+            const [drawHistory2m, setDrawHistory2m] = useState([
+                { period: '20260708300021104', number: 9, size: 'Big', color: 'green' }
+            ]);
+
+            // Betting Board States
+            const [betValue, setBetValue] = useState(null);
+            const [multiplier, setMultiplier] = useState(1);
+            const [selectedUnit, setSelectedUnit] = useState(10);
+            const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
+            const [gameSubTab, setGameSubTab] = useState('history');
+            const [myBets, setMyBets] = useState([]);
+            const [depositHistory, setDepositHistory] = useState([]);
+            const [globalPendingDeposits, setGlobalPendingDeposits] = useState([]); 
+
+            const getSanitizedPath = (fullPhone) => {
+                return fullPhone.replace(/[^0-9]/g, "");
+            };
+
+            // Persistent Session Restore
+            useEffect(() => {
+                const localSession = localStorage.getItem('steven_win_current_phone');
+                if (localSession) {
+                    setIsLoading(true);
+                    db.ref('users/' + getSanitizedPath(localSession)).on('value', (snapshot) => {
+                        if (snapshot.exists()) {
+                            const userData = snapshot.val();
+                            setCurrentUser(userData);
+                            setBalance(userData.balance || 0.00);
+                            setMyBets(userData.bets ? Object.values(userData.bets) : []);
+                            setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
+                            setView('home');
+                        } else {
+                            localStorage.removeItem('steven_win_current_phone');
+                        }
+                        setIsLoading(false);
+                    });
+                }
+            }, []);
+
+            // Admin Listener
+            useEffect(() => {
+                if (currentUser) {
+                    const pendingRef = db.ref('global_deposits').orderByChild('status').equalTo('Pending');
+                    pendingRef.on('value', (snapshot) => {
+                        if (snapshot.exists()) {
+                            setGlobalPendingDeposits(Object.values(snapshot.val()));
+                        } else {
+                            setGlobalPendingDeposits([]);
+                        }
+                    });
+                    return () => pendingRef.off();
+                }
+            }, [currentUser]);
+
+            // Live Game Clocks
+            useEffect(() => {
+                const clockInterval = setInterval(() => {
+                    setTimer30s(prev => {
+                        if (prev <= 1) {
+                            handleModeDraw('30sec');
+                            return 30;
+                        }
+                        return prev - 1;
+                    });
+
+                    setTimer1m(prev => {
+                        if (prev <= 1) {
+                            handleModeDraw('1min');
+                            return 60;
+                        }
+                        return prev - 1;
+                    });
+
+                    setTimer2m(prev => {
+                        if (prev <= 1) {
+                            handleModeDraw('2min');
+                            return 120;
+                        }
+                        return prev - 1;
+                    });
+                }, 1000);
+
+                return () => clearInterval(clockInterval);
+            }, [period30s, period1m, period2m, myBets, currentUser, balance]);
+
+            const handleModeDraw = (mode) => {
+                const drawNumber = Math.floor(Math.random() * 10);
+                let drawColor = '';
+                if (drawNumber === 0) drawColor = 'violet-red';
+                else if (drawNumber === 5) drawColor = 'violet-green';
+                else if ([1, 3, 7, 9].includes(drawNumber)) drawColor = 'green';
+                else drawColor = 'red';
+
+                const drawSize = drawNumber >= 5 ? 'Big' : 'Small';
+
+                if (mode === '30sec') {
+                    const currentPeriod = period30s;
+                    const newResult = { period: currentPeriod, number: drawNumber, size: drawSize, color: drawColor };
+                    setDrawHistory30s(prev => [newResult, ...prev]);
+                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setPeriod30s(prev => String(Number(prev) + 1));
+                } else if (mode === '1min') {
+                    const currentPeriod = period1m;
+                    const newResult = { period: currentPeriod, number: drawNumber, size: drawSize, color: drawColor };
+                    setDrawHistory1m(prev => [newResult, ...prev]);
+                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setPeriod1m(prev => String(Number(prev) + 1));
+                } else if (mode === '2min') {
+                    const currentPeriod = period2m;
+                    const newResult = { period: currentPeriod, number: drawNumber, size: drawSize, color: drawColor };
+                    setDrawHistory2m(prev => [newResult, ...prev]);
+                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setPeriod2m(prev => String(Number(prev) + 1));
+                }
+            };
+
+            const processPlacedBetsForMode = (mode, period, number, size, color) => {
+                if (!currentUser) return;
+                let winAmount = 0;
+                let activeBetFound = false;
+
+                const updatedBets = myBets.map(bet => {
+                    if (bet.mode === mode && bet.period === period && bet.status === 'pending') {
+                        activeBetFound = true;
+                        let isWin = false;
+                        let multiplierFactor = 0;
+
+                        if (typeof bet.selection === 'number') {
+                            if (bet.selection === number) { isWin = true; multiplierFactor = 9; }
+                        } else if (bet.selection === 'big' || bet.selection === 'small') {
+                            if (bet.selection === size.toLowerCase()) { isWin = true; multiplierFactor = 2; }
+                        } else if (['green', 'red', 'violet'].includes(bet.selection)) {
+                            if (color.includes(bet.selection)) {
+                                isWin = true;
+                                multiplierFactor = bet.selection === 'violet' ? 4.5 : 2;
+                            }
+                        }
+
+                        if (isWin) {
+                            const payout = bet.amount * multiplierFactor;
+                            winAmount += payout;
+                            return { ...bet, status: 'won', payout };
+                        }
+                        return { ...bet, status: 'lost', payout: 0 };
+                    }
+                    return bet;
+                });
+
+                if (activeBetFound) {
+                    setMyBets(updatedBets);
+                    const newBalance = balance + winAmount;
+                    setBalance(newBalance);
+                    
+                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                    db.ref(dbPath).update({
+                        balance: newBalance,
+                        bets: updatedBets
+                    });
+
+                    if (winAmount > 0) {
+                        showToast(`Win payout of ৳${winAmount.toFixed(2)} added!`, 'success');
+                    } else {
+                        showToast('Prediction missed. Try again!', 'error');
+                    }
+                }
+            };
+
+            const showToast = (message, type = 'success') => {
+                setToast({ show: true, message, type });
+                setTimeout(() => setToast({ show: false, message: '', type: 'success' }), 3000);
+            };
+
+            // Trigger click count to unlock the secret Admin Dashboard
+            const handleAdminClickTrigger = () => {
+                const nextCount = adminClickCount + 1;
+                setAdminClickCount(nextCount);
+                if (nextCount >= 5) {
+                    setAdminMode(!adminMode);
+                    setAdminClickCount(0);
+                    showToast(adminMode ? "Admin Mode Closed" : "Admin Panel Unlocked", "success");
+                }
+            };
+
+            // HIGH-FIDELITY VECTOR STEVENX LOGO (MATCHES REFERENCE IMAGE 2)
+            const StevenXLogoVector = () => (
+                <div onClick={handleAdminClickTrigger} class="flex flex-col items-center cursor-pointer active:scale-95 transition-transform">
+                    <svg viewBox="0 0 500 500" class="w-28 h-28 drop-shadow-[0_0_15px_rgba(138,43,226,0.6)]" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ba55d3"/>
+                                <stop offset="50%" stop-color="#8a2be2"/>
+                                <stop offset="100%" stop-color="#4b0082"/>
+                            </linearGradient>
+                            <linearGradient id="silverGloss" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff"/>
+                                <stop offset="30%" stop-color="#b0c4de"/>
+                                <stop offset="70%" stop-color="#708090"/>
+                                <stop offset="100%" stop-color="#3a4f5f"/>
+                            </linearGradient>
+                        </defs>
+                        
+                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" stroke-width="2">
+                            <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
+                            <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
+                            <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
+                            <path d="M 125 270 C 80 290, 50 260, 60 210 C 80 235, 105 250, 135 252 Z" />
+                        </g>
+
+                        <g transform="translate(500,0) scale(-1,1)" fill="url(#purpleGlow)" stroke="url(#silverGloss)" stroke-width="2">
+                            <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
+                            <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
+                            <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
+                            <path d="M 125 270 C 80 290, 50 260, 60 210 C 80 235, 105 250, 135 252 Z" />
+                        </g>
+
+                        <circle cx="250" cy="250" r="140" fill="#0d111b" stroke="url(#purpleGlow)" stroke-width="8" />
+                        <circle cx="250" cy="250" r="130" fill="none" stroke="url(#silverGloss)" stroke-width="3" />
+
+                        <path d="M 190 130 L 210 80 L 235 110 L 250 65 L 265 110 L 290 80 L 310 130 Z" fill="url(#silverGloss)" stroke="url(#purpleGlow)" stroke-width="3" />
+                        <polygon points="242,100 250,85 258,100 250,115" fill="url(#purpleGlow)"/>
+
+                        <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" stroke-width="4">
+                            <path d="M 170 160 L 220 160 L 290 320 L 330 320 L 330 340 L 280 340 L 210 180 L 170 180 Z" />
+                            <path d="M 330 160 L 280 160 L 245 235 L 280 315 L 250 340 L 170 340 L 170 320 L 220 320 L 255 250 Z" />
+                        </g>
+                    </svg>
+                    <span class="text-3xl font-black bg-gradient-to-r from-white via-[#b0c4de] to-[#8a2be2] bg-clip-text text-transparent uppercase tracking-widest font-sans mt-2">STEVENX</span>
+                    <span class="text-[9px] font-extrabold text-indigo-400 tracking-[0.25em] uppercase mt-1">TRADE . WIN . GROW</span>
+                </div>
+            );
+
+            const BkashOfficialLogo = () => (
+                <svg viewBox="0 0 350 120" class="h-10 w-auto" xmlns="http://www.w3.org/2000/svg">
+                    <text x="10" y="90" font-family="'Poppins', sans-serif" font-weight="800" font-size="88" fill="#e2136e">b</text>
+                    <text x="65" y="90" font-family="'Poppins', sans-serif" font-weight="600" font-size="78" fill="#231f20">Kash</text>
+                    <g transform="translate(245, 10)">
+                        <polygon points="10,12 80,18 64,52" fill="#bc1055" />
+                        <polygon points="10,12 64,52 14,24" fill="#8e0a3f" />
+                        <polygon points="80,18 112,62 64,52" fill="#e2136e" />
+                        <polygon points="64,52 74,75 42,98" fill="#a00d4c" />
+                        <polygon points="64,52 74,75 125,58" fill="#ff248a" />
+                        <polygon points="80,18 132,44 112,62" fill="#f03e8c" />
+                        <polygon points="132,44 148,38 142,48" fill="#e2136e" />
+                    </g>
+                </svg>
+            );
+
+            // Signup Submit Action
+            const handleSignupSubmit = (e) => {
+                e.preventDefault();
+                if (!phone || !username || !password || !confirmPassword) {
+                    showToast('Please complete all form inputs', 'error');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showToast('Passwords do not match', 'error');
+                    return;
+                }
+                
+                setIsLoading(true);
+                const fullPhone = `${selectedCountry.code}${phone}`;
+                const sanitized = getSanitizedPath(fullPhone);
+
+                db.ref('users/' + sanitized).once('value')
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            showToast('This phone number is already registered!', 'error');
+                            setIsLoading(false);
+                        } else {
+                            const newUser = {
+                                phone: fullPhone,
+                                countryCode: selectedCountry.code,
+                                username: username,
+                                password: password,
+                                balance: 0.00,
+                                deposits: [],
+                                bets: []
+                            };
+
+                            db.ref('users/' + sanitized).set(newUser)
+                                .then(() => {
+                                    if (promoCode.trim()) {
+                                        const sanitizedPromo = getSanitizedPath(promoCode.trim());
+                                        db.ref('users/' + sanitizedPromo).once('value')
+                                            .then((promoSnapshot) => {
+                                                if (promoSnapshot.exists()) {
+                                                    const referrerObj = promoSnapshot.val();
+                                                    const updatedRefBal = parseFloat(referrerObj.balance || 0) + 1.00;
+                                                    db.ref('users/' + sanitizedPromo).update({
+                                                        balance: updatedRefBal
+                                                    });
+                                                }
+                                            });
+                                    }
+
+                                    showToast('Account registered successfully! Log in.', 'success');
+                                    setAuthTab('login');
+                                })
+                                .finally(() => setIsLoading(false));
+                        }
+                    })
+                    .catch(() => {
+                        showToast('Database sync failure', 'error');
+                        setIsLoading(false);
+                    });
+            };
+
+            // Login Submit Action
+            const handleLoginSubmit = (e) => {
+                e.preventDefault();
+                if (!phone || !password) {
+                    showToast('Please enter your credentials', 'error');
+                    return;
+                }
+
+                setIsLoading(true);
+                const fullPhone = `${selectedCountry.code}${phone}`;
+                const sanitized = getSanitizedPath(fullPhone);
+
+                db.ref('users/' + sanitized).once('value')
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userObj = snapshot.val();
+                            if (userObj.password === password) {
+                                setCurrentUser(userObj);
+                                setBalance(userObj.balance || 0.00);
+                                setMyBets(userObj.bets ? Object.values(userObj.bets) : []);
+                                setDepositHistory(userObj.deposits ? Object.values(userObj.deposits) : []);
+                                localStorage.setItem('steven_win_current_phone', fullPhone);
+                                setView('home');
+                                showToast(`Welcome, ${userObj.username}`, 'success');
+                            } else {
+                                showToast('Incorrect password entered', 'error');
+                            }
+                        } else {
+                            showToast('No account associated with this number', 'error');
+                        }
+                    })
+                    .catch(() => showToast('Database sync failure', 'error'))
+                    .finally(() => setIsLoading(false));
+            };
+
+            // Submit Deposit Ticket (Status: Pending)
+            const processDeposit = (e) => {
+                e.preventDefault();
+                const amt = parseFloat(depositAmount);
+                if (isNaN(amt) || amt < 100) {
+                    showToast('Minimum deposit amount is ৳100', 'error');
+                    return;
+                }
+                if (!senderNumber || senderNumber.length < 10) {
+                    showToast('Enter valid sender bKash number', 'error');
+                    return;
+                }
+                if (!transactionId || transactionId.length < 8) {
+                    showToast('Provide valid Transaction ID', 'error');
+                    return;
+                }
+
+                setIsDepositing(true);
+
+                const depositId = Date.now().toString();
+                const newDepositItem = {
+                    id: depositId,
+                    amount: amt,
+                    sender: senderNumber,
+                    txid: transactionId.toUpperCase(),
+                    status: 'Pending', 
+                    timestamp: new Date().toLocaleString(),
+                    userPhone: currentUser.phone,
+                    username: currentUser.username
+                };
+
+                const userPath = 'users/' + getSanitizedPath(currentUser.phone) + '/deposits/' + depositId;
+                const globalPath = 'global_deposits/' + depositId;
+
+                Promise.all([
+                    db.ref(userPath).set(newDepositItem),
+                    db.ref(globalPath).set(newDepositItem)
+                ]).then(() => {
+                    setIsDepositing(false);
+                    showToast('Deposit request submitted! Status is Pending.', 'success');
+                    setSenderNumber('');
+                    setTransactionId('');
+                    setDepositTab('history');
+                }).catch(() => {
+                    setIsDepositing(false);
+                    showToast('Submission error. Try again.', 'error');
+                });
+            };
+
+            // Admin Approve and Auto-Add Balance
+            const handleAdminApproveDeposit = (depositItem) => {
+                const targetUserPath = 'users/' + getSanitizedPath(depositItem.userPhone);
+                
+                setIsLoading(true);
+                db.ref(targetUserPath).once('value')
+                    .then((snapshot) => {
+                        if (snapshot.exists()) {
+                            const userObj = snapshot.val();
+                            const currentBal = parseFloat(userObj.balance || 0);
+                            const updatedBal = currentBal + parseFloat(depositItem.amount);
+
+                            const approvedItem = { ...depositItem, status: 'Success' };
+
+                            Promise.all([
+                                db.ref(targetUserPath).update({ balance: updatedBal }),
+                                db.ref(targetUserPath + '/deposits/' + depositItem.id).set(approvedItem),
+                                db.ref('global_deposits/' + depositItem.id).remove()
+                            ]).then(() => {
+                                showToast(`Approved! Added ৳${depositItem.amount} to ${userObj.username}`, 'success');
+                            });
+                        } else {
+                            showToast('Target user account not found', 'error');
+                        }
+                    })
+                    .catch(() => showToast('Error during approval transaction', 'error'))
+                    .finally(() => setIsLoading(false));
+            };
+
+            // Admin Reject Deposit
+            const handleAdminRejectDeposit = (depositId, userPhone) => {
+                const targetUserPath = 'users/' + getSanitizedPath(userPhone) + '/deposits/' + depositId;
+                
+                setIsLoading(true);
+                Promise.all([
+                    db.ref(targetUserPath).update({ status: 'Rejected' }),
+                    db.ref('global_deposits/' + depositId).remove()
+                ]).then(() => {
+                    showToast('Deposit ticket rejected successfully', 'error');
+                }).catch(() => {
+                    showToast('Rejection transaction failed', 'error');
+                }).finally(() => setIsLoading(false));
+            };
+
+            const confirmBetPlacement = () => {
+                const totalCost = selectedUnit * multiplier;
+                if (totalCost > balance) {
+                    showToast('Insufficient balance!', 'error');
+                    setIsBetSheetOpen(false);
+                    return;
+                }
+
+                let currentActivePeriod = '';
+                if (activeGameTab === '30sec') currentActivePeriod = period30s;
+                else if (activeGameTab === '1min') currentActivePeriod = period1m;
+                else currentActivePeriod = period2m;
+
+                const newBet = {
+                    id: Date.now(),
+                    period: currentActivePeriod,
+                    mode: activeGameTab,
+                    selection: betValue,
+                    amount: totalCost,
+                    status: 'pending',
+                    timestamp: new Date().toLocaleTimeString()
+                };
+
+                const nextBalance = balance - totalCost;
+                const nextBets = [newBet, ...myBets];
+
+                setBalance(nextBalance);
+                setMyBets(nextBets);
+
+                const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                db.ref(dbPath).update({
+                    balance: nextBalance,
+                    bets: nextBets
+                }).then(() => {
+                    showToast(`Bet of ৳${totalCost} placed!`, 'success');
+                    setIsBetSheetOpen(false);
+                });
+            };
+
+            const handleLogout = () => {
+                localStorage.removeItem('steven_win_current_phone');
+                setCurrentUser(null);
+                setBalance(0.00);
+                setMyBets([]);
+                setDepositHistory([]);
+                setView('auth');
+                setAdminMode(false);
+                showToast('Logged out successfully', 'success');
+            };
+
+            const getTimerForActiveTab = () => {
+                if (activeGameTab === '30sec') return timer30s;
+                if (activeGameTab === '1min') return timer1m;
+                return timer2m;
+            };
+
+            const getPeriodForActiveTab = () => {
+                if (activeGameTab === '30sec') return period30s;
+                if (activeGameTab === '1min') return period1m;
+                return period2m;
+            };
+
+            const getHistoryForActiveTab = () => {
+                if (activeGameTab === '30sec') return drawHistory30s;
+                if (activeGameTab === '1min') return drawHistory1m;
+                return drawHistory2m;
+            };
+
+            return (
+                <div class="flex-1 flex flex-col justify-between relative h-full bg-[#f5f6fa]">
+                    
+                    {/* Loading Modal */}
+                    {isLoading && (
+                        <div class="absolute inset-0 bg-slate-900/70 z-[999] flex flex-col items-center justify-center">
+                            <div class="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
+                            <span class="text-white text-xs font-bold mt-3">Connecting to Secure Gateway...</span>
+                        </div>
+                    )}
+
+                    {/* Toast Notification overlay */}
+                    {toast.show && (
+                        <div class="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold flex items-center space-x-2 bg-slate-900 text-white border-slate-700 animate-bounce">
+                            <i data-lucide={toast.type === 'success' ? 'check-circle' : 'alert-circle'} class="w-4 h-4 text-secondary"></i>
+                            <span>{toast.message}</span>
+                        </div>
+                    )}
+
+                    {/* VIEW: AUTHENTICATION */}
+                    {view === 'auth' && (
+                        <div class="flex-1 flex flex-col justify-center px-6 bg-slate-950 text-white py-8 overflow-y-auto">
+                            <div class="mb-6">
+                                <StevenXLogoVector />
+                            </div>
+
+                            {/* Signin/Signup Selector Tab */}
+                            <div class="flex bg-slate-900 p-1 rounded-xl mb-4 border border-slate-800">
+                                <button onClick={() => setAuthTab('login')} class={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${authTab === 'login' ? 'bg-[#8a2be2] text-white' : 'text-slate-400'}`}>Log In</button>
+                                <button onClick={() => setAuthTab('signup')} class={`flex-1 py-3 text-xs font-bold rounded-lg transition-all ${authTab === 'signup' ? 'bg-[#8a2be2] text-white' : 'text-slate-400'}`}>Sign Up</button>
+                            </div>
+
+                            <form onSubmit={authTab === 'login' ? handleLoginSubmit : handleSignupSubmit} class="space-y-3.5">
+                                {authTab === 'signup' && (
+                                    <div>
+                                        <label class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Nickname</label>
+                                        <div class="relative">
+                                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="user" class="w-4 h-4"></i></span>
+                                            <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div>
+                                    <label class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Phone Number</label>
+                                    <div class="flex space-x-2 relative">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowCountryDrop(!showCountryDrop)} 
+                                            class="bg-slate-900 border border-slate-800 px-3 py-3 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-800"
+                                        >
+                                            <span>{selectedCountry.flag}</span>
+                                            <span>{selectedCountry.code}</span>
+                                            <i data-lucide="chevron-down" class="w-3.5 h-3.5"></i>
+                                        </button>
+                                        <input type="tel" placeholder="Phone Number" value={phone} onChange={e => setPhone(e.target.value)} class="flex-1 bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
+
+                                        {showCountryDrop && (
+                                            <div class="absolute left-0 bottom-full mb-2 w-56 max-h-48 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl shadow-xl z-50 p-1">
+                                                {COUNTRIES.map((country, index) => (
+                                                    <div 
+                                                        key={index} 
+                                                        onClick={() => { setSelectedCountry(country); setShowCountryDrop(false); }} 
+                                                        class="flex items-center space-x-3 px-3 py-2.5 rounded-lg hover:bg-slate-800 cursor-pointer text-xs text-white"
+                                                    >
+                                                        <span>{country.flag}</span>
+                                                        <span class="font-semibold text-slate-200">{country.code}</span>
+                                                        <span class="text-slate-400 text-[10px]">{country.name}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Password</label>
+                                    <div class="relative">
+                                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="lock" class="w-4 h-4"></i></span>
+                                        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
+                                    </div>
+                                </div>
+
+                                {authTab === 'signup' && (
+                                    <>
+                                        <div>
+                                            <label class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Confirm Password</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="shield-check" class="w-4 h-4"></i></span>
+                                                <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Promo / Referral Code</label>
+                                            <div class="relative">
+                                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><i data-lucide="gift" class="w-4 h-4"></i></span>
+                                                <input type="text" placeholder="e.g. +880186XXXXXXX" value={promoCode} onChange={e => setPromoCode(e.target.value)} class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono"/>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-violet-600 to-[#8a2be2] hover:from-violet-500 text-white font-black rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-violet-900/30">
+                                    {authTab === 'login' ? 'Confirm Login' : 'Register Account'}
+                                </button>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* VIEW: HOME SCREEN */}
+                    {view === 'home' && activeNav === 'home' && (
+                        <div class="flex-1 flex flex-col justify-between">
+                            {/* App Header */}
+                            <div class="bg-white px-4 py-3 flex justify-between items-center border-b border-gray-100 shadow-sm">
+                                <h1 class="text-xl font-black text-[#8a2be2] tracking-widest font-sans flex items-center">
+                                    <div class="w-7 h-7 bg-slate-950 rounded-lg flex items-center justify-center border border-[#8a2be2] mr-2">
+                                        <span class="text-base font-extrabold text-[#fccd11]">S</span>
+                                    </div>
+                                    STEVENX
+                                </h1>
+                                <div class="flex space-x-3 text-slate-700 items-center">
+                                    <button class="hover:text-[#8a2be2]"><i data-lucide="download" class="w-5 h-5 stroke-[2.5]"></i></button>
+                                    <button class="hover:text-[#8a2be2]"><i data-lucide="smile" class="w-5 h-5 stroke-[2.5]"></i></button>
+                                </div>
+                            </div>
+
+                            {/* Content Section */}
+                            <div class="flex-1 overflow-y-auto px-4 py-4 space-y-4">
+                                <div class="flex items-center justify-between bg-white p-2.5 rounded-xl shadow-sm">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-violet-600 to-[#8a2be2] flex items-center justify-center text-white font-extrabold shadow-sm border border-violet-400">SX</div>
+                                        <span class="font-bold text-gray-800 font-sans">Wingo</span>
+                                        <span class="text-[10px] bg-gray-100 text-slate-500 px-3 py-1 rounded-full font-bold">ALL 3</span>
+                                    </div>
+                                    <div class="flex space-x-1">
+                                        <button class="w-8 h-8 rounded-lg bg-violet-50 text-[#8a2be2] flex items-center justify-center"><i data-lucide="chevron-left" class="w-5 h-5 stroke-[3]"></i></button>
+                                        <button class="w-8 h-8 rounded-lg bg-secondary text-slate-900 flex items-center justify-center"><i data-lucide="chevron-right" class="w-5 h-5 stroke-[3]"></i></button>
+                                    </div>
+                                </div>
+
+                                {/* Clickable Game Card Poster */}
+                                <div onClick={() => setView('game')} class="relative h-[480px] bg-gradient-to-b from-[#8a2be2] via-violet-800 to-indigo-950 rounded-[2rem] shadow-xl p-6 flex flex-col justify-between cursor-pointer active:scale-95 transition-transform overflow-hidden">
+                                    <div class="absolute inset-0 bg-white/5 pointer-events-none rounded-[2rem]"></div>
+                                    <div class="relative flex-1 flex justify-center items-center">
+                                        <div class="relative w-64 h-64">
+                                            <div class="absolute bottom-10 left-2 w-20 h-20 bg-gradient-to-tr from-emerald-500 to-[#7efcbe] rounded-full flex items-center justify-center border-2 border-white/40 shadow-lg">
+                                                <span class="text-3xl font-black text-white">4</span>
+                                            </div>
+                                            <div class="absolute top-4 right-6 w-28 h-28 bg-gradient-to-tr from-rose-500 to-rose-300 rounded-full flex items-center justify-center border-4 border-white/30 shadow-2xl">
+                                                <span class="text-5xl font-black text-white">9</span>
+                                            </div>
+                                            <div class="absolute bottom-6 right-8 w-24 h-24 bg-gradient-to-tr from-[#9c27b0] to-fuchsia-400 rounded-full flex items-center justify-center border-2 border-white/30 shadow-xl">
+                                                <span class="text-4xl font-extrabold text-white">0</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center pb-4">
+                                        <h2 class="text-4xl font-black text-white tracking-widest font-sans">WINGO</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            {renderSharedNav()}
+                        </div>
+                    )}
+
+                    {/* VIEW: ACCOUNT PORTAL WITH SECRET ADMIN CONTROL ACCESS */}
+                    {view === 'home' && activeNav === 'account' && (
+                        <div class="flex-1 flex flex-col bg-[#f5f6fa] overflow-y-auto">
+                            <div class="bg-gradient-to-b from-indigo-950 to-slate-950 text-white px-6 py-6 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
+                                <div class="mb-3">
+                                    <StevenXLogoVector />
+                                </div>
+                                <span class="text-[9px] text-slate-400 block mb-3 font-mono">TAPs the logo 5 times to reveal hidden controls</span>
+
+                                <h2 class="text-sm font-bold">{currentUser ? currentUser.username : 'Guest User'}</h2>
+                                <p class="text-[9px] text-slate-400">{currentUser ? currentUser.phone : 'Not Verified'}</p>
+
+                                <div class="mt-4 bg-[#141b2d] border border-slate-800 text-white rounded-2xl py-3 px-6 w-full text-center shadow-sm">
+                                    <span class="text-[10px] font-bold text-slate-400 block uppercase tracking-wider">Account Balance</span>
+                                    <span class="text-xl font-black text-[#fccd11]">৳{balance.toFixed(2)}</span>
+                                </div>
+                            </div>
+
+                            <div class="p-4 space-y-3 flex-1">
+                                <button onClick={() => { setView('deposit'); setDepositTab('new'); }} class="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="wallet" class="w-5 h-5 text-[#8a2be2]"></i>
+                                        <span class="text-xs font-bold text-slate-800">bKash Fast Deposit</span>
+                                    </div>
+                                    <span class="text-[9px] bg-rose-50 text-rose-600 py-1 px-2.5 rounded-full font-bold">Add BDT</span>
+                                </button>
+
+                                <button onClick={() => { setView('deposit'); setDepositTab('history'); }} class="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
+                                    <div class="flex items-center space-x-3">
+                                        <i data-lucide="receipt" class="w-5 h-5 text-indigo-500"></i>
+                                        <span class="text-xs font-bold text-slate-800">My Deposits History</span>
+                                    </div>
+                                    <span class="text-[9px] bg-slate-100 text-slate-700 py-1 px-2.5 rounded-full font-bold">Details</span>
+                                </button>
+
+                                {/* SECRET HIDDEN OWNER ADMIN PORTAL MODAL */}
+                                {adminMode && (
+                                    <div class="bg-indigo-950 text-white rounded-2xl p-4 mt-4 space-y-3 border border-[#8a2be2]/40 shadow-xl">
+                                        <div class="flex justify-between items-center">
+                                            <div>
+                                                <span class="text-xs font-black block text-yellow-400">Owner Verification Panel</span>
+                                                <span class="text-[8px] text-slate-400">Approve/Reject Pending Deposits</span>
+                                            </div>
+                                            <button onClick={() => setAdminMode(false)} class="text-slate-400 hover:text-white">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
+                                            </button>
+                                        </div>
+
+                                        <div class="space-y-3 pt-2 border-t border-slate-800">
+                                            <h3 class="text-[10px] font-bold text-slate-300 uppercase tracking-wider flex items-center space-x-1">
+                                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-[#8a2be2]"></i>
+                                                <span>Queue Check ({globalPendingDeposits.length})</span>
+                                            </h3>
+                                            
+                                            {globalPendingDeposits.length === 0 ? (
+                                                <div class="text-center py-4 bg-slate-900 rounded-xl border border-slate-800 text-[10px] text-slate-500">
+                                                    No pending deposit requests in queue.
+                                                </div>
+                                            ) : (
+                                                <div class="space-y-2 max-h-48 overflow-y-auto">
+                                                    {globalPendingDeposits.map(item => (
+                                                        <div key={item.id} class="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col space-y-2">
+                                                            <div class="flex justify-between text-[10px] border-b border-slate-800 pb-1.5 font-mono">
+                                                                <span class="font-bold text-slate-300">{item.username} ({item.userPhone})</span>
+                                                                <span class="text-secondary font-black">৳{item.amount}</span>
+                                                            </div>
+                                                            <div class="text-[9px] text-slate-400 space-y-0.5 font-mono">
+                                                                <p>Sender: {item.sender}</p>
+                                                                <p>TxID: {item.txid}</p>
+                                                            </div>
+                                                            <div class="grid grid-cols-2 gap-2 pt-1.5">
+                                                                <button 
+                                                                    onClick={() => handleAdminApproveDeposit(item)} 
+                                                                    class="py-1.5 bg-[#0c7a3d] hover:bg-emerald-700 text-white font-extrabold text-[9px] rounded-lg uppercase tracking-wider"
+                                                                >
+                                                                    Approve
+                                                                </button>
+                                                                <button 
+                                                                    onClick={() => handleAdminRejectDeposit(item.id, item.userPhone)} 
+                                                                    class="py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-[9px] rounded-lg uppercase tracking-wider"
+                                                                >
+                                                                    Reject
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+
+                                <button onClick={handleLogout} class="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 py-3 px-4 rounded-xl flex items-center justify-between border border-rose-100 transition-colors mt-6">
+                                    <span class="text-xs font-bold">Sign Out from Device</span>
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            {renderSharedNav()}
+                        </div>
+                    )}
+
+                    {/* VIEW: BKASH DEPOSIT SCREEN */}
+                    {view === 'deposit' && (
+                        <div class="flex-1 flex flex-col bg-slate-50 justify-between">
+                            <div class="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+                                <div class="flex items-center">
+                                    <button onClick={() => setView('home')} class="text-slate-700 hover:text-black mr-2">
+                                        <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                                    </button>
+                                    <h1 class="text-sm font-bold text-slate-800">bKash Deposit Portal</h1>
+                                </div>
+                                
+                                <div class="flex space-x-1.5">
+                                    <button onClick={() => setDepositTab('new')} class={`px-2.5 py-1 rounded text-[10px] font-bold ${depositTab === 'new' ? 'bg-[#e2136e] text-white' : 'bg-slate-100 text-slate-600'}`}>New</button>
+                                    <button onClick={() => setDepositTab('history')} class={`px-2.5 py-1 rounded text-[10px] font-bold ${depositTab === 'history' ? 'bg-[#e2136e] text-white' : 'bg-slate-100 text-slate-600'}`}>History</button>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                                {depositTab === 'new' ? (
+                                    <>
+                                        <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
+                                            <div class="flex justify-between items-center pb-2 border-b border-slate-50">
+                                                <BkashOfficialLogo />
+                                                <span class="text-[9px] font-bold bg-rose-100 text-[#e2136e] px-2 py-0.5 rounded-full uppercase">Official Wallet</span>
+                                            </div>
+                                            
+                                            <div class="p-3 bg-rose-50/50 rounded-xl border border-rose-100 space-y-2">
+                                                <div class="flex items-center justify-between">
+                                                    <div>
+                                                        <span class="text-[10px] text-slate-500 block">bKash SendMoney Agent:</span>
+                                                        <span class="text-sm font-black text-slate-800 font-mono">01860909272</span>
+                                                    </div>
+                                                    <button 
+                                                        onClick={() => { navigator.clipboard.writeText('01860909272'); showToast('Number copied!', 'success'); }} 
+                                                        class="px-3.5 py-1.5 bg-[#e2136e] text-white rounded-lg text-[10px] font-bold"
+                                                    >
+                                                        Copy Number
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <form onSubmit={processDeposit} class="space-y-4">
+                                            <div>
+                                                <label class="block text-slate-500 text-[10px] font-bold uppercase mb-1.5">Deposit Amount (Minimum ৳100)</label>
+                                                <div class="grid grid-cols-4 gap-2">
+                                                    {['200', '500', '1000', '5000'].map(val => (
+                                                        <button 
+                                                            type="button" 
+                                                            key={val} 
+                                                            onClick={() => setDepositAmount(val)} 
+                                                            class={`py-2 text-xs font-bold rounded-xl border transition-all ${depositAmount === val ? 'bg-[#e2136e] text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}
+                                                        >
+                                                            ৳{val}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                                <input 
+                                                    type="number" 
+                                                    placeholder="Enter Custom Amount" 
+                                                    value={depositAmount} 
+                                                    onChange={e => setDepositAmount(e.target.value)} 
+                                                    class="w-full mt-2 bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-slate-500 text-[10px] font-bold uppercase mb-1">Your Sender bKash Number</label>
+                                                <input 
+                                                    type="tel" 
+                                                    placeholder="e.g., 017XXXXXXXX" 
+                                                    value={senderNumber} 
+                                                    onChange={e => setSenderNumber(e.target.value)} 
+                                                    class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs focus:outline-none font-mono"
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label class="block text-slate-500 text-[10px] font-bold uppercase mb-1">bKash Transaction ID (TxID)</label>
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="Enter 8-10 digit TxID" 
+                                                    value={transactionId} 
+                                                    onChange={e => setTransactionId(e.target.value)} 
+                                                    class="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs focus:outline-none font-mono uppercase"
+                                                />
+                                            </div>
+
+                                            <button 
+                                                type="submit" 
+                                                disabled={isDepositing}
+                                                class="w-full py-3.5 bg-gradient-to-r from-rose-600 to-[#e2136e] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
+                                            >
+                                                {isDepositing ? 'Submitting request...' : 'Submit Deposit Ticket'}
+                                            </button>
+                                        </form>
+                                    </>
+                                ) : (
+                                    <div class="space-y-3">
+                                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wide">My Historical Deposits</h3>
+                                        {depositHistory.length === 0 ? (
+                                            <div class="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
+                                                <i data-lucide="receipt" class="w-8 h-8 mx-auto text-slate-300 mb-2"></i>
+                                                <span>No historical deposit receipts found.</span>
+                                            </div>
+                                        ) : (
+                                            depositHistory.map(item => (
+                                                <div key={item.id} class="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
+                                                    <div class="flex justify-between items-center">
+                                                        <span class="text-xs font-black text-[#e2136e]">৳{item.amount.toFixed(2)}</span>
+                                                        <span class={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                                                            item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
+                                                            item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
+                                                        }`}>
+                                                            {item.status}
+                                                        </span>
+                                                    </div>
+                                                    <div class="grid grid-cols-2 gap-1 text-[10px] text-slate-500 pt-1.5 border-t border-slate-50 font-mono">
+                                                        <span>Sender: {item.sender}</span>
+                                                        <span class="text-right">TXID: {item.txid}</span>
+                                                        <span class="col-span-2 text-slate-400 mt-1">{item.timestamp}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* VIEW: GAME PLAY WINDOW (30s, 1m, and 2m Multi-timer layout) */}
+                    {view === 'game' && (
+                        <div class="flex-1 flex flex-col bg-slate-50 justify-between">
+                            <div class="bg-[#fccd11] px-4 pt-3 pb-4 flex flex-col items-center shadow-md">
+                                <div class="w-full flex justify-between items-center">
+                                    <button onClick={() => setView('home')} class="text-slate-900 hover:text-black">
+                                        <i data-lucide="chevron-left" class="w-8 h-8 stroke-[3]"></i>
+                                    </button>
+                                    
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-8 h-8 bg-slate-950 rounded-lg flex items-center justify-center border border-white shadow mb-0.5">
+                                            <span class="text-sm font-black text-[#fccd11]">SX</span>
+                                        </div>
+                                        <span class="text-xs font-black text-slate-950 tracking-wider">STEVEN WIN</span>
+                                    </div>
+
+                                    <div class="flex space-x-3 text-slate-900">
+                                        <button><i data-lucide="headphones" class="w-5 h-5"></i></button>
+                                        <button><i data-lucide="refresh-cw" class="w-5 h-5"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-16">
+                                
+                                {/* Game Mode Tabs for 30s, 1m, and 2m */}
+                                <div class="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
+                                    {[
+                                        { id: '30sec', desc: 'Wingo 30s' },
+                                        { id: '1min', desc: 'Wingo 1 Min' },
+                                        { id: '2min', desc: 'Wingo 2 Min' }
+                                    ].map(tab => (
+                                        <button 
+                                            key={tab.id}
+                                            onClick={() => { setActiveGameTab(tab.id); setGameSubTab('history'); }}
+                                            class={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
+                                                activeGameTab === tab.id ? 'bg-secondary text-slate-950 shadow' : 'text-slate-500 hover:text-slate-800'
+                                            }`}
+                                        >
+                                            {tab.desc}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                <div class="bg-gradient-to-r from-violet-700 to-indigo-950 text-white rounded-2xl p-4 shadow-sm flex justify-between items-center border border-indigo-900/40">
+                                    <div>
+                                        <span class="text-[9px] text-slate-300 uppercase tracking-wider block">SX Wallet Balance</span>
+                                        <span class="text-xl font-black text-secondary">৳{balance.toFixed(2)}</span>
+                                    </div>
+                                    <button onClick={() => { setView('deposit'); setDepositTab('new'); }} class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300">
+                                    <div class="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
+                                        <span class="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
+                                        <span class="text-xs font-bold uppercase tracking-wide">Live Counter</span>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-3 pt-3 items-center">
+                                        <div>
+                                            <div class="flex space-x-1 mb-2">
+                                                {getHistoryForActiveTab().slice(0, 5).map((draw, idx) => (
+                                                    <div key={idx} class="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-900">
+                                                        {draw.number}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <span class="text-[9px] block text-slate-700">Period ID:</span>
+                                            <span class="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
+                                        </div>
+
+                                        <div class="text-right">
+                                            <span class="text-[9px] font-bold block text-slate-700">Time remaining</span>
+                                            <div class="flex justify-end space-x-1 mt-1 font-mono">
+                                                {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
+                                                    <span key={index} class={`px-1.5 bg-slate-950 text-yellow-400 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : ''}`}>
+                                                        {char}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button onClick={() => openBetConfirmation('green')} class="bg-gameGreen text-white py-3 rounded-xl font-bold text-xs">Green</button>
+                                    <button onClick={() => openBetConfirmation('violet')} class="bg-gameViolet text-white py-3 rounded-xl font-bold text-xs">Violet</button>
+                                    <button onClick={() => openBetConfirmation('red')} class="bg-gameRed text-white py-3 rounded-xl font-bold text-xs">Red</button>
+                                </div>
+
+                                {/* PREMIUM GLOSSY COLOURED BALLS SELECTION PANEL (MATCHES UPLOADED DESIGN EXACTLY) */}
+                                <div class="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+                                    <div class="grid grid-cols-5 gap-y-5 gap-x-3.5">
+                                        {[
+                                            { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
+                                            { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
+                                            { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
+                                            { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' }
+                                        ].map(ball => (
+                                            <button 
+                                                key={ball.val} 
+                                                onClick={() => openBetConfirmation(ball.val)} 
+                                                class={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 border border-white/20 overflow-hidden ${ball.style}`}
+                                            >
+                                                {/* Top reflection arc mimicking the 3D glossy dome texture */}
+                                                <div class="absolute top-0.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/25 rounded-full filter blur-[0.5px]"></div>
+                                                <span class="z-10 text-white font-extrabold text-base tracking-tighter shadow-sm">{ball.val}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onClick={() => openBetConfirmation('big')} class="bg-[#e0b50f] py-2.5 rounded-xl font-black text-xs text-slate-950">BIG</button>
+                                    <button onClick={() => openBetConfirmation('small')} class="bg-[#1e88e5] py-2.5 text-white rounded-xl font-black text-xs">SMALL</button>
+                                </div>
+
+                                <div class="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+                                    <div class="grid grid-cols-2 border-b border-slate-100 text-center text-[10px] font-bold">
+                                        <button onClick={() => setGameSubTab('history')} class={`py-3 ${gameSubTab === 'history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>Game History</button>
+                                        <button onClick={() => setGameSubTab('my_history')} class={`py-3 ${gameSubTab === 'my_history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>My Bets</button>
+                                    </div>
+
+                                    <div class="p-3">
+                                        {gameSubTab === 'history' ? (
+                                            <div class="space-y-1.5 text-[10px]">
+                                                {getHistoryForActiveTab().map((item, idx) => (
+                                                    <div key={idx} class="flex justify-between items-center py-1.5 border-b border-slate-50 text-slate-600">
+                                                        <span>{item.period}</span>
+                                                        <span class="font-bold text-slate-900 bg-slate-100 w-5 h-5 flex items-center justify-center rounded-full">{item.number}</span>
+                                                        <span class="font-bold">{item.size}</span>
+                                                        <span class="capitalize text-primary">{item.color}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div class="space-y-2 text-[10px]">
+                                                {myBets.filter(b => b.mode === activeGameTab).length === 0 ? (
+                                                    <div class="text-center py-8 text-slate-400">
+                                                        <i data-lucide="info" class="w-6 h-6 mx-auto mb-1 opacity-50"></i>
+                                                        <span>No bets logged in this mode yet.</span>
+                                                    </div>
+                                                ) : (
+                                                    myBets.filter(b => b.mode === activeGameTab).map(bet => (
+                                                        <div key={bet.id} class="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
+                                                            <div>
+                                                                <span class="block text-slate-400 text-[9px] font-mono">Period: {bet.period}</span>
+                                                                <span class="font-bold text-slate-800">Prediction: <span class="uppercase text-primary font-black">{bet.selection}</span></span>
+                                                                <span class="block text-[9px] text-slate-400">{bet.timestamp}</span>
+                                                            </div>
+                                                            <div class="text-right">
+                                                                <span class="block font-black text-slate-700">৳{bet.amount}</span>
+                                                                <span class={`text-[9px] font-bold uppercase ${
+                                                                    bet.status === 'won' ? 'text-emerald-600' : bet.status === 'lost' ? 'text-red-500' : 'text-amber-500'
+                                                                }`}>{bet.status}</span>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* DYNAMIC BET PLACEMENT POPUP SHEET */}
+                    {isBetSheetOpen && (
+                        <div class="absolute inset-0 bg-slate-900/60 z-50 flex flex-col justify-end">
+                            <div class="bg-white rounded-t-[2rem] p-5 space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <h3 class="text-xs font-bold text-slate-800">Confirm Bet Details</h3>
+                                    <button onClick={() => setIsBetSheetOpen(false)}><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
+                                </div>
+
+                                <div class="p-3 bg-slate-50 rounded-xl flex justify-between text-xs">
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 block">Target Selection:</span>
+                                        <span class="font-black text-primary uppercase text-sm">{betValue}</span>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="text-[10px] text-slate-400 block">Round Period:</span>
+                                        <span class="font-bold text-slate-700">{getPeriodForActiveTab()}</span>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-2">
+                                    <span class="text-[10px] font-bold text-slate-400 block">Set Unit Multiplier (Quantity):</span>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex space-x-1">
+                                            {[10, 50, 100].map(val => (
+                                                <button key={val} onClick={() => setSelectedUnit(val)} class={`px-3 py-1.5 rounded-lg border text-xs font-bold ${selectedUnit === val ? 'bg-primary text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}>
+                                                    ৳{val}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button onClick={() => setMultiplier(prev => Math.max(1, prev - 1))} class="w-7 h-7 rounded bg-slate-100 text-slate-600 font-bold">-</button>
+                                            <span class="font-bold text-xs">{multiplier}</span>
+                                            <button onClick={() => setMultiplier(prev => prev + 1)} class="w-7 h-7 rounded bg-slate-100 text-slate-600 font-bold">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between items-center pt-2">
+                                    <div>
+                                        <span class="text-[10px] text-slate-400 block">Total cost:</span>
+                                        <span class="text-xl font-black text-emerald-600">৳{(selectedUnit * multiplier).toFixed(2)}</span>
+                                    </div>
+                                    <button onClick={confirmBetPlacement} class="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-950 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+            );
+
+            function renderSharedNav() {
+                return (
+                    <div class="bg-white border-t border-gray-200 py-2.5 px-4 flex justify-between items-center relative z-20">
+                        <button onClick={() => { setView('home'); setActiveNav('home'); }} class={`flex flex-col items-center space-y-1 ${activeNav === 'home' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
+                            <i data-lucide="home" class="w-6 h-6"></i>
+                            <span class="text-[10px] font-bold">Home</span>
+                        </button>
+                        <button onClick={() => { setView('home'); setActiveNav('activity'); }} class="flex flex-col items-center space-y-1 text-slate-400">
+                            <i data-lucide="gift" class="w-6 h-6"></i>
+                            <span class="text-[10px] font-medium">Activity</span>
+                        </button>
+                        
+                        <div class="w-16"></div>
+
+                        <button onClick={() => { setView('home'); setActiveNav('promotion'); }} class="flex flex-col items-center space-y-1 text-slate-400">
+                            <i data-lucide="percent" class="w-6 h-6"></i>
+                            <span class="text-[10px] font-medium">Promo</span>
+                        </button>
+                        <button onClick={() => { setView('home'); setActiveNav('account'); }} class={`flex flex-col items-center space-y-1 ${activeNav === 'account' ? 'text-[#8a2be2] font-bold' : 'text-slate-400'}`}>
+                            <i data-lucide="user" class="w-6 h-6"></i>
+                            <span class="text-[10px] font-medium">Account</span>
+                        </button>
+                    </div>
+                );
+            }
+        }
+
+        function formatTimeToSplit(totalSeconds) {
+            const mins = Math.floor(totalSeconds / 60);
+            const secs = totalSeconds % 60;
+            const mString = String(mins).padStart(2, '0');
+            const sString = String(secs).padStart(2, '0');
+            return [mString[0], mString[1], ':', sString[0], sString[1]];
+        }
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+
+        setInterval(() => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }, 800);
+    </script>
+</body>
+</html>
