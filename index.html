@@ -248,7 +248,7 @@
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 
-                osc.frequency.value = isFinal ? 900 : 550; // Pitch sets higher on final tick
+                osc.frequency.value = isFinal ? 900 : 550; 
                 osc.type = 'sine';
                 
                 gain.gain.setValueAtTime(0.08, ctx.currentTime);
@@ -257,8 +257,58 @@
                 osc.start();
                 osc.stop(ctx.currentTime + 0.15);
             } catch (e) {
-                // Catches strict browser permission blocks
+                // Catches browser restriction limits
             }
+        };
+
+        // Simulated TRON block detail generator
+        const generateTrxBlockData = (period, targetDigit) => {
+            const baseBlockHeight = 84300000 + (Number(period % 100000) * 20);
+            const hexChars = 'abcdef';
+            const suffixLength = Math.floor(Math.random() * 3); 
+            let suffix = '';
+            for (let i = 0; i < suffixLength; i++) {
+                suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+            }
+            
+            const randomPrefixChars = '0123456789abcdef';
+            let prefix = '';
+            for (let i = 0; i < 12; i++) {
+                prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
+            }
+            
+            const fullHash = prefix + targetDigit + suffix;
+            const last5 = fullHash.slice(-5).toUpperCase().split('');
+            const shortHash = '**' + fullHash.slice(-4);
+            
+            const now = new Date();
+            const blockTime = now.toTimeString().split(' ')[0]; 
+            
+            return {
+                blockHeight: baseBlockHeight,
+                hash: fullHash,
+                shortHash: shortHash,
+                last5: last5,
+                blockTime: blockTime
+            };
+        };
+
+        const initTrxHistory = (period, digit, minusOffset) => {
+            const adjustedPeriod = String(BigInt(period) - BigInt(minusOffset));
+            const blockData = generateTrxBlockData(adjustedPeriod, digit);
+            const drawSize = digit >= 5 ? 'Big' : 'Small';
+            const drawColor = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
+            return {
+                period: adjustedPeriod,
+                blockHeight: blockData.blockHeight,
+                blockTime: blockData.blockTime,
+                hash: blockData.hash,
+                shortHash: blockData.shortHash,
+                last5: blockData.last5,
+                number: digit,
+                size: drawSize,
+                color: drawColor
+            };
         };
 
         function App() {
@@ -269,6 +319,9 @@
             const [balance, setBalance] = useState(0.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             const [isLoading, setIsLoading] = useState(false);
+
+            // Active Game States
+            const [gameType, setGameType] = useState('wingo'); // 'wingo' or 'trx_wingo'
 
             // Country Selector States
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
@@ -311,11 +364,17 @@
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
 
+            // Wingo Classic Period IDs
             const [period30s, setPeriod30s] = useState('20260708100051482');
             const [period1m, setPeriod1m] = useState('20260708200031105');
             const [period2m, setPeriod2m] = useState('20260708300021105');
 
-            // Draw History
+            // TRX Period IDs (TRON Blocks)
+            const [periodTrx30s, setPeriodTrx30s] = useState('20260709103010419');
+            const [periodTrx1m, setPeriodTrx1m] = useState('20260709203010201');
+            const [periodTrx2m, setPeriodTrx2m] = useState('20260709303010101');
+
+            // Wingo Classic History
             const [drawHistory30s, setDrawHistory30s] = useState([
                 { period: '20260708100051481', number: 2, size: 'Small', color: 'red' },
                 { period: '20260708100051480', number: 5, size: 'Big', color: 'violet-green' }
@@ -325,6 +384,21 @@
             ]);
             const [drawHistory2m, setDrawHistory2m] = useState([
                 { period: '20260708300021104', number: 9, size: 'Big', color: 'green' }
+            ]);
+
+            // TRX History
+            const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState([
+                initTrxHistory('20260709103010419', 1, 1),
+                initTrxHistory('20260709103010419', 7, 2),
+                initTrxHistory('20260709103010419', 1, 3),
+                initTrxHistory('20260709103010419', 4, 4),
+                initTrxHistory('20260709103010419', 1, 5)
+            ]);
+            const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState([
+                initTrxHistory('20260709203010201', 9, 1)
+            ]);
+            const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState([
+                initTrxHistory('20260709303010101', 3, 1)
             ]);
 
             // Betting Board States
@@ -349,6 +423,11 @@
             const period30sRef = useRef(period30s);
             const period1mRef = useRef(period1m);
             const period2mRef = useRef(period2m);
+
+            const periodTrx30sRef = useRef(periodTrx30s);
+            const periodTrx1mRef = useRef(periodTrx1m);
+            const periodTrx2mRef = useRef(periodTrx2m);
+
             const myBetsRef = useRef(myBets);
             const currentUserRef = useRef(currentUser);
             const balanceRef = useRef(balance);
@@ -356,6 +435,11 @@
             useEffect(() => { period30sRef.current = period30s; }, [period30s]);
             useEffect(() => { period1mRef.current = period1m; }, [period1m]);
             useEffect(() => { period2mRef.current = period2m; }, [period2m]);
+
+            useEffect(() => { periodTrx30sRef.current = periodTrx30s; }, [periodTrx30s]);
+            useEffect(() => { periodTrx1mRef.current = periodTrx1m; }, [periodTrx1m]);
+            useEffect(() => { periodTrx2mRef.current = periodTrx2m; }, [periodTrx2m]);
+
             useEffect(() => { myBetsRef.current = myBets; }, [myBets]);
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
             useEffect(() => { balanceRef.current = balance; }, [balance]);
@@ -416,14 +500,12 @@
                         let updates = {};
                         let hasUpdates = false;
 
-                        // Ensure each user profile always has a dynamic custom referral code
                         if (!userData.referralCode) {
                             userData.referralCode = generateReferralCode();
                             updates.referralCode = userData.referralCode;
                             hasUpdates = true;
                         }
 
-                        // Ensure each user profile always has a dynamic unique STX ID
                         if (!userData.stxId) {
                             userData.stxId = generateSTXId();
                             updates.stxId = userData.stxId;
@@ -476,8 +558,8 @@
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
             // Opponent Defeat Logic
-            const determineOutcomeWithLossParameters = (mode, currentPeriod) => {
-                const activeBets = (myBetsRef.current || []).filter(b => b.mode === mode && b.period === currentPeriod && b.status === 'pending');
+            const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
+                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
                 if (activeBets.length === 0) {
                     return Math.floor(Math.random() * 10);
@@ -520,13 +602,13 @@
                 return Math.floor(Math.random() * 10);
             };
 
-            const processPlacedBetsForMode = (mode, period, number, size, color) => {
+            const processPlacedBetsForMode = (game, mode, period, number, size, color) => {
                 if (!currentUserRef.current) return;
                 let winAmount = 0;
                 let activeBetFound = false;
 
                 const updatedBets = (myBetsRef.current || []).map(bet => {
-                    if (bet.mode === mode && bet.period === period && bet.status === 'pending') {
+                    if (bet.gameType === game && bet.mode === mode && bet.period === period && bet.status === 'pending') {
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
@@ -573,34 +655,77 @@
             };
 
             const handleModeDraw = (mode) => {
-                let currentPeriod = '';
-                if (mode === '30sec') currentPeriod = period30sRef.current;
-                else if (mode === '1min') currentPeriod = period1mRef.current;
-                else currentPeriod = period2mRef.current;
+                // 1. CLASSIC WINGO DRAW
+                let currentPeriodClassic = '';
+                if (mode === '30sec') currentPeriodClassic = period30sRef.current;
+                else if (mode === '1min') currentPeriodClassic = period1mRef.current;
+                else currentPeriodClassic = period2mRef.current;
 
-                const drawNumber = determineOutcomeWithLossParameters(mode, currentPeriod);
+                const drawNumberClassic = determineOutcomeWithLossParameters('wingo', mode, currentPeriodClassic);
 
-                let drawColor = '';
-                if (drawNumber === 0) drawColor = 'violet-red';
-                else if (drawNumber === 5) drawColor = 'violet-green';
-                else if ([1, 3, 7, 9].includes(drawNumber)) drawColor = 'green';
-                else drawColor = 'red';
+                let drawColorClassic = '';
+                if (drawNumberClassic === 0) drawColorClassic = 'violet-red';
+                else if (drawNumberClassic === 5) drawColorClassic = 'violet-green';
+                else if ([1, 3, 7, 9].includes(drawNumberClassic)) drawColorClassic = 'green';
+                else drawColorClassic = 'red';
 
-                const drawSize = drawNumber >= 5 ? 'Big' : 'Small';
-                const newResult = { period: currentPeriod, number: drawNumber, size: drawSize, color: drawColor };
+                const drawSizeClassic = drawNumberClassic >= 5 ? 'Big' : 'Small';
+                const newResultClassic = { period: currentPeriodClassic, number: drawNumberClassic, size: drawSizeClassic, color: drawColorClassic };
 
                 if (mode === '30sec') {
-                    setDrawHistory30s(prev => [newResult, ...prev]);
-                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setDrawHistory30s(prev => [newResultClassic, ...prev]);
+                    processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod30s(prev => incrementPeriodString(prev));
                 } else if (mode === '1min') {
-                    setDrawHistory1m(prev => [newResult, ...prev]);
-                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setDrawHistory1m(prev => [newResultClassic, ...prev]);
+                    processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod1m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistory2m(prev => [newResult, ...prev]);
-                    processPlacedBetsForMode(mode, currentPeriod, drawNumber, drawSize, drawColor);
+                    setDrawHistory2m(prev => [newResultClassic, ...prev]);
+                    processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod2m(prev => incrementPeriodString(prev));
+                }
+
+                // 2. TRX WINGO DRAW
+                let currentPeriodTrx = '';
+                if (mode === '30sec') currentPeriodTrx = periodTrx30sRef.current;
+                else if (mode === '1min') currentPeriodTrx = periodTrx1mRef.current;
+                else currentPeriodTrx = periodTrx2mRef.current;
+
+                const drawNumberTrx = determineOutcomeWithLossParameters('trx_wingo', mode, currentPeriodTrx);
+
+                let drawColorTrx = '';
+                if (drawNumberTrx === 0) drawColorTrx = 'violet-red';
+                else if (drawNumberTrx === 5) drawColorTrx = 'violet-green';
+                else if ([1, 3, 7, 9].includes(drawNumberTrx)) drawColorTrx = 'green';
+                else drawColorTrx = 'red';
+
+                const drawSizeTrx = drawNumberTrx >= 5 ? 'Big' : 'Small';
+                const blockData = generateTrxBlockData(currentPeriodTrx, drawNumberTrx);
+                const newResultTrx = { 
+                    period: currentPeriodTrx, 
+                    blockHeight: blockData.blockHeight,
+                    blockTime: blockData.blockTime,
+                    hash: blockData.hash,
+                    shortHash: blockData.shortHash,
+                    last5: blockData.last5,
+                    number: drawNumberTrx, 
+                    size: drawSizeTrx, 
+                    color: drawColorTrx 
+                };
+
+                if (mode === '30sec') {
+                    setDrawHistoryTrx30s(prev => [newResultTrx, ...prev]);
+                    processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
+                    setPeriodTrx30s(prev => incrementPeriodString(prev));
+                } else if (mode === '1min') {
+                    setDrawHistoryTrx1m(prev => [newResultTrx, ...prev]);
+                    processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
+                    setPeriodTrx1m(prev => incrementPeriodString(prev));
+                } else if (mode === '2min') {
+                    setDrawHistoryTrx2m(prev => [newResultTrx, ...prev]);
+                    processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
+                    setPeriodTrx2m(prev => incrementPeriodString(prev));
                 }
             };
 
@@ -907,15 +1032,13 @@
                     return;
                 }
 
-                let currentActivePeriod = '';
-                if (activeGameTab === '30sec') currentActivePeriod = period30s;
-                else if (activeGameTab === '1min') currentActivePeriod = period1m;
-                else currentActivePeriod = period2m;
+                const currentActivePeriod = getPeriodForActiveTab();
 
                 const newBet = {
                     id: Date.now(),
                     period: currentActivePeriod,
                     mode: activeGameTab,
+                    gameType: gameType,
                     selection: betValue,
                     amount: totalCost,
                     status: 'pending',
@@ -945,15 +1068,27 @@
             };
 
             const getPeriodForActiveTab = () => {
-                if (activeGameTab === '30sec') return period30s;
-                if (activeGameTab === '1min') return period1m;
-                return period2m;
+                if (gameType === 'trx_wingo') {
+                    if (activeGameTab === '30sec') return periodTrx30s;
+                    if (activeGameTab === '1min') return periodTrx1m;
+                    return periodTrx2m;
+                } else {
+                    if (activeGameTab === '30sec') return period30s;
+                    if (activeGameTab === '1min') return period1m;
+                    return period2m;
+                }
             };
 
             const getHistoryForActiveTab = () => {
-                if (activeGameTab === '30sec') return drawHistory30s;
-                if (activeGameTab === '1min') return drawHistory1m;
-                return drawHistory2m;
+                if (gameType === 'trx_wingo') {
+                    if (activeGameTab === '30sec') return drawHistoryTrx30s;
+                    if (activeGameTab === '1min') return drawHistoryTrx1m;
+                    return drawHistoryTrx2m;
+                } else {
+                    if (activeGameTab === '30sec') return drawHistory30s;
+                    if (activeGameTab === '1min') return drawHistory1m;
+                    return drawHistory2m;
+                }
             };
 
             const openBetConfirmation = (selection) => {
@@ -990,6 +1125,12 @@
             const pendingWithdrawAmount = (withdrawHistory || [])
                 .filter(w => w.status?.toLowerCase() === 'pending')
                 .reduce((sum, w) => sum + Number(w.amount || 0).toFixed(2), 0);
+
+            // Fetch last drawn hash elements for TRX UI Board representation
+            const activeTrxHistory = getHistoryForActiveTab();
+            const currentTrxLast5 = (gameType === 'trx_wingo' && activeTrxHistory.length > 0) 
+                ? activeTrxHistory[0].last5 
+                : ['E', '7', 'D', '1', 'C'];
 
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full bg-[#f5f6fa]">
@@ -1046,7 +1187,7 @@
                                             <button 
                                                 type="button" 
                                                 onClick={() => setShowCountryDrop(!showCountryDrop)} 
-                                                className="bg-slate-900 border border-slate-800 px-3 py-3 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-800 animate-fade-in"
+                                                className="bg-slate-900 border border-slate-800 px-3 py-3 rounded-xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-800"
                                             >
                                                 <span>{selectedCountry.flag}</span>
                                                 <span>{selectedCountry.code}</span>
@@ -1125,7 +1266,7 @@
                                     </div>
                                 </div>
 
-                                {/* ACCOUNT INFO LINE (FIXED AT THE TOP - DIRECTLY UNDER SITE'S NAME HEADER) */}
+                                {/* ACCOUNT INFO LINE */}
                                 {currentUser && (
                                     <div className="bg-slate-950 text-white px-4 py-2.5 flex justify-between items-center text-[11px] border-b border-slate-800 flex-shrink-0 font-sans">
                                         <div className="flex items-center space-x-2">
@@ -1141,7 +1282,7 @@
                                     </div>
                                 )}
 
-                                {/* NAVIGATION BAR (REPOSITIONED BELOW THE ACCOUNT INFO LINE) */}
+                                {/* NAVIGATION BAR */}
                                 {renderSharedNav()}
 
                                 {/* Scrollable Dynamic Views Area */}
@@ -1150,7 +1291,9 @@
                                     {/* NAVIGATION SUB-VIEW: HOME */}
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
-                                            <div onClick={() => setView('game')} className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-all">
+                                            
+                                            {/* Game Card 1: Wingo Classic */}
+                                            <div onClick={() => { setGameType('wingo'); setView('game'); }} className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-all">
                                                 <div className="flex items-center space-x-3.5">
                                                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-[#8a2be2] flex items-center justify-center text-white font-black shadow-sm border border-violet-400 text-lg">SX</div>
                                                     <div>
@@ -1163,6 +1306,43 @@
                                                     <div className="w-8 h-8 rounded-lg bg-secondary text-slate-900 flex items-center justify-center"><Icon name="chevron-right" className="w-5 h-5" /></div>
                                                 </div>
                                             </div>
+
+                                            {/* Game Card 2: TRX WINGO */}
+                                            <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                
+                                                {/* Ambient curve background effect */}
+                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
+                                                
+                                                {/* Card Header Labels */}
+                                                <div className="flex justify-between items-start z-10">
+                                                    <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">TRX Hash Live</span>
+                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">TRON Block</span>
+                                                </div>
+
+                                                {/* Graphical Elements recreating TRX WINGO layout */}
+                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
+                                                    {/* Backdrop Pink Pattern Circle */}
+                                                    <div className="absolute right-2 top-2 w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-600 opacity-80 blur-[0.2px]"></div>
+                                                    
+                                                    {/* Central Red 3D Tron pyramid symbol */}
+                                                    <div className="relative z-10 w-12 h-14 bg-gradient-to-b from-red-500 to-red-800 shadow-lg" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}>
+                                                        <div className="absolute inset-0 bg-red-400/30" style={{ clipPath: 'polygon(50% 0%, 50% 100%, 0% 100%)' }}></div>
+                                                    </div>
+
+                                                    {/* Orange Sphere 'T' */}
+                                                    <div className="absolute bottom-2 -right-1 w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">T</div>
+
+                                                    {/* Green Sphere 'R' */}
+                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
+                                                </div>
+
+                                                {/* Footer branding of TRX Wingo */}
+                                                <div className="z-10 mt-auto">
+                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">TRX Wingo</h2>
+                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Hash Block Color Prediction</span>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     )}
 
@@ -1570,20 +1750,26 @@
                         {/* VIEW: GAME PLAY WINDOW */}
                         {view === 'game' && (
                             <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
-                                <div className="bg-[#fccd11] px-4 py-3 flex items-center justify-between shadow-md">
-                                    <button onClick={() => setView('home')} className="text-slate-900 hover:text-black">
+                                
+                                {/* Dynamic Theme Header depending on gameType */}
+                                <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
+                                    gameType === 'trx_wingo' ? 'bg-[#12161f] border-b border-slate-800 text-white' : 'bg-[#fccd11] text-slate-950'
+                                }`}>
+                                    <button onClick={() => setView('home')} className={`${gameType === 'trx_wingo' ? 'text-white' : 'text-slate-900'} hover:text-black`}>
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
                                     
                                     <div className="flex flex-col items-center">
-                                        <div className="w-8 h-8 bg-slate-950 rounded-lg flex items-center justify-center border border-white shadow mb-0.5">
-                                            <span className="text-sm font-black text-[#fccd11]">SX</span>
+                                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow mb-0.5 ${
+                                            gameType === 'trx_wingo' ? 'bg-rose-600 border-rose-500' : 'bg-slate-950 border-white'
+                                        }`}>
+                                            <span className="text-sm font-black text-white">{gameType === 'trx_wingo' ? 'TRX' : 'SX'}</span>
                                         </div>
-                                        <span className="text-xs font-black text-slate-950 tracking-wider">STEVEN WIN</span>
+                                        <span className="text-xs font-black tracking-wider uppercase">{gameType === 'trx_wingo' ? 'TRX WINGO' : 'STEVEN WIN'}</span>
                                     </div>
 
-                                    <div className="flex space-x-3 text-slate-900">
-                                        <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="hover:text-black"><Icon name="headphones" className="w-5 h-5" /></a>
+                                    <div className="flex space-x-3">
+                                        <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500"><Icon name="headphones" className="w-5 h-5" /></a>
                                         <button onClick={() => window.location.reload()}><Icon name="refresh-cw" className="w-5 h-5" /></button>
                                     </div>
                                 </div>
@@ -1592,15 +1778,17 @@
                                     
                                     <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
                                         {[
-                                            { id: '30sec', desc: 'Wingo 30s' },
-                                            { id: '1min', desc: 'Wingo 1 Min' },
-                                            { id: '2min', desc: 'Wingo 2 Min' }
+                                            { id: '30sec', desc: gameType === 'trx_wingo' ? 'TRX 30s' : 'Wingo 30s' },
+                                            { id: '1min', desc: gameType === 'trx_wingo' ? 'TRX 1m' : 'Wingo 1 Min' },
+                                            { id: '2min', desc: gameType === 'trx_wingo' ? 'TRX 2m' : 'Wingo 2 Min' }
                                         ].map(tab => (
                                             <button 
                                                 key={tab.id}
                                                 onClick={() => { setActiveGameTab(tab.id); setGameSubTab('history'); }}
                                                 className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
-                                                    activeGameTab === tab.id ? 'bg-secondary text-slate-950 shadow' : 'text-slate-500 hover:text-slate-800'
+                                                    activeGameTab === tab.id 
+                                                        ? (gameType === 'trx_wingo' ? 'bg-rose-600 text-white shadow' : 'bg-secondary text-slate-950 shadow') 
+                                                        : 'text-slate-500 hover:text-slate-800'
                                                 }`}
                                             >
                                                 {tab.desc}
@@ -1608,88 +1796,167 @@
                                         ))}
                                     </div>
 
-                                    <div className="bg-gradient-to-r from-violet-700 to-indigo-950 text-white rounded-2xl p-4 shadow-sm flex justify-between items-center border border-indigo-900/40">
+                                    {/* Wallet Balance Display Card */}
+                                    <div className={`rounded-2xl p-4 shadow-sm flex justify-between items-center border transition-all ${
+                                        gameType === 'trx_wingo' ? 'bg-slate-900 border-slate-800 text-white' : 'bg-gradient-to-r from-violet-700 to-indigo-950 text-white border-indigo-900/40'
+                                    }`}>
                                         <div>
-                                            <span className="text-[9px] text-slate-300 uppercase tracking-wider block">SX Wallet Balance</span>
-                                            <span className="text-xl font-black text-secondary">৳{Number(balance || 0).toFixed(2)}</span>
+                                            <span className="text-[9px] text-slate-300 uppercase tracking-wider block">Wallet Balance</span>
+                                            <span className="text-xl font-black text-[#fccd11]">৳{Number(balance || 0).toFixed(2)}</span>
                                         </div>
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
                                     </div>
 
-                                    <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden">
-                                        <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
-                                            <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
-                                            <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
-                                        </div>
+                                    {/* Counter & Period status display */}
+                                    {gameType === 'trx_wingo' ? (
+                                        /* AUTHENTIC TRX BOARD UI WITH THE YELLOW GOLD THEME & SPHERES */
+                                        <div className="bg-[#fcc911] p-4 rounded-3xl border border-yellow-500 text-slate-900 relative shadow-md">
+                                            {/* Header Section */}
+                                            <div className="flex items-center space-x-3 mb-4">
+                                                <div className="bg-[#dfaf0a] rounded-2xl px-3 py-2 text-center text-white flex flex-col justify-center items-center shadow-inner min-w-[85px]">
+                                                    <svg className="w-5 h-5 text-white animate-spin mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <polyline points="12 6 12 12 16 14" />
+                                                    </svg>
+                                                    <span className="text-[9px] font-extrabold block">TrxWinGo</span>
+                                                    <span className="text-[8px] opacity-90">{activeGameTab === '30sec' ? '30 Sec' : activeGameTab === '1min' ? '1 Min' : '2 Min'}</span>
+                                                </div>
 
-                                        <div className="grid grid-cols-2 gap-3 pt-3 items-center">
-                                            <div>
-                                                <div className="flex space-x-1 mb-2">
-                                                    {getHistoryForActiveTab().slice(0, 5).map((draw, idx) => (
-                                                        <div key={idx} className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-900">
-                                                            {draw.number}
+                                                <div className="flex-1 flex flex-wrap gap-1.5 justify-end">
+                                                    <span className="border border-yellow-700 text-yellow-900 px-3 py-1 rounded-full text-[9px] font-extrabold uppercase">Period</span>
+                                                    <button className="bg-white hover:bg-slate-100 text-slate-800 px-2.5 py-1 rounded-full text-[9px] font-bold flex items-center space-x-1 shadow-sm">
+                                                        <span>📜 How to play</span>
+                                                    </button>
+                                                    <button className="bg-white hover:bg-slate-100 text-slate-800 px-2.5 py-1 rounded-full text-[9px] font-bold flex items-center space-x-1 shadow-sm">
+                                                        <span>🔍 Public Chain Query</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Period ID and Ticking Counter Row */}
+                                            <div className="flex justify-between items-center py-2.5 border-t border-yellow-600/20">
+                                                <div>
+                                                    <span className="text-[10px] text-yellow-900 font-extrabold block">Active Period</span>
+                                                    <span className="text-sm font-black font-mono tracking-tight text-yellow-950">{getPeriodForActiveTab()}</span>
+                                                </div>
+
+                                                <div className="text-right">
+                                                    <span className="text-[10px] text-yellow-900 font-extrabold block mr-1">Draw time</span>
+                                                    <div className="flex justify-end space-x-1 mt-1 font-mono">
+                                                        {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
+                                                            <span key={index} className={`px-1.5 py-0.5 text-sm font-black rounded ${char === ':' ? 'bg-transparent text-slate-900 px-0' : 'bg-white text-slate-900 border border-yellow-600/30 shadow-sm'}`}>
+                                                                {char}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Dynamic Block Hash character display spheres */}
+                                            <div className="flex justify-between items-center mt-3 bg-[#e8b90c] p-3 rounded-2xl border border-yellow-600/20">
+                                                <span className="text-[10px] font-black text-yellow-950 uppercase tracking-wide">Block Hash:</span>
+                                                <div className="flex space-x-1.5">
+                                                    {currentTrxLast5.map((char, index) => (
+                                                        <div 
+                                                            key={index} 
+                                                            className="w-8 h-8 rounded-full bg-gradient-to-b from-[#ff82a3] to-[#ff2b61] text-white border-2 border-white flex items-center justify-center font-black text-xs shadow-[0_4px_10px_rgba(255,43,97,0.3)] animate-pulse"
+                                                        >
+                                                            {char}
                                                         </div>
                                                     ))}
                                                 </div>
-                                                <span className="text-[9px] block text-slate-700">Period ID:</span>
-                                                <span className="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
                                             </div>
 
-                                            <div className="text-right">
-                                                <span className="text-[9px] font-bold block text-slate-700">Time remaining</span>
-                                                <div className="flex justify-end space-x-1 mt-1 font-mono">
-                                                    {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                        <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
-                                                            {char}
-                                                        </span>
-                                                    ))}
+                                            {/* COUNTDOWN LOCKING SCREEN OVERLAY */}
+                                            {getTimerForActiveTab() <= 5 && (
+                                                <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2 rounded-3xl backdrop-blur-sm animate-fade-in">
+                                                    <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
+                                                    <div className="flex space-x-4">
+                                                        <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl">
+                                                            <span className="text-5xl font-black text-rose-500">0</span>
+                                                        </div>
+                                                        <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl animate-bounce">
+                                                            <span className="text-5xl font-black text-rose-500">{getTimerForActiveTab()}</span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            )}
                                         </div>
+                                    ) : (
+                                        /* CLASSIC WINGO COUNTER BOARD */
+                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden">
+                                            <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
+                                                <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
+                                                <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
+                                            </div>
 
-                                        {/* COUNTDOWN 5-SECOND BIG CARDS OVERLAY */}
-                                        {getTimerForActiveTab() <= 5 && (
-                                            <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in">
-                                                <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
-                                                <div className="flex space-x-4">
-                                                    {/* Left Card: Always '0' */}
-                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
-                                                        <span className="text-6xl font-black text-amber-500">0</span>
+                                            <div className="grid grid-cols-2 gap-3 pt-3 items-center">
+                                                <div>
+                                                    <div className="flex space-x-1 mb-2">
+                                                        {getHistoryForActiveTab().slice(0, 5).map((draw, idx) => (
+                                                            <div key={idx} className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-800">
+                                                                {draw.number}
+                                                            </div>
+                                                        ))}
                                                     </div>
-                                                    {/* Right Card: Current Ticking Second */}
-                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
-                                                        <span className="text-6xl font-black text-amber-500">{getTimerForActiveTab()}</span>
+                                                    <span className="text-[9px] block text-slate-700">Period ID:</span>
+                                                    <span className="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
+                                                </div>
+
+                                                <div className="text-right">
+                                                    <span className="text-[9px] font-bold block text-slate-700">Time remaining</span>
+                                                    <div className="flex justify-end space-x-1 mt-1 font-mono">
+                                                        {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
+                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
+                                                                {char}
+                                                            </span>
+                                                        ))}
                                                     </div>
                                                 </div>
                                             </div>
-                                        )}
-                                    </div>
 
+                                            {getTimerForActiveTab() <= 5 && (
+                                                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in">
+                                                    <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
+                                                    <div className="flex space-x-4">
+                                                        <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
+                                                            <span className="text-6xl font-black text-amber-500">0</span>
+                                                        </div>
+                                                        <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
+                                                            <span className="text-6xl font-black text-amber-500">{getTimerForActiveTab()}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Action Buttons: Red, Green, Violet */}
                                     <div className="grid grid-cols-3 gap-2">
-                                        <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen text-white py-3 rounded-xl font-bold text-xs">Green</button>
-                                        <button onClick={() => openBetConfirmation('violet')} className="bg-gameViolet text-white py-3 rounded-xl font-bold text-xs">Violet</button>
-                                        <button onClick={() => openBetConfirmation('red')} className="bg-gameRed text-white py-3 rounded-xl font-bold text-xs">Red</button>
+                                        <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen text-white py-3 rounded-xl font-bold text-xs shadow-md">Green</button>
+                                        <button onClick={() => openBetConfirmation('violet')} className="bg-gameViolet text-white py-3 rounded-xl font-bold text-xs shadow-md">Violet</button>
+                                        <button onClick={() => openBetConfirmation('red')} className="bg-gameRed text-white py-3 rounded-xl font-bold text-xs shadow-md">Red</button>
                                     </div>
 
                                     {/* BALLS GRID SELECTION PANEL */}
                                     <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                         <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                             {[
-                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
-                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
-                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
-                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' }
+                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
+                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' }
                                             ].map(ball => (
                                                 <button 
                                                     key={ball.val} 
                                                     onClick={() => openBetConfirmation(ball.val)} 
-                                                    className={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 border border-white/20 overflow-hidden ${ball.style}`}
+                                                    className={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 overflow-hidden ${ball.style}`}
                                                 >
                                                     <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/25 rounded-full filter blur-[0.5px]"></div>
                                                     <span className="z-10 text-white font-extrabold text-base tracking-tighter shadow-sm">{ball.val}</span>
@@ -1698,11 +1965,38 @@
                                         </div>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] py-2.5 rounded-xl font-black text-xs text-slate-950">BIG</button>
-                                        <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] py-2.5 text-white rounded-xl font-black text-xs">SMALL</button>
+                                    {/* Multiplier Adjustment & Random Selection row */}
+                                    <div className="flex items-center justify-between space-x-1.5 overflow-x-auto bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100">
+                                        <button 
+                                            onClick={() => openBetConfirmation(Math.floor(Math.random() * 10))} 
+                                            className="px-3.5 py-1.5 border border-red-500 rounded-lg text-[10px] font-black text-red-500 hover:bg-red-50"
+                                        >
+                                            Random
+                                        </button>
+                                        <div className="flex space-x-1">
+                                            {[1, 5, 10, 20, 50, 100].map(val => (
+                                                <button 
+                                                    key={val} 
+                                                    onClick={() => { setMultiplier(val); showToast(`Multiplier set to x${val}`, 'success'); }} 
+                                                    className={`px-3 py-1.5 rounded-lg text-[10px] font-black ${
+                                                        multiplier === val 
+                                                            ? 'bg-rose-600 text-white' 
+                                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                                                    }`}
+                                                >
+                                                    x{val}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
 
+                                    {/* Big / Small Betting Nodes */}
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] py-2.5 rounded-xl font-black text-xs text-slate-950 shadow-md">BIG</button>
+                                        <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] py-2.5 text-white rounded-xl font-black text-xs shadow-md">SMALL</button>
+                                    </div>
+
+                                    {/* History logs section */}
                                     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
                                         <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[10px] font-bold">
                                             <button onClick={() => setGameSubTab('history')} className={`py-3 ${gameSubTab === 'history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>Game History</button>
@@ -1711,25 +2005,82 @@
 
                                         <div className="p-3">
                                             {gameSubTab === 'history' ? (
-                                                <div className="space-y-1.5 text-[10px]">
-                                                    {getHistoryForActiveTab().map((item, idx) => (
-                                                        <div key={idx} className="flex justify-between items-center py-1.5 border-b border-slate-50 text-slate-600">
-                                                            <span>{item.period}</span>
-                                                            <span className="font-bold text-slate-900 bg-slate-100 w-5 h-5 flex items-center justify-center rounded-full">{item.number}</span>
-                                                            <span className="font-bold">{item.size}</span>
-                                                            <span className="capitalize text-primary">{item.color}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
+                                                /* CONDITIONAL RENDER: TRX BLOCK CHAIN VERIFICATION DIRECTORY */
+                                                gameType === 'trx_wingo' ? (
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-[10px] text-left border-collapse">
+                                                            <thead>
+                                                                <tr className="bg-[#fbc911] text-yellow-950 font-bold border-b border-yellow-500/30">
+                                                                    <th className="py-2.5 px-1.5 text-center">Period</th>
+                                                                    <th className="py-2.5 px-1 text-center">Block height</th>
+                                                                    <th className="py-2.5 px-1 text-center">Block time</th>
+                                                                    <th className="py-2.5 px-1 text-center">Hash value</th>
+                                                                    <th className="py-2.5 px-1.5 text-center">Result</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {getHistoryForActiveTab().map((item, idx) => {
+                                                                    // Format Period like the authentic screenshot: 202**0418
+                                                                    const rawPeriod = item.period;
+                                                                    const formattedPeriod = rawPeriod.length > 7 
+                                                                        ? `${rawPeriod.substring(0, 3)}**${rawPeriod.slice(-4)}` 
+                                                                        : rawPeriod;
+                                                                    
+                                                                    // Outcome sphere color styles
+                                                                    const ballColorClass = item.number === 0 ? 'bg-gradient-to-r from-red-500 to-violet-600' : 
+                                                                        (item.number === 5 ? 'bg-gradient-to-r from-emerald-500 to-violet-600' :
+                                                                        ([1,3,7,9].includes(item.number) ? 'bg-emerald-500' : 'bg-red-500'));
+
+                                                                    return (
+                                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 font-mono text-[9px] text-slate-700">
+                                                                            <td className="py-2.5 px-1.5 text-center font-semibold text-slate-800">{formattedPeriod}</td>
+                                                                            <td className="py-2.5 px-1 text-center">
+                                                                                <span className="flex items-center justify-center space-x-0.5">
+                                                                                    <span className="text-slate-800">{item.blockHeight || '84303440'}</span>
+                                                                                    <span className="w-3.5 h-3.5 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center font-bold text-[8px] scale-90 cursor-help">?</span>
+                                                                                </span>
+                                                                            </td>
+                                                                            <td className="py-2.5 px-1 text-center text-slate-500">{item.blockTime || '23:57:54'}</td>
+                                                                            <td className="py-2.5 px-1 text-center font-bold text-slate-500">{item.shortHash || '**7d1c'}</td>
+                                                                            <td className="py-2.5 px-1.5 text-center">
+                                                                                <div className="flex items-center justify-center space-x-1.5 font-sans">
+                                                                                    <span className={`w-4 h-4 rounded-full text-white font-bold text-[8px] flex items-center justify-center shadow-sm ${ballColorClass}`}>
+                                                                                        {item.number}
+                                                                                    </span>
+                                                                                    <span className={`font-black text-[9px] ${item.size === 'Big' ? 'text-amber-500' : 'text-blue-500'}`}>
+                                                                                        {item.size === 'Big' ? 'B' : 'S'}
+                                                                                    </span>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                ) : (
+                                                    /* CLASSIC WINGO DIRECTORY LIST */
+                                                    <div className="space-y-1.5 text-[10px]">
+                                                        {getHistoryForActiveTab().map((item, idx) => (
+                                                            <div key={idx} className="flex justify-between items-center py-1.5 border-b border-slate-50 text-slate-600">
+                                                                <span>{item.period}</span>
+                                                                <span className="font-bold text-slate-900 bg-slate-100 w-5 h-5 flex items-center justify-center rounded-full">{item.number}</span>
+                                                                <span className="font-bold">{item.size}</span>
+                                                                <span className="capitalize text-primary">{item.color}</span>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )
                                             ) : (
+                                                /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
                                                 <div className="space-y-2 text-[10px]">
-                                                    {myBets.filter(b => b.mode === activeGameTab).length === 0 ? (
+                                                    {myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
                                                         <div className="text-center py-8 text-slate-400">
                                                             <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
                                                             <span>No bets logged in this mode yet.</span>
                                                         </div>
                                                     ) : (
-                                                        myBets.filter(b => b.mode === activeGameTab).map(bet => (
+                                                        myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).map(bet => (
                                                             <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
                                                                 <div>
                                                                     <span className="block text-slate-400 text-[9px] font-mono">Period: {bet.period}</span>
