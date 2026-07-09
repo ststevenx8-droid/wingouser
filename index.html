@@ -220,9 +220,10 @@
             return <IconComponent className={className} {...props} />;
         };
 
+        // --- STEVENX Premium Crown & Winged Vector Logo ---
         const StevenXLogoVector = () => (
-            <div className="flex flex-col items-center select-none">
-                <svg viewBox="0 0 500 500" className="w-24 h-24 drop-shadow-[0_0_15px_rgba(138,43,226,0.6)]" xmlns="http://www.w3.org/2000/svg">
+            <div className="flex flex-col items-center select-none w-full">
+                <svg viewBox="0 0 500 500" className="w-28 h-28 drop-shadow-[0_0_15px_rgba(138,43,226,0.6)]" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                         <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stopColor="#ba55d3"/>
@@ -236,13 +237,13 @@
                             <stop offset="100%" stopColor="#3a4f5f"/>
                         </linearGradient>
                     </defs>
-                    <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2">
+                    <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2.5">
                         <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
                         <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
                         <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
                         <path d="M 125 270 C 80 290, 50 260, 60 210 C 80 235, 105 250, 135 252 Z" />
                     </g>
-                    <g transform="translate(500,0) scale(-1,1)" fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2">
+                    <g transform="translate(500,0) scale(-1,1)" fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="2.5">
                         <path d="M 120 180 C 80 180, 40 140, 50 80 C 70 120, 100 150, 130 160 Z" />
                         <path d="M 110 210 C 60 210, 30 180, 42 120 C 60 160, 90 180, 120 190 Z" />
                         <path d="M 115 240 C 70 250, 40 220, 50 170 C 70 200, 95 215, 125 220 Z" />
@@ -252,7 +253,12 @@
                     <circle cx="250" cy="250" r="130" fill="none" stroke="url(#silverGloss)" strokeWidth="3" />
                     <path d="M 190 130 L 210 80 L 235 110 L 250 65 L 265 110 L 290 80 L 310 130 Z" fill="url(#silverGloss)" stroke="url(#purpleGlow)" strokeWidth="3" />
                     <polygon points="242,100 250,85 258,100 250,115" fill="url(#purpleGlow)"/>
-                    <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="4">
+                    {/* Financial Trading Candlesticks inside X layout */}
+                    <line x1="210" y1="200" x2="210" y2="280" stroke="url(#silverGloss)" strokeWidth="4" />
+                    <rect x="206" y="220" width="8" height="30" fill="#18b660" />
+                    <line x1="290" y1="210" x2="290" y2="290" stroke="url(#silverGloss)" strokeWidth="4" />
+                    <rect x="286" y="230" width="8" height="40" fill="#f34242" />
+                    <g fill="url(#purpleGlow)" stroke="url(#silverGloss)" strokeWidth="4.5">
                         <path d="M 170 160 L 220 160 L 290 320 L 330 320 L 330 340 L 280 340 L 210 180 L 170 180 Z" />
                         <path d="M 330 160 L 280 160 L 245 235 L 280 315 L 250 340 L 170 340 L 170 320 L 220 320 L 255 250 Z" />
                     </g>
@@ -277,6 +283,31 @@
                 </g>
             </svg>
         );
+
+        // --- Synthetic Beep Sound Synthesizer ---
+        const playCountdownBeep = (isFinal = false) => {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.frequency.value = isFinal ? 900 : 550; // Pitch sets higher on final tick
+                osc.type = 'sine';
+                
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.12);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                // Catches strict browser permission blocks
+            }
+        };
 
         function App() {
             const [view, setView] = useState('auth'); 
@@ -359,6 +390,9 @@
             const [popupType, setPopupType] = useState('win'); // 'win' | 'lose'
             const [popupAmount, setPopupAmount] = useState(0);
 
+            // Audio trigger tracker to prevent multiple checks playing simultaneously 
+            const lastPlayedTimeRef = useRef(-1);
+
             // Helper Refs for smooth game ticks without stale state
             const period30sRef = useRef(period30s);
             const period1mRef = useRef(period1m);
@@ -392,7 +426,7 @@
                 }
             }, [toast.show]);
 
-            // Session check on load and subscription
+            // Session checker & Firebase event handler
             useEffect(() => {
                 if (!sessionPhone) {
                     setCurrentUser(null);
@@ -419,7 +453,9 @@
                         setMyBets(userData.bets ? Object.values(userData.bets) : []);
                         setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
                         setWithdrawHistory(userData.withdrawals ? Object.values(userData.withdrawals) : []);
-                        setView('home');
+                        
+                        // FIX: Safely route to dashboard ONLY if the app is currently showing 'auth' page
+                        setView(prev => prev === 'auth' ? 'home' : prev);
                     } else {
                         localStorage.removeItem('steven_win_current_phone');
                         setSessionPhone('');
@@ -441,6 +477,17 @@
                     return String(Number(prev) + 1);
                 }
             };
+
+            // Sound player context hook
+            useEffect(() => {
+                const activeTimer = getTimerForActiveTab();
+                if (view === 'game' && activeTimer <= 5 && activeTimer >= 0) {
+                    if (lastPlayedTimeRef.current !== activeTimer) {
+                        playCountdownBeep(activeTimer === 0);
+                        lastPlayedTimeRef.current = activeTimer;
+                    }
+                }
+            }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
             // Opponent Defeat Logic
             const determineOutcomeWithLossParameters = (mode, currentPeriod) => {
@@ -990,7 +1037,7 @@
                         </div>
                     )}
 
-                    {/* VIEWPORT CONTROLLER (Scrollable view above Bottom Navbar) */}
+                    {/* VIEWPORT CONTROLLER */}
                     <div className="flex-1 flex flex-col justify-start overflow-y-auto pb-4">
                         
                         {/* VIEW: AUTHENTICATION */}
@@ -1102,9 +1149,11 @@
                                 <div className="p-4 space-y-4">
                                     <div onClick={() => setView('game')} className="flex items-center justify-between bg-white p-4 rounded-2xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-all">
                                         <div className="flex items-center space-x-3.5">
-                                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-violet-600 to-[#8a2be2] flex items-center justify-center text-white font-black shadow-sm border border-violet-400 text-lg">SX</div>
+                                            <div className="w-12 h-12 flex items-center justify-center bg-[#0d111b] rounded-xl border border-violet-500/30 shadow-md">
+                                                <StevenXLogoVector />
+                                            </div>
                                             <div>
-                                                <span className="font-extrabold text-slate-800 font-sans block text-sm">Wingo Game Mode</span>
+                                                <span className="font-extrabold text-slate-800 font-sans block text-sm">Wingo Color Prediction</span>
                                                 <span className="text-[10px] bg-violet-100 text-violet-700 px-2.5 py-0.5 rounded-full font-bold">30s / 1m / 2m Live</span>
                                             </div>
                                         </div>
@@ -1196,11 +1245,11 @@
                         {view === 'home' && activeNav === 'account' && (
                             <div className="flex-1 flex flex-col bg-[#f5f6fa]">
                                 <div className="bg-gradient-to-b from-indigo-950 to-slate-950 text-white px-6 py-6 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
-                                    <div className="mb-3">
+                                    <div className="mb-3 w-full flex justify-center">
                                         <StevenXLogoVector />
                                     </div>
 
-                                    <h2 className="text-sm font-bold">{currentUser ? currentUser.username : 'Guest User'}</h2>
+                                    <h2 className="text-sm font-bold mt-2">{currentUser ? currentUser.username : 'Guest User'}</h2>
                                     <p className="text-[11px] text-slate-400 mt-0.5">Phone: {currentUser ? currentUser.phone : 'Not Verified'}</p>
                                     
                                     {/* STX ID DISPLAY */}
@@ -1547,15 +1596,15 @@
 
                         {/* VIEW: GAME PLAY WINDOW */}
                         {view === 'game' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between">
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative">
                                 <div className="bg-[#fccd11] px-4 py-3 flex items-center justify-between shadow-md">
                                     <button onClick={() => setView('home')} className="text-slate-900 hover:text-black">
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
                                     
                                     <div className="flex flex-col items-center">
-                                        <div className="w-8 h-8 bg-slate-950 rounded-lg flex items-center justify-center border border-white shadow mb-0.5">
-                                            <span className="text-sm font-black text-[#fccd11]">SX</span>
+                                        <div className="w-8 h-8 flex items-center justify-center bg-[#0b0f19] rounded-lg border border-white shadow-md mb-0.5">
+                                            <StevenXLogoVector />
                                         </div>
                                         <span className="text-xs font-black text-slate-950 tracking-wider">STEVEN WIN</span>
                                     </div>
@@ -1566,7 +1615,7 @@
                                     </div>
                                 </div>
 
-                                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-16">
+                                <div className="flex-1 overflow-y-auto px-4 py-3 space-y-4 pb-16 relative">
                                     
                                     <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
                                         {[
@@ -1594,7 +1643,7 @@
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
                                     </div>
 
-                                    <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300">
+                                    <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden">
                                         <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
                                             <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
                                             <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
@@ -1624,6 +1673,23 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        {/* COUNTDOWN 5-SECOND BIG CARDS OVERLAY */}
+                                        {getTimerForActiveTab() <= 5 && (
+                                            <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in">
+                                                <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
+                                                <div className="flex space-x-4">
+                                                    {/* Left Card: Always '0' */}
+                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
+                                                        <span className="text-6xl font-black text-amber-500">0</span>
+                                                    </div>
+                                                    {/* Right Card: Current Ticking Second */}
+                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
+                                                        <span className="text-6xl font-black text-amber-500">{getTimerForActiveTab()}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     <div className="grid grid-cols-3 gap-2">
@@ -1632,20 +1698,20 @@
                                         <button onClick={() => openBetConfirmation('red')} className="bg-gameRed text-white py-3 rounded-xl font-bold text-xs">Red</button>
                                     </div>
 
-                                    {/* PREMIUM GLOSSY COLOURED BALLS SELECTION PANEL */}
+                                    {/* BALLS GRID SELECTION PANEL */}
                                     <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                         <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                             {[
                                                 { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
                                                 { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
-                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
-                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
-                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' },
-                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)]' },
-                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)]' }
+                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
+                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)]' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' },
+                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)]' },
+                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)]' }
                                             ].map(ball => (
                                                 <button 
                                                     key={ball.val} 
@@ -1715,7 +1781,7 @@
                         )}
                     </div>
 
-                    {/* VIEW: BOTTOM NAVIGATION BAR (Anchored to App Window) */}
+                    {/* VIEW: BOTTOM NAVIGATION BAR */}
                     {view === 'home' && renderSharedNav()}
 
                     {/* DYNAMIC BET PLACEMENT POPUP SHEET */}
@@ -1795,12 +1861,12 @@
                         </div>
                     )}
 
-                    {/* DYNAMIC RESULT POPUP (Matches reference visual style closely) */}
+                    {/* DYNAMIC RESULT POPUP Overlay */}
                     {showResultPopup && (
-                        <div className="absolute inset-0 bg-black/80 z-[1000] flex flex-col items-center justify-center p-6 animate-fade-in">
+                        <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-6 animate-fade-in">
                             <div className="relative w-full max-w-sm bg-gradient-to-b from-[#192130] to-[#0c1017] border border-slate-800 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
                                 
-                                {/* Confetti gold aesthetics */}
+                                {/* Confetti gold overlay */}
                                 <div className="absolute top-0 inset-x-0 h-40 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_top,rgba(252,205,17,0.3),transparent_60%)]"></div>
                                 
                                 {popupType === 'win' ? (
