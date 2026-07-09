@@ -45,6 +45,13 @@
             width: 0px;
             background: transparent;
         }
+        @keyframes zoomIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-zoom-in {
+            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
     </style>
 </head>
 <body class="flex justify-center items-center min-h-screen w-full">
@@ -269,7 +276,7 @@
 
         // Simulated TRON block detail generator
         const generateTrxBlockData = (period, targetDigit) => {
-            const baseBlockHeight = 84300000 + (Number(period % 100000n) * 20);
+            const baseBlockHeight = baseBlockHeight = 84300000 + (Number(period % 100000n) * 20);
             const hexChars = 'abcdef';
             const suffixLength = Math.floor(Math.random() * 3); 
             let suffix = '';
@@ -336,13 +343,13 @@
             return history;
         };
 
-        // Super Ace Reel Configuration Symbols
-        const SUPER_ACE_SYMBOLS = [
-            { id: 'A', label: 'ACE', color: 'gold', badge: 'A' },
-            { id: 'K', label: 'KING', color: 'yellow', badge: 'K' },
-            { id: 'Q', label: 'QUEEN', color: 'red', badge: 'Q' },
-            { id: 'J', label: 'JACK', color: 'blue', badge: 'J' },
-            { id: 'S', label: 'SPADE', color: 'silver', badge: '♠' }
+        // --- Custom Slot Machine Config Coins ---
+        const SLOT_COINS = [
+            { id: 'bronze', value: 0, label: 'Bronze Coin', symbol: '🥉', payout: 0, color: 'text-amber-600' },
+            { id: 'blue', value: 8, label: 'Blue Coin', symbol: '🔵', payout: 8, color: 'text-blue-500' },
+            { id: 'gold', value: 10, label: 'Gold Coin', symbol: '🟡', payout: 10, color: 'text-yellow-500' },
+            { id: 'red', value: 50, label: 'Red Coin', symbol: '🔴', payout: 50, color: 'text-red-500' },
+            { id: 'secret', value: 100, label: 'Secret Coin', symbol: '🔮', payout: 100, color: 'text-purple-500' }
         ];
 
         function App() {
@@ -355,7 +362,7 @@
             const [isLoading, setIsLoading] = useState(false);
 
             // Active Game States
-            const [gameType, setGameType] = useState('wingo'); // 'wingo', 'trx_wingo', or 'super_ace'
+            const [gameType, setGameType] = useState('wingo'); // 'wingo' or 'trx_wingo' or 'slot_machine'
 
             // Pagination state for Game History lists
             const [historyPage, setHistoryPage] = useState(1);
@@ -436,13 +443,12 @@
             const [popupType, setPopupType] = useState('win'); 
             const [popupAmount, setPopupAmount] = useState(0);
 
-            // --- Super Ace Slot Game States ---
-            const [aceBetAmount, setAceBetAmount] = useState(2.00);
-            const [isAceSpinning, setIsAceSpinning] = useState(false);
-            const [aceMultiplier, setAceMultiplier] = useState(1); // can sequence x1 -> x2 -> x3 -> x5
-            const [aceWinDisplay, setAceWinDisplay] = useState(0.00);
-            const [aceGrid, setAceGrid] = useState(Array(20).fill(SUPER_ACE_SYMBOLS[0])); // 5 cols x 4 rows
-            const [winningAceCells, setWinningAceCells] = useState([]);
+            // --- Premium Slot Machine States ---
+            const [slotBet, setSlotBet] = useState(10);
+            const [isSlotSpinning, setIsSlotSpinning] = useState(false);
+            const [slotReels, setSlotReels] = useState(['🥉', '🥉', '🥉']);
+            const [zoomWinningCoin, setZoomWinningCoin] = useState(null);
+            const [showZoomWinning, setShowZoomWinning] = useState(false);
 
             // Audio trigger tracker to prevent multiple checks playing simultaneously 
             const lastPlayedTimeRef = useRef(-1);
@@ -476,11 +482,6 @@
             useEffect(() => {
                 setHistoryPage(1);
             }, [gameType, activeGameTab, gameSubTab]);
-
-            // Pre-populate Super Ace Grid with random starting state
-            useEffect(() => {
-                setAceGrid(Array.from({ length: 20 }, () => SUPER_ACE_SYMBOLS[Math.floor(Math.random() * SUPER_ACE_SYMBOLS.length)]));
-            }, []);
 
             const getSanitizedPath = (fullPhone) => {
                 return fullPhone.replace(/[^0-9]/g, "");
@@ -595,7 +596,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic
+            // Opponent Defeat Logic set to 75% lose, 25% profit
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -605,7 +606,8 @@
 
                 const controlRoll = Math.random() * 100;
 
-                if (controlRoll <= 99) {
+                // 75% lose control parameter
+                if (controlRoll <= 75) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
@@ -1148,83 +1150,111 @@
                 setView('auth');
             };
 
-            // --- Super Ace Slot Game Handlers ---
-            const triggerSuperAceSpin = () => {
-                if (isAceSpinning) return;
-                if (balance < aceBetAmount) {
+            // --- Premium Coin Slot Machine Handlers ---
+            const triggerSlotMachineSpin = () => {
+                if (isSlotSpinning) return;
+                
+                const betVal = Number(slotBet);
+                if (isNaN(betVal) || betVal < 10) {
+                    showToast('Minimum bet is ৳10 BDT', 'error');
+                    return;
+                }
+                if (balance < betVal) {
                     showToast('Insufficient balance to spin!', 'error');
                     return;
                 }
 
-                // Deduct balance and begin spin simulation
-                const nextBalance = balance - aceBetAmount;
+                // Deduct balance and spin
+                const nextBalance = balance - betVal;
                 setBalance(nextBalance);
-                setIsAceSpinning(true);
-                setWinningAceCells([]);
-                setAceWinDisplay(0.00);
+                setIsSlotSpinning(true);
+                setShowZoomWinning(false);
+                setZoomWinningCoin(null);
 
                 if (currentUser) {
                     const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
                     db.ref(dbPath).update({ balance: nextBalance });
                 }
 
-                let rollCount = 0;
-                const interval = setInterval(() => {
-                    setAceGrid(Array.from({ length: 20 }, () => SUPER_ACE_SYMBOLS[Math.floor(Math.random() * SUPER_ACE_SYMBOLS.length)]));
-                    rollCount++;
+                // Probability algorithm configuration
+                // High Bet Option (>= 100 BDT) gets 80% winning luck parameter
+                let winningCoin = null;
+                const roll = Math.random() * 100;
 
-                    if (rollCount >= 10) {
+                if (betVal >= 100) {
+                    // High Luck Pool: Bronze 20%, Blue 30%, Gold 30%, Red 18%, Secret 2%
+                    if (roll < 20) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'bronze');
+                    } else if (roll < 50) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'blue');
+                    } else if (roll < 80) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'gold');
+                    } else if (roll < 98) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'red');
+                    } else {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'secret');
+                    }
+                } else {
+                    // Standard Luck Pool: Bronze 70%, Blue 10%, Gold 10%, Red 9%, Secret 1%
+                    if (roll < 70) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'bronze');
+                    } else if (roll < 80) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'blue');
+                    } else if (roll < 90) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'gold');
+                    } else if (roll < 99) {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'red');
+                    } else {
+                        winningCoin = SLOT_COINS.find(c => c.id === 'secret');
+                    }
+                }
+
+                // Reel spinning interval effect
+                let spinCount = 0;
+                const interval = setInterval(() => {
+                    const randomReels = Array.from({ length: 3 }, () => {
+                        const randomCoin = SLOT_COINS[Math.floor(Math.random() * SLOT_COINS.length)];
+                        return randomCoin.symbol;
+                    });
+                    setSlotReels(randomReels);
+                    spinCount++;
+
+                    if (spinCount >= 15) {
                         clearInterval(interval);
                         
-                        // Set final layout
-                        const finalGrid = Array.from({ length: 20 }, () => SUPER_ACE_SYMBOLS[Math.floor(Math.random() * SUPER_ACE_SYMBOLS.length)]);
-                        setAceGrid(finalGrid);
-                        setIsAceSpinning(false);
-
-                        // Basic win line calculation matching card layouts
-                        // Match adjacent duplicate values across columns
-                        const countMap = {};
-                        finalGrid.forEach(sym => {
-                            countMap[sym.id] = (countMap[sym.id] || 0) + 1;
-                        });
-
-                        let winMultiplier = 1;
-                        let winningSymbolId = null;
-                        const matchingSymbols = Object.entries(countMap).filter(([_, qty]) => qty >= 4);
-
-                        if (matchingSymbols.length > 0) {
-                            winningSymbolId = matchingSymbols[0][0];
-                            const qty = matchingSymbols[0][1];
-                            winMultiplier = qty === 4 ? 3 : 5; // x3 or x5 pay out modifiers
+                        // Final alignment representation
+                        let finalReels = [];
+                        if (winningCoin.id === 'bronze') {
+                            // Mismatched configuration or bronze matching
+                            finalReels = ['🥉', '🥉', '🥉'];
+                        } else {
+                            // Solid matched win pattern
+                            finalReels = [winningCoin.symbol, winningCoin.symbol, winningCoin.symbol];
                         }
+                        
+                        setSlotReels(finalReels);
+                        setIsSlotSpinning(false);
 
-                        // Determine consecutive multiplier stage payout randomly
-                        const multiplierStages = [1, 2, 3, 5];
-                        const randomStage = multiplierStages[Math.floor(Math.random() * multiplierStages.length)];
-                        setAceMultiplier(randomStage);
-
-                        if (winningSymbolId) {
-                            const calculatedWin = Number((aceBetAmount * winMultiplier * randomStage).toFixed(2));
-                            const indexes = [];
-                            finalGrid.forEach((sym, idx) => {
-                                if (sym.id === winningSymbolId) indexes.push(idx);
-                            });
-
-                            setWinningAceCells(indexes);
-                            setAceWinDisplay(calculatedWin);
-                            const updatedBalance = nextBalance + calculatedWin;
+                        // Payout distribution check
+                        if (winningCoin.payout > 0) {
+                            const wonAmt = Number(winningCoin.payout);
+                            const updatedBalance = nextBalance + wonAmt;
                             setBalance(updatedBalance);
 
                             if (currentUser) {
                                 const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
                                 db.ref(dbPath).update({ balance: updatedBalance });
                             }
-                            showToast(`You Win! ৳${calculatedWin.toFixed(2)}`, 'success');
+
+                            // High zoom visual popup trigger for target winning coins
+                            setZoomWinningCoin(winningCoin);
+                            setShowZoomWinning(true);
+                            showToast(`You matched ${winningCoin.label}! Earned ৳${wonAmt}`, 'success');
                         } else {
-                            setAceWinDisplay(0.00);
+                            showToast('Spin settled. Bronze Coin provides ৳0 BDT', 'info');
                         }
                     }
-                }, 100);
+                }, 90);
             };
 
             // SAFE-GUARDED LOAD SCREEN TO PREVENT WHITE PAGE AUTH GLITCH
@@ -1488,42 +1518,27 @@
                                                 </div>
                                             </div>
 
-                                            {/* Game Card 3: SUPER ACE */}
-                                            <div onClick={() => { setGameType('super_ace'); setView('super_ace'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#0a4421] via-[#0f7c38] to-[#14b14d] shadow-lg border border-emerald-500 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                {/* Jester crown overlay backdrop matching JILI layout */}
-                                                <div className="absolute inset-0 bg-cover bg-center opacity-20 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2)_0%,transparent_70%)]"></div>
+                                            {/* Game Card 3: PREMIUM BDT COIN SLOT MACHINE */}
+                                            <div onClick={() => { setGameType('slot_machine'); setView('slot_machine'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#0c1017] via-[#1a2333] to-[#2c3b54] shadow-lg border border-slate-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                <div className="absolute inset-0 bg-cover bg-center opacity-20 bg-[radial-gradient(circle_at_center,rgba(252,205,17,0.25)_0%,transparent_80%)]"></div>
                                                 
                                                 <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-yellow-400 text-slate-950 px-2.5 py-0.5 rounded-full font-extrabold uppercase tracking-widest shadow-sm">JILI SLOTS</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-widest font-mono">POPULAR GAME</span>
+                                                    <span className="text-[10px] bg-yellow-500 text-slate-950 px-2.5 py-0.5 rounded-full font-extrabold uppercase tracking-widest shadow-sm">Premium Slots</span>
+                                                    <span className="text-[10px] font-black text-emerald-400 tracking-widest font-mono">LUCK UP TO 80%</span>
                                                 </div>
 
-                                                {/* High quality responsive CSS/SVG recreation of the Jester Crown layout */}
+                                                {/* Golden Neon Coin Ring Graphics */}
                                                 <div className="absolute right-6 top-6 w-32 h-28 flex items-center justify-center pointer-events-none">
                                                     <div className="relative w-24 h-24 flex items-center justify-center animate-pulse">
-                                                        {/* Golden coins floating */}
-                                                        <div className="absolute -top-2 left-4 w-5 h-5 rounded-full bg-yellow-400 border border-yellow-200 shadow shadow-yellow-500/50 flex items-center justify-center text-[8px] text-yellow-900 font-extrabold">$</div>
-                                                        <div className="absolute bottom-1 right-2 w-6 h-6 rounded-full bg-yellow-500 border border-yellow-200 shadow shadow-yellow-600/50 flex items-center justify-center text-[9px] text-yellow-950 font-extrabold">$</div>
-                                                        
-                                                        {/* Jester crown elements */}
-                                                        <svg className="w-16 h-16 drop-shadow-[0_4px_12px_rgba(252,205,17,0.7)]" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <polygon points="50,15 65,55 35,55" fill="#fccd11" />
-                                                            <polygon points="15,30 45,65 20,70" fill="#e2136e" />
-                                                            <polygon points="85,30 55,65 80,70" fill="#e2136e" />
-                                                            <circle cx="50" cy="15" r="7" fill="#fccd11" stroke="#fff" strokeWidth="2" />
-                                                            <circle cx="15" cy="30" r="7" fill="#fccd11" stroke="#fff" strokeWidth="2" />
-                                                            <circle cx="85" cy="30" r="7" fill="#fccd11" stroke="#fff" strokeWidth="2" />
-                                                            <rect x="25" y="65" width="50" height="12" rx="4" fill="#a00d4c" />
-                                                            <circle cx="35" cy="71" r="3" fill="#fccd11" />
-                                                            <circle cx="50" cy="71" r="3" fill="#fccd11" />
-                                                            <circle cx="65" cy="71" r="3" fill="#fccd11" />
-                                                        </svg>
+                                                        <div className="absolute -top-1 left-2 w-7 h-7 rounded-full bg-yellow-400 border border-yellow-200 shadow shadow-yellow-500/50 flex items-center justify-center text-xs text-yellow-900 font-extrabold">🟡</div>
+                                                        <div className="absolute bottom-2 right-1 w-8 h-8 rounded-full bg-purple-500 border border-purple-200 shadow shadow-purple-600/50 flex items-center justify-center text-xs font-extrabold">🔮</div>
+                                                        <div className="absolute top-8 right-2 w-7 h-7 rounded-full bg-red-500 border border-red-200 shadow shadow-red-500/50 flex items-center justify-center text-xs font-extrabold">🔴</div>
                                                     </div>
                                                 </div>
 
                                                 <div className="z-10 mt-auto">
-                                                    <h2 className="text-2xl font-black text-white tracking-wider font-sans uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">Super Ace</h2>
-                                                    <span className="text-[10px] text-yellow-300 font-bold block mt-0.5 tracking-wide">Multi-multiplier Cascading Card Reels</span>
+                                                    <h2 className="text-2xl font-black text-white tracking-wider font-sans uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.5)]">BDT Coin Slots</h2>
+                                                    <span className="text-[10px] text-yellow-300 font-bold block mt-0.5 tracking-wide">High Bets (৳100+) Shift Win Probability to 80%!</span>
                                                 </div>
                                             </div>
 
@@ -2091,7 +2106,7 @@
                                                     <span className="text-[9px] font-bold block text-slate-700">Time remaining</span>
                                                     <div className="flex justify-end space-x-1 mt-1 font-mono">
                                                         {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
+                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-955 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
                                                                 {char}
                                                             </span>
                                                         ))}
@@ -2303,144 +2318,118 @@
                             </div>
                         )}
 
-                        {/* VIEW: FULLY PLAYABLE SUPER ACE GAME BOARD */}
-                        {view === 'super_ace' && (
+                        {/* VIEW: PREMIUM COIN SLOT MACHINE */}
+                        {view === 'slot_machine' && (
                             <div className="flex-1 flex flex-col bg-[#0b0f19] justify-between relative overflow-y-auto text-white">
                                 
-                                {/* JILI Brand Styled Top Bar */}
+                                {/* Slot Machine Top Bar */}
                                 <div className="px-4 py-3 bg-slate-900 flex items-center justify-between border-b border-slate-800">
                                     <button onClick={() => setView('home')} className="text-slate-400 hover:text-white">
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
                                     <div className="flex flex-col items-center">
-                                        <span className="text-[10px] font-black tracking-widest text-[#fccd11]">JILI GAMEPLAY</span>
-                                        <span className="text-sm font-black text-white">SUPER ACE</span>
+                                        <span className="text-[10px] font-black tracking-widest text-[#fccd11]">PREMIUM SLOTS</span>
+                                        <span className="text-sm font-black text-white">COIN SPINNER</span>
                                     </div>
-                                    <button onClick={() => setAceGrid(Array.from({ length: 20 }, () => SUPER_ACE_SYMBOLS[Math.floor(Math.random() * SUPER_ACE_SYMBOLS.length)]))} className="text-slate-400 hover:text-white">
+                                    <button onClick={() => setSlotReels(['🥉', '🥉', '🥉'])} className="text-slate-400 hover:text-white">
                                         <Icon name="refresh-cw" className="w-5 h-5" />
                                     </button>
                                 </div>
 
                                 <div className="p-4 space-y-4 pb-20">
                                     
-                                    {/* Multiplier Sequence Status Panel */}
-                                    <div className="grid grid-cols-4 gap-2 bg-slate-950/80 p-2 rounded-2xl border border-slate-800 text-center font-black">
-                                        {[
-                                            { stage: 1, val: '×1' },
-                                            { stage: 2, val: '×2' },
-                                            { stage: 3, val: '×3' },
-                                            { stage: 5, val: '×5' }
-                                        ].map((item) => (
-                                            <div 
-                                                key={item.stage} 
-                                                className={`py-1.5 rounded-xl transition-all duration-300 text-xs ${
-                                                    aceMultiplier === item.stage 
-                                                        ? 'bg-gradient-to-r from-yellow-500 to-[#fccd11] text-slate-950 scale-105 shadow-[0_0_12px_rgba(252,205,17,0.5)]' 
-                                                        : 'bg-slate-900 text-slate-500'
-                                                }`}
-                                            >
-                                                {item.val}
+                                    {/* Win multipliers display card */}
+                                    <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 text-center space-y-1 text-xs">
+                                        <span className="text-[10px] font-black text-emerald-400 block tracking-wider uppercase">COIN PAYOUT DIRECTORY</span>
+                                        <div className="grid grid-cols-5 gap-1.5 pt-1 font-mono">
+                                            <div className="bg-slate-900 p-1 rounded border border-slate-800">
+                                                <span className="block text-sm">🥉</span>
+                                                <span className="text-[9px] text-slate-400">৳0</span>
                                             </div>
-                                        ))}
-                                    </div>
-
-                                    {/* 5 columns x 4 rows Slot Cards Grid */}
-                                    <div className="bg-slate-950 p-2.5 rounded-3xl border border-slate-800 shadow-[0_12px_30px_rgba(0,0,0,0.5)]">
-                                        <div className="grid grid-cols-5 gap-1.5">
-                                            {aceGrid.map((sym, idx) => {
-                                                const isWinning = winningAceCells.includes(idx);
-                                                let cardStyle = "bg-slate-900 border-slate-800 text-slate-300";
-                                                
-                                                if (sym.id === 'A') cardStyle = "bg-gradient-to-b from-amber-950 to-slate-900 border-yellow-600/60 text-yellow-500";
-                                                else if (sym.id === 'K') cardStyle = "bg-gradient-to-b from-yellow-950 to-slate-900 border-yellow-500/40 text-yellow-400";
-                                                else if (sym.id === 'Q') cardStyle = "bg-gradient-to-b from-red-950 to-slate-900 border-red-500/40 text-red-400";
-                                                else if (sym.id === 'J') cardStyle = "bg-gradient-to-b from-blue-950 to-slate-900 border-blue-500/40 text-blue-400";
-
-                                                return (
-                                                    <div 
-                                                        key={idx} 
-                                                        className={`h-[72px] rounded-xl flex flex-col justify-between p-1.5 border font-sans relative transition-all duration-300 overflow-hidden ${cardStyle} ${
-                                                            isWinning ? 'animate-bounce border-yellow-400 ring-2 ring-yellow-400 ring-offset-2 ring-offset-slate-950 scale-105 shadow-[0_0_15px_rgba(252,205,17,0.8)] z-10' : ''
-                                                        }`}
-                                                    >
-                                                        {/* Glossy shine reflection overlay */}
-                                                        <div className="absolute inset-0 bg-white/5 skew-y-12 translate-y-[-50%] pointer-events-none"></div>
-
-                                                        {/* Top Corner Value badge */}
-                                                        <div className="text-[10px] font-black tracking-tight leading-none text-left">
-                                                            {sym.badge}
-                                                        </div>
-
-                                                        {/* Central Graphics */}
-                                                        <div className="flex justify-center items-center h-full">
-                                                            {sym.id === 'S' ? (
-                                                                <span className="text-xl drop-shadow-[0_2px_4px_rgba(255,255,255,0.2)]">♠</span>
-                                                            ) : sym.id === 'A' ? (
-                                                                <div className="w-7 h-7 bg-amber-500/20 rounded-full border border-yellow-500/40 flex items-center justify-center font-black text-xs">A</div>
-                                                            ) : (
-                                                                <span className="text-lg font-black tracking-tighter drop-shadow">{sym.id}</span>
-                                                            )}
-                                                        </div>
-
-                                                        {/* Bottom label bar */}
-                                                        <div className="text-[7px] text-center font-bold tracking-widest opacity-60">
-                                                            {sym.label}
-                                                        </div>
-                                                    </div>
-                                                );
-                                            })}
+                                            <div className="bg-slate-900 p-1 rounded border border-slate-800">
+                                                <span className="block text-sm">🔵</span>
+                                                <span className="text-[9px] text-blue-400">৳8</span>
+                                            </div>
+                                            <div className="bg-slate-900 p-1 rounded border border-slate-800">
+                                                <span className="block text-sm">🟡</span>
+                                                <span className="text-[9px] text-yellow-400">৳10</span>
+                                            </div>
+                                            <div className="bg-slate-900 p-1 rounded border border-slate-800">
+                                                <span className="block text-sm">🔴</span>
+                                                <span className="text-[9px] text-red-400">৳50</span>
+                                            </div>
+                                            <div className="bg-slate-900 p-1 rounded border border-slate-800">
+                                                <span className="block text-sm">🔮</span>
+                                                <span className="text-[9px] text-purple-400">৳100</span>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    {/* Win and Balance Display Readouts */}
-                                    <div className="grid grid-cols-2 gap-3">
+                                    {/* 3-Reel Slot Box */}
+                                    <div className="bg-gradient-to-b from-[#1b2536] to-[#0c1017] p-5 rounded-3xl border-2 border-yellow-500/40 shadow-[0_12px_30px_rgba(0,0,0,0.6)]">
+                                        <div className="grid grid-cols-3 gap-3">
+                                            {slotReels.map((symbol, idx) => (
+                                                <div 
+                                                    key={idx} 
+                                                    className={`h-28 bg-slate-950 rounded-2xl flex items-center justify-center text-4xl border border-slate-800 shadow-inner select-none transition-transform ${isSlotSpinning ? 'animate-bounce' : ''}`}
+                                                >
+                                                    {symbol}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Account balance and Luck Indicator */}
+                                    <div className="grid grid-cols-2 gap-3 text-xs">
                                         <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
-                                            <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest block">WIN AMOUNT</span>
-                                            <span className="text-base font-black text-emerald-400">Tk {aceWinDisplay.toFixed(3)}</span>
+                                            <span className="text-[9px] text-slate-500 font-extrabold uppercase block tracking-wider">CURRENT LUCK</span>
+                                            <span className={`text-sm font-black font-mono uppercase ${slotBet >= 100 ? 'text-emerald-400' : 'text-yellow-500'}`}>
+                                                {slotBet >= 100 ? '🔥 Ultra (80%)' : '⚙️ Standard'}
+                                            </span>
                                         </div>
                                         <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
-                                            <span className="text-[9px] text-slate-500 font-extrabold uppercase tracking-widest block">WALLET BALANCE</span>
-                                            <span className="text-base font-black text-yellow-400">Tk {Number(balance || 0).toFixed(3)}</span>
+                                            <span className="text-[9px] text-slate-500 font-extrabold uppercase block tracking-wider">WALLET BALANCE</span>
+                                            <span className="text-sm font-black font-mono text-[#fccd11]">৳{Number(balance || 0).toFixed(2)}</span>
                                         </div>
                                     </div>
 
-                                    {/* Bet Selection Row with settings and spin triggers */}
+                                    {/* Control Board */}
                                     <div className="bg-slate-900/60 p-4 rounded-3xl border border-slate-800 flex justify-between items-center">
-                                        <button onClick={() => showToast('Autoplay/Turbo settings locked at default x1.', 'info')} className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300">
+                                        <button onClick={() => showToast('Min spin limit is ৳10 BDT', 'info')} className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300">
                                             <Icon name="settings" className="w-5 h-5" />
                                         </button>
 
-                                        {/* Bet Adjustment system */}
+                                        {/* Bet levels switcher */}
                                         <div className="flex items-center space-x-2 bg-slate-950/80 px-4 py-2 rounded-2xl border border-slate-800">
                                             <button 
-                                                onClick={() => setAceBetAmount(prev => Math.max(2.00, prev - 2.00))}
+                                                onClick={() => setSlotBet(prev => Math.max(10, prev - 10))}
                                                 className="text-lg font-black text-slate-400 hover:text-white px-1"
                                             >
                                                 -
                                             </button>
                                             <div className="text-center min-w-[70px]">
-                                                <span className="text-[8px] text-slate-500 block uppercase font-bold tracking-wider">Bet Level</span>
-                                                <span className="text-xs font-black text-white">Tk {aceBetAmount.toFixed(0)}</span>
+                                                <span className="text-[8px] text-slate-500 block uppercase font-bold tracking-wider">SPIN COST</span>
+                                                <span className="text-xs font-black text-white">৳{slotBet}</span>
                                             </div>
                                             <button 
-                                                onClick={() => setAceBetAmount(prev => Math.min(500.00, prev + 2.00))}
+                                                onClick={() => setSlotBet(prev => prev + 10)}
                                                 className="text-lg font-black text-slate-400 hover:text-white px-1"
                                             >
                                                 +
                                             </button>
                                         </div>
 
-                                        {/* Spin Control Button */}
+                                        {/* Main Spin Button */}
                                         <button 
-                                            disabled={isAceSpinning}
-                                            onClick={triggerSuperAceSpin}
+                                            disabled={isSlotSpinning}
+                                            onClick={triggerSlotMachineSpin}
                                             className={`w-14 h-14 rounded-full flex flex-col justify-center items-center font-black transition-all transform active:scale-90 ${
-                                                isAceSpinning 
+                                                isSlotSpinning 
                                                     ? 'bg-slate-700 text-slate-500 cursor-not-allowed border-2 border-slate-600' 
                                                     : 'bg-gradient-to-r from-yellow-500 via-amber-500 to-yellow-600 text-slate-950 border-2 border-white shadow-[0_0_15px_rgba(252,205,17,0.4)] hover:shadow-[0_0_20px_rgba(252,205,17,0.6)]'
                                             }`}
                                         >
-                                            {isAceSpinning ? (
+                                            {isSlotSpinning ? (
                                                 <div className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin"></div>
                                             ) : (
                                                 <>
@@ -2454,11 +2443,11 @@
                                         </button>
                                     </div>
 
-                                    {/* How to win guide block */}
+                                    {/* Slot mechanics info block */}
                                     <div className="p-4 bg-slate-950/40 rounded-2xl border border-slate-800/60 text-[10px] text-slate-400 leading-relaxed space-y-1">
-                                        <p className="font-extrabold text-slate-300 uppercase tracking-widest">ℹ️ Slot Mechanics</p>
-                                        <p>1. Tap the Spin button to spin the JILI Super Ace card grid.</p>
-                                        <p>2. Aligning duplicate symbol sets across the columns pays out dynamically based on the current cascade multipliers.</p>
+                                        <p className="font-extrabold text-slate-300 uppercase tracking-widest">ℹ️ Coin Spinner Guide</p>
+                                        <p>1. Target any valuable Blue, Gold, Red or Secret coin.</p>
+                                        <p>2. Setting your spin cost to ৳100 BDT or higher automatically shifts winning parameter luck to 80%!</p>
                                     </div>
                                 </div>
                             </div>
@@ -2590,6 +2579,46 @@
                                 >
                                     Close Window
                                 </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* HIGH ZOOM WIN ANIMATION FOR VALUABLE COIN MATCHES */}
+                    {showZoomWinning && zoomWinningCoin && (
+                        <div className="absolute inset-0 bg-[#070b12]/95 z-[1100] flex flex-col items-center justify-center p-6 transition-all duration-300">
+                            <div className="text-center space-y-6 animate-zoom-in">
+                                <div className="relative flex items-center justify-center">
+                                    <div className="absolute w-44 h-44 rounded-full bg-gradient-to-r from-yellow-500/40 to-amber-500/0 animate-spin blur-md"></div>
+                                    <span className="text-8xl drop-shadow-[0_10px_25px_rgba(252,205,17,0.5)] select-none">
+                                        {zoomWinningCoin.symbol}
+                                    </span>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <span className="text-[11px] font-black tracking-widest text-emerald-400 uppercase block">SLOT WINNER</span>
+                                    <h2 className="text-3xl font-black text-[#fccd11] uppercase tracking-wide">
+                                        Matched {zoomWinningCoin.label}!
+                                    </h2>
+                                    <p className="text-slate-400 text-xs">
+                                        Payout added to your active wallet balance.
+                                    </p>
+                                </div>
+
+                                <div className="bg-slate-900/80 px-6 py-4 rounded-2xl border border-slate-800 inline-block">
+                                    <span className="text-[9px] font-bold text-slate-500 uppercase block">TOTAL REWARD</span>
+                                    <span className="text-3xl font-black text-emerald-400 font-mono">
+                                        ৳{zoomWinningCoin.payout.toFixed(2)}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <button 
+                                        onClick={() => setShowZoomWinning(false)}
+                                        className="px-8 py-3.5 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider shadow-lg"
+                                    >
+                                        Keep Spinning
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
