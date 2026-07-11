@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1861,7 +1863,7 @@
                                     </div>
 
                                     {/* ==================================================== */}
-                                    {/* BETTING CONTROLS PANEL - MOVED TO THE TOP AS REQUESTED */}
+                                    {/* BETTING CONTROLS PANEL */}
                                     {/* ==================================================== */}
                                     
                                     {/* Action Buttons: Red, Green, Violet */}
@@ -1920,7 +1922,7 @@
                                     </div>
 
                                     {/* ==================================================== */}
-                                    {/* COUNTERS & TIME REMAINING PANEL - MOVED BELOW BET CONTROLS */}
+                                    {/* COUNTERS & TIME REMAINING PANEL */}
                                     {/* ==================================================== */}
 
                                     {/* Counter & Period status display */}
@@ -2181,10 +2183,12 @@
                         )}
                     </div>
 
-                    {/* DYNAMIC BET PLACEMENT POPUP SHEET */}
+                    {/* ==================================================== */}
+                    {/* DYNAMIC BET PLACEMENT POPUP SHEET - ALIGNED TO TOP */}
+                    {/* ==================================================== */}
                     {isBetSheetOpen && (
-                        <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-end animate-fade-in font-sans">
-                            <div className="bg-white rounded-t-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto">
+                        <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-start animate-fade-in font-sans">
+                            <div className="bg-white rounded-b-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto shadow-2xl border-b border-slate-200">
                                 <div className="flex justify-between items-center">
                                     <h3 className="text-xs font-bold text-slate-800 font-sans">Confirm Bet Details</h3>
                                     <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
