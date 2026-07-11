@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -477,6 +479,10 @@
             const currentUserRef = useRef(currentUser);
             const balanceRef = useRef(balance);
 
+            const chickenStepRef = useRef(chickenStep);
+            const chickenDifficultyRef = useRef(chickenDifficulty);
+            const chickenBetRef = useRef(chickenBet);
+
             useEffect(() => { period30sRef.current = period30s; }, [period30s]);
             useEffect(() => { period1mRef.current = period1m; }, [period1m]);
             useEffect(() => { period2mRef.current = period2m; }, [period2m]);
@@ -488,6 +494,10 @@
             useEffect(() => { myBetsRef.current = myBets; }, [myBets]);
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
             useEffect(() => { balanceRef.current = balance; }, [balance]);
+
+            useEffect(() => { chickenStepRef.current = chickenStep; }, [chickenStep]);
+            useEffect(() => { chickenDifficultyRef.current = chickenDifficulty; }, [chickenDifficulty]);
+            useEffect(() => { chickenBetRef.current = chickenBet; }, [chickenBet]);
 
             // Auto-reset page view back to page 1 on tab toggling
             useEffect(() => {
@@ -524,6 +534,131 @@
 
             const generateSTXId = () => {
                 return 'STX-ID-' + Math.floor(1000 + Math.random() * 9000);
+            };
+
+            // --- Game Handlers ---
+
+            const startChickenGame = () => {
+                if (chickenActive) return;
+                const currentBet = chickenBetRef.current;
+                if (balanceRef.current < currentBet) {
+                    showToast('Insufficient balance!', 'error');
+                    return;
+                }
+
+                const nextBalance = balanceRef.current - currentBet;
+                setBalance(nextBalance);
+
+                if (currentUserRef.current) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({
+                        balance: nextBalance
+                    });
+                }
+
+                setChickenStep(-1);
+                setChickenCrash(false);
+                setChickenActive(true);
+                setChickenJumping(false);
+                showToast(`Game started with bet ৳${currentBet}`, 'success');
+            };
+
+            const handleTriggerCrash = () => {
+                setChickenCrash(true);
+                setChickenActive(false);
+                playCountdownBeep(true);
+
+                const currentStep = chickenStepRef.current;
+                const currentDifficulty = chickenDifficultyRef.current;
+                const currentBet = chickenBetRef.current;
+
+                const newBetLog = {
+                    id: Date.now(),
+                    period: 'N/A',
+                    mode: currentDifficulty.toUpperCase(),
+                    gameType: 'chicken_road_2',
+                    selection: 'Step ' + (currentStep + 1),
+                    amount: currentBet,
+                    status: 'lost',
+                    timestamp: new Date().toLocaleTimeString()
+                };
+
+                setMyBets(prevBets => {
+                    const nextBets = [newBetLog, ...(prevBets || [])];
+                    if (currentUserRef.current) {
+                        const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                        db.ref(dbPath).update({
+                            bets: nextBets
+                        });
+                    }
+                    return nextBets;
+                });
+            };
+
+            const handleChickenCashout = (forcedAmount = null) => {
+                const activeStep = chickenStepRef.current;
+                if (!chickenActive && forcedAmount === null) return;
+                if (activeStep < 0 && forcedAmount === null) return;
+
+                const currentMult = chickenRoad2Multipliers[activeStep] || 1.0;
+                const currentBet = chickenBetRef.current;
+                const winAmt = forcedAmount !== null ? forcedAmount : (currentBet * currentMult);
+                const nextBalance = balanceRef.current + winAmt;
+
+                setBalance(nextBalance);
+                setChickenActive(false);
+                setChickenStep(-1);
+
+                const newBetLog = {
+                    id: Date.now(),
+                    period: 'N/A',
+                    mode: chickenDifficultyRef.current.toUpperCase(),
+                    gameType: 'chicken_road_2',
+                    selection: 'Cashout x' + (forcedAmount !== null ? chickenRoad2Multipliers[8] : currentMult),
+                    amount: currentBet,
+                    status: 'won',
+                    payout: winAmt,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+
+                setMyBets(prevBets => {
+                    const nextBets = [newBetLog, ...(prevBets || [])];
+                    if (currentUserRef.current) {
+                        const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                        db.ref(dbPath).update({
+                            balance: nextBalance,
+                            bets: nextBets
+                        });
+                    }
+                    return nextBets;
+                });
+
+                setPopupAmount(winAmt);
+                setPopupType('win');
+                setShowResultPopup(true);
+            };
+
+            const triggerRealJump = () => {
+                if (!chickenActive || chickenJumping) return;
+                setChickenJumping(true);
+                playCountdownBeep(false);
+
+                // Emulate physical jumping sequence (300ms arc)
+                setTimeout(() => {
+                    setChickenStep(prevStep => {
+                        const nextStep = prevStep + 1;
+                        if (nextStep === 8) {
+                            const maxMult = chickenRoad2Multipliers[8];
+                            const currentBet = chickenBetRef.current;
+                            const winAmt = currentBet * maxMult;
+                            setTimeout(() => {
+                                handleChickenCashout(winAmt);
+                            }, 10);
+                        }
+                        return nextStep;
+                    });
+                    setChickenJumping(false);
+                }, 280);
             };
 
             // Session checker & Firebase event handler
@@ -860,92 +995,6 @@
                     }
                 }
             }, [carPositions, chickenStep, chickenJumping, chickenActive]);
-
-            const handleTriggerCrash = () => {
-                setChickenCrash(true);
-                setChickenActive(false);
-                playCountdownBeep(true);
-
-                const newBetLog = {
-                    id: Date.now(),
-                    period: 'N/A',
-                    mode: chickenDifficulty.toUpperCase(),
-                    gameType: 'chicken_road_2',
-                    selection: 'Step ' + (chickenStep + 1),
-                    amount: chickenBet,
-                    status: 'lost',
-                    timestamp: new Date().toLocaleTimeString()
-                };
-
-                const nextBets = [newBetLog, ...(myBets || [])];
-                setMyBets(nextBets);
-
-                if (currentUser) {
-                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
-                    db.ref(dbPath).update({
-                        bets: nextBets
-                    });
-                }
-            };
-
-            const triggerRealJump = () => {
-                if (!chickenActive || chickenJumping) return;
-                setChickenJumping(true);
-                playCountdownBeep(false);
-
-                // Emulate physical jumping sequence (300ms arc)
-                setTimeout(() => {
-                    const nextStep = chickenStep + 1;
-                    setChickenStep(nextStep);
-                    setChickenJumping(false);
-
-                    // Auto-cashout if final lane is completed safely
-                    if (nextStep === 8) {
-                        const maxMult = chickenRoad2Multipliers[8];
-                        const winAmt = chickenBet * maxMult;
-                        handleChickenCashout(winAmt);
-                    }
-                }, 280);
-            };
-
-            const handleChickenCashout = (forcedAmount = null) => {
-                if (!chickenActive && forcedAmount === null) return;
-
-                const currentMult = chickenRoad2Multipliers[chickenStep];
-                const winAmt = forcedAmount !== null ? forcedAmount : (chickenBet * currentMult);
-                const nextBalance = balance + winAmt;
-
-                setBalance(nextBalance);
-                setChickenActive(false);
-                setChickenStep(-1);
-
-                const newBetLog = {
-                    id: Date.now(),
-                    period: 'N/A',
-                    mode: chickenDifficulty.toUpperCase(),
-                    gameType: 'chicken_road_2',
-                    selection: 'Cashout x' + currentMult,
-                    amount: chickenBet,
-                    status: 'won',
-                    payout: winAmt,
-                    timestamp: new Date().toLocaleTimeString()
-                };
-
-                const nextBets = [newBetLog, ...(myBets || [])];
-                setMyBets(nextBets);
-
-                if (currentUser) {
-                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
-                    db.ref(dbPath).update({
-                        balance: nextBalance,
-                        bets: nextBets
-                    });
-                }
-
-                setPopupAmount(winAmt);
-                setPopupType('win');
-                setShowResultPopup(true);
-            };
 
             const handleSignupSubmit = (e) => {
                 e.preventDefault();
@@ -1300,6 +1349,16 @@
                     </div>
                 );
             }
+
+            const getActiveTrxLast5 = () => {
+                const history = getHistoryForActiveTab();
+                if (history && history[0] && history[0].last5) {
+                    return history[0].last5;
+                }
+                return ['0', 'A', '2', 'B', 'F']; 
+            };
+
+            const currentTrxLast5 = getActiveTrxLast5();
 
             const hasPendingWithdraw = (withdrawHistory || []).some(w => w.status?.toLowerCase() === 'pending');
             const pendingWithdrawAmount = (withdrawHistory || [])
@@ -1714,9 +1773,9 @@
                                     <div className="flex-1 overflow-y-auto pb-24">
                                         {/* 1. Yellow Gradient Balance Card */}
                                         <div className="p-4">
-                                            <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-950 relative overflow-hidden">
+                                            <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-955 relative overflow-hidden">
                                                 <div className="absolute right-0 bottom-0 translate-y-4 translate-x-4 opacity-10">
-                                                    <Icon name="wallet" className="w-32 h-32 text-slate-950" />
+                                                    <Icon name="wallet" className="w-32 h-32 text-slate-955" />
                                                 </div>
                                                 <div className="flex items-center space-x-1.5 opacity-80 text-xs font-semibold">
                                                     <Icon name="wallet" className="w-4 h-4" />
@@ -1725,7 +1784,7 @@
                                                 <div className="text-3xl font-black mt-1 tracking-tight flex items-center space-x-2 font-mono">
                                                     <span>৳{Number(balance || 0).toFixed(2)}</span>
                                                     <button onClick={() => window.location.reload()} className="hover:rotate-180 transition-transform duration-350">
-                                                        <Icon name="refresh-cw" className="w-4 h-4 text-slate-950/75" />
+                                                        <Icon name="refresh-cw" className="w-4 h-4 text-slate-955/75" />
                                                     </button>
                                                 </div>
                                             </div>
@@ -2474,7 +2533,7 @@
                                                         {/* Real-time moving vehicle sprite */}
                                                         {chickenActive && carY !== undefined && (
                                                             <div 
-                                                                className="absolute w-8 h-12 bg-yellow-500 rounded-md border border-slate-950 shadow-md flex items-center justify-center transition-all duration-75 text-base"
+                                                                className="absolute w-8 h-12 bg-yellow-500 rounded-md border border-slate-955 shadow-md flex items-center justify-center transition-all duration-75 text-base"
                                                                 style={{ top: `${carY}px`, left: '50%', transform: 'translateX(-50%)' }}
                                                             >
                                                                 <div className="absolute top-1 inset-x-1 h-2 bg-slate-800 rounded-sm"></div>
