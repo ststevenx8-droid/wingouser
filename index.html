@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -234,6 +235,17 @@
             return <IconComponent className={className} {...props} />;
         };
 
+        // Real high-quality bKash app icon vector
+        const BkashAppIcon = () => (
+            <svg viewBox="0 0 100 100" className="w-14 h-14 shadow-md rounded-2xl">
+                <rect width="100" height="100" rx="22" fill="#e2136e" />
+                <path d="M25,50 L45,25 L45,75 Z" fill="#ffffff" />
+                <path d="M45,25 L75,35 L45,50 Z" fill="#ffffff" opacity="0.9" />
+                <path d="M45,50 L80,60 L45,75 Z" fill="#ffffff" opacity="0.8" />
+                <path d="M45,75 L65,82 L45,90 Z" fill="#ffffff" opacity="0.75" />
+            </svg>
+        );
+
         const BkashOfficialLogo = () => (
             <svg viewBox="0 0 350 120" className="h-10 w-auto" xmlns="http://www.w3.org/2000/svg">
                 <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
@@ -275,7 +287,6 @@
             }
         };
 
-        // Simulated TRON block detail generator
         const generateTrxBlockData = (period, targetDigit) => {
             const baseBlockHeight = 84300000 + (Number(period % 100000n) * 20);
             const hexChars = 'abcdef';
@@ -307,7 +318,6 @@
             };
         };
 
-        // Complete 50-Item Mock History generator for Wingo
         const generateClassicMockHistory = (basePeriod, count) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
@@ -320,7 +330,6 @@
             return history;
         };
 
-        // Complete 50-Item Mock History generator for TRX Wingo
         const generateTrxMockHistory = (basePeriod, count) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
@@ -344,8 +353,6 @@
             return history;
         };
 
-        // Multipliers lists for the new Chicken Road games
-        const chickenRoadMultipliers = [1.03, 1.07, 1.12, 1.17, 1.23, 1.29, 1.36, 1.44, 1.53];
         const chickenRoad2Multipliers = [1.01, 1.03, 1.06, 1.10, 1.15, 1.19, 1.24, 1.30, 1.37];
 
         function App() {
@@ -357,8 +364,8 @@
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             const [isLoading, setIsLoading] = useState(false);
 
-            // Active Game States
-            const [gameType, setGameType] = useState('wingo'); // 'wingo' | 'trx_wingo' | 'chicken_road' | 'chicken_road_2'
+            // Active Game States (Wingo and Chicken Road 2)
+            const [gameType, setGameType] = useState('wingo'); 
 
             // Pagination state for Game History lists
             const [historyPage, setHistoryPage] = useState(1);
@@ -378,16 +385,16 @@
             const [confirmPassword, setConfirmPassword] = useState('');
             const [promoCode, setPromoCode] = useState('');
 
-            // Deposit Form States & Channel Modifiers
+            // Deposit Form States (Only bKash remains)
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
             const [isDepositing, setIsDepositing] = useState(false);
             const [depositTab, setDepositTab] = useState('new'); 
-            const [selectedMethod, setSelectedMethod] = useState('nagad'); // 'nagad' | 'bkash' (USDT Removed)
-            const [selectedChannel, setSelectedChannel] = useState('GoPay-Nagad');
+            const [selectedMethod, setSelectedMethod] = useState('bkash'); 
+            const [selectedChannel, setSelectedChannel] = useState('GoPay-bKash');
 
-            // Withdrawal Wallet States
+            // Withdrawal Wallet States (Only bKash remains)
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
             const [withdrawType, setWithdrawType] = useState('Personal'); 
@@ -430,7 +437,7 @@
             const [chickenActive, setChickenActive] = useState(false);
             const [chickenStep, setChickenStep] = useState(-1);
             const [chickenBet, setChickenBet] = useState(10);
-            const [chickenDifficulty, setChickenDifficulty] = useState('easy'); // 'easy' | 'medium' | 'hard' | 'hardcore'
+            const [chickenDifficulty, setChickenDifficulty] = useState('easy'); 
             const [chickenCrash, setChickenCrash] = useState(false);
 
             // Betting Board States
@@ -594,7 +601,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic adjusted to exactly 80% lose (20% strict win rate)
+            // Opponent Defeat Logic adjusted to exactly 80% lose (20% win rate)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -604,7 +611,7 @@
 
                 const controlRoll = Math.random() * 100;
 
-                // Exactly 80% forced loss (20% win rate)
+                // Exactly 80% forced loss (strict 20% win rate)
                 if (controlRoll <= 80) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
@@ -804,9 +811,7 @@
                 return () => clearInterval(clockInterval);
             }, []);
 
-            // Chicken Road gameplay actions
-            const activeChickenMults = gameType === 'chicken_road' ? chickenRoadMultipliers : chickenRoad2Multipliers;
-
+            // Chicken Road 2 gameplay actions
             const startChickenGame = () => {
                 if (chickenBet <= 0) {
                     showToast('Please enter a valid bet amount!', 'error');
@@ -848,7 +853,7 @@
 
                     // Automatic max-out cashout on 9th lane completion
                     if (nextStep === 8) {
-                        const maxMult = activeChickenMults[8];
+                        const maxMult = chickenRoad2Multipliers[8];
                         const winAmt = chickenBet * maxMult;
                         handleChickenCashout(winAmt);
                     }
@@ -883,7 +888,7 @@
             const handleChickenCashout = (forcedAmount = null) => {
                 if (!chickenActive && forcedAmount === null) return;
 
-                const currentMult = activeChickenMults[chickenStep];
+                const currentMult = chickenRoad2Multipliers[chickenStep];
                 const winAmt = forcedAmount !== null ? forcedAmount : (chickenBet * currentMult);
                 const nextBalance = balance + winAmt;
 
@@ -1046,7 +1051,7 @@
                 }
                 const amt = parseFloat(depositAmount);
                 if (isNaN(amt) || amt < 100) {
-                    showToast('Minimum deposit amount is ৳100', 'error');
+                    showToast('Minimum deposit is ৳100', 'error');
                     return;
                 }
                 if (!senderNumber || senderNumber.length < 10) {
@@ -1264,29 +1269,20 @@
                 setView('auth');
             };
 
-            // SAFE-GUARDED LOAD SCREEN TO PREVENT WHITE PAGE AUTH GLITCH
             if (!isInitialized) {
                 return (
                     <div className="flex-1 bg-slate-950 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
                         <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase">Connecting to Gateway...</span>
+                        <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase font-sans">Connecting to Gateway...</span>
                     </div>
                 );
             }
 
-            // Calculation values for withdrawal pending checks
             const hasPendingWithdraw = (withdrawHistory || []).some(w => w.status?.toLowerCase() === 'pending');
             const pendingWithdrawAmount = (withdrawHistory || [])
                 .filter(w => w.status?.toLowerCase() === 'pending')
                 .reduce((sum, w) => sum + Number(w.amount || 0), 0);
 
-            // Fetch last drawn hash elements for TRX UI Board representation
-            const activeTrxHistory = getHistoryForActiveTab();
-            const currentTrxLast5 = (gameType === 'trx_wingo' && activeTrxHistory.length > 0) 
-                ? activeTrxHistory[0].last5 
-                : ['E', '7', 'D', '1', 'C'];
-
-            // Pagination calculation for Game History
             const activeFullHistory = getHistoryForActiveTab();
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
             const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
@@ -1298,7 +1294,7 @@
                     {isLoading && (
                         <div className="absolute inset-0 bg-slate-900/70 z-[999] flex flex-col items-center justify-center">
                             <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
-                            <span className="text-white text-xs font-bold mt-3">Connecting to Secure Gateway...</span>
+                            <span className="text-white text-xs font-bold mt-3 font-sans">Connecting to Secure Gateway...</span>
                         </div>
                     )}
 
@@ -1306,7 +1302,7 @@
                     {toast.show && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold flex items-center space-x-2 bg-slate-900 text-white border-slate-700 animate-bounce">
                             <Icon name="check-circle" className="w-4 h-4 text-secondary" />
-                            <span>{toast.message}</span>
+                            <span className="font-sans">{toast.message}</span>
                         </div>
                     )}
 
@@ -1501,33 +1497,12 @@
                                                 </div>
                                             </div>
 
-                                            {/* Game Card 3: CHICKEN ROAD (NEW!) */}
-                                            <div onClick={() => { setGameType('chicken_road'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-indigo-900 to-slate-900 shadow-md border border-indigo-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-indigo-800/60 border border-indigo-700 text-indigo-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Crash Lane</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">MULTIPLIER</span>
-                                                </div>
-
-                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    {/* Graphical Sewer Grate Cover representation */}
-                                                    <div className="w-14 h-14 rounded-full bg-slate-800 border-4 border-slate-600 flex items-center justify-center shadow-lg">
-                                                        <span className="text-xs font-bold text-[#fccd11] animate-bounce">🐔</span>
-                                                    </div>
-                                                </div>
-
-                                                <div className="z-10 mt-auto">
-                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road</h2>
-                                                    <span className="text-[10px] text-indigo-200 block mt-0.5">Avoid Obstacles & Cash Out Big</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Game Card 4: CHICKEN ROAD 2 (NEW!) */}
+                                            {/* Game Card 4: CHICKEN ROAD 2 (NEW & RETAINED!) */}
                                             <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
                                                     <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">CAR CRASH 2</span>
+                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono font-sans">CHICKEN ROAD 2</span>
                                                 </div>
 
                                                 <div className="absolute right-6 top-6 w-28 h-24 pointer-events-none flex items-center justify-center">
@@ -1539,7 +1514,7 @@
 
                                                 <div className="z-10 mt-auto">
                                                     <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road 2</h2>
-                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Highway Traffic Survival Game</span>
+                                                    <span className="text-[10px] text-emerald-200 block mt-0.5 font-sans">Highway Traffic Survival Game</span>
                                                 </div>
                                             </div>
 
@@ -1548,7 +1523,7 @@
 
                                     {/* NAVIGATION SUB-VIEW: ACTIVITY */}
                                     {activeNav === 'activity' && (
-                                        <div className="p-4 space-y-4">
+                                        <div className="p-4 space-y-4 font-sans">
                                             <h2 className="text-base font-bold text-slate-800">Activity & Rewards</h2>
                                             <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
                                                 <div className="flex items-center space-x-3">
@@ -1570,7 +1545,7 @@
 
                                     {/* NAVIGATION SUB-VIEW: PROMOTION */}
                                     {activeNav === 'promotion' && (
-                                        <div className="p-4 space-y-4">
+                                        <div className="p-4 space-y-4 font-sans">
                                             <h2 className="text-base font-bold text-slate-800">Invite & Earn Program</h2>
                                             <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm space-y-3">
                                                 <div className="flex items-center space-x-3">
@@ -1613,19 +1588,19 @@
                                             </div>
 
                                             {hasPendingWithdraw && (
-                                                <div className="mx-4 mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center space-x-3 text-amber-800 animate-pulse">
+                                                <div className="mx-4 mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center space-x-3 text-amber-800 animate-pulse font-sans">
                                                     <Icon name="info" className="w-5 h-5 text-amber-600 flex-shrink-0" />
                                                     <div className="text-[10px] font-semibold leading-snug">
-                                                        You have a pending cashout ticket of <span className="font-extrabold">৳{pendingWithdrawAmount.toFixed(2)}</span>. Please wait for node validation.
+                                                        You have a pending cashout ticket of <span className="font-extrabold font-mono">৳{pendingWithdrawAmount.toFixed(2)}</span>. Please wait for node validation.
                                                     </div>
                                                 </div>
                                             )}
 
-                                            <div className="p-4 space-y-3">
+                                            <div className="p-4 space-y-3 font-sans">
                                                 <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="wallet" className="w-5 h-5 text-[#8a2be2]" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">Fast Deposit Gateway</span>
+                                                        <span className="text-xs font-bold text-slate-800">bKash Fast Deposit</span>
                                                     </div>
                                                     <span className="text-[9px] bg-rose-50 text-rose-600 py-1 px-2.5 rounded-full font-bold">Add Funds</span>
                                                 </button>
@@ -1633,7 +1608,7 @@
                                                 <button onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors relative">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="wallet" className="w-5 h-5 text-emerald-600" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">Fast Withdraw</span>
+                                                        <span className="text-xs font-bold text-slate-800">bKash Fast Withdraw</span>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
                                                         {hasPendingWithdraw && <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-ping"></span>}
@@ -1644,7 +1619,7 @@
                                                 <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="receipt" className="w-5 h-5 text-indigo-500" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">My Deposits History</span>
+                                                        <span className="text-xs font-bold text-slate-800">My Deposits History</span>
                                                     </div>
                                                     <span className="text-[9px] bg-slate-100 text-slate-700 py-1 px-2.5 rounded-full font-bold">Details</span>
                                                 </button>
@@ -1652,7 +1627,7 @@
                                                 <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full bg-white hover:bg-slate-50 text-slate-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="receipt" className="w-5 h-5 text-amber-500" />
-                                                        <span className="text-xs font-bold text-slate-800 font-sans">My Withdrawals History</span>
+                                                        <span className="text-xs font-bold text-slate-800">My Withdrawals History</span>
                                                     </div>
                                                     <span className="text-[9px] bg-amber-50 text-amber-700 py-1 px-2.5 rounded-full font-bold">Details</span>
                                                 </button>
@@ -1661,7 +1636,7 @@
                                                 <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full bg-sky-50 hover:bg-sky-100 text-sky-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-sky-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="headphones" className="w-5 h-5 text-sky-600 animate-pulse" />
-                                                        <span className="text-xs font-bold font-sans">Telegram Customer Support</span>
+                                                        <span>Telegram Customer Support</span>
                                                     </div>
                                                     <span className="text-[10px] text-sky-600 font-bold bg-sky-100/50 py-1 px-2 rounded-full">@Kaisarvai007</span>
                                                 </a>
@@ -1688,7 +1663,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN (USDT REMOVED) */}
+                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN (NAGAD & USDT COMPLETELY REMOVED) */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#f5f6fa] h-full justify-between overflow-hidden">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
@@ -1700,7 +1675,7 @@
                                     <h1 className="text-base font-bold text-slate-800 font-sans">Deposit</h1>
                                     <button 
                                         onClick={() => setDepositTab(depositTab === 'new' ? 'history' : 'new')} 
-                                        className="text-xs font-bold text-slate-600 hover:text-[#8a2be2]"
+                                        className="text-xs font-bold text-slate-600 hover:text-[#8a2be2] font-sans"
                                     >
                                         {depositTab === 'new' ? 'Deposit history' : 'New Deposit'}
                                     </button>
@@ -1718,7 +1693,7 @@
                                                     <Icon name="wallet" className="w-4 h-4" />
                                                     <span>Balance</span>
                                                 </div>
-                                                <div className="text-3xl font-black mt-1 tracking-tight flex items-center space-x-2">
+                                                <div className="text-3xl font-black mt-1 tracking-tight flex items-center space-x-2 font-mono">
                                                     <span>৳{Number(balance || 0).toFixed(2)}</span>
                                                     <button onClick={() => window.location.reload()} className="hover:rotate-180 transition-transform duration-350">
                                                         <Icon name="refresh-cw" className="w-4 h-4 text-slate-950/75" />
@@ -1727,33 +1702,12 @@
                                             </div>
                                         </div>
 
-                                        {/* 2. Professional Payment Method Tabs (USDT removed, grid-cols-2) */}
-                                        <div className="px-4 pb-3 grid grid-cols-2 gap-3">
-                                            {/* Nagad Method Tab */}
-                                            <button 
-                                                onClick={() => { setSelectedMethod('nagad'); setSelectedChannel('GoPay-Nagad'); }} 
-                                                className={`p-3 rounded-xl bg-white border-2 flex flex-col items-center justify-center space-y-1.5 shadow-sm transition-all ${
-                                                    selectedMethod === 'nagad' ? 'border-[#fccd11] bg-yellow-50/20' : 'border-transparent'
-                                                }`}
-                                            >
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 flex items-center justify-center text-white text-xs font-bold font-sans">
-                                                    N
-                                                </div>
-                                                <span className="text-xs font-bold text-slate-700 font-sans">Nagad</span>
-                                            </button>
-
-                                            {/* bKash Method Tab */}
-                                            <button 
-                                                onClick={() => { setSelectedMethod('bkash'); setSelectedChannel('GoPay-bKash'); }} 
-                                                className={`p-3 rounded-xl bg-white border-2 flex flex-col items-center justify-center space-y-1.5 shadow-sm transition-all ${
-                                                    selectedMethod === 'bkash' ? 'border-[#e2136e] bg-rose-50/20' : 'border-transparent'
-                                                }`}
-                                            >
-                                                <div className="w-10 h-10 rounded-xl bg-[#e2136e] flex items-center justify-center">
-                                                    <span className="text-white font-extrabold text-base">b</span>
-                                                </div>
-                                                <span className="text-xs font-bold text-slate-700 font-sans">bKash</span>
-                                            </button>
+                                        {/* 2. Professional Payment Method Tabs (Single bKash Real Logo Card, full width) */}
+                                        <div className="px-4 pb-3">
+                                            <div className="p-4 rounded-2xl bg-white border-2 border-bkashPink flex flex-col items-center justify-center space-y-2 shadow-sm text-center">
+                                                <BkashAppIcon />
+                                                <span className="text-xs font-black text-slate-800 font-sans uppercase tracking-wider block mt-1">bKash official gateway</span>
+                                            </div>
                                         </div>
 
                                         {/* 3. Select Channel Section */}
@@ -1765,60 +1719,24 @@
                                                 </div>
 
                                                 <div className="grid grid-cols-2 gap-2">
-                                                    {selectedMethod === 'nagad' && (
-                                                        <>
-                                                            <button 
-                                                                onClick={() => setSelectedChannel('GoPay-Nagad')}
-                                                                className={`p-3 text-left rounded-xl transition-all border ${
-                                                                    selectedChannel === 'GoPay-Nagad' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
-                                                                }`}
-                                                            >
-                                                                <div className="text-[11px] font-extrabold">GoPay-Nagad</div>
-                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 50K</div>
-                                                            </button>
-                                                            <button 
-                                                                onClick={() => setSelectedChannel('RolezPay-nagad')}
-                                                                className={`p-3 text-left rounded-xl transition-all border ${
-                                                                    selectedChannel === 'RolezPay-nagad' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
-                                                                }`}
-                                                            >
-                                                                <div className="text-[11px] font-extrabold">RolezPay-nagad</div>
-                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 30K</div>
-                                                            </button>
-                                                            <button 
-                                                                onClick={() => setSelectedChannel('StarPago-NAGAD')}
-                                                                className={`p-3 text-left rounded-xl transition-all border ${
-                                                                    selectedChannel === 'StarPago-NAGAD' ? 'bg-[#fccd11] border-transparent text-slate-955 font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
-                                                                }`}
-                                                            >
-                                                                <div className="text-[11px] font-extrabold">StarPago-NAGAD</div>
-                                                                <div className="text-[9px] opacity-80 mt-0.5 font-semibold">Balance:100 - 5K</div>
-                                                            </button>
-                                                        </>
-                                                    )}
-
-                                                    {selectedMethod === 'bkash' && (
-                                                        <>
-                                                            <button 
-                                                                onClick={() => setSelectedChannel('GoPay-bKash')}
-                                                                className={`p-3 text-left rounded-xl transition-all border ${
-                                                                    selectedChannel === 'GoPay-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
-                                                                }`}
-                                                            >
-                                                                <div className="text-[11px] font-extrabold">GoPay-bKash</div>
-                                                                <div className="text-[9px] opacity-85 mt-0.5 font-semibold">Balance:100 - 50K</div>
-                                                            </button>
-                                                            <button 
-                                                                onClick={() => setSelectedChannel('StarPago-bKash')}
-                                                                className={`p-3 text-left rounded-xl transition-all border ${
-                                                                    selectedChannel === 'StarPago-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
-                                                                }`}
-                                                            >
-                                                                <div className="text-[11px] font-extrabold">StarPago-bKash</div>
-                                                                <div className="text-[9px] opacity-85 mt-0.5 font-semibold">Balance:100 - 10K</div>
-                                                            </button>
-                                                        </>
-                                                    )}
+                                                    <button 
+                                                        onClick={() => setSelectedChannel('GoPay-bKash')}
+                                                        className={`p-3 text-left rounded-xl transition-all border ${
+                                                            selectedChannel === 'GoPay-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                        }`}
+                                                    >
+                                                        <div className="text-[11px] font-extrabold">GoPay-bKash</div>
+                                                        <div className="text-[9px] opacity-85 mt-0.5 font-semibold font-mono">Balance:100 - 50K</div>
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => setSelectedChannel('StarPago-bKash')}
+                                                        className={`p-3 text-left rounded-xl transition-all border ${
+                                                            selectedChannel === 'StarPago-bKash' ? 'bg-[#e2136e] border-transparent text-white font-bold shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-600'
+                                                        }`}
+                                                    >
+                                                        <div className="text-[11px] font-extrabold">StarPago-bKash</div>
+                                                        <div className="text-[9px] opacity-85 mt-0.5 font-semibold font-mono">Balance:100 - 10K</div>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -1830,15 +1748,12 @@
                                                 <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/60 flex items-center justify-between">
                                                     <div>
                                                         <span className="text-[9px] text-slate-500 block">Agent Account:</span>
-                                                        <span className="text-sm font-black text-slate-800 font-mono select-all">
-                                                            {selectedMethod === 'nagad' ? '01910203040' : '01860909272'}
-                                                        </span>
+                                                        <span className="text-sm font-black text-slate-800 font-mono select-all">01860909272</span>
                                                     </div>
                                                     <button 
                                                         type="button"
                                                         onClick={() => {
-                                                            const val = selectedMethod === 'nagad' ? '01910203040' : '01860909272';
-                                                            navigator.clipboard.writeText(val);
+                                                            navigator.clipboard.writeText('01860909272');
                                                             showToast('Receiver copied!', 'success');
                                                         }} 
                                                         className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-[10px] font-bold"
@@ -1877,7 +1792,7 @@
                                                     placeholder="Enter Custom Amount (BDT)"
                                                     value={depositAmount} 
                                                     onChange={e => setDepositAmount(e.target.value)} 
-                                                    className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#8a2be2]"
+                                                    className="w-full mt-2 bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
                                                 />
                                             </div>
                                         </div>
@@ -1922,7 +1837,7 @@
                                             (depositHistory || []).map(item => (
                                                 <div key={item.id} className="bg-white p-3.5 rounded-xl border border-slate-200/60 shadow-sm flex flex-col space-y-2">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-xs font-black text-[#e2136e]">৳{Number(item.amount || 0).toFixed(2)}</span>
+                                                        <span className="text-xs font-black text-[#e2136e] font-mono">৳{Number(item.amount || 0).toFixed(2)}</span>
                                                         <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                             item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
                                                             item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-[#e2136e]'
@@ -1943,17 +1858,17 @@
 
                                 {/* Sticky professional footer */}
                                 {depositTab === 'new' && (
-                                    <div className="bg-white border-t border-slate-100 px-4 py-3 flex justify-between items-center flex-shrink-0 font-sans">
+                                    <div className="bg-white border-t border-slate-100 px-4 py-3 flex justify-between items-center flex-shrink-0 font-sans shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
                                         <div>
                                             <span className="text-[10px] text-slate-500 block leading-tight font-semibold">Recharge Method:</span>
-                                            <span className="text-xs font-extrabold text-slate-900 leading-tight block mt-0.5">{selectedChannel}</span>
+                                            <span className="text-xs font-extrabold text-[#e2136e] leading-tight block mt-0.5">{selectedChannel}</span>
                                         </div>
                                         <button 
                                             type="button"
                                             onClick={processDeposit}
                                             disabled={isDepositing}
                                             className={`px-8 py-3 rounded-xl text-white font-bold text-xs uppercase shadow transition-all ${
-                                                isDepositing ? 'bg-slate-400 cursor-not-allowed' : 'bg-slate-900 hover:bg-black active:scale-95'
+                                                isDepositing ? 'bg-slate-400 cursor-not-allowed' : 'bg-[#e2136e] hover:bg-rose-700 active:scale-95'
                                             }`}
                                         >
                                             {isDepositing ? 'Processing...' : 'Deposit'}
@@ -1963,10 +1878,10 @@
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN */}
+                        {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (NAGAD REMOVED) */}
                         {view === 'withdraw' && (
                             <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
-                                <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100">
+                                <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
                                             <Icon name="chevron-left" className="w-6 h-6" />
@@ -1990,7 +1905,7 @@
                                                 </div>
                                                 <div className="flex justify-between text-xs pt-1">
                                                     <span className="text-slate-500 font-bold">Withdrawable Balance:</span>
-                                                    <span className="font-black text-emerald-600">৳{Number(balance || 0).toFixed(2)}</span>
+                                                    <span className="font-black text-emerald-600 font-mono">৳{Number(balance || 0).toFixed(2)}</span>
                                                 </div>
                                             </div>
 
@@ -2022,7 +1937,7 @@
                                                         placeholder="Enter Custom Payout Amount" 
                                                         value={withdrawAmount} 
                                                         onChange={e => setWithdrawAmount(e.target.value)} 
-                                                        className="w-full mt-2 bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none"
+                                                        className="w-full mt-2 bg-white border border-slate-200 rounded-xl py-3 px-4 text-xs font-bold text-slate-800 focus:outline-none font-mono"
                                                     />
                                                 </div>
 
@@ -2069,7 +1984,7 @@
                                                             <span className="text-xs font-black text-emerald-600">৳{Number(item.amount || 0).toFixed(2)}</span>
                                                             <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                                 item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
-                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-850 border border-amber-300 animate-pulse'
+                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-850 border border-amber-300 animate-pulse font-mono'
                                                             }`}>
                                                                 {item.status}
                                                             </span>
@@ -2143,10 +2058,10 @@
                                         gameType === 'trx_wingo' ? 'bg-slate-900 border-slate-800 text-white' : 'bg-gradient-to-r from-violet-700 to-indigo-950 text-white border-indigo-900/40'
                                     }`}>
                                         <div>
-                                            <span className="text-[9px] text-slate-300 uppercase tracking-wider block">Wallet Balance</span>
-                                            <span className="text-xl font-black text-[#fccd11]">৳{Number(balance || 0).toFixed(2)}</span>
+                                            <span className="text-[9px] text-slate-300 uppercase tracking-wider block font-sans">Wallet Balance</span>
+                                            <span className="text-xl font-black text-[#fccd11] font-mono">৳{Number(balance || 0).toFixed(2)}</span>
                                         </div>
-                                        <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
+                                        <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-sans">Deposit Funds</button>
                                     </div>
 
                                     {/* Action Buttons: Red, Green, Violet */}
@@ -2218,7 +2133,7 @@
                                                     <span className="text-[8px] opacity-90">{activeGameTab === '30sec' ? '30 Sec' : activeGameTab === '1min' ? '1 Min' : '2 Min'}</span>
                                                 </div>
 
-                                                <div className="flex-1 flex flex-wrap gap-1.5 justify-end">
+                                                <div className="flex-1 flex flex-wrap gap-1.5 justify-end font-sans">
                                                     <span className="border border-yellow-700 text-yellow-900 px-3 py-1 rounded-full text-[9px] font-extrabold uppercase">Period</span>
                                                     <button className="bg-white hover:bg-slate-100 text-slate-800 px-2.5 py-1 rounded-full text-[9px] font-bold flex items-center space-x-1 shadow-sm">
                                                         <span>📜 How to play</span>
@@ -2236,7 +2151,7 @@
                                                 </div>
 
                                                 <div className="text-right">
-                                                    <span className="text-[10px] text-yellow-900 font-extrabold block mr-1">Draw time</span>
+                                                    <span className="text-[10px] text-yellow-900 font-extrabold block mr-1 font-sans">Draw time</span>
                                                     <div className="flex justify-end space-x-1 mt-1 font-mono">
                                                         {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
                                                             <span key={index} className={`px-1.5 py-0.5 text-sm font-black rounded ${char === ':' ? 'bg-transparent text-slate-900 px-0' : 'bg-white text-slate-900 border border-yellow-600/30 shadow-sm'}`}>
@@ -2247,13 +2162,13 @@
                                                 </div>
                                             </div>
 
-                                            <div className="flex justify-between items-center mt-3 bg-[#e8b90c] p-3 rounded-2xl border border-yellow-600/20">
+                                            <div className="flex justify-between items-center mt-3 bg-[#e8b90c] p-3 rounded-2xl border border-yellow-600/20 font-sans">
                                                 <span className="text-[10px] font-black text-yellow-950 uppercase tracking-wide">Block Hash:</span>
                                                 <div className="flex space-x-1.5">
                                                     {currentTrxLast5.map((char, index) => (
                                                         <div 
                                                             key={index} 
-                                                            className="w-8 h-8 rounded-full bg-gradient-to-b from-[#ff82a3] to-[#ff2b61] text-white border-2 border-white flex items-center justify-center font-black text-xs shadow-[0_4px_10px_rgba(255,43,97,0.3)] animate-pulse"
+                                                            className="w-8 h-8 rounded-full bg-gradient-to-b from-[#ff82a3] to-[#ff2b61] text-white border-2 border-white flex items-center justify-center font-black text-xs shadow-[0_4px_10px_rgba(255,43,97,0.3)] animate-pulse font-mono"
                                                         >
                                                             {char}
                                                         </div>
@@ -2262,14 +2177,14 @@
                                             </div>
 
                                             {getTimerForActiveTab() <= 5 && (
-                                                <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2 rounded-3xl backdrop-blur-sm animate-fade-in">
+                                                <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2 rounded-3xl backdrop-blur-sm animate-fade-in font-sans">
                                                     <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
                                                     <div className="flex space-x-4">
                                                         <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl">
-                                                            <span className="text-5xl font-black text-rose-500">0</span>
+                                                            <span className="text-5xl font-black text-rose-500 font-mono">0</span>
                                                         </div>
                                                         <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl animate-bounce">
-                                                            <span className="text-5xl font-black text-rose-500">{getTimerForActiveTab()}</span>
+                                                            <span className="text-5xl font-black text-rose-500 font-mono">{getTimerForActiveTab()}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2277,7 +2192,7 @@
                                         </div>
                                     ) : (
                                         /* CLASSIC WINGO COUNTER BOARD */
-                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-955 p-4 rounded-2xl border border-amber-350 relative overflow-hidden shadow-sm">
+                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-955 p-4 rounded-2xl border border-amber-350 relative overflow-hidden shadow-sm font-sans">
                                             <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
                                                 <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
                                                 <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
@@ -2287,7 +2202,7 @@
                                                 <div>
                                                     <div className="flex space-x-1 mb-2">
                                                         {getHistoryForActiveTab().slice(0, 5).map((draw, idx) => (
-                                                            <div key={idx} className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-800">
+                                                            <div key={idx} className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-800 font-mono">
                                                                 {draw.number}
                                                             </div>
                                                         ))}
@@ -2297,7 +2212,7 @@
                                                 </div>
 
                                                 <div className="text-right">
-                                                    <span className="text-[9px] font-bold block text-slate-700">Time remaining</span>
+                                                    <span className="text-[9px] font-bold block text-slate-700 font-sans">Time remaining</span>
                                                     <div className="flex justify-end space-x-1 mt-1 font-mono">
                                                         {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
                                                             <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-955 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
@@ -2309,14 +2224,14 @@
                                             </div>
 
                                             {getTimerForActiveTab() <= 5 && (
-                                                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in">
+                                                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in font-sans">
                                                     <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
                                                     <div className="flex space-x-4">
                                                         <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
-                                                            <span className="text-6xl font-black text-amber-500">0</span>
+                                                            <span className="text-6xl font-black text-amber-500 font-mono font-sans">0</span>
                                                         </div>
                                                         <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
-                                                            <span className="text-6xl font-black text-amber-500">{getTimerForActiveTab()}</span>
+                                                            <span className="text-6xl font-black text-amber-500 font-mono font-sans">{getTimerForActiveTab()}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -2339,22 +2254,20 @@
                                                         <table className="w-full text-[10px] text-left border-collapse font-sans">
                                                             <thead>
                                                                 <tr className="bg-[#fbc911] text-yellow-955 font-bold border-b border-yellow-500/30">
-                                                                    <th className="py-2.5 px-1.5 text-center">Period</th>
-                                                                    <th className="py-2.5 px-1 text-center">Block height</th>
-                                                                    <th className="py-2.5 px-1 text-center">Block time</th>
-                                                                    <th className="py-2.5 px-1 text-center">Hash value</th>
-                                                                    <th className="py-2.5 px-1.5 text-center">Result</th>
+                                                                    <th className="py-2.5 px-1.5 text-center font-sans">Period</th>
+                                                                    <th className="py-2.5 px-1 text-center font-sans">Block height</th>
+                                                                    <th className="py-2.5 px-1 text-center font-sans">Block time</th>
+                                                                    <th className="py-2.5 px-1 text-center font-sans">Hash value</th>
+                                                                    <th className="py-2.5 px-1.5 text-center font-sans">Result</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {paginatedHistory.map((item, idx) => {
-                                                                    // Format Period like the authentic screenshot: 202**0418
                                                                     const rawPeriod = item.period;
                                                                     const formattedPeriod = rawPeriod.length > 7 
                                                                         ? `${rawPeriod.substring(0, 3)}**${rawPeriod.slice(-4)}` 
                                                                         : rawPeriod;
                                                                     
-                                                                    // Outcome sphere color styles
                                                                     const ballColorClass = item.number === 0 ? 'bg-gradient-to-r from-red-500 to-violet-600' : 
                                                                         (item.number === 5 ? 'bg-gradient-to-r from-emerald-500 to-violet-600' :
                                                                         ([1,3,7,9].includes(item.number) ? 'bg-emerald-500' : 'bg-red-500'));
@@ -2364,13 +2277,13 @@
                                                                             <td className="py-2.5 px-1.5 text-center font-semibold text-slate-800">{formattedPeriod}</td>
                                                                             <td className="py-2.5 px-1 text-center">
                                                                                 <span className="flex items-center justify-center space-x-0.5">
-                                                                                    <span className="text-slate-800">{item.blockHeight || '84303440'}</span>
+                                                                                    <span className="text-slate-800 font-mono">{item.blockHeight || '84303440'}</span>
                                                                                     <span className="w-3.5 h-3.5 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center font-bold text-[8px] scale-90 cursor-help">?</span>
                                                                                 </span>
                                                                             </td>
-                                                                            <td className="py-2.5 px-1 text-center text-slate-500">{item.blockTime || '23:57:54'}</td>
-                                                                            <td className="py-2.5 px-1 text-center font-bold text-slate-500">{item.shortHash || '**7d1c'}</td>
-                                                                            <td className="py-2.5 px-1.5 text-center">
+                                                                            <td className="py-2.5 px-1 text-center text-slate-500 font-mono">{item.blockTime || '23:57:54'}</td>
+                                                                            <td className="py-2.5 px-1 text-center font-bold text-slate-500 font-mono">{item.shortHash || '**7d1c'}</td>
+                                                                            <td className="py-2.5 px-1.5 text-center font-sans">
                                                                                 <div className="flex items-center justify-center space-x-1.5 font-sans">
                                                                                     <span className={`w-4 h-4 rounded-full text-white font-bold text-[8px] flex items-center justify-center shadow-sm ${ballColorClass}`}>
                                                                                         {item.number}
@@ -2388,7 +2301,7 @@
                                                     </div>
                                                 ) : (
                                                     /* CLASSIC WINGO DIRECTORY LIST */
-                                                    <div className="space-y-1.5 text-[10px]">
+                                                    <div className="space-y-1.5 text-[10px] font-sans">
                                                         {paginatedHistory.map((item, idx) => (
                                                             <div key={idx} className="flex justify-between items-center py-1.5 border-b border-slate-50 text-slate-600 font-mono">
                                                                 <span className="font-semibold">{item.period}</span>
@@ -2401,7 +2314,7 @@
                                                 )
                                             ) : (
                                                 /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
-                                                <div className="space-y-2 text-[10px]">
+                                                <div className="space-y-2 text-[10px] font-sans">
                                                     {myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
                                                         <div className="text-center py-8 text-slate-400">
                                                             <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
@@ -2411,12 +2324,12 @@
                                                         myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).map(bet => (
                                                             <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
                                                                 <div>
-                                                                    <span className="block text-slate-400 text-[9px] font-mono">Period: {bet.period}</span>
+                                                                    <span className="block text-slate-400 text-[9px] font-mono font-sans">Period: {bet.period}</span>
                                                                     <span className="font-bold text-slate-800">Prediction: <span className="uppercase text-primary font-black">{bet.selection}</span></span>
-                                                                    <span className="block text-[9px] text-slate-400">{bet.timestamp}</span>
+                                                                    <span className="block text-[9px] text-slate-400 font-sans">{bet.timestamp}</span>
                                                                 </div>
                                                                 <div className="text-right">
-                                                                    <span className="block font-black text-slate-700">৳{bet.amount}</span>
+                                                                    <span className="block font-black text-slate-700 font-mono">৳{bet.amount}</span>
                                                                     <span className={`text-[9px] font-bold uppercase ${
                                                                         bet.status === 'won' ? 'text-emerald-600' : bet.status === 'lost' ? 'text-red-500' : 'text-amber-500'
                                                                     }`}>{bet.status}</span>
@@ -2429,7 +2342,7 @@
 
                                             {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM */}
                                             {gameSubTab === 'history' && activeFullHistory.length > 10 && (
-                                                <div className="flex items-center justify-center space-x-6 py-4 border-t border-slate-100 mt-4">
+                                                <div className="flex items-center justify-center space-x-6 py-4 border-t border-slate-100 mt-4 font-sans">
                                                     <button 
                                                         disabled={historyPage === 1}
                                                         onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))}
@@ -2457,7 +2370,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: CHICKEN ROAD & CHICKEN ROAD 2 PLAY SCREEN (NEW!) */}
+                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN */}
                         {view === 'game_chicken' && (
                             <div className="flex-1 flex flex-col bg-[#111622] justify-between relative overflow-y-auto text-white">
                                 {/* Header */}
@@ -2466,9 +2379,7 @@
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
                                     <div className="flex flex-col items-center">
-                                        <span className="text-xs font-black tracking-widest text-[#fccd11] font-mono">
-                                            {gameType === 'chicken_road' ? 'CHICKEN ROAD' : 'CHICKEN ROAD 2'}
-                                        </span>
+                                        <span className="text-xs font-black tracking-widest text-[#fccd11] font-mono">CHICKEN ROAD 2</span>
                                         <span className="text-[9px] text-slate-400">Survival Multiplier</span>
                                     </div>
                                     <div className="flex space-x-1.5 items-center">
@@ -2486,9 +2397,7 @@
                                     </div>
 
                                     {/* Highway / Sewer lane horizontal scrolling track */}
-                                    <div className={`w-full overflow-x-auto flex relative py-8 min-h-[160px] border border-slate-800 rounded-3xl ${
-                                        gameType === 'chicken_road' ? 'bg-[#0f141d]' : 'bg-[#1e2330]'
-                                    }`}>
+                                    <div className="w-full overflow-x-auto flex relative py-8 min-h-[160px] border border-slate-800 rounded-3xl bg-[#1e2330]">
                                         
                                         {/* Start point Arch Tunnel */}
                                         <div className="w-16 flex-shrink-0 border-r-2 border-slate-800 bg-[#0b0e16] flex flex-col justify-center items-center relative">
@@ -2499,7 +2408,7 @@
                                         </div>
 
                                         {/* 9 Game columns corresponding to multipliers */}
-                                        {activeChickenMults.map((mult, index) => {
+                                        {chickenRoad2Multipliers.map((mult, index) => {
                                             const isActive = chickenStep === index;
                                             const isPassed = chickenStep > index;
                                             const isCrashSpot = chickenCrash && chickenStep === index;
@@ -2530,20 +2439,14 @@
                                                         ) : isCrashSpot ? (
                                                             <div className="text-3xl z-10 animate-bounce">💥</div>
                                                         ) : (
-                                                            <div className={`w-11 h-11 rounded-full border-2 flex items-center justify-center ${
-                                                                gameType === 'chicken_road' 
-                                                                    ? 'bg-slate-800 border-slate-600 text-slate-500' 
-                                                                    : 'bg-zinc-700 border-zinc-500 text-zinc-400'
-                                                            }`}>
+                                                            <div className="w-11 h-11 rounded-full border-2 flex items-center justify-center bg-zinc-700 border-zinc-500 text-zinc-400">
                                                                 <span className="text-[10px] font-black">◎</span>
                                                             </div>
                                                         )}
                                                     </div>
 
                                                     {/* Sewer grate graphics at the bottom */}
-                                                    <div className={`w-full h-4 rounded-t-md opacity-45 ${
-                                                        gameType === 'chicken_road' ? 'bg-slate-900 border-t border-slate-700' : 'bg-yellow-600/30 border-t border-yellow-500/20'
-                                                    }`}></div>
+                                                    <div className="w-full h-4 rounded-t-md opacity-45 bg-yellow-600/30 border-t border-yellow-500/20"></div>
                                                 </div>
                                             );
                                         })}
@@ -2551,8 +2454,8 @@
 
                                     {/* Crash Error layout alert */}
                                     {chickenCrash && (
-                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-500 text-xs font-bold animate-pulse">
-                                            {gameType === 'chicken_road' ? 'FALLEN INTO THE SEWER ARCHWAY!' : 'HIT BY A TRUCK ON HIGHWAY!'} Game Over!
+                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-500 text-xs font-bold animate-pulse font-sans">
+                                            HIT BY A TRUCK ON HIGHWAY! Game Over!
                                         </div>
                                     )}
 
@@ -2561,7 +2464,7 @@
                                         
                                         {/* 1. Set Difficulty selectors */}
                                         <div>
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Crossing Difficulty:</span>
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 font-sans">Crossing Difficulty:</span>
                                             <div className="grid grid-cols-4 gap-1.5 bg-[#0f141d] p-1 rounded-xl">
                                                 {['easy', 'medium', 'hard', 'hardcore'].map(diff => (
                                                     <button 
@@ -2570,7 +2473,7 @@
                                                         onClick={() => setChickenDifficulty(diff)}
                                                         className={`py-2 text-[10px] font-black uppercase rounded-lg transition-all ${
                                                             chickenDifficulty === diff 
-                                                                ? 'bg-[#fccd11] text-slate-950 font-black shadow' 
+                                                                ? 'bg-[#fccd11] text-slate-955 font-black shadow' 
                                                                 : 'text-slate-400 hover:text-slate-200 disabled:opacity-40'
                                                         }`}
                                                     >
@@ -2583,7 +2486,7 @@
                                         {/* 2. Amount Ajusters & Play triggers */}
                                         <div className="flex items-center space-x-3">
                                             {/* MIN/MAX Controls */}
-                                            <div className="flex flex-col space-y-1">
+                                            <div className="flex flex-col space-y-1 font-sans">
                                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bet Amount:</span>
                                                 <div className="flex bg-[#0f141d] rounded-xl border border-slate-800 overflow-hidden max-w-[150px]">
                                                     <button 
@@ -2615,12 +2518,12 @@
                                                 {!chickenActive ? (
                                                     <button 
                                                         onClick={startChickenGame}
-                                                        className="w-full py-3 bg-[#18b660] hover:bg-[#149d4e] active:scale-95 transition-all text-white font-black uppercase text-xs rounded-xl shadow-lg shadow-emerald-950/40 tracking-wider"
+                                                        className="w-full py-3 bg-[#18b660] hover:bg-[#149d4e] active:scale-95 transition-all text-white font-black uppercase text-xs rounded-xl shadow-lg shadow-emerald-950/40 tracking-wider font-sans"
                                                     >
                                                         Play Game
                                                     </button>
                                                 ) : (
-                                                    <div className="grid grid-cols-2 gap-2 w-full">
+                                                    <div className="grid grid-cols-2 gap-2 w-full font-sans">
                                                         <button 
                                                             onClick={handleChickenStep}
                                                             className="py-3 bg-[#fccd11] hover:bg-goldHover text-slate-950 font-black uppercase text-[10px] rounded-xl tracking-wider transition-all"
@@ -2640,12 +2543,12 @@
 
                                         {/* Presets amounts shortcut row */}
                                         {!chickenActive && (
-                                            <div className="grid grid-cols-4 gap-1.5 pt-1.5 border-t border-slate-800/60">
+                                            <div className="grid grid-cols-4 gap-1.5 pt-1.5 border-t border-slate-800/60 font-mono">
                                                 {[10, 50, 100, 200].map(val => (
                                                     <button 
                                                         key={val} 
                                                         onClick={() => setChickenBet(val)}
-                                                        className="py-1 bg-slate-800/80 hover:bg-slate-700 rounded-lg text-[10px] font-bold"
+                                                        className="py-1 bg-slate-800/80 hover:bg-slate-700 rounded-lg text-[10px] font-bold text-white"
                                                     >
                                                         ৳{val}
                                                     </button>
@@ -2676,7 +2579,7 @@
                                     </div>
                                     <div className="text-right">
                                         <span className="text-[10px] text-slate-400 block">Round Period:</span>
-                                        <span className="font-bold text-slate-700">{getPeriodForActiveTab()}</span>
+                                        <span className="font-bold text-slate-700 font-mono">{getPeriodForActiveTab()}</span>
                                     </div>
                                 </div>
 
@@ -2712,7 +2615,7 @@
                                                     setSelectedUnit(0);
                                                 }
                                             }} 
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold text-slate-800 focus:outline-none"
+                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold text-slate-800 focus:outline-none font-mono"
                                         />
                                     </div>
 
@@ -2730,7 +2633,7 @@
                                 <div className="flex justify-between items-center pt-2 border-t border-slate-100 font-sans">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block">Total cost:</span>
-                                        <span className="text-xl font-black text-emerald-600">৳{(selectedUnit * multiplier).toFixed(2)}</span>
+                                        <span className="text-xl font-black text-emerald-600 font-mono">৳{(selectedUnit * multiplier).toFixed(2)}</span>
                                     </div>
                                     <button onClick={confirmBetPlacement} className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-955 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
                                 </div>
@@ -2757,7 +2660,7 @@
                                         
                                         <div className="mt-6 p-5 bg-gradient-to-b from-[#141c2b] to-[#0c1017] rounded-2xl border border-amber-400/80 shadow-[0_0_20px_rgba(252,205,17,0.15)]">
                                             <span className="text-[9px] uppercase font-bold tracking-widest text-slate-400 block">Win Amount</span>
-                                            <span className="text-3xl font-black text-[#fccd11] tracking-tight block mt-1">৳{Number(popupAmount).toFixed(2)}</span>
+                                            <span className="text-3xl font-black text-[#fccd11] tracking-tight block mt-1 font-mono">৳{Number(popupAmount).toFixed(2)}</span>
                                         </div>
                                     </>
                                 ) : (
@@ -2770,18 +2673,18 @@
                                                 <line x1="15" y1="9" x2="15.01" y2="9" />
                                             </svg>
                                         </div>
-                                        <h2 className="text-2xl font-extrabold text-rose-500 tracking-wider">TRY AGAIN!</h2>
-                                        <p className="text-[11px] text-slate-300 mt-1">Prediction missed. Better luck next round!</p>
+                                        <h2 className="text-2xl font-extrabold text-rose-500 tracking-wider font-sans">TRY AGAIN!</h2>
+                                        <p className="text-[11px] text-slate-300 mt-1 font-sans">Prediction missed. Better luck next round!</p>
                                         
                                         <div className="mt-6 p-5 bg-[#141b26] rounded-2xl border border-slate-800">
-                                            <span className="text-[9px] uppercase font-bold tracking-widest text-slate-400 block">Win Amount</span>
-                                            <span className="text-2xl font-bold text-slate-400 tracking-tight block mt-1">৳0.00</span>
+                                            <span className="text-[9px] uppercase font-bold tracking-widest text-slate-400 block font-sans">Win Amount</span>
+                                            <span className="text-2xl font-bold text-slate-400 tracking-tight block mt-1 font-mono">৳0.00</span>
                                         </div>
                                     </>
                                 )}
                                 <button 
                                     onClick={() => { setShowResultPopup(false); }} 
-                                    className="mt-6 w-full py-3 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-955 font-black rounded-xl text-xs uppercase tracking-wider shadow-all active:scale-95"
+                                    className="mt-6 w-full py-3 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-955 font-black rounded-xl text-xs uppercase tracking-wider shadow-all active:scale-95 font-sans"
                                 >
                                     Close Window
                                 </button>
@@ -2795,7 +2698,7 @@
             // Spacing Configured for Top Navigation bar Layout
             function renderSharedNav() {
                 return (
-                    <div className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center relative z-20 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex-shrink-0">
+                    <div className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center relative z-20 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex-shrink-0 font-sans">
                         <button onClick={() => { setView('home'); setActiveNav('home'); }} className={`flex flex-col items-center space-y-1 ${activeNav === 'home' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="home" className="w-5 h-5" />
                             <span className="text-[10px] font-bold font-sans">Home</span>
