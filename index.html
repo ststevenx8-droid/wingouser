@@ -1805,7 +1805,7 @@
                                 
                                 {/* Dynamic Theme Header depending on gameType */}
                                 <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
-                                    gameType === 'trx_wingo' ? 'bg-[#12161f] border-b border-slate-800 text-white' : 'bg-[#fccd11] text-slate-950'
+                                    gameType === 'trx_wingo' ? 'bg-[#12161f] border-b border-slate-800 text-white' : 'bg-[#fccd11] text-slate-955 border-b border-yellow-500/20'
                                 }`}>
                                     <button onClick={() => setView('home')} className={`${gameType === 'trx_wingo' ? 'text-white' : 'text-slate-900'} hover:text-black`}>
                                         <Icon name="chevron-left" className="w-8 h-8" />
@@ -1826,8 +1826,9 @@
                                     </div>
                                 </div>
 
-                                <div className="flex-1 px-4 py-3 space-y-4 pb-16 relative">
+                                <div className="flex-1 px-4 py-3 space-y-4 pb-16 relative font-sans">
                                     
+                                    {/* Game Modes selector */}
                                     <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
                                         {[
                                             { id: '30sec', desc: gameType === 'trx_wingo' ? 'TRX 30s' : 'Wingo 30s' },
@@ -1858,6 +1859,69 @@
                                         </div>
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold">Deposit Funds</button>
                                     </div>
+
+                                    {/* ==================================================== */}
+                                    {/* BETTING CONTROLS PANEL - MOVED TO THE TOP AS REQUESTED */}
+                                    {/* ==================================================== */}
+                                    
+                                    {/* Action Buttons: Red, Green, Violet */}
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Green</button>
+                                        <button onClick={() => openBetConfirmation('violet')} className="bg-gameViolet hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Violet</button>
+                                        <button onClick={() => openBetConfirmation('red')} className="bg-gameRed hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Red</button>
+                                    </div>
+
+                                    {/* BALLS GRID SELECTION PANEL */}
+                                    <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+                                        <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
+                                            {[
+                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
+                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
+                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
+                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' }
+                                            ].map(ball => (
+                                                <button 
+                                                    key={ball.val} 
+                                                    onClick={() => openBetConfirmation(ball.val)} 
+                                                    className={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 overflow-hidden ${ball.style}`}
+                                                >
+                                                    <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/25 rounded-full filter blur-[0.5px]"></div>
+                                                    <span className="z-10 text-white font-extrabold text-base tracking-tighter shadow-sm">{ball.val}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Big / Small Betting Nodes */}
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] hover:opacity-90 py-2.5 rounded-xl font-black text-xs text-slate-950 shadow-md transition-opacity">BIG</button>
+                                        <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] hover:opacity-90 py-2.5 text-white rounded-xl font-black text-xs shadow-md transition-opacity">SMALL</button>
+                                    </div>
+
+                                    {/* Multiplier Adjustment row - Constrained to 1x option only */}
+                                    <div className="flex items-center justify-center bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100">
+                                        <div className="flex space-x-1">
+                                            {[1].map(val => (
+                                                <button 
+                                                    key={val} 
+                                                    onClick={() => { setMultiplier(val); showToast(`Multiplier set to x${val}`, 'success'); }} 
+                                                    className="px-6 py-2 rounded-xl text-xs font-black bg-rose-600 text-white shadow-sm transition-colors"
+                                                >
+                                                    x{val}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* ==================================================== */}
+                                    {/* COUNTERS & TIME REMAINING PANEL - MOVED BELOW BET CONTROLS */}
+                                    {/* ==================================================== */}
 
                                     {/* Counter & Period status display */}
                                     {gameType === 'trx_wingo' ? (
@@ -1936,7 +2000,7 @@
                                         </div>
                                     ) : (
                                         /* CLASSIC WINGO COUNTER BOARD */
-                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden">
+                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-955 p-4 rounded-2xl border border-amber-350 relative overflow-hidden shadow-sm">
                                             <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
                                                 <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
                                                 <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
@@ -1982,61 +2046,6 @@
                                             )}
                                         </div>
                                     )}
-
-                                    {/* Action Buttons: Red, Green, Violet */}
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen text-white py-3 rounded-xl font-bold text-xs shadow-md">Green</button>
-                                        <button onClick={() => openBetConfirmation('violet')} className="bg-gameViolet text-white py-3 rounded-xl font-bold text-xs shadow-md">Violet</button>
-                                        <button onClick={() => openBetConfirmation('red')} className="bg-gameRed text-white py-3 rounded-xl font-bold text-xs shadow-md">Red</button>
-                                    </div>
-
-                                    {/* BALLS GRID SELECTION PANEL */}
-                                    <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-                                        <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
-                                            {[
-                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15_rgba(24,182,96,0.35)] border border-emerald-400' }
-                                            ].map(ball => (
-                                                <button 
-                                                    key={ball.val} 
-                                                    onClick={() => openBetConfirmation(ball.val)} 
-                                                    className={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 overflow-hidden ${ball.style}`}
-                                                >
-                                                    <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/25 rounded-full filter blur-[0.5px]"></div>
-                                                    <span className="z-10 text-white font-extrabold text-base tracking-tighter shadow-sm">{ball.val}</span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Multiplier Adjustment row - Constrained to 1x option only as requested */}
-                                    <div className="flex items-center justify-center bg-white p-2.5 rounded-2xl shadow-sm border border-slate-100">
-                                        <div className="flex space-x-1">
-                                            {[1].map(val => (
-                                                <button 
-                                                    key={val} 
-                                                    onClick={() => { setMultiplier(val); showToast(`Multiplier set to x${val}`, 'success'); }} 
-                                                    className="px-6 py-2 rounded-xl text-xs font-black bg-rose-600 text-white shadow-sm transition-colors"
-                                                >
-                                                    x{val}
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Big / Small Betting Nodes */}
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] py-2.5 rounded-xl font-black text-xs text-slate-950 shadow-md">BIG</button>
-                                        <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] py-2.5 text-white rounded-xl font-black text-xs shadow-md">SMALL</button>
-                                    </div>
 
                                     {/* History logs section */}
                                     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
@@ -2174,14 +2183,14 @@
 
                     {/* DYNAMIC BET PLACEMENT POPUP SHEET */}
                     {isBetSheetOpen && (
-                        <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-end animate-fade-in">
+                        <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-end animate-fade-in font-sans">
                             <div className="bg-white rounded-t-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto">
                                 <div className="flex justify-between items-center">
-                                    <h3 className="text-xs font-bold text-slate-800">Confirm Bet Details</h3>
+                                    <h3 className="text-xs font-bold text-slate-800 font-sans">Confirm Bet Details</h3>
                                     <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
                                 </div>
 
-                                <div className="p-3 bg-slate-50 rounded-xl flex justify-between text-xs">
+                                <div className="p-3 bg-slate-50 rounded-xl flex justify-between text-xs font-sans">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block">Target Selection:</span>
                                         <span className="font-black text-primary uppercase text-sm">{betValue}</span>
@@ -2192,7 +2201,7 @@
                                     </div>
                                 </div>
 
-                                <div className="space-y-2">
+                                <div className="space-y-2 font-sans">
                                     <span className="text-[10px] font-bold text-slate-400 block">Select Preset Bet Amount:</span>
                                     <div className="flex flex-wrap gap-1.5">
                                         {[10, 50, 100, 500, 1000, 5000].map(val => (
@@ -2239,7 +2248,7 @@
                                     </div>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                                <div className="flex justify-between items-center pt-2 border-t border-slate-100 font-sans">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block">Total cost:</span>
                                         <span className="text-xl font-black text-emerald-600">৳{(selectedUnit * multiplier).toFixed(2)}</span>
@@ -2252,7 +2261,7 @@
 
                     {/* DYNAMIC RESULT POPUP */}
                     {showResultPopup && (
-                        <div className="absolute inset-0 bg-black/80 z-[1000] flex flex-col items-center justify-center p-6 animate-fade-in">
+                        <div className="absolute inset-0 bg-black/80 z-[1000] flex flex-col items-center justify-center p-6 animate-fade-in font-sans">
                             <div className="relative w-full max-w-sm bg-gradient-to-b from-[#192130] to-[#0c1017] border border-slate-800 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
                                 
                                 <div className="absolute top-0 inset-x-0 h-40 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_top,rgba(252,205,17,0.3),transparent_60%)]"></div>
