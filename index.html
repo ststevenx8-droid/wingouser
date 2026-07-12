@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -411,7 +410,7 @@
             // Active Game View State
             const [activeGameTab, setActiveGameTab] = useState('30sec'); 
 
-            // Timers & Periods
+            // Timers & Periods (Starts at non-zero to prevent initial flash)
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
@@ -918,7 +917,7 @@
                 handleModeDrawRef.current = handleModeDraw;
             });
 
-            // Precise System-Clock Synchronized Timer Loop
+            // Precise System-Clock Synchronized Timer Loop with smooth 0-second settle states
             useEffect(() => {
                 let lastSeconds = -1;
 
@@ -930,7 +929,7 @@
                     if (seconds === lastSeconds) return; 
                     lastSeconds = seconds;
 
-                    // Trigger draw cycles exactly on clock alignment
+                    // Trigger settle action strictly at system boundaries
                     if (seconds % 30 === 0) {
                         handleModeDrawRef.current('30sec');
                     }
@@ -943,15 +942,15 @@
                         handleModeDrawRef.current('2min');
                     }
 
-                    // Update Countdown values correctly
-                    const rem30 = 30 - (seconds % 30);
+                    // Countdown value mapping (Counts 29 down to 0, total 30 unique states)
+                    const rem30 = 29 - (seconds % 30);
                     setTimer30s(rem30);
 
-                    const rem1m = 60 - seconds;
+                    const rem1m = 59 - seconds;
                     setTimer1m(rem1m);
 
                     const totalSeconds2m = (minutes % 2) * 60 + seconds;
-                    const rem2m = 120 - totalSeconds2m;
+                    const rem2m = 119 - totalSeconds2m;
                     setTimer2m(rem2m);
 
                 }, 250); 
@@ -1352,7 +1351,7 @@
 
             if (!isInitialized) {
                 return (
-                    <div className="flex-1 bg-slate-955 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
+                    <div className="flex-1 bg-slate-950 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
                         <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase font-sans">Connecting to Gateway...</span>
                     </div>
@@ -1514,7 +1513,7 @@
 
                                 {/* ACCOUNT INFO LINE */}
                                 {currentUser && (
-                                    <div className="bg-slate-950 text-white px-4 py-2.5 flex justify-between items-center text-[11px] border-b border-slate-800 flex-shrink-0 font-sans">
+                                    <div className="bg-slate-955 text-white px-4 py-2.5 flex justify-between items-center text-[11px] border-b border-slate-800 flex-shrink-0 font-sans">
                                         <div className="flex items-center space-x-2">
                                             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></div>
                                             <span className="font-bold text-slate-200">{currentUser.username}</span>
@@ -1977,7 +1976,7 @@
 
                         {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (NAGAD REMOVED) */}
                         {view === 'withdraw' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-550 justify-between overflow-y-auto">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
@@ -2178,7 +2177,7 @@
                                                 { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
                                                 { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
                                                 { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-450' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-455' },
                                                 { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
                                                 { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
                                                 { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' }
@@ -2244,7 +2243,7 @@
                                             <div className="flex justify-between items-center py-2.5 border-t border-yellow-600/20">
                                                 <div>
                                                     <span className="text-[10px] text-yellow-900 font-extrabold block">Active Period</span>
-                                                    <span className="text-sm font-black font-mono tracking-tight text-yellow-950">{getPeriodForActiveTab()}</span>
+                                                    <span className="text-sm font-black font-mono tracking-tight text-yellow-955">{getPeriodForActiveTab()}</span>
                                                 </div>
 
                                                 <div className="text-right">
@@ -2305,14 +2304,14 @@
                                                         ))}
                                                     </div>
                                                     <span className="text-[9px] block text-slate-700">Period ID:</span>
-                                                    <span className="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
+                                                    <span className="text-xs font-bold font-mono text-slate-955">{getPeriodForActiveTab()}</span>
                                                 </div>
 
                                                 <div className="text-right">
                                                     <span className="text-[9px] font-bold block text-slate-700 font-sans">Time remaining</span>
                                                     <div className="flex justify-end space-x-1 mt-1 font-mono">
                                                         {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-955 bg-transparent px-0' : 'bg-slate-955 text-yellow-400'}`}>
+                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-955 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
                                                                 {char}
                                                             </span>
                                                         ))}
