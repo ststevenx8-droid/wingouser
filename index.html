@@ -741,7 +741,7 @@
 
             // Opponent Defeat Logic adjusted to exactly 70% forced lose rate (giving an effective ~30% win rate environment)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
-                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
+                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
                 
                 if (activeBets.length === 0) {
                     return Math.floor(Math.random() * 10);
@@ -755,8 +755,8 @@
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
                         
-                        if (typeof selection === 'number') {
-                            userWinStates.add(selection);
+                        if (!isNaN(selection) && selection !== '') {
+                            userWinStates.add(Number(selection));
                         } else if (selection === 'big') {
                             [5, 6, 7, 8, 9].forEach(n => userWinStates.add(n));
                         } else if (selection === 'small') {
@@ -791,15 +791,16 @@
                 let activeBetFound = false;
 
                 const updatedBets = (myBetsRef.current || []).map(bet => {
-                    if (bet.gameType === game && bet.mode === mode && bet.period === period && bet.status === 'pending') {
+                    // String comparison to prevent precision loss or big int mismatch
+                    if (bet.gameType === game && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
 
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
 
-                        if (typeof selection === 'number') {
-                            if (selection === number) { isWin = true; multiplierFactor = 9; }
+                        if (!isNaN(selection) && selection !== '') {
+                            if (Number(selection) === Number(number)) { isWin = true; multiplierFactor = 9; }
                         } else if (selection === 'big' || selection === 'small') {
                             if (selection === size.toLowerCase()) { isWin = true; multiplierFactor = 2; }
                         } else if (['green', 'red', 'violet'].includes(selection)) {
@@ -1271,7 +1272,7 @@
                     return;
                 }
 
-                const currentActivePeriod = getPeriodForActiveTab();
+                const currentActivePeriod = String(getPeriodForActiveTab());
 
                 const newBet = {
                     id: Date.now(),
@@ -1401,7 +1402,7 @@
                         
                         {/* VIEW: AUTHENTICATION */}
                         {view === 'auth' && (
-                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-950 text-white py-8 overflow-y-auto">
+                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-955 text-white py-8 overflow-y-auto">
                                 <div className="mb-6 flex flex-col items-center text-center">
                                     <div className="w-16 h-16 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                         <span className="text-3xl font-black text-[#fccd11]">S</span>
@@ -2101,7 +2102,7 @@
 
                         {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
                         {view === 'game' && (
-                            <div className="flex-1 flex flex-col bg-slate-550 justify-between relative overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
                                 
                                 {/* Dynamic Theme Header depending on gameType */}
                                 <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
