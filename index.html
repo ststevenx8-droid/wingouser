@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -917,33 +918,43 @@
                 handleModeDrawRef.current = handleModeDraw;
             });
 
-            // Clock Interval loop
+            // Precise System-Clock Synchronized Timer Loop
             useEffect(() => {
+                let lastSeconds = -1;
+
                 const clockInterval = setInterval(() => {
-                    setTimer30s(prev => {
-                        if (prev <= 1) {
-                            handleModeDrawRef.current('30sec');
-                            return 30;
-                        }
-                        return prev - 1;
-                    });
+                    const now = new Date();
+                    const seconds = now.getSeconds();
+                    const minutes = now.getMinutes();
 
-                    setTimer1m(prev => {
-                        if (prev <= 1) {
-                            handleModeDrawRef.current('1min');
-                            return 60;
-                        }
-                        return prev - 1;
-                    });
+                    if (seconds === lastSeconds) return; 
+                    lastSeconds = seconds;
 
-                    setTimer2m(prev => {
-                        if (prev <= 1) {
-                            handleModeDrawRef.current('2min');
-                            return 120;
-                        }
-                        return prev - 1;
-                    });
-                }, 1000);
+                    // Trigger draw cycles exactly on clock alignment
+                    if (seconds % 30 === 0) {
+                        handleModeDrawRef.current('30sec');
+                    }
+
+                    if (seconds === 0) {
+                        handleModeDrawRef.current('1min');
+                    }
+
+                    if (minutes % 2 === 0 && seconds === 0) {
+                        handleModeDrawRef.current('2min');
+                    }
+
+                    // Update Countdown values correctly
+                    const rem30 = 30 - (seconds % 30);
+                    setTimer30s(rem30);
+
+                    const rem1m = 60 - seconds;
+                    setTimer1m(rem1m);
+
+                    const totalSeconds2m = (minutes % 2) * 60 + seconds;
+                    const rem2m = 120 - totalSeconds2m;
+                    setTimer2m(rem2m);
+
+                }, 250); 
 
                 return () => clearInterval(clockInterval);
             }, []);
@@ -1341,7 +1352,7 @@
 
             if (!isInitialized) {
                 return (
-                    <div className="flex-1 bg-slate-950 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
+                    <div className="flex-1 bg-slate-955 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
                         <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase font-sans">Connecting to Gateway...</span>
                     </div>
@@ -1391,7 +1402,7 @@
                         
                         {/* VIEW: AUTHENTICATION */}
                         {view === 'auth' && (
-                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-955 text-white py-8 overflow-y-auto">
+                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-950 text-white py-8 overflow-y-auto">
                                 <div className="mb-6 flex flex-col items-center text-center">
                                     <div className="w-16 h-16 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                         <span className="text-3xl font-black text-[#fccd11]">S</span>
@@ -1578,7 +1589,7 @@
                                             </div>
 
                                             {/* Game Card 4: CHICKEN ROAD 2 */}
-                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-955 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-955 shadow-md border border-emerald-955 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
                                                     <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
@@ -1966,7 +1977,7 @@
 
                         {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (NAGAD REMOVED) */}
                         {view === 'withdraw' && (
-                            <div className="flex-1 flex flex-col bg-slate-550 justify-between overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
@@ -2456,7 +2467,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN (REAL-TIME COLLISION & 3D JUMP ENGINE!) */}
+                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN */}
                         {view === 'game_chicken' && (
                             <div className="flex-1 flex flex-col bg-[#111622] justify-between relative overflow-y-auto text-white">
                                 {/* Header */}
