@@ -356,7 +356,49 @@
             return history;
         };
 
+        const generateK3MockHistory = (basePeriod, count) => {
+            const history = [];
+            for (let i = 1; i <= count; i++) {
+                const period = String(BigInt(basePeriod) - BigInt(i));
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const d3 = Math.floor(Math.random() * 6) + 1;
+                const sum = d1 + d2 + d3;
+                const size = sum >= 11 ? 'Big' : 'Small';
+                const parity = sum % 2 === 0 ? 'Even' : 'Odd';
+                history.push({ period, sum, size, parity, dice: [d1, d2, d3] });
+            }
+            return history;
+        };
+
         const chickenRoad2Multipliers = [1.01, 1.03, 1.06, 1.10, 1.15, 1.19, 1.24, 1.30, 1.37];
+
+        const DiceFace = ({ value, size = "w-8 h-8" }) => {
+            const dotStyles = {
+                1: [[50, 50]],
+                2: [[25, 25], [75, 75]],
+                3: [[25, 25], [50, 50], [75, 75]],
+                4: [[25, 25], [25, 75], [75, 25], [75, 75]],
+                5: [[25, 25], [25, 75], [50, 50], [75, 25], [75, 75]],
+                6: [[25, 25], [25, 50], [25, 75], [75, 25], [75, 50], [75, 75]]
+            };
+            const dots = dotStyles[value] || [];
+            return (
+                <div className={`${size} bg-white rounded-lg border-2 border-slate-200 shadow-md relative flex items-center justify-center p-1 flex-shrink-0`}>
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                        {dots.map(([cx, cy], i) => (
+                            <circle 
+                                key={i} 
+                                cx={cx} 
+                                cy={cy} 
+                                r={value === 1 ? 16 : 8} 
+                                fill="red" 
+                            />
+                        ))}
+                    </svg>
+                </div>
+            );
+        };
 
         function App() {
             const [view, setView] = useState('auth'); 
@@ -425,6 +467,11 @@
             const [periodTrx1m, setPeriodTrx1m] = useState('20260709203010201');
             const [periodTrx2m, setPeriodTrx2m] = useState('20260709303010101');
 
+            // K3 Period IDs
+            const [periodK330s, setPeriodK330s] = useState('20260712101010572');
+            const [periodK31m, setPeriodK31m] = useState('20260712201010344');
+            const [periodK32m, setPeriodK32m] = useState('20260712301010111');
+
             // Wingo Classic History preloaded with 50 elements from start
             const [drawHistory30s, setDrawHistory30s] = useState(generateClassicMockHistory('20260708100051482', 50));
             const [drawHistory1m, setDrawHistory1m] = useState(generateClassicMockHistory('20260708200031105', 50));
@@ -434,6 +481,11 @@
             const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(generateTrxMockHistory('20260709103010419', 50));
             const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(generateTrxMockHistory('20260709203010201', 50));
             const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(generateTrxMockHistory('20260709303010101', 50));
+
+            // K3 History preloaded with 50 elements
+            const [drawHistoryK330s, setDrawHistoryK330s] = useState(generateK3MockHistory('20260712101010572', 50));
+            const [drawHistoryK31m, setDrawHistoryK31m] = useState(generateK3MockHistory('20260712201010344', 50));
+            const [drawHistoryK32m, setDrawHistoryK32m] = useState(generateK3MockHistory('20260712301010111', 50));
 
             // Chicken Road 2 Real-Time Physical Engine States
             const [chickenActive, setChickenActive] = useState(false);
@@ -473,6 +525,10 @@
             const periodTrx1mRef = useRef(periodTrx1m);
             const periodTrx2mRef = useRef(periodTrx2m);
 
+            const periodK330sRef = useRef(periodK330s);
+            const periodK31mRef = useRef(periodK31m);
+            const periodK32mRef = useRef(periodK32m);
+
             const myBetsRef = useRef(myBets);
             const currentUserRef = useRef(currentUser);
             const balanceRef = useRef(balance);
@@ -488,6 +544,10 @@
             useEffect(() => { periodTrx30sRef.current = periodTrx30s; }, [periodTrx30s]);
             useEffect(() => { periodTrx1mRef.current = periodTrx1m; }, [periodTrx1m]);
             useEffect(() => { periodTrx2mRef.current = periodTrx2m; }, [periodTrx2m]);
+
+            useEffect(() => { periodK330sRef.current = periodK330s; }, [periodK330s]);
+            useEffect(() => { periodK31mRef.current = periodK31m; }, [periodK31m]);
+            useEffect(() => { periodK32mRef.current = periodK32m; }, [periodK32m]);
 
             useEffect(() => { myBetsRef.current = myBets; }, [myBets]);
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
@@ -731,7 +791,7 @@
             // Sound player context hook
             useEffect(() => {
                 const activeTimer = getTimerForActiveTab();
-                if (view === 'game' && activeTimer <= 5 && activeTimer >= 0) {
+                if ((view === 'game' || view === 'game_k3') && activeTimer <= 5 && activeTimer >= 0) {
                     if (lastPlayedTimeRef.current !== activeTimer) {
                         playCountdownBeep(activeTimer === 0);
                         lastPlayedTimeRef.current = activeTimer;
@@ -785,13 +845,66 @@
                 return Math.floor(Math.random() * 10);
             };
 
+            const determineK3OutcomeWithLossParameters = (mode, currentPeriod) => {
+                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === 'k3_lottery' && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
+                
+                if (activeBets.length === 0) {
+                    const d1 = Math.floor(Math.random() * 6) + 1;
+                    const d2 = Math.floor(Math.random() * 6) + 1;
+                    const d3 = Math.floor(Math.random() * 6) + 1;
+                    return [d1, d2, d3];
+                }
+
+                const controlRoll = Math.random() * 100;
+
+                // Exactly 70% forced loss rate
+                if (controlRoll <= 70) {
+                    const allCombos = [];
+                    for (let d1 = 1; d1 <= 6; d1++) {
+                        for (let d2 = 1; d2 <= 6; d2++) {
+                            for (let d3 = 1; d3 <= 6; d3++) {
+                                allCombos.push([d1, d2, d3]);
+                            }
+                        }
+                    }
+
+                    const losingCombos = allCombos.filter(([d1, d2, d3]) => {
+                        const sum = d1 + d2 + d3;
+                        const size = sum >= 11 ? 'big' : 'small';
+                        const parity = sum % 2 === 0 ? 'even' : 'odd';
+
+                        const userWins = activeBets.some(bet => {
+                            const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+                            if (!isNaN(selection) && selection !== '') {
+                                return Number(selection) === sum;
+                            } else if (selection === 'big' || selection === 'small') {
+                                return selection === size;
+                            } else if (selection === 'even' || selection === 'odd') {
+                                return selection === parity;
+                            }
+                            return false;
+                        });
+
+                        return !userWins;
+                    });
+
+                    if (losingCombos.length > 0) {
+                        return losingCombos[Math.floor(Math.random() * losingCombos.length)];
+                    }
+                }
+
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const d3 = Math.floor(Math.random() * 6) + 1;
+                return [d1, d2, d3];
+            };
+
             const processPlacedBetsForMode = (game, mode, period, number, size, color) => {
                 if (!currentUserRef.current) return;
                 let winAmount = 0;
                 let activeBetFound = false;
 
                 const updatedBets = (myBetsRef.current || []).map(bet => {
-                    // String comparison to prevent precision loss or big int mismatch
                     if (bet.gameType === game && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
                         activeBetFound = true;
                         let isWin = false;
@@ -808,6 +921,62 @@
                                 isWin = true;
                                 multiplierFactor = selection === 'violet' ? 4.5 : 2;
                             }
+                        }
+
+                        if (isWin) {
+                            const payout = bet.amount * multiplierFactor;
+                            winAmount += payout;
+                            return { ...bet, status: 'won', payout };
+                        }
+                        return { ...bet, status: 'lost', payout: 0 };
+                    }
+                    return bet;
+                });
+
+                if (activeBetFound) {
+                    setMyBets(updatedBets);
+                    const newBalance = balanceRef.current + winAmount;
+                    setBalance(newBalance);
+                    
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({
+                        balance: newBalance,
+                        bets: updatedBets
+                    });
+
+                    setPopupAmount(winAmount);
+                    setPopupType(winAmount > 0 ? 'win' : 'lose');
+                    setShowResultPopup(true);
+                }
+            };
+
+            const processPlacedK3BetsForMode = (mode, period, d1, d2, d3, sum, size, parity) => {
+                if (!currentUserRef.current) return;
+                let winAmount = 0;
+                let activeBetFound = false;
+
+                const updatedBets = (myBetsRef.current || []).map(bet => {
+                    if (bet.gameType === 'k3_lottery' && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
+                        activeBetFound = true;
+                        let isWin = false;
+                        let multiplierFactor = 0;
+
+                        const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+
+                        if (!isNaN(selection) && selection !== '') {
+                            if (Number(selection) === Number(sum)) {
+                                isWin = true;
+                                const sumMultipliers = {
+                                    3: 207.36, 4: 69.12, 5: 34.56, 6: 20.74, 7: 13.83, 8: 9.88, 
+                                    9: 8.3, 10: 7.68, 11: 7.68, 12: 8.3, 13: 9.88, 14: 13.83, 
+                                    15: 20.74, 16: 34.56, 17: 69.12, 18: 207.36
+                                };
+                                multiplierFactor = sumMultipliers[selection] || 2;
+                            }
+                        } else if (selection === 'big' || selection === 'small') {
+                            if (selection === size.toLowerCase()) { isWin = true; multiplierFactor = 2; }
+                        } else if (selection === 'even' || selection === 'odd') {
+                            if (selection === parity.toLowerCase()) { isWin = true; multiplierFactor = 2; }
                         }
 
                         if (isWin) {
@@ -909,6 +1078,32 @@
                     setDrawHistoryTrx2m(prev => [newResultTrx, ...prev]);
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx2m(prev => incrementPeriodString(prev));
+                }
+
+                // 3. K3 LOTTERY DRAW
+                let currentPeriodK3 = '';
+                if (mode === '30sec') currentPeriodK3 = periodK330sRef.current;
+                else if (mode === '1min') currentPeriodK3 = periodK31mRef.current;
+                else currentPeriodK3 = periodK32mRef.current;
+
+                const [d1, d2, d3] = determineK3OutcomeWithLossParameters(mode, currentPeriodK3);
+                const sum = d1 + d2 + d3;
+                const size = sum >= 11 ? 'Big' : 'Small';
+                const parity = sum % 2 === 0 ? 'Even' : 'Odd';
+                const newResultK3 = { period: currentPeriodK3, sum, size, parity, dice: [d1, d2, d3] };
+
+                if (mode === '30sec') {
+                    setDrawHistoryK330s(prev => [newResultK3, ...prev]);
+                    processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
+                    setPeriodK330s(prev => incrementPeriodString(prev));
+                } else if (mode === '1min') {
+                    setDrawHistoryK31m(prev => [newResultK3, ...prev]);
+                    processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
+                    setPeriodK31m(prev => incrementPeriodString(prev));
+                } else if (mode === '2min') {
+                    setDrawHistoryK32m(prev => [newResultK3, ...prev]);
+                    processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
+                    setPeriodK32m(prev => incrementPeriodString(prev));
                 }
             };
 
@@ -1312,6 +1507,10 @@
                     if (activeGameTab === '30sec') return periodTrx30s;
                     if (activeGameTab === '1min') return periodTrx1m;
                     return periodTrx2m;
+                } else if (gameType === 'k3_lottery') {
+                    if (activeGameTab === '30sec') return periodK330s;
+                    if (activeGameTab === '1min') return periodK31m;
+                    return periodK32m;
                 } else {
                     if (activeGameTab === '30sec') return period30s;
                     if (activeGameTab === '1min') return period1m;
@@ -1324,6 +1523,10 @@
                     if (activeGameTab === '30sec') return drawHistoryTrx30s;
                     if (activeGameTab === '1min') return drawHistoryTrx1m;
                     return drawHistoryTrx2m;
+                } else if (gameType === 'k3_lottery') {
+                    if (activeGameTab === '30sec') return drawHistoryK330s;
+                    if (activeGameTab === '1min') return drawHistoryK31m;
+                    return drawHistoryK32m;
                 } else {
                     if (activeGameTab === '30sec') return drawHistory30s;
                     if (activeGameTab === '1min') return drawHistory1m;
@@ -1377,6 +1580,8 @@
             const activeFullHistory = getHistoryForActiveTab();
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
             const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
+
+            const activeK3Result = activeFullHistory && activeFullHistory[0] ? activeFullHistory[0] : { dice: [1, 1, 1], sum: 3, size: 'Small', parity: 'Odd' };
 
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full bg-[#f5f6fa]">
@@ -1588,6 +1793,29 @@
                                                 </div>
                                             </div>
 
+                                            {/* Game Card 3: K3 LOTTERY */}
+                                            <div onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#12a14b] to-[#0a6125] shadow-md border border-emerald-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
+                                                <div className="flex justify-between items-start z-10">
+                                                    <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">K3 Dice Live</span>
+                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">K3 30s/1m/2m</span>
+                                                </div>
+
+                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center space-x-1">
+                                                    <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-md flex items-center justify-center rotate-12">
+                                                        <span className="text-xl text-red-500">⚂</span>
+                                                    </div>
+                                                    <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-md flex items-center justify-center -rotate-12">
+                                                        <span className="text-xl text-red-500">⚄</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="z-10 mt-auto">
+                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">K3 Lottery</h2>
+                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Premium 3 Dice Betting Game</span>
+                                                </div>
+                                            </div>
+
                                             {/* Game Card 4: CHICKEN ROAD 2 */}
                                             <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-955 shadow-md border border-emerald-955 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
@@ -1708,7 +1936,7 @@
                                                         <span className="text-xs font-bold text-slate-800">bKash Fast Withdraw</span>
                                                     </div>
                                                     <div className="flex items-center space-x-2">
-                                                        {hasPendingWithdraw && <span className="w-2.5 h-2.5 bg-amber-500 rounded-full animate-ping"></span>}
+                                                        {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-500 rounded-full animate-ping"></span>}
                                                         <span className="text-[9px] bg-emerald-50 text-emerald-600 py-1 px-2.5 rounded-full font-bold">Cashout</span>
                                                     </div>
                                                 </button>
@@ -2102,7 +2330,7 @@
 
                         {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
                         {view === 'game' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-550 justify-between relative overflow-y-auto">
                                 
                                 {/* Dynamic Theme Header depending on gameType */}
                                 <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
@@ -2454,6 +2682,248 @@
                                                         </div>
                                                     ) : (
                                                         myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).map(bet => (
+                                                            <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
+                                                                <div>
+                                                                    <span className="block text-slate-400 text-[9px] font-mono font-sans">Period: {bet.period}</span>
+                                                                    <span className="font-bold text-slate-800">Prediction: <span className="uppercase text-primary font-black">{bet.selection}</span></span>
+                                                                    <span className="block text-[9px] text-slate-400 font-sans">{bet.timestamp}</span>
+                                                                </div>
+                                                                <div className="text-right">
+                                                                    <span className="block font-black text-slate-700 font-mono">৳{bet.amount}</span>
+                                                                    <span className={`text-[9px] font-bold uppercase ${
+                                                                        bet.status === 'won' ? 'text-emerald-600' : bet.status === 'lost' ? 'text-red-500' : 'text-amber-500'
+                                                                    }`}>{bet.status}</span>
+                                                                </div>
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM (PREMIUM CIRCULAR BUTTONS) */}
+                                            {gameSubTab === 'history' && activeFullHistory.length > 10 && (
+                                                <div className="flex items-center justify-center space-x-6 py-5 border-t border-slate-100 mt-4 font-sans bg-white">
+                                                    <button 
+                                                        disabled={historyPage === 1}
+                                                        onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))}
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
+                                                    >
+                                                        <Icon name="chevron-left" className="w-4 h-4 text-slate-800" strokeWidth={3} />
+                                                    </button>
+
+                                                    <span className="text-[13px] font-extrabold text-slate-800 font-mono tracking-wider bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-100 shadow-inner">
+                                                        {historyPage}/{totalPages}
+                                                    </span>
+
+                                                    <button 
+                                                        disabled={historyPage === totalPages}
+                                                        onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))}
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
+                                                    >
+                                                        <Icon name="chevron-right" className="w-4 h-4 text-slate-800" strokeWidth={3} />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW: GAME PLAY WINDOW (K3 LOTTERY) */}
+                        {view === 'game_k3' && (
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
+                                
+                                <div className="px-4 py-3 flex items-center justify-between shadow-md bg-[#12a14b] text-white border-b border-emerald-600/20">
+                                    <button onClick={() => setView('home')} className="text-white hover:text-black">
+                                        <Icon name="chevron-left" className="w-8 h-8" />
+                                    </button>
+                                    
+                                    <div className="flex flex-col items-center">
+                                        <div className="w-8 h-8 rounded-lg flex items-center justify-center border shadow bg-[#0a6125] border-white/20 mb-0.5">
+                                            <span className="text-sm font-black text-white">K3</span>
+                                        </div>
+                                        <span className="text-xs font-black tracking-wider uppercase">K3 LOTTERY</span>
+                                    </div>
+
+                                    <div className="flex space-x-3">
+                                        <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="hover:text-[#fccd11]"><Icon name="headphones" className="w-5 h-5" /></a>
+                                        <button onClick={() => window.location.reload()}><Icon name="refresh-cw" className="w-5 h-5" /></button>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 px-4 py-3 space-y-4 pb-16 relative font-sans">
+                                    
+                                    {/* Game Modes selector */}
+                                    <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
+                                        {[
+                                            { id: '30sec', desc: 'K3 30s' },
+                                            { id: '1min', desc: 'K3 1 Min' },
+                                            { id: '2min', desc: 'K3 2 Min' }
+                                        ].map(tab => (
+                                            <button 
+                                                key={tab.id}
+                                                onClick={() => { setActiveGameTab(tab.id); setGameSubTab('history'); }}
+                                                className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
+                                                    activeGameTab === tab.id 
+                                                        ? 'bg-[#12a14b] text-white shadow' 
+                                                        : 'text-slate-500 hover:text-slate-800'
+                                                }`}
+                                            >
+                                                {tab.desc}
+                                            </button>
+                                        ))}
+                                    </div>
+
+                                    {/* Wallet Balance Display Card */}
+                                    <div className="rounded-2xl p-4 shadow-sm flex justify-between items-center bg-gradient-to-r from-emerald-700 to-emerald-950 text-white border border-emerald-900">
+                                        <div>
+                                            <span className="text-[9px] text-slate-300 block font-sans">Wallet Balance</span>
+                                            <span className="text-xl font-black text-[#fccd11] font-mono">৳{Number(balance || 0).toFixed(2)}</span>
+                                        </div>
+                                        <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-sans">Deposit Funds</button>
+                                    </div>
+
+                                    {/* Counters & Timers */}
+                                    <div className="bg-[#12a14b] text-white p-4 rounded-2xl border border-emerald-500 relative overflow-hidden shadow-sm font-sans">
+                                        <div className="flex justify-between items-center pb-2.5 border-b border-emerald-400/20">
+                                            <span className="bg-emerald-900/40 border border-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold">K3 ruleset active</span>
+                                            <span className="text-xs font-bold uppercase tracking-wide">Live Draw</span>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-3 pt-3 items-center">
+                                            <div>
+                                                <span className="text-[9px] block text-emerald-100">Period ID:</span>
+                                                <span className="text-xs font-bold font-mono text-white">{getPeriodForActiveTab()}</span>
+                                            </div>
+
+                                            <div className="text-right">
+                                                <span className="text-[9px] font-bold block text-emerald-100 font-sans">Time remaining</span>
+                                                <div className="flex justify-end space-x-1 mt-1 font-mono">
+                                                    {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
+                                                        <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-white bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
+                                                            {char}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {getTimerForActiveTab() <= 5 && (
+                                            <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in font-sans">
+                                                <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
+                                                <div className="flex space-x-4">
+                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
+                                                        <span className="text-6xl font-black text-[#12a14b] font-mono">0</span>
+                                                    </div>
+                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
+                                                        <span className="text-6xl font-black text-[#12a14b] font-mono">{getTimerForActiveTab()}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Dice Display Slots Box */}
+                                    <div className="bg-slate-100 rounded-2xl p-4 border border-slate-200">
+                                        <div className="flex space-x-3 justify-center items-center py-2 bg-[#0a6125]/10 rounded-xl border border-[#0a6125]/20">
+                                            <DiceFace value={activeK3Result.dice[0]} size="w-14 h-14" />
+                                            <DiceFace value={activeK3Result.dice[1]} size="w-14 h-14" />
+                                            <DiceFace value={activeK3Result.dice[2]} size="w-14 h-14" />
+                                        </div>
+                                    </div>
+
+                                    {/* Total numbers 3 to 18 option grid */}
+                                    <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
+                                        <div className="grid grid-cols-4 gap-y-5 gap-x-2">
+                                            {[
+                                                { val: 3, mult: "207.36X", color: "bg-red-500" },
+                                                { val: 4, mult: "69.12X", color: "bg-emerald-500" },
+                                                { val: 5, mult: "34.56X", color: "bg-red-500" },
+                                                { val: 6, mult: "20.74X", color: "bg-emerald-500" },
+                                                { val: 7, mult: "13.83X", color: "bg-red-500" },
+                                                { val: 8, mult: "9.88X", color: "bg-emerald-500" },
+                                                { val: 9, mult: "8.3X", color: "bg-red-500" },
+                                                { val: 10, mult: "7.68X", color: "bg-emerald-500" },
+                                                { val: 11, mult: "7.68X", color: "bg-red-500" },
+                                                { val: 12, mult: "8.3X", color: "bg-emerald-500" },
+                                                { val: 13, mult: "9.88X", color: "bg-red-500" },
+                                                { val: 14, mult: "13.83X", color: "bg-emerald-500" },
+                                                { val: 15, mult: "20.74X", color: "bg-red-500" },
+                                                { val: 16, mult: "34.56X", color: "bg-emerald-500" },
+                                                { val: 17, mult: "69.12X", color: "bg-red-500" },
+                                                { val: 18, mult: "207.36X", color: "bg-emerald-500" }
+                                            ].map(item => (
+                                                <button 
+                                                    key={item.val} 
+                                                    onClick={() => openBetConfirmation(item.val)} 
+                                                    className="flex flex-col items-center justify-center p-1.5 hover:opacity-90 active:scale-95 transition-all"
+                                                >
+                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm text-white shadow ${item.color}`}>
+                                                        {item.val}
+                                                    </div>
+                                                    <span className="text-[9px] text-slate-400 font-bold mt-1">{item.mult}</span>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Big, Small, Even, Odd selection grids */}
+                                    <div className="grid grid-cols-4 gap-2">
+                                        <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Small 2X</button>
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] text-slate-955 hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Big 2X</button>
+                                        <button onClick={() => openBetConfirmation('even')} className="bg-gameGreen text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Even 2X</button>
+                                        <button onClick={() => openBetConfirmation('odd')} className="bg-gameRed text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Odd 2X</button>
+                                    </div>
+
+                                    {/* History logs section */}
+                                    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm font-sans">
+                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[12px] font-bold font-sans bg-slate-50/50">
+                                            <button onClick={() => setGameSubTab('history')} className={`py-3.5 transition-all ${gameSubTab === 'history' ? 'border-b-2 border-[#12a14b] text-[#12a14b] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>Game History</button>
+                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3.5 transition-all ${gameSubTab === 'my_history' ? 'border-b-2 border-[#12a14b] text-[#12a14b] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>My Bets</button>
+                                        </div>
+
+                                        <div className="p-1">
+                                            {gameSubTab === 'history' ? (
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-[11px] text-left border-collapse font-sans">
+                                                        <tbody>
+                                                            {paginatedHistory.map((item, idx) => (
+                                                                <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                                                    <td className="py-3 pl-3 font-mono font-medium text-slate-700 tracking-tight text-[11px] w-[35%]">
+                                                                        {item.period}
+                                                                    </td>
+                                                                    <td className="py-3 text-center font-bold text-slate-800 w-[15%]">
+                                                                        {item.sum}
+                                                                    </td>
+                                                                    <td className="py-3 text-center font-semibold text-slate-700 w-[15%]">
+                                                                        {item.size}
+                                                                    </td>
+                                                                    <td className="py-3 text-center font-semibold text-slate-700 w-[15%]">
+                                                                        {item.parity}
+                                                                    </td>
+                                                                    <td className="py-3 pr-3 text-right w-[20%]">
+                                                                        <div className="inline-flex space-x-1 justify-end">
+                                                                            <DiceFace value={item.dice[0]} size="w-5 h-5" />
+                                                                            <DiceFace value={item.dice[1]} size="w-5 h-5" />
+                                                                            <DiceFace value={item.dice[2]} size="w-5 h-5" />
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ) : (
+                                                /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
+                                                <div className="space-y-2 text-[10px] font-sans p-2">
+                                                    {myBets.filter(b => b.gameType === 'k3_lottery' && b.mode === activeGameTab).length === 0 ? (
+                                                        <div className="text-center py-8 text-slate-400">
+                                                            <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
+                                                            <span>No bets logged in this mode yet.</span>
+                                                        </div>
+                                                    ) : (
+                                                        myBets.filter(b => b.gameType === 'k3_lottery' && b.mode === activeGameTab).map(bet => (
                                                             <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
                                                                 <div>
                                                                     <span className="block text-slate-400 text-[9px] font-mono font-sans">Period: {bet.period}</span>
