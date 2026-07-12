@@ -739,7 +739,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic adjusted to exactly 80% lose (20% win rate)
+            // Opponent Defeat Logic adjusted to exactly 60% lose (40% win rate)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -749,8 +749,8 @@
 
                 const controlRoll = Math.random() * 100;
 
-                // Exactly 80% forced loss (strict 20% win rate)
-                if (controlRoll <= 80) {
+                // Exactly 60% forced loss (strict 40% win rate)
+                if (controlRoll <= 60) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
@@ -1351,7 +1351,7 @@
 
             if (!isInitialized) {
                 return (
-                    <div className="flex-1 bg-slate-950 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
+                    <div className="flex-1 bg-slate-955 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
                         <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase font-sans">Connecting to Gateway...</span>
                     </div>
