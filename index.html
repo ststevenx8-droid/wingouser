@@ -1581,7 +1581,10 @@
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
             const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
 
-            const activeK3Result = activeFullHistory && activeFullHistory[0] ? activeFullHistory[0] : { dice: [1, 1, 1], sum: 3, size: 'Small', parity: 'Odd' };
+            // Safer dynamic extraction for active K3 results to prevent white screen on transitions
+            const activeK3Result = (gameType === 'k3_lottery' && activeFullHistory && activeFullHistory[0] && activeFullHistory[0].dice) 
+                ? activeFullHistory[0] 
+                : { dice: [1, 1, 1], sum: 3, size: 'Small', parity: 'Odd' };
 
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full bg-[#f5f6fa]">
@@ -1626,7 +1629,7 @@
                                         <div>
                                             <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Nickname</label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="user" className="w-4 h-4" /></span>
+                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="user" className="w-4 h-4" /></span>
                                                 <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                             </div>
                                         </div>
@@ -1667,7 +1670,7 @@
                                     <div>
                                         <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Password</label>
                                         <div className="relative">
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="lock" className="w-4 h-4" /></span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="lock" className="w-4 h-4" /></span>
                                             <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                         </div>
                                     </div>
@@ -1677,7 +1680,7 @@
                                             <div>
                                                 <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Confirm Password</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="shield-check" className="w-4 h-4" /></span>
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="shield-check" className="w-4 h-4" /></span>
                                                     <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                                 </div>
                                             </div>
@@ -1685,7 +1688,7 @@
                                             <div>
                                                 <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Promo / Referral Code</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="gift" className="w-4 h-4" /></span>
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="gift" className="w-4 h-4" /></span>
                                                     <input type="text" placeholder="e.g. STXWXYZ" value={promoCode} onChange={e => setPromoCode(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono uppercase"/>
                                                 </div>
                                             </div>
@@ -1756,7 +1759,7 @@
                                                         <div className="absolute inset-0 bg-white/10 rounded-full" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
                                                         <span className="text-white text-2xl font-black tracking-tighter drop-shadow-md">9</span>
                                                     </div>
-                                                    <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-500 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
+                                                    <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-505 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
                                                         <span className="text-white text-xl font-black tracking-tighter drop-shadow-md">0</span>
                                                     </div>
                                                     <div className="absolute bottom-4 left-2 w-10 h-10 rounded-full bg-gradient-to-br from-teal-300 via-emerald-400 to-emerald-500 border border-white/20 shadow-lg flex items-center justify-center">
@@ -1784,7 +1787,7 @@
                                                         <div className="absolute inset-0 bg-red-400/30" style={{ clipPath: 'polygon(50% 0%, 50% 100%, 0% 100%)' }}></div>
                                                     </div>
                                                     <div className="absolute bottom-2 -right-1 w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">T</div>
-                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
+                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-505 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
                                                 </div>
 
                                                 <div className="z-10 mt-auto">
@@ -1887,7 +1890,7 @@
                                                         showToast('Referral code copied to clipboard!', 'success');
                                                     }} 
                                                     disabled={!currentUser}
-                                                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase transition-all"
+                                                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-505 text-white font-extrabold rounded-xl text-xs uppercase transition-all"
                                                 >
                                                     Copy Referral Code
                                                 </button>
@@ -1958,7 +1961,7 @@
                                                 </button>
 
                                                 {/* OFFICIAL TELEGRAM SUPPORT BUTTON */}
-                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full bg-sky-50 hover:bg-sky-100 text-sky-800 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-sky-100 transition-colors">
+                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full bg-sky-50 hover:bg-sky-100 text-sky-850 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-sky-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="headphones" className="w-5 h-5 text-sky-600 animate-pulse" />
                                                         <span>Telegram Customer Support</span>
@@ -2136,14 +2139,14 @@
                                                         placeholder="Sender Account/Phone Number"
                                                         value={senderNumber} 
                                                         onChange={e => setSenderNumber(e.target.value)} 
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
+                                                        className="w-full bg-slate-550 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
                                                     />
                                                     <input 
                                                         type="text" 
                                                         placeholder="Enter Transaction ID (TxID)" 
                                                         value={transactionId} 
                                                         onChange={e => setTransactionId(e.target.value)} 
-                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
+                                                        className="w-full bg-slate-550 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
                                                     />
                                                 </div>
                                             </div>
@@ -2170,7 +2173,7 @@
                                                             {item.status}
                                                         </span>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-500 pt-1.5 border-t border-slate-50 font-mono">
+                                                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-505 pt-1.5 border-t border-slate-50 font-mono">
                                                         <span>Sender: {item.sender}</span>
                                                         <span className="text-right">TXID: {item.txid}</span>
                                                         <span className="col-span-2 text-slate-400 mt-1">{item.timestamp}</span>
@@ -2185,7 +2188,7 @@
                                 {depositTab === 'new' && (
                                     <div className="bg-white border-t border-slate-100 px-4 py-3 flex justify-between items-center flex-shrink-0 font-sans shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
                                         <div>
-                                            <span className="text-[10px] text-slate-500 block leading-tight font-semibold">Recharge Method:</span>
+                                            <span className="text-[10px] text-slate-505 block leading-tight font-semibold">Recharge Method:</span>
                                             <span className="text-xs font-extrabold text-[#e2136e] leading-tight block mt-0.5">{selectedChannel}</span>
                                         </div>
                                         <button 
@@ -2224,7 +2227,7 @@
                                     {withdrawTab === 'new' ? (
                                         <>
                                             <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-                                                <div className="flex justify-between items-center pb-2 border-b border-slate-50">
+                                                <div className="flex justify-between items-center pb-2 border-b border-slate-555">
                                                     <BkashOfficialLogo />
                                                     <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full uppercase">Official payout</span>
                                                 </div>
@@ -2244,7 +2247,7 @@
 
                                             <form onSubmit={processWithdrawal} className="space-y-4">
                                                 <div>
-                                                    <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1.5">Withdraw Amount (Min ৳100)</label>
+                                                    <label className="block text-slate-505 text-[10px] font-bold uppercase mb-1.5">Withdraw Amount (Min ৳100)</label>
                                                     <div className="grid grid-cols-4 gap-2">
                                                         {['100', '500', '1000', '5000'].map(val => (
                                                             <button 
@@ -2288,7 +2291,7 @@
                                                 <button 
                                                     type="submit" 
                                                     disabled={isWithdrawing}
-                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
+                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-505 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
                                                 >
                                                     {isWithdrawing ? 'Processing Cashout...' : 'Confirm Cashout Ticket'}
                                                 </button>
@@ -2370,7 +2373,7 @@
                                                 className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
                                                     activeGameTab === tab.id 
                                                         ? (gameType === 'trx_wingo' ? 'bg-rose-600 text-white shadow' : 'bg-secondary text-slate-955 shadow') 
-                                                        : 'text-slate-500 hover:text-slate-800'
+                                                        : 'text-slate-505 hover:text-slate-800'
                                                 }`}
                                             >
                                                 {tab.desc}
@@ -2606,7 +2609,7 @@
                                                                                     <span className="w-3.5 h-3.5 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center font-bold text-[8px] scale-90 cursor-help">?</span>
                                                                                 </span>
                                                                             </td>
-                                                                            <td className="py-2.5 px-1 text-center text-slate-500 font-mono">{item.blockTime || '23:57:54'}</td>
+                                                                            <td className="py-2.5 px-1 text-center text-slate-505 font-mono">{item.blockTime || '23:57:54'}</td>
                                                                             <td className="py-2.5 px-1 text-center font-bold text-slate-500 font-mono">{item.shortHash || '**7d1c'}</td>
                                                                             <td className="py-2.5 px-1.5 text-center font-sans">
                                                                                 <div className="flex items-center justify-center space-x-1.5 font-sans">
@@ -2643,7 +2646,7 @@
                                                                         textColorClass = "bg-gradient-to-r from-purple-500 to-rose-500 bg-clip-text text-transparent font-bold";
                                                                         displayedColorName = "Violet-Red";
                                                                     } else if (item.color === 'violet-green') {
-                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-emerald-500 bg-clip-text text-transparent font-bold";
+                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-emerald-505 bg-clip-text text-transparent font-bold";
                                                                         displayedColorName = "Violet-Green";
                                                                     }
 
@@ -2767,7 +2770,7 @@
                                                 className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
                                                     activeGameTab === tab.id 
                                                         ? 'bg-[#12a14b] text-white shadow' 
-                                                        : 'text-slate-500 hover:text-slate-800'
+                                                        : 'text-slate-505 hover:text-slate-800'
                                                 }`}
                                             >
                                                 {tab.desc}
@@ -2827,9 +2830,9 @@
                                     {/* Dice Display Slots Box */}
                                     <div className="bg-slate-100 rounded-2xl p-4 border border-slate-200">
                                         <div className="flex space-x-3 justify-center items-center py-2 bg-[#0a6125]/10 rounded-xl border border-[#0a6125]/20">
-                                            <DiceFace value={activeK3Result.dice[0]} size="w-14 h-14" />
-                                            <DiceFace value={activeK3Result.dice[1]} size="w-14 h-14" />
-                                            <DiceFace value={activeK3Result.dice[2]} size="w-14 h-14" />
+                                            <DiceFace value={activeK3Result.dice ? activeK3Result.dice[0] : 1} size="w-14 h-14" />
+                                            <DiceFace value={activeK3Result.dice ? activeK3Result.dice[1] : 1} size="w-14 h-14" />
+                                            <DiceFace value={activeK3Result.dice ? activeK3Result.dice[2] : 1} size="w-14 h-14" />
                                         </div>
                                     </div>
 
@@ -2904,9 +2907,9 @@
                                                                     </td>
                                                                     <td className="py-3 pr-3 text-right w-[20%]">
                                                                         <div className="inline-flex space-x-1 justify-end">
-                                                                            <DiceFace value={item.dice[0]} size="w-5 h-5" />
-                                                                            <DiceFace value={item.dice[1]} size="w-5 h-5" />
-                                                                            <DiceFace value={item.dice[2]} size="w-5 h-5" />
+                                                                            <DiceFace value={item.dice ? item.dice[0] : 1} size="w-5 h-5" />
+                                                                            <DiceFace value={item.dice ? item.dice[1] : 1} size="w-5 h-5" />
+                                                                            <DiceFace value={item.dice ? item.dice[2] : 1} size="w-5 h-5" />
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -2985,7 +2988,7 @@
                                         <span className="text-[9px] text-slate-400">Realistic 3D Crossing Highway</span>
                                     </div>
                                     <div className="flex space-x-1.5 items-center">
-                                        <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
+                                        <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-955/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
                                             ৳{Number(balance).toFixed(2)}
                                         </span>
                                     </div>
@@ -3082,7 +3085,7 @@
 
                                     {/* Crash Alert status */}
                                     {chickenCrash && (
-                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-500 text-xs font-bold animate-pulse font-sans">
+                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-505 text-xs font-bold animate-pulse font-sans">
                                             HIT BY A DYNAMIC VEHICLE ON HIGHWAY! Game Over!
                                         </div>
                                     )}
@@ -3284,7 +3287,7 @@
                                                 <path d="M12 2l3 6 6-1-4 5 3 6-8-3-8 3 3-6-4-5 6 1z"/>
                                             </svg>
                                         </div>
-                                        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider font-sans">YOU WON!</h2>
+                                        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-505 tracking-wider font-sans">YOU WON!</h2>
                                         <p className="text-[11px] text-slate-300 mt-1 font-sans">Congratulations! Your prediction was correct.</p>
                                         
                                         <div className="mt-6 p-5 bg-gradient-to-b from-[#141c2b] to-[#0c1017] rounded-2xl border border-amber-400/80 shadow-[0_0_20px_rgba(252,205,17,0.15)] animate-zoom-in">
@@ -3342,7 +3345,7 @@
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 relative ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-5 h-5" />
-                            {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-500 rounded-full animate-ping"></span>}
+                            {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-505 rounded-full animate-ping"></span>}
                             <span className="text-[10px] font-bold font-sans">Account</span>
                         </button>
                     </div>
