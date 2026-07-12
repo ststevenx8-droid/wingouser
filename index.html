@@ -404,11 +404,6 @@
             const [withdrawTab, setWithdrawTab] = useState('new'); 
             const [withdrawHistory, setWithdrawHistory] = useState([]);
 
-            // Admin Panel States
-            const [adminTab, setAdminTab] = useState('deposits');
-            const [globalDeposits, setGlobalDeposits] = useState([]);
-            const [globalWithdrawals, setGlobalWithdrawals] = useState([]);
-
             // Claim limit states
             const [dailyClaimed, setDailyClaimed] = useState(false);
 
@@ -724,38 +719,6 @@
                 userRef.on('value', handleData);
                 return () => userRef.off('value', handleData);
             }, [sessionPhone]);
-
-            // --- Real-time Admin Listeners ---
-            useEffect(() => {
-                if (view !== 'admin') return;
-
-                const depRef = db.ref('global_deposits');
-                const wdRef = db.ref('global_withdrawals');
-
-                const handleDeps = (snapshot) => {
-                    if (snapshot.exists()) {
-                        setGlobalDeposits(Object.values(snapshot.val()));
-                    } else {
-                        setGlobalDeposits([]);
-                    }
-                };
-
-                const handleWds = (snapshot) => {
-                    if (snapshot.exists()) {
-                        setGlobalWithdrawals(Object.values(snapshot.val()));
-                    } else {
-                        setGlobalWithdrawals([]);
-                    }
-                };
-
-                depRef.on('value', handleDeps);
-                wdRef.on('value', handleWds);
-
-                return () => {
-                    depRef.off('value', handleDeps);
-                    wdRef.off('value', handleWds);
-                };
-            }, [view]);
 
             const incrementPeriodString = (prev) => {
                 try {
@@ -1259,71 +1222,6 @@
                 });
             };
 
-            // --- Admin Process Logic ---
-            const handleConfirmDeposit = (dep) => {
-                const sanitizedPhone = getSanitizedPath(dep.userPhone);
-                const userBalanceRef = db.ref(`users/${sanitizedPhone}/balance`);
-                
-                userBalanceRef.transaction((currentBalance) => {
-                    return (currentBalance || 0) + Number(dep.amount);
-                }, (error, committed) => {
-                    if (committed) {
-                        const updates = {};
-                        updates[`global_deposits/${dep.id}/status`] = 'Success';
-                        updates[`users/${sanitizedPhone}/deposits/${dep.id}/status`] = 'Success';
-                        
-                        db.ref().update(updates)
-                            .then(() => showToast(`Deposit of ৳${dep.amount} successfully confirmed.`, 'success'))
-                            .catch(() => showToast(`Failed to update status nodes.`, 'error'));
-                    } else {
-                        showToast(`Failed to update balance.`, 'error');
-                    }
-                });
-            };
-
-            const handleRejectDeposit = (dep) => {
-                const sanitizedPhone = getSanitizedPath(dep.userPhone);
-                const updates = {};
-                updates[`global_deposits/${dep.id}/status`] = 'Rejected';
-                updates[`users/${sanitizedPhone}/deposits/${dep.id}/status`] = 'Rejected';
-
-                db.ref().update(updates)
-                    .then(() => showToast(`Deposit of ৳${dep.amount} rejected.`, 'success'))
-                    .catch(() => showToast(`Database status update failed.`, 'error'));
-            };
-
-            const handleConfirmWithdrawal = (wd) => {
-                const sanitizedPhone = getSanitizedPath(wd.userPhone);
-                const updates = {};
-                updates[`global_withdrawals/${wd.id}/status`] = 'Success';
-                updates[`users/${sanitizedPhone}/withdrawals/${wd.id}/status`] = 'Success';
-
-                db.ref().update(updates)
-                    .then(() => showToast(`Withdrawal of ৳${wd.amount} successfully confirmed.`, 'success'))
-                    .catch(() => showToast(`Database status update failed.`, 'error'));
-            };
-
-            const handleRejectWithdrawal = (wd) => {
-                const sanitizedPhone = getSanitizedPath(wd.userPhone);
-                const userBalanceRef = db.ref(`users/${sanitizedPhone}/balance`);
-
-                userBalanceRef.transaction((currentBalance) => {
-                    return (currentBalance || 0) + Number(wd.amount);
-                }, (error, committed) => {
-                    if (committed) {
-                        const updates = {};
-                        updates[`global_withdrawals/${wd.id}/status`] = 'Rejected';
-                        updates[`users/${sanitizedPhone}/withdrawals/${wd.id}/status`] = 'Rejected';
-
-                        db.ref().update(updates)
-                            .then(() => showToast(`Withdrawal of ৳${wd.amount} rejected and refunded.`, 'success'))
-                            .catch(() => showToast(`Failed to clear database status.`, 'error'));
-                    } else {
-                        showToast(`Refund transaction balance failure.`, 'error');
-                    }
-                });
-            };
-
             const handleDailyBonusClaim = () => {
                 if (dailyClaimed) {
                     showToast('Already Claimed! Bonus is restricted to once per user.', 'error');
@@ -1493,7 +1391,7 @@
                         
                         {/* VIEW: AUTHENTICATION */}
                         {view === 'auth' && (
-                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-950 text-white py-8 overflow-y-auto">
+                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-955 text-white py-8 overflow-y-auto">
                                 <div className="mb-6 flex flex-col items-center text-center">
                                     <div className="w-16 h-16 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                         <span className="text-3xl font-black text-[#fccd11]">S</span>
@@ -1829,15 +1727,6 @@
                                                     <span className="text-[10px] text-sky-600 font-bold bg-sky-100/50 py-1 px-2 rounded-full">@Kaisarvai007</span>
                                                 </a>
 
-                                                {/* ADMIN PANEL ACTION CARD */}
-                                                <button onClick={() => { setView('admin'); }} className="w-full bg-slate-900 hover:bg-slate-850 text-slate-300 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-slate-800 transition-colors mt-4">
-                                                    <div className="flex items-center space-x-3">
-                                                        <Icon name="settings" className="w-5 h-5 text-yellow-500" />
-                                                        <span className="text-xs font-bold text-slate-200 font-sans">Admin Control Center</span>
-                                                    </div>
-                                                    <span className="text-[9px] bg-yellow-500/10 text-yellow-500 py-1 px-2.5 rounded-full font-bold uppercase tracking-wider">Configure Nodes</span>
-                                                </button>
-
                                                 {/* DEVELOPER CREDIT CARD */}
                                                 <div className="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-2xl text-center space-y-2">
                                                     <p className="text-[10px] text-slate-400 leading-relaxed font-sans uppercase font-bold tracking-wide">
@@ -1860,7 +1749,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN */}
+                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN (NAGAD & USDT COMPLETELY REMOVED) */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#f5f6fa] h-full justify-between overflow-hidden">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
@@ -2075,9 +1964,9 @@
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN */}
+                        {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (NAGAD REMOVED) */}
                         {view === 'withdraw' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-550 justify-between overflow-y-auto">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
@@ -2200,124 +2089,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: ADMIN PANEL */}
-                        {view === 'admin' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-hidden h-full">
-                                <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
-                                    <div className="flex items-center">
-                                        <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
-                                            <Icon name="chevron-left" className="w-6 h-6" />
-                                        </button>
-                                        <h1 className="text-sm font-bold text-slate-800 font-sans">Admin Control</h1>
-                                    </div>
-                                    <div className="flex bg-slate-100 p-0.5 rounded-lg border border-slate-200">
-                                        <button onClick={() => setAdminTab('deposits')} className={`px-3 py-1 rounded text-[10px] font-bold ${adminTab === 'deposits' ? 'bg-[#8a2be2] text-white' : 'text-slate-600'}`}>Deposits</button>
-                                        <button onClick={() => setAdminTab('withdrawals')} className={`px-3 py-1 rounded text-[10px] font-bold ${adminTab === 'withdrawals' ? 'bg-[#8a2be2] text-white' : 'text-slate-600'}`}>Withdrawals</button>
-                                    </div>
-                                </div>
-
-                                <div className="flex-1 p-4 space-y-4 overflow-y-auto pb-24 font-sans">
-                                    {adminTab === 'deposits' ? (
-                                        <div className="space-y-3">
-                                            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">Manage Global Deposits</h3>
-                                            {globalDeposits.length === 0 ? (
-                                                <div className="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
-                                                    <Icon name="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                                                    <span>No deposit records available.</span>
-                                                </div>
-                                            ) : (
-                                                [...globalDeposits].reverse().map(item => (
-                                                    <div key={item.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-3">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-xs font-black text-[#e2136e] font-mono">৳{Number(item.amount || 0).toFixed(2)}</span>
-                                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                                                item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
-                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-[#e2136e]'
-                                                            }`}>
-                                                                {item.status}
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-[10px] text-slate-600 space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100 font-mono">
-                                                            <div>User Phone: <span className="font-bold text-slate-800">{item.userPhone}</span></div>
-                                                            <div>Username: <span className="font-bold text-slate-800">{item.username}</span></div>
-                                                            <div>Sender Account: <span className="font-bold text-slate-800">{item.sender}</span></div>
-                                                            <div>TXID: <span className="font-bold text-slate-800 uppercase">{item.txid}</span></div>
-                                                            <div>Gateway: <span className="text-slate-500">{item.gateway}</span></div>
-                                                            <div className="text-[9px] text-slate-400 pt-1 border-t border-slate-200/50 mt-1">{item.timestamp}</div>
-                                                        </div>
-                                                        {item.status === 'Pending' && (
-                                                            <div className="grid grid-cols-2 gap-2 pt-1">
-                                                                <button 
-                                                                    onClick={() => handleConfirmDeposit(item)}
-                                                                    className="py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow-sm"
-                                                                >
-                                                                    Confirm
-                                                                </button>
-                                                                <button 
-                                                                    onClick={() => handleRejectDeposit(item)}
-                                                                    className="py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg shadow-sm"
-                                                                >
-                                                                    Reject
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-3">
-                                            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">Manage Global Withdrawals</h3>
-                                            {globalWithdrawals.length === 0 ? (
-                                                <div className="text-center py-10 bg-white border rounded-2xl p-6 text-slate-400 text-xs">
-                                                    <Icon name="receipt" className="w-8 h-8 mx-auto text-slate-300 mb-2" />
-                                                    <span>No withdrawal records available.</span>
-                                                </div>
-                                            ) : (
-                                                [...globalWithdrawals].reverse().map(item => (
-                                                    <div key={item.id} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-3">
-                                                        <div className="flex justify-between items-center">
-                                                            <span className="text-xs font-black text-emerald-600 font-mono">৳{Number(item.amount || 0).toFixed(2)}</span>
-                                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
-                                                                item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
-                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800'
-                                                            }`}>
-                                                                {item.status}
-                                                            </span>
-                                                        </div>
-                                                        <div className="text-[10px] text-slate-600 space-y-1 bg-slate-50 p-2.5 rounded-lg border border-slate-100 font-mono">
-                                                            <div>User Phone: <span className="font-bold text-slate-800">{item.userPhone}</span></div>
-                                                            <div>Username: <span className="font-bold text-slate-800">{item.username}</span></div>
-                                                            <div>Receiver bKash: <span className="font-bold text-slate-800">{item.receiver}</span></div>
-                                                            <div>Wallet Mode: <span className="font-bold text-slate-800">{item.type}</span></div>
-                                                            <div className="text-[9px] text-slate-400 pt-1 border-t border-slate-200/50 mt-1">{item.timestamp}</div>
-                                                        </div>
-                                                        {item.status === 'Pending' && (
-                                                            <div className="grid grid-cols-2 gap-2 pt-1">
-                                                                <button 
-                                                                    onClick={() => handleConfirmWithdrawal(item)}
-                                                                    className="py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow-sm"
-                                                                >
-                                                                    Confirm
-                                                                </button>
-                                                                <button 
-                                                                    onClick={() => handleRejectWithdrawal(item)}
-                                                                    className="py-2 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-lg shadow-sm"
-                                                                >
-                                                                    Reject
-                                                                </button>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                ))
-                                            )}
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        )}
-
-                        {/* VIEW: GAME PLAY WINDOW */}
+                        {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
                         {view === 'game' && (
                             <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
                                 
@@ -2684,7 +2456,7 @@
                             </div>
                         )}
 
-                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN */}
+                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN (REAL-TIME COLLISION & 3D JUMP ENGINE!) */}
                         {view === 'game_chicken' && (
                             <div className="flex-1 flex flex-col bg-[#111622] justify-between relative overflow-y-auto text-white">
                                 {/* Header */}
