@@ -739,7 +739,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic adjusted to exactly 60% lose (40% win rate)
+            // Opponent Defeat Logic adjusted to exactly 50% forced lose rate (giving an effective ~45-50% win rate environment)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -749,8 +749,8 @@
 
                 const controlRoll = Math.random() * 100;
 
-                // Exactly 60% forced loss (strict 40% win rate)
-                if (controlRoll <= 60) {
+                // Exactly 50% forced loss rate (maintaining target win parameter of ~45-50%)
+                if (controlRoll <= 50) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
@@ -2177,7 +2177,7 @@
                                                 { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
                                                 { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
                                                 { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-455' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border-2 border-rose-455' },
                                                 { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
                                                 { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
                                                 { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' }
