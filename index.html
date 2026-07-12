@@ -739,7 +739,7 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic adjusted to exactly 50% forced lose rate (giving an effective ~45-50% win rate environment)
+            // Opponent Defeat Logic adjusted to exactly 70% forced lose rate (giving an effective ~30% win rate environment)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && b.period === currentPeriod && b.status === 'pending');
                 
@@ -749,8 +749,8 @@
 
                 const controlRoll = Math.random() * 100;
 
-                // Exactly 50% forced loss rate (maintaining target win parameter of ~45-50%)
-                if (controlRoll <= 50) {
+                // Exactly 70% forced loss rate
+                if (controlRoll <= 70) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
@@ -2101,7 +2101,7 @@
 
                         {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
                         {view === 'game' && (
-                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-550 justify-between relative overflow-y-auto">
                                 
                                 {/* Dynamic Theme Header depending on gameType */}
                                 <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
@@ -2337,12 +2337,12 @@
 
                                     {/* History logs section */}
                                     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm font-sans">
-                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[10px] font-bold font-sans">
-                                            <button onClick={() => setGameSubTab('history')} className={`py-3 ${gameSubTab === 'history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>Game History</button>
-                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3 ${gameSubTab === 'my_history' ? 'border-b-2 border-primary text-primary' : 'text-slate-400'}`}>My Bets</button>
+                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[12px] font-bold font-sans bg-slate-50/50">
+                                            <button onClick={() => setGameSubTab('history')} className={`py-3.5 transition-all ${gameSubTab === 'history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>Game History</button>
+                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3.5 transition-all ${gameSubTab === 'my_history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>My Bets</button>
                                         </div>
 
-                                        <div className="p-3">
+                                        <div className="p-1">
                                             {gameSubTab === 'history' ? (
                                                 /* CONDITIONAL RENDER: TRX BLOCK CHAIN VERIFICATION DIRECTORY */
                                                 gameType === 'trx_wingo' ? (
@@ -2396,21 +2396,56 @@
                                                         </table>
                                                     </div>
                                                 ) : (
-                                                    /* CLASSIC WINGO DIRECTORY LIST */
-                                                    <div className="space-y-1.5 text-[10px] font-sans">
-                                                        {paginatedHistory.map((item, idx) => (
-                                                            <div key={idx} className="flex justify-between items-center py-1.5 border-b border-slate-50 text-slate-600 font-mono">
-                                                                <span className="font-semibold">{item.period}</span>
-                                                                <span className="font-bold text-slate-900 bg-slate-100 w-5 h-5 flex items-center justify-center rounded-full font-sans">{item.number}</span>
-                                                                <span className="font-bold">{item.size}</span>
-                                                                <span className="capitalize text-primary">{item.color}</span>
-                                                            </div>
-                                                        ))}
+                                                    /* CLASSIC WINGO DIRECTORY LIST - MODIFIED FOR AN EXTREMELY PREMIUM TABULAR LOOK */
+                                                    <div className="overflow-x-auto">
+                                                        <table className="w-full text-[11px] text-left border-collapse font-sans">
+                                                            <tbody>
+                                                                {paginatedHistory.map((item, idx) => {
+                                                                    // Determine proper gradient/color styling
+                                                                    let textColorClass = "text-slate-600";
+                                                                    let displayedColorName = item.color;
+                                                                    if (item.color === 'red') {
+                                                                        textColorClass = "text-rose-500 font-bold";
+                                                                        displayedColorName = "Red";
+                                                                    } else if (item.color === 'green') {
+                                                                        textColorClass = "text-emerald-500 font-bold";
+                                                                        displayedColorName = "Green";
+                                                                    } else if (item.color === 'violet-red') {
+                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-rose-500 bg-clip-text text-transparent font-bold";
+                                                                        displayedColorName = "Violet-Red";
+                                                                    } else if (item.color === 'violet-green') {
+                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-emerald-500 bg-clip-text text-transparent font-bold";
+                                                                        displayedColorName = "Violet-Green";
+                                                                    }
+
+                                                                    return (
+                                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                                                            <td className="py-3 pl-3 font-mono font-medium text-slate-700 tracking-tight text-[11px] w-[40%]">
+                                                                                {item.period}
+                                                                            </td>
+                                                                            <td className="py-2 text-center w-[15%]">
+                                                                                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 border border-slate-200/50 text-slate-800 font-extrabold text-[12px] shadow-sm">
+                                                                                    {item.number}
+                                                                                </div>
+                                                                            </td>
+                                                                            <td className="py-3 text-center font-semibold text-slate-700 w-[20%]">
+                                                                                {item.size}
+                                                                            </td>
+                                                                            <td className="py-3 pr-3 text-right w-[25%]">
+                                                                                <span className={`${textColorClass} text-[11px]`}>
+                                                                                    {displayedColorName}
+                                                                                </span>
+                                                                            </td>
+                                                                        </tr>
+                                                                    );
+                                                                })}
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 )
                                             ) : (
                                                 /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
-                                                <div className="space-y-2 text-[10px] font-sans">
+                                                <div className="space-y-2 text-[10px] font-sans p-2">
                                                     {myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
                                                         <div className="text-center py-8 text-slate-400">
                                                             <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
@@ -2436,27 +2471,27 @@
                                                 </div>
                                             )}
 
-                                            {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM */}
+                                            {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM (PREMIUM CIRCULAR BUTTONS) */}
                                             {gameSubTab === 'history' && activeFullHistory.length > 10 && (
-                                                <div className="flex items-center justify-center space-x-6 py-4 border-t border-slate-100 mt-4 font-sans">
+                                                <div className="flex items-center justify-center space-x-6 py-5 border-t border-slate-100 mt-4 font-sans bg-white">
                                                     <button 
                                                         disabled={historyPage === 1}
                                                         onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))}
-                                                        className="w-10 h-10 rounded-xl bg-[#fccd11] hover:bg-goldHover text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow transition-all active:scale-95"
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
                                                     >
-                                                        <Icon name="chevron-left" className="w-5 h-5 text-white" strokeWidth={3} />
+                                                        <Icon name="chevron-left" className="w-4 h-4 text-slate-800" strokeWidth={3} />
                                                     </button>
 
-                                                    <span className="text-sm font-extrabold text-slate-800 font-mono tracking-wider">
+                                                    <span className="text-[13px] font-extrabold text-slate-800 font-mono tracking-wider bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-100 shadow-inner">
                                                         {historyPage}/{totalPages}
                                                     </span>
 
                                                     <button 
                                                         disabled={historyPage === totalPages}
                                                         onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))}
-                                                        className="w-10 h-10 rounded-xl bg-[#fccd11] hover:bg-[#e0b50f] text-white flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed shadow transition-all active:scale-95"
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
                                                     >
-                                                        <Icon name="chevron-right" className="w-5 h-5 text-white" strokeWidth={3} />
+                                                        <Icon name="chevron-right" className="w-4 h-4 text-slate-800" strokeWidth={3} />
                                                     </button>
                                                 </div>
                                             )}
