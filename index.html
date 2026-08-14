@@ -26,6 +26,10 @@
                         bkashPink: '#e2136e',
                         bkashBlack: '#231f20',
                         stevenXPurple: '#8a2be2'
+                    },
+                    boxShadow: {
+                        'neon-gold': '0 0 15px rgba(252, 205, 17, 0.4)',
+                        'neon-red': '0 0 15px rgba(243, 66, 66, 0.5)'
                     }
                 }
             }
@@ -50,14 +54,14 @@
             100% { transform: scale(1); opacity: 1; }
         }
         .animate-zoom-in {
-            animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         @keyframes slideDownFade {
-            0% { opacity: 0; transform: translateY(-12px); }
+            0% { opacity: 0; transform: translateY(-10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
         .animate-slide-down {
-            animation: slideDownFade 0.4s ease-out forwards;
+            animation: slideDownFade 0.35s ease-out forwards;
         }
         @keyframes marquee {
             0% { transform: translateX(100%); }
@@ -66,7 +70,14 @@
         .animate-marquee {
             display: inline-block;
             white-space: nowrap;
-            animation: marquee 14s linear infinite;
+            animation: marquee 16s linear infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 8px rgba(252, 205, 17, 0.6)); }
+            50% { filter: drop-shadow(0 0 16px rgba(252, 205, 17, 0.9)); }
+        }
+        .glow-pulse {
+            animation: pulseGlow 2s infinite ease-in-out;
         }
     </style>
 </head>
@@ -209,17 +220,8 @@
                 </svg>
             ),
             volume2: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-                </svg>
-            ),
-            info: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="16" x2="12" y2="12" />
-                    <line x1="12" y1="8" x2="12.01" y2="8" />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
+                    <path d="M13.5 4.06c0-1.33-1.61-1.98-2.54-1.02L6.3 7.5H4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h2.3l4.66 4.46c.93.96 2.54.31 2.54-1.02V4.06zM18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM16 4.45v.02c2.72.93 4.5 3.65 4.5 7.53s-1.78 6.6-4.5 7.53v.02c-.55.19-1.15-.12-1.33-.67-.19-.55.12-1.15.67-1.33 2.12-.73 3.66-2.92 3.66-5.55s-1.54-4.82-3.66-5.55c-.55-.19-.86-.78-.67-1.33.18-.55.78-.86 1.33-.67z"/>
                 </svg>
             ),
             x: (props) => (
@@ -250,6 +252,7 @@
             return <IconComponent className={className} {...props} />;
         };
 
+        // Real high-quality bKash app icon vector
         const BkashAppIcon = () => (
             <svg viewBox="0 0 350 120" className="w-40 h-auto" xmlns="http://www.w3.org/2000/svg">
                 <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
@@ -282,124 +285,136 @@
             </svg>
         );
 
-        // --- TOP PROMOTIONAL BANNER CAROUSEL (WITH AVIATOR BONUS) ---
-        const PromoBannerCarousel = ({ onDetailClick }) => {
+        // --- REAL COMMERCIAL PROMO CAROUSEL WITH DETAIL MODAL ---
+        const PromoBannerCarousel = ({ onOpenDetail }) => {
             const [currentSlide, setCurrentSlide] = useState(0);
 
             const banners = [
                 {
                     id: 'aviator',
+                    title: 'AVIATOR BONUS',
+                    subtitle: 'Cash out multiplier & get extra cash!',
                     render: () => (
-                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-[#0d121c] via-[#171b26] to-[#b38600] p-3 text-white relative overflow-hidden border border-amber-500/30 flex flex-col justify-between shadow-lg">
-                            <div className="absolute top-2 right-2 flex items-center space-x-1 z-20">
-                                <span className="text-[11px] font-black text-amber-400">SX</span>
-                                <span className="text-[11px] font-black text-white">WIN</span>
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#0d0f17] via-[#1a1f2e] to-[#694b05] p-3.5 text-white relative overflow-hidden border border-amber-500/40 flex flex-col justify-between shadow-xl">
+                            {/* Top Header line */}
+                            <div className="flex justify-between items-center z-10">
+                                <div className="flex items-center space-x-1.5">
+                                    <div className="w-5 h-5 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-md flex items-center justify-center font-black text-[10px] text-black">SX</div>
+                                    <span className="text-[12px] font-black tracking-widest text-[#fccd11] font-mono">SX WIN</span>
+                                </div>
+                                <span className="bg-red-600/90 text-white text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">Official Event</span>
                             </div>
 
-                            <div className="z-10">
-                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                            {/* Main Title */}
+                            <div className="z-10 mt-0.5">
+                                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider uppercase font-sans drop-shadow-[0_2px_10px_rgba(252,205,17,0.5)]">
                                     AVIATOR BONUS
                                 </h2>
                             </div>
 
-                            <div className="z-10 grid grid-cols-2 gap-x-2 text-[8.5px] font-bold text-slate-100 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px]">
-                                <div>Cash Out 15x Get <span className="text-amber-300 font-black">৳300</span></div>
-                                <div>Cash Out 20x Get <span className="text-amber-300 font-black">৳800</span></div>
-                                <div>Cash Out 30x Get <span className="text-amber-300 font-black">৳1200</span></div>
-                                <div>Cash Out 50x Get <span className="text-amber-300 font-black">৳1500</span></div>
-                                <div>Cash Out 80x Get <span className="text-amber-300 font-black">৳3000</span></div>
-                                <div>Cash Out 120x Get <span className="text-amber-300 font-black">৳5000</span></div>
+                            {/* Reward Multipliers Grid Box */}
+                            <div className="z-10 grid grid-cols-2 gap-x-2.5 gap-y-0.5 text-[8.5px] font-extrabold bg-black/60 backdrop-blur-sm p-2 rounded-xl border border-amber-400/30 max-w-[245px] shadow-inner font-mono">
+                                <div className="text-slate-100">Cash Out 15x <span className="text-amber-400">Get ৳300</span></div>
+                                <div className="text-slate-100">Cash Out 20x <span className="text-amber-400">Get ৳800</span></div>
+                                <div className="text-slate-100">Cash Out 30x <span className="text-amber-400">Get ৳1200</span></div>
+                                <div className="text-slate-100">Cash Out 50x <span className="text-amber-400">Get ৳1500</span></div>
+                                <div className="text-slate-100">Cash Out 80x <span className="text-amber-400">Get ৳3000</span></div>
+                                <div className="text-slate-100">Cash Out 120x <span className="text-amber-400">Get ৳5000</span></div>
                             </div>
 
-                            <div className="z-10 flex justify-between items-end text-[7.5px] text-slate-300 font-semibold">
-                                <span>Terms: Min bet 100 Tk • Once per day</span>
-                                <span className="text-red-500 font-black text-sm italic font-mono animate-pulse">Aviator ✈</span>
+                            {/* Bottom Note */}
+                            <div className="z-10 flex justify-between items-end text-[8px] text-slate-300 font-medium">
+                                <span>Terms: Min bet 100 Tk • Apply once daily</span>
+                                <span className="text-red-500 font-black text-sm italic tracking-tighter drop-shadow-[0_0_8px_rgba(243,66,66,0.8)]">Aviator ✈</span>
                             </div>
 
-                            {/* 3D Red Plane & Phone Graphic Simulation */}
-                            <div className="absolute right-0 top-3 bottom-0 w-36 pointer-events-none flex items-center justify-center">
-                                <div className="text-5xl transform -rotate-12 -translate-x-2 drop-shadow-[0_10px_10px_rgba(255,0,0,0.5)]">
-                                    🛩️
+                            {/* 3D Realistic Plane & Smartphone Simulation Graphic */}
+                            <div className="absolute right-1 top-2 bottom-0 w-36 pointer-events-none flex items-center justify-center">
+                                <div className="text-5xl transform -rotate-12 translate-y-1 -translate-x-3 glow-pulse">
+                                    ✈️
                                 </div>
-                                <div className="w-16 h-28 bg-slate-900 rounded-xl border-2 border-slate-700 shadow-2xl transform rotate-6 flex flex-col items-center justify-center p-1 text-center">
-                                    <span className="text-[8px] text-amber-400 font-mono font-black">10.30x</span>
-                                    <div className="w-10 h-3 bg-emerald-500 rounded mt-2 text-[6px] text-slate-900 font-black flex items-center justify-center">BET</div>
+                                <div className="w-16 h-32 bg-slate-900 rounded-2xl border-2 border-slate-700 shadow-2xl transform rotate-6 flex flex-col items-center justify-between p-1.5 text-center overflow-hidden">
+                                    <div className="w-6 h-1 bg-slate-700 rounded-full mt-0.5"></div>
+                                    <span className="text-[9px] text-amber-400 font-mono font-black animate-pulse">10.30x</span>
+                                    <div className="w-12 h-3.5 bg-gradient-to-r from-emerald-500 to-green-600 rounded text-[7px] text-slate-950 font-black flex items-center justify-center shadow">BET ৳100</div>
                                 </div>
                             </div>
                         </div>
                     )
                 },
                 {
-                    id: 'deposit_bonus',
+                    id: 'deposit_100',
+                    title: '100% FIRST DEPOSIT BONUS',
+                    subtitle: 'Instant auto recharge via bKash',
                     render: () => (
-                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-800 p-3 text-white relative overflow-hidden border border-emerald-500/30 flex flex-col justify-between shadow-lg">
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#063319] via-[#0b4d27] to-[#0a6632] p-3.5 text-white relative overflow-hidden border border-emerald-400/40 flex flex-col justify-between shadow-xl">
+                            <div className="flex justify-between items-center z-10">
+                                <span className="bg-emerald-400 text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Instant Payout</span>
+                                <span className="text-emerald-200 text-[10px] font-bold font-mono">bKash FastPay</span>
+                            </div>
                             <div className="z-10">
-                                <span className="text-[9px] bg-emerald-500 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase">100% Match Bonus</span>
-                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase mt-1">
-                                    FIRST DEPOSIT BONUS
+                                <h2 className="text-2xl font-black text-white tracking-wider uppercase font-sans">
+                                    100% FIRST DEPOSIT
                                 </h2>
+                                <p className="text-[10px] text-emerald-200 mt-0.5 font-semibold">Deposit ৳500 get ৳500 bonus directly to wallet</p>
                             </div>
-                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[220px] text-[9px] space-y-0.5">
-                                <div>Deposit ৳500 <span className="text-emerald-400 font-black">+ Get ৳500 FREE</span></div>
-                                <div>Deposit ৳1000 <span className="text-emerald-400 font-black">+ Get ৳1200 FREE</span></div>
-                                <div>Instant bKash auto-credit within 2 mins!</div>
+                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px] text-[9px] font-mono space-y-0.5">
+                                <div>Deposit ৳500 <span className="text-emerald-400 font-bold">+ ৳500 Extra</span></div>
+                                <div>Deposit ৳1000 <span className="text-emerald-400 font-bold">+ ৳1200 Extra</span></div>
                             </div>
-                            <div className="z-10 text-[8px] text-slate-300 font-semibold">
-                                Valid for all new verified accounts
-                            </div>
-                            <div className="absolute right-3 top-6 text-6xl opacity-85">
-                                🎁
-                            </div>
+                            <div className="z-10 text-[8px] text-emerald-100">Automatic bKash verification within 2 minutes</div>
+                            <div className="absolute right-3 top-8 text-6xl opacity-90 animate-bounce">🎁</div>
                         </div>
                     )
                 },
                 {
-                    id: 'vip_rewards',
+                    id: 'vip_cashback',
+                    title: 'VIP WEEKLY CASHBACK',
+                    subtitle: 'Up to 2.5% Unlimited Rebate',
                     render: () => (
-                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-indigo-950 via-purple-950 to-amber-900 p-3 text-white relative overflow-hidden border border-amber-400/30 flex flex-col justify-between shadow-lg">
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#20083b] via-[#3a1068] to-[#915605] p-3.5 text-white relative overflow-hidden border border-purple-400/40 flex flex-col justify-between shadow-xl">
+                            <div className="flex justify-between items-center z-10">
+                                <span className="bg-amber-400 text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">VIP Club</span>
+                                <span className="text-purple-200 text-[10px] font-bold font-mono">Level V1 - V10</span>
+                            </div>
                             <div className="z-10">
-                                <span className="text-[9px] bg-amber-400 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase">VIP Privilege Club</span>
-                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase mt-1">
-                                    WEEKLY CASH REBATE
+                                <h2 className="text-2xl font-black text-amber-300 tracking-wider uppercase font-sans">
+                                    WEEKLY CASHBACK
                                 </h2>
+                                <p className="text-[10px] text-purple-200 mt-0.5 font-semibold">Get up to 2.5% loss protection guarantee</p>
                             </div>
-                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[220px] text-[9px] space-y-0.5">
-                                <div>Level V1 to V10 VIP Rewards</div>
-                                <div>Up to <span className="text-amber-300 font-black">2.5% Unlimited Cashback</span></div>
-                                <div>Exclusive Telegram customer manager</div>
+                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px] text-[9px] font-mono space-y-0.5">
+                                <div>Every Monday automatic settle</div>
+                                <div>Directly withdrawable with 0 wagering</div>
                             </div>
-                            <div className="z-10 text-[8px] text-slate-300 font-semibold">
-                                Automatically credited every Monday 00:00
-                            </div>
-                            <div className="absolute right-3 top-6 text-6xl opacity-85">
-                                👑
-                            </div>
+                            <div className="z-10 text-[8px] text-purple-200">Exclusive 24/7 Personal Account Manager</div>
+                            <div className="absolute right-4 top-8 text-6xl opacity-90">👑</div>
                         </div>
                     )
                 }
             ];
 
             useEffect(() => {
-                const timer = setInterval(() => {
+                const interval = setInterval(() => {
                     setCurrentSlide(prev => (prev + 1) % banners.length);
-                }, 3800);
-                return () => clearInterval(timer);
+                }, 4000);
+                return () => clearInterval(interval);
             }, [banners.length]);
 
             return (
                 <div className="space-y-3 font-sans">
-                    {/* Active Banner Slide */}
-                    <div className="relative overflow-hidden transition-all duration-500">
+                    {/* Carousel Frame */}
+                    <div className="relative overflow-hidden cursor-pointer" onClick={() => onOpenDetail(banners[currentSlide])}>
                         {banners[currentSlide].render()}
                         
                         {/* Slide Indicator Dots */}
-                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
+                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
                             {banners.map((_, idx) => (
                                 <button
                                     key={idx}
-                                    onClick={() => setCurrentSlide(idx)}
-                                    className={`w-2 h-2 rounded-full transition-all ${
-                                        currentSlide === idx ? 'bg-amber-400 w-5' : 'bg-white/40'
+                                    onClick={(e) => { e.stopPropagation(); setCurrentSlide(idx); }}
+                                    className={`h-1.5 rounded-full transition-all ${
+                                        currentSlide === idx ? 'bg-amber-400 w-6' : 'bg-white/40 w-1.5'
                                     }`}
                                 />
                             ))}
@@ -409,18 +424,18 @@
                     {/* Announcement Marquee Bar with Speaker Icon & Yellow Detail Button */}
                     <div className="bg-white rounded-2xl px-3 py-2 border border-slate-200/80 shadow-sm flex items-center justify-between space-x-2">
                         <div className="text-amber-500 flex-shrink-0">
-                            <Icon name="volume-2" className="w-5 h-5 fill-amber-400 text-amber-500" />
+                            <Icon name="volume-2" className="w-5 h-5 text-amber-500" />
                         </div>
                         
-                        <div className="flex-1 overflow-hidden relative">
+                        <div className="flex-1 overflow-hidden relative py-0.5">
                             <span className="animate-marquee text-xs font-bold text-slate-700">
-                                📣 Welcome to STEVEN WIN! Join our Telegram VIP Channel for daily gift codes, fast deposits & withdrawals via bKash. Play Wingo, TRX, and K3 Lottery 24/7!
+                                📣 Welcome to STEVEN WIN! Join our Official Telegram for daily redeem codes, fast bKash deposits & 24/7 withdrawals. Play Wingo, TRX Hash & K3 Lottery!
                             </span>
                         </div>
 
                         <button 
-                            onClick={onDetailClick}
-                            className="bg-secondary hover:bg-goldHover text-slate-950 text-xs font-black px-4 py-1 rounded-full shadow-sm flex-shrink-0 transition-transform active:scale-95 uppercase tracking-wider"
+                            onClick={() => onOpenDetail(banners[currentSlide])}
+                            className="bg-secondary hover:bg-goldHover active:scale-95 text-slate-950 text-xs font-black px-4 py-1.5 rounded-full shadow-sm flex-shrink-0 transition-transform uppercase tracking-wider font-sans"
                         >
                             Detail
                         </button>
@@ -429,30 +444,30 @@
             );
         };
 
-        // --- Winning Information Feed Generator & Avatars ---
+        // --- REAL LIVE WINNING INFORMATION FEED COMPONENT ---
         const AVATARS = [
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=120&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=120&auto=format&fit=crop&q=80"
         ];
 
-        const RANDOM_NAMES = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK"];
+        const RANDOM_NAMES = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK", "NMB", "PLO"];
         const GAME_TYPES = [
-            { name: "365 GAMES", color: "bg-[#188038]", type: "casino" },
-            { name: "5D LOTTERY", color: "bg-[#0c7a3d]", type: "5d" },
-            { name: "WINGO 30S", color: "bg-[#1b8a43]", type: "wingo" },
-            { name: "TRX HASH", color: "bg-[#0b632d]", type: "trx" }
+            { name: "365 GAMES", color: "bg-[#147a38]", sub: "CASINO" },
+            { name: "5D LOTTERY", color: "bg-[#0c7a3d]", sub: "LOTTERY" },
+            { name: "WINGO 30S", color: "bg-[#1b8a43]", sub: "COLOR" },
+            { name: "TRX HASH", color: "bg-[#0b5f2c]", sub: "TRON" }
         ];
 
         const generateRandomWinner = () => {
             const code = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
             const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
             const game = GAME_TYPES[Math.floor(Math.random() * GAME_TYPES.length)];
-            const amount = (Math.random() * (260 - 45) + 45).toFixed(2);
+            const amount = (Math.random() * (280 - 40) + 40).toFixed(2);
             return {
                 id: Math.random().toString(36).substr(2, 9),
                 username: `Mem***${code}`,
@@ -479,7 +494,7 @@
                         const newWinner = generateRandomWinner();
                         return [newWinner, ...prev.slice(0, 5)];
                     });
-                }, 2800);
+                }, 2600);
                 return () => clearInterval(interval);
             }, []);
 
@@ -489,37 +504,37 @@
                         <div className="w-6 h-6 flex items-center justify-center text-lg">
                             💰
                         </div>
-                        <h3 className="text-sm font-black text-slate-800 tracking-tight">Winning information</h3>
+                        <h3 className="text-sm font-black text-slate-800 tracking-tight font-sans">Winning information</h3>
                     </div>
 
                     <div className="space-y-2.5">
                         {winners.map((item) => (
                             <div 
                                 key={item.id}
-                                className="relative bg-gradient-to-r from-[#f7be16] via-[#f7c222] to-[#f4b306] rounded-2xl p-2.5 flex items-center justify-between shadow-sm border border-amber-300/40 animate-slide-down overflow-hidden"
+                                className="relative bg-gradient-to-r from-[#f7be16] via-[#f7c222] to-[#f4b306] rounded-2xl p-2.5 flex items-center justify-between shadow-sm border border-amber-300/50 animate-slide-down overflow-hidden"
                             >
                                 <div className="flex items-center space-x-3 z-10">
                                     <div className="relative flex-shrink-0">
                                         <div className="w-11 h-11 rounded-full border-2 border-white overflow-hidden shadow-sm bg-amber-100">
                                             <img src={item.avatar} alt="avatar" className="w-full h-full object-cover" />
                                         </div>
-                                        <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-900 border border-white rounded-full px-1 py-0.2 text-[8px] font-black tracking-tighter shadow">
+                                        <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-900 border border-white rounded-full px-1.5 py-0.2 text-[8px] font-black tracking-tighter shadow">
                                             V1
                                         </div>
                                     </div>
-                                    <span className="text-xs font-black text-white drop-shadow-sm tracking-wide">
+                                    <span className="text-xs font-black text-white drop-shadow-sm tracking-wide font-sans">
                                         {item.username}
                                     </span>
                                 </div>
 
                                 <div className="z-10 px-1">
-                                    <div className={`w-14 h-12 ${item.game.color} rounded-xl flex flex-col items-center justify-center p-1 shadow-inner border border-white/20 text-center`}>
+                                    <div className={`w-14 h-12 ${item.game.color} rounded-xl flex flex-col items-center justify-center p-1 shadow-inner border border-white/25 text-center`}>
                                         <span className="text-[7px] font-black text-white leading-tight uppercase font-sans">
                                             {item.game.name}
                                         </span>
                                         <div className="mt-0.5 flex space-x-0.5 items-center justify-center">
-                                            <div className="w-3.5 h-3.5 rounded-full bg-red-400/90 text-[6px] text-white flex items-center justify-center font-bold">5D</div>
-                                            <div className="w-3.5 h-3.5 rounded-full bg-cyan-300/90 text-[6px] text-slate-900 flex items-center justify-center font-bold">★</div>
+                                            <div className="w-3.5 h-3.5 rounded-full bg-red-500/90 text-[6px] text-white flex items-center justify-center font-bold">5D</div>
+                                            <div className="w-3.5 h-3.5 rounded-full bg-yellow-300 text-[6px] text-slate-900 flex items-center justify-center font-black">★</div>
                                         </div>
                                     </div>
                                 </div>
@@ -528,7 +543,7 @@
                                     <div className="text-sm font-black text-white tracking-tight drop-shadow-sm font-mono">
                                         ৳{item.amount}
                                     </div>
-                                    <div className="text-[9px] font-semibold text-white/90 leading-tight mt-0.5">
+                                    <div className="text-[9px] font-semibold text-white/90 leading-tight mt-0.5 font-sans">
                                         Winning amount
                                     </div>
                                 </div>
@@ -686,6 +701,10 @@
 
             const [gameType, setGameType] = useState('wingo'); 
             const [historyPage, setHistoryPage] = useState(1);
+            const [homeCategory, setHomeCategory] = useState('all');
+
+            // Detail Modal State for Promo Banners
+            const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
 
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
             const [showCountryDrop, setShowCountryDrop] = useState(false);
@@ -1864,12 +1883,34 @@
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
                                             
-                                            {/* 1. TOP PROMOTIONAL ADS BANNER + ANNOUNCEMENT MARQUEE */}
-                                            <PromoBannerCarousel onDetailClick={() => {
-                                                showToast('Bonus promotion details active! Play Aviator & Win.');
+                                            {/* 1. TOP PROMOTIONAL REAL ADS CAROUSEL + SPEAKER ANNOUNCEMENT BAR */}
+                                            <PromoBannerCarousel onOpenDetail={(bannerData) => {
+                                                setPromoModal({ isOpen: true, data: bannerData });
                                             }} />
 
-                                            {/* 2. GAME CARDS */}
+                                            {/* 2. REALISTIC GAME CATEGORY TABS */}
+                                            <div className="flex space-x-2 overflow-x-auto py-1 font-sans">
+                                                {[
+                                                    { id: 'all', label: '🔥 All Games' },
+                                                    { id: 'lottery', label: '🎲 Lottery' },
+                                                    { id: 'original', label: '🚀 Original' },
+                                                    { id: 'slots', label: '🎰 Slots' }
+                                                ].map(cat => (
+                                                    <button
+                                                        key={cat.id}
+                                                        onClick={() => setHomeCategory(cat.id)}
+                                                        className={`px-3.5 py-1.5 rounded-xl text-xs font-extrabold whitespace-nowrap transition-all ${
+                                                            homeCategory === cat.id
+                                                                ? 'bg-slate-900 text-white shadow-sm'
+                                                                : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                                                        }`}
+                                                    >
+                                                        {cat.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            {/* 3. GAME CARDS */}
                                             {/* Game 1: Wingo */}
                                             <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
@@ -1959,7 +2000,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* 3. LIVE WINNING INFORMATION FEED COMPONENT */}
+                                            {/* 4. REAL LIVE WINNING INFORMATION FEED */}
                                             <WinningInfoComponent />
                                         </div>
                                     )}
@@ -2745,6 +2786,47 @@
                             </div>
                         )}
                     </div>
+
+                    {/* DETAIL MODAL FOR PROMO BANNERS */}
+                    {promoModal.isOpen && (
+                        <div className="absolute inset-0 bg-black/80 z-[1050] flex flex-col items-center justify-center p-5 animate-fade-in font-sans">
+                            <div className="relative w-full max-w-sm bg-gradient-to-b from-[#192231] to-[#0d121a] border border-amber-500/40 rounded-3xl p-5 text-white shadow-2xl overflow-hidden space-y-3.5">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-xl">🎁</span>
+                                        <h3 className="text-sm font-black text-amber-300">{promoModal.data?.title || 'Promotion Event Details'}</h3>
+                                    </div>
+                                    <button onClick={() => setPromoModal({ isOpen: false, data: null })} className="text-slate-400 hover:text-white">
+                                        <Icon name="x" className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-2 text-xs text-slate-300">
+                                    <p className="text-slate-200 font-semibold">{promoModal.data?.subtitle}</p>
+                                    <div className="p-3 bg-black/40 rounded-xl border border-slate-800 text-[11px] space-y-1.5 font-mono">
+                                        <div className="flex justify-between"><span>Minimum Recharge:</span><span className="text-amber-400">৳100</span></div>
+                                        <div className="flex justify-between"><span>Cashout Multiplier:</span><span className="text-emerald-400">Up to 120X</span></div>
+                                        <div className="flex justify-between"><span>Settle Type:</span><span className="text-amber-300">Automatic / Instant</span></div>
+                                    </div>
+                                    <p className="text-[10px] text-slate-400 leading-relaxed">
+                                        All bonus earnings will be credited directly to your available balance upon qualification. 24/7 Live telegram support is available for query resolution.
+                                    </p>
+                                </div>
+
+                                <div className="pt-2">
+                                    <button 
+                                        onClick={() => {
+                                            setPromoModal({ isOpen: false, data: null });
+                                            setView('deposit');
+                                        }}
+                                        className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase tracking-wider active:scale-95 transition-all shadow-md"
+                                    >
+                                        Deposit Now & Claim
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* CONFIRM BET MODAL */}
                     {isBetSheetOpen && (
