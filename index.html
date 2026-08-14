@@ -37,10 +37,10 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', 'Hind Siliguri', sans-serif;
             background-color: #0b0f19;
             user-select: none;
             overflow: hidden;
@@ -78,6 +78,25 @@
         }
         .glow-pulse {
             animation: pulseGlow 2s infinite ease-in-out;
+        }
+        /* Custom 3D text stroke for Bangla Banner */
+        .text-3d-bengali {
+            color: #ffeb3b;
+            text-shadow: 
+                -1.5px -1.5px 0 #e91e63,
+                 1.5px -1.5px 0 #e91e63,
+                -1.5px  1.5px 0 #e91e63,
+                 1.5px  1.5px 0 #e91e63,
+                 0px 3px 6px rgba(0, 0, 0, 0.9);
+        }
+        .text-3d-neon {
+            color: #fff159;
+            text-shadow: 
+                -1.5px -1.5px 0 #ff007f,
+                 1.5px -1.5px 0 #ff007f,
+                -1.5px  1.5px 0 #ff007f,
+                 1.5px  1.5px 0 #ff007f,
+                 0px 3px 8px rgba(0, 0, 0, 0.9);
         }
     </style>
 </head>
@@ -252,7 +271,6 @@
             return <IconComponent className={className} {...props} />;
         };
 
-        // Real high-quality bKash app icon vector
         const BkashAppIcon = () => (
             <svg viewBox="0 0 350 120" className="w-40 h-auto" xmlns="http://www.w3.org/2000/svg">
                 <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
@@ -285,110 +303,180 @@
             </svg>
         );
 
-        // --- REAL COMMERCIAL PROMO CAROUSEL WITH DETAIL MODAL ---
+        // --- REAL SX WIN LOGO EMBLEM ---
+        const SxWinLogo = () => (
+            <div className="flex items-center space-x-1 font-mono">
+                <div className="w-5 h-5 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-md flex items-center justify-center font-black text-[9px] text-black shadow-md">
+                    SX
+                </div>
+                <span className="text-xs font-black tracking-widest text-[#fccd11]">WIN</span>
+            </div>
+        );
+
+        // --- REAL COMMERCIAL PROMO CAROUSEL WITH EXACT BANNER GRAPHICS ---
         const PromoBannerCarousel = ({ onOpenDetail }) => {
             const [currentSlide, setCurrentSlide] = useState(0);
 
             const banners = [
+                // 1. BANNER 1: শীর্ষস্থানীয় প্ল্যাটফর্মে আপনাকে স্বাগতম
+                {
+                    id: 'welcome_bangla',
+                    title: 'শীর্ষস্থানীয় প্ল্যাটফর্মে স্বাগতম',
+                    subtitle: 'Play on the #1 Official Certified Gaming Platform',
+                    render: () => (
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#0c0d12] via-[#1c1811] to-[#3a2908] p-3 text-white relative overflow-hidden border border-amber-500/40 flex flex-col justify-between shadow-xl">
+                            {/* Dotted dark mesh background */}
+                            <div className="absolute inset-0 bg-[radial-gradient(#fccd11_1px,transparent_1px)] [background-size:12px_12px] opacity-15 pointer-events-none"></div>
+
+                            {/* SX WIN Logo top right */}
+                            <div className="flex justify-between items-start z-10">
+                                <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-[8px] px-2.5 py-0.5 rounded-full uppercase shadow">
+                                    Official #1 Platform
+                                </div>
+                                <SxWinLogo />
+                            </div>
+
+                            {/* Center Bengali 3D Glowing Text */}
+                            <div className="z-10 my-auto text-left pl-1">
+                                <h2 className="text-2xl font-black text-3d-bengali tracking-tight leading-tight drop-shadow-lg">
+                                    শীর্ষস্থানীয় প্ল্যাটফর্মে
+                                </h2>
+                                <h2 className="text-2xl font-black text-3d-bengali tracking-tight leading-tight mt-0.5 drop-shadow-lg">
+                                    আপনাকে স্বাগতম।
+                                </h2>
+                            </div>
+
+                            {/* Bottom tag */}
+                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-bold text-amber-200">
+                                <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">🏆 100% Trusted</span>
+                                <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">⚡ Instant bKash</span>
+                            </div>
+
+                            {/* Left Golden Trophy & Gold Coins Graphic */}
+                            <div className="absolute -left-3 -bottom-2 w-28 h-28 pointer-events-none flex items-center justify-center">
+                                <div className="text-6xl drop-shadow-[0_4px_12px_rgba(252,205,17,0.7)] animate-bounce">
+                                    🏆
+                                </div>
+                                <div className="absolute top-1 right-2 text-2xl animate-pulse">🪙</div>
+                            </div>
+
+                            {/* Right Casino Dealer Woman & Roulette Table Graphic */}
+                            <div className="absolute right-0 top-3 bottom-0 w-36 pointer-events-none flex items-end justify-center">
+                                <div className="relative z-10 w-24 h-40 rounded-t-full overflow-hidden border-t-2 border-l-2 border-amber-400/60 shadow-2xl bg-gradient-to-b from-amber-900/60 to-transparent flex items-center justify-center">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=240&auto=format&fit=crop&q=80" 
+                                        alt="Casino Dealer" 
+                                        className="w-full h-full object-cover opacity-90 scale-110"
+                                    />
+                                </div>
+                                {/* Golden Cards in hand */}
+                                <div className="absolute top-8 right-1 z-20 text-2xl drop-shadow-md rotate-12">
+                                    🃏
+                                </div>
+                            </div>
+                        </div>
+                    )
+                },
+
+                // 2. BANNER 2: MEMBER ACTIVITIES - WINNING STREAK
+                {
+                    id: 'winning_streak',
+                    title: 'MEMBER ACTIVITIES - WINNING STREAK',
+                    subtitle: 'Earn More with Every Win • Climb the Leaderboard • Glory Awaits',
+                    render: () => (
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#120f06] via-[#241a06] to-[#402a04] p-3 text-white relative overflow-hidden border border-yellow-500/40 flex flex-col justify-between shadow-xl">
+                            {/* Dotted texture */}
+                            <div className="absolute inset-0 bg-[radial-gradient(#fccd11_1px,transparent_1px)] [background-size:12px_12px] opacity-15 pointer-events-none"></div>
+
+                            {/* Top line with Neon MEMBER ACTIVITIES and SX WIN */}
+                            <div className="flex justify-between items-center z-10">
+                                <h2 className="text-xl font-black text-3d-neon tracking-wider uppercase drop-shadow-md">
+                                    MEMBER ACTIVITIES
+                                </h2>
+                                <SxWinLogo />
+                            </div>
+
+                            {/* Center Dark Inner Frame for WINNING STREAK */}
+                            <div className="z-10 bg-black/65 backdrop-blur-md p-2.5 rounded-xl border border-white/20 max-w-[250px] shadow-lg space-y-0.5">
+                                <div className="text-base font-black text-amber-400 tracking-wide uppercase font-sans drop-shadow-sm">
+                                    WINNING STREAK
+                                </div>
+                                <div className="text-[8.5px] font-bold text-slate-100 leading-tight">
+                                    Earn More with Every Win • Climb the Leaderboard
+                                </div>
+                                <div className="text-[9.5px] font-extrabold italic text-amber-300 tracking-wide font-sans pt-0.5">
+                                    Glory Awaits ✨
+                                </div>
+                            </div>
+
+                            {/* Bottom Note */}
+                            <div className="z-10 text-[8px] text-amber-200/90 font-semibold">
+                                Daily Jackpot Pool: ৳500,000.00
+                            </div>
+
+                            {/* Left Slot Machine Graphic */}
+                            <div className="absolute left-1 bottom-1 w-16 h-16 pointer-events-none opacity-40 text-4xl">
+                                🎰
+                            </div>
+
+                            {/* Right Casino Lady in Golden Dress */}
+                            <div className="absolute right-0 top-2 bottom-0 w-36 pointer-events-none flex items-end justify-center">
+                                <div className="relative z-10 w-24 h-40 rounded-t-full overflow-hidden border-t-2 border-amber-400 shadow-2xl bg-gradient-to-b from-amber-900/60 to-transparent flex items-center justify-center">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=240&auto=format&fit=crop&q=80" 
+                                        alt="Winner model" 
+                                        className="w-full h-full object-cover opacity-90 scale-110"
+                                    />
+                                </div>
+                                <div className="absolute top-10 right-2 z-20 text-2xl drop-shadow-md -rotate-12">
+                                    🎴
+                                </div>
+                            </div>
+                        </div>
+                    )
+                },
+
+                // 3. BANNER 3: AVIATOR BONUS
                 {
                     id: 'aviator',
                     title: 'AVIATOR BONUS',
-                    subtitle: 'Cash out multiplier & get extra cash!',
+                    subtitle: 'Cash out multiplier & get extra cash bonus instantly!',
                     render: () => (
-                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#0d0f17] via-[#1a1f2e] to-[#694b05] p-3.5 text-white relative overflow-hidden border border-amber-500/40 flex flex-col justify-between shadow-xl">
-                            {/* Top Header line */}
+                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#0d0f17] via-[#1a1f2e] to-[#694b05] p-3 text-white relative overflow-hidden border border-amber-500/40 flex flex-col justify-between shadow-xl">
                             <div className="flex justify-between items-center z-10">
-                                <div className="flex items-center space-x-1.5">
-                                    <div className="w-5 h-5 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-md flex items-center justify-center font-black text-[10px] text-black">SX</div>
-                                    <span className="text-[12px] font-black tracking-widest text-[#fccd11] font-mono">SX WIN</span>
-                                </div>
                                 <span className="bg-red-600/90 text-white text-[8px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider animate-pulse">Official Event</span>
+                                <SxWinLogo />
                             </div>
 
-                            {/* Main Title */}
-                            <div className="z-10 mt-0.5">
-                                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider uppercase font-sans drop-shadow-[0_2px_10px_rgba(252,205,17,0.5)]">
+                            <div className="z-10">
+                                <h2 className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider uppercase font-sans drop-shadow-[0_2px_10px_rgba(252,205,17,0.5)]">
                                     AVIATOR BONUS
                                 </h2>
                             </div>
 
-                            {/* Reward Multipliers Grid Box */}
-                            <div className="z-10 grid grid-cols-2 gap-x-2.5 gap-y-0.5 text-[8.5px] font-extrabold bg-black/60 backdrop-blur-sm p-2 rounded-xl border border-amber-400/30 max-w-[245px] shadow-inner font-mono">
-                                <div className="text-slate-100">Cash Out 15x <span className="text-amber-400">Get ৳300</span></div>
-                                <div className="text-slate-100">Cash Out 20x <span className="text-amber-400">Get ৳800</span></div>
-                                <div className="text-slate-100">Cash Out 30x <span className="text-amber-400">Get ৳1200</span></div>
-                                <div className="text-slate-100">Cash Out 50x <span className="text-amber-400">Get ৳1500</span></div>
-                                <div className="text-slate-100">Cash Out 80x <span className="text-amber-400">Get ৳3000</span></div>
-                                <div className="text-slate-100">Cash Out 120x <span className="text-amber-400">Get ৳5000</span></div>
+                            <div className="z-10 grid grid-cols-2 gap-x-2 gap-y-0.5 text-[8.5px] font-extrabold bg-black/60 backdrop-blur-sm p-1.5 rounded-xl border border-amber-400/30 max-w-[240px] shadow-inner font-mono">
+                                <div className="text-slate-100">15x <span className="text-amber-400">Get ৳300</span></div>
+                                <div className="text-slate-100">20x <span className="text-amber-400">Get ৳800</span></div>
+                                <div className="text-slate-100">30x <span className="text-amber-400">Get ৳1200</span></div>
+                                <div className="text-slate-100">50x <span className="text-amber-400">Get ৳1500</span></div>
+                                <div className="text-slate-100">80x <span className="text-amber-400">Get ৳3000</span></div>
+                                <div className="text-slate-100">120x <span className="text-amber-400">Get ৳5000</span></div>
                             </div>
 
-                            {/* Bottom Note */}
                             <div className="z-10 flex justify-between items-end text-[8px] text-slate-300 font-medium">
-                                <span>Terms: Min bet 100 Tk • Apply once daily</span>
-                                <span className="text-red-500 font-black text-sm italic tracking-tighter drop-shadow-[0_0_8px_rgba(243,66,66,0.8)]">Aviator ✈</span>
+                                <span>Terms: Min bet 100 Tk • Once per day</span>
+                                <span className="text-red-500 font-black text-xs italic tracking-tighter">Aviator ✈</span>
                             </div>
 
-                            {/* 3D Realistic Plane & Smartphone Simulation Graphic */}
                             <div className="absolute right-1 top-2 bottom-0 w-36 pointer-events-none flex items-center justify-center">
                                 <div className="text-5xl transform -rotate-12 translate-y-1 -translate-x-3 glow-pulse">
                                     ✈️
                                 </div>
-                                <div className="w-16 h-32 bg-slate-900 rounded-2xl border-2 border-slate-700 shadow-2xl transform rotate-6 flex flex-col items-center justify-between p-1.5 text-center overflow-hidden">
-                                    <div className="w-6 h-1 bg-slate-700 rounded-full mt-0.5"></div>
-                                    <span className="text-[9px] text-amber-400 font-mono font-black animate-pulse">10.30x</span>
-                                    <div className="w-12 h-3.5 bg-gradient-to-r from-emerald-500 to-green-600 rounded text-[7px] text-slate-950 font-black flex items-center justify-center shadow">BET ৳100</div>
+                                <div className="w-14 h-28 bg-slate-900 rounded-xl border-2 border-slate-700 shadow-2xl transform rotate-6 flex flex-col items-center justify-between p-1.5 text-center overflow-hidden">
+                                    <span className="text-[8px] text-amber-400 font-mono font-black animate-pulse">10.30x</span>
+                                    <div className="w-10 h-3 bg-gradient-to-r from-emerald-500 to-green-600 rounded text-[6px] text-slate-950 font-black flex items-center justify-center">BET</div>
                                 </div>
                             </div>
-                        </div>
-                    )
-                },
-                {
-                    id: 'deposit_100',
-                    title: '100% FIRST DEPOSIT BONUS',
-                    subtitle: 'Instant auto recharge via bKash',
-                    render: () => (
-                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#063319] via-[#0b4d27] to-[#0a6632] p-3.5 text-white relative overflow-hidden border border-emerald-400/40 flex flex-col justify-between shadow-xl">
-                            <div className="flex justify-between items-center z-10">
-                                <span className="bg-emerald-400 text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">Instant Payout</span>
-                                <span className="text-emerald-200 text-[10px] font-bold font-mono">bKash FastPay</span>
-                            </div>
-                            <div className="z-10">
-                                <h2 className="text-2xl font-black text-white tracking-wider uppercase font-sans">
-                                    100% FIRST DEPOSIT
-                                </h2>
-                                <p className="text-[10px] text-emerald-200 mt-0.5 font-semibold">Deposit ৳500 get ৳500 bonus directly to wallet</p>
-                            </div>
-                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px] text-[9px] font-mono space-y-0.5">
-                                <div>Deposit ৳500 <span className="text-emerald-400 font-bold">+ ৳500 Extra</span></div>
-                                <div>Deposit ৳1000 <span className="text-emerald-400 font-bold">+ ৳1200 Extra</span></div>
-                            </div>
-                            <div className="z-10 text-[8px] text-emerald-100">Automatic bKash verification within 2 minutes</div>
-                            <div className="absolute right-3 top-8 text-6xl opacity-90 animate-bounce">🎁</div>
-                        </div>
-                    )
-                },
-                {
-                    id: 'vip_cashback',
-                    title: 'VIP WEEKLY CASHBACK',
-                    subtitle: 'Up to 2.5% Unlimited Rebate',
-                    render: () => (
-                        <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#20083b] via-[#3a1068] to-[#915605] p-3.5 text-white relative overflow-hidden border border-purple-400/40 flex flex-col justify-between shadow-xl">
-                            <div className="flex justify-between items-center z-10">
-                                <span className="bg-amber-400 text-slate-950 text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase">VIP Club</span>
-                                <span className="text-purple-200 text-[10px] font-bold font-mono">Level V1 - V10</span>
-                            </div>
-                            <div className="z-10">
-                                <h2 className="text-2xl font-black text-amber-300 tracking-wider uppercase font-sans">
-                                    WEEKLY CASHBACK
-                                </h2>
-                                <p className="text-[10px] text-purple-200 mt-0.5 font-semibold">Get up to 2.5% loss protection guarantee</p>
-                            </div>
-                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px] text-[9px] font-mono space-y-0.5">
-                                <div>Every Monday automatic settle</div>
-                                <div>Directly withdrawable with 0 wagering</div>
-                            </div>
-                            <div className="z-10 text-[8px] text-purple-200">Exclusive 24/7 Personal Account Manager</div>
-                            <div className="absolute right-4 top-8 text-6xl opacity-90">👑</div>
                         </div>
                     )
                 }
@@ -397,7 +485,7 @@
             useEffect(() => {
                 const interval = setInterval(() => {
                     setCurrentSlide(prev => (prev + 1) % banners.length);
-                }, 4000);
+                }, 4200);
                 return () => clearInterval(interval);
             }, [banners.length]);
 
@@ -408,7 +496,7 @@
                         {banners[currentSlide].render()}
                         
                         {/* Slide Indicator Dots */}
-                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
                             {banners.map((_, idx) => (
                                 <button
                                     key={idx}
@@ -428,7 +516,7 @@
                         </div>
                         
                         <div className="flex-1 overflow-hidden relative py-0.5">
-                            <span className="animate-marquee text-xs font-bold text-slate-700">
+                            <span className="animate-marquee text-xs font-bold text-slate-700 font-sans">
                                 📣 Welcome to STEVEN WIN! Join our Official Telegram for daily redeem codes, fast bKash deposits & 24/7 withdrawals. Play Wingo, TRX Hash & K3 Lottery!
                             </span>
                         </div>
@@ -1214,7 +1302,6 @@
             };
 
             const handleModeDraw = (mode) => {
-                // Classic Wingo Draw
                 let currentPeriodClassic = mode === '30sec' ? period30sRef.current : (mode === '1min' ? period1mRef.current : period2mRef.current);
                 const drawNumberClassic = determineOutcomeWithLossParameters('wingo', mode, currentPeriodClassic);
                 let drawColorClassic = drawNumberClassic === 0 ? 'violet-red' : (drawNumberClassic === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberClassic) ? 'green' : 'red'));
@@ -1235,7 +1322,6 @@
                     setPeriod2m(prev => incrementPeriodString(prev));
                 }
 
-                // TRX Wingo Draw
                 let currentPeriodTrx = mode === '30sec' ? periodTrx30sRef.current : (mode === '1min' ? periodTrx1mRef.current : periodTrx2mRef.current);
                 const drawNumberTrx = determineOutcomeWithLossParameters('trx_wingo', mode, currentPeriodTrx);
                 let drawColorTrx = drawNumberTrx === 0 ? 'violet-red' : (drawNumberTrx === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberTrx) ? 'green' : 'red'));
@@ -1267,7 +1353,6 @@
                     setPeriodTrx2m(prev => incrementPeriodString(prev));
                 }
 
-                // K3 Lottery Draw
                 let currentPeriodK3 = mode === '30sec' ? periodK330sRef.current : (mode === '1min' ? periodK31mRef.current : periodK32mRef.current);
                 const [d1, d2, d3] = determineK3OutcomeWithLossParameters(mode, currentPeriodK3);
                 const sum = d1 + d2 + d3;
@@ -2789,7 +2874,7 @@
 
                     {/* DETAIL MODAL FOR PROMO BANNERS */}
                     {promoModal.isOpen && (
-                        <div className="absolute inset-0 bg-black/80 z-[1050] flex flex-col items-center justify-center p-5 animate-fade-in font-sans">
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-5 animate-fade-in font-sans">
                             <div className="relative w-full max-w-sm bg-gradient-to-b from-[#192231] to-[#0d121a] border border-amber-500/40 rounded-3xl p-5 text-white shadow-2xl overflow-hidden space-y-3.5">
                                 <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
                                     <div className="flex items-center space-x-2">
@@ -2803,7 +2888,7 @@
 
                                 <div className="space-y-2 text-xs text-slate-300">
                                     <p className="text-slate-200 font-semibold">{promoModal.data?.subtitle}</p>
-                                    <div className="p-3 bg-black/40 rounded-xl border border-slate-800 text-[11px] space-y-1.5 font-mono">
+                                    <div className="p-3 bg-black/50 rounded-xl border border-slate-800 text-[11px] space-y-1.5 font-mono">
                                         <div className="flex justify-between"><span>Minimum Recharge:</span><span className="text-amber-400">৳100</span></div>
                                         <div className="flex justify-between"><span>Cashout Multiplier:</span><span className="text-emerald-400">Up to 120X</span></div>
                                         <div className="flex justify-between"><span>Settle Type:</span><span className="text-amber-300">Automatic / Instant</span></div>
