@@ -33,7 +33,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -51,6 +51,22 @@
         }
         .animate-zoom-in {
             animation: zoomIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes slideDownFade {
+            0% { opacity: 0; transform: translateY(-12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-slide-down {
+            animation: slideDownFade 0.4s ease-out forwards;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 14s linear infinite;
         }
     </style>
 </head>
@@ -192,6 +208,13 @@
                     <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" />
                 </svg>
             ),
+            volume2: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" fill="currentColor" />
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                </svg>
+            ),
             info: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
                     <circle cx="12" cy="12" r="10" />
@@ -217,12 +240,6 @@
                     <circle cx="6.5" cy="6.5" r="2.5" />
                     <circle cx="17.5" cy="17.5" r="2.5" />
                 </svg>
-            ),
-            settings: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <circle cx="12" cy="12" r="3"/>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                </svg>
             )
         };
 
@@ -233,7 +250,6 @@
             return <IconComponent className={className} {...props} />;
         };
 
-        // Real high-quality bKash app icon vector
         const BkashAppIcon = () => (
             <svg viewBox="0 0 350 120" className="w-40 h-auto" xmlns="http://www.w3.org/2000/svg">
                 <text x="10" y="90" fontFamily="'Poppins', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
@@ -266,6 +282,265 @@
             </svg>
         );
 
+        // --- TOP PROMOTIONAL BANNER CAROUSEL (WITH AVIATOR BONUS) ---
+        const PromoBannerCarousel = ({ onDetailClick }) => {
+            const [currentSlide, setCurrentSlide] = useState(0);
+
+            const banners = [
+                {
+                    id: 'aviator',
+                    render: () => (
+                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-[#0d121c] via-[#171b26] to-[#b38600] p-3 text-white relative overflow-hidden border border-amber-500/30 flex flex-col justify-between shadow-lg">
+                            <div className="absolute top-2 right-2 flex items-center space-x-1 z-20">
+                                <span className="text-[11px] font-black text-amber-400">SX</span>
+                                <span className="text-[11px] font-black text-white">WIN</span>
+                            </div>
+
+                            <div className="z-10">
+                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                                    AVIATOR BONUS
+                                </h2>
+                            </div>
+
+                            <div className="z-10 grid grid-cols-2 gap-x-2 text-[8.5px] font-bold text-slate-100 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[230px]">
+                                <div>Cash Out 15x Get <span className="text-amber-300 font-black">৳300</span></div>
+                                <div>Cash Out 20x Get <span className="text-amber-300 font-black">৳800</span></div>
+                                <div>Cash Out 30x Get <span className="text-amber-300 font-black">৳1200</span></div>
+                                <div>Cash Out 50x Get <span className="text-amber-300 font-black">৳1500</span></div>
+                                <div>Cash Out 80x Get <span className="text-amber-300 font-black">৳3000</span></div>
+                                <div>Cash Out 120x Get <span className="text-amber-300 font-black">৳5000</span></div>
+                            </div>
+
+                            <div className="z-10 flex justify-between items-end text-[7.5px] text-slate-300 font-semibold">
+                                <span>Terms: Min bet 100 Tk • Once per day</span>
+                                <span className="text-red-500 font-black text-sm italic font-mono animate-pulse">Aviator ✈</span>
+                            </div>
+
+                            {/* 3D Red Plane & Phone Graphic Simulation */}
+                            <div className="absolute right-0 top-3 bottom-0 w-36 pointer-events-none flex items-center justify-center">
+                                <div className="text-5xl transform -rotate-12 -translate-x-2 drop-shadow-[0_10px_10px_rgba(255,0,0,0.5)]">
+                                    🛩️
+                                </div>
+                                <div className="w-16 h-28 bg-slate-900 rounded-xl border-2 border-slate-700 shadow-2xl transform rotate-6 flex flex-col items-center justify-center p-1 text-center">
+                                    <span className="text-[8px] text-amber-400 font-mono font-black">10.30x</span>
+                                    <div className="w-10 h-3 bg-emerald-500 rounded mt-2 text-[6px] text-slate-900 font-black flex items-center justify-center">BET</div>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    id: 'deposit_bonus',
+                    render: () => (
+                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-emerald-950 via-slate-900 to-emerald-800 p-3 text-white relative overflow-hidden border border-emerald-500/30 flex flex-col justify-between shadow-lg">
+                            <div className="z-10">
+                                <span className="text-[9px] bg-emerald-500 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase">100% Match Bonus</span>
+                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase mt-1">
+                                    FIRST DEPOSIT BONUS
+                                </h2>
+                            </div>
+                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[220px] text-[9px] space-y-0.5">
+                                <div>Deposit ৳500 <span className="text-emerald-400 font-black">+ Get ৳500 FREE</span></div>
+                                <div>Deposit ৳1000 <span className="text-emerald-400 font-black">+ Get ৳1200 FREE</span></div>
+                                <div>Instant bKash auto-credit within 2 mins!</div>
+                            </div>
+                            <div className="z-10 text-[8px] text-slate-300 font-semibold">
+                                Valid for all new verified accounts
+                            </div>
+                            <div className="absolute right-3 top-6 text-6xl opacity-85">
+                                🎁
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    id: 'vip_rewards',
+                    render: () => (
+                        <div className="w-full h-44 rounded-2xl bg-gradient-to-r from-indigo-950 via-purple-950 to-amber-900 p-3 text-white relative overflow-hidden border border-amber-400/30 flex flex-col justify-between shadow-lg">
+                            <div className="z-10">
+                                <span className="text-[9px] bg-amber-400 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase">VIP Privilege Club</span>
+                                <h2 className="text-xl font-black text-amber-300 tracking-wider uppercase mt-1">
+                                    WEEKLY CASH REBATE
+                                </h2>
+                            </div>
+                            <div className="z-10 bg-black/40 p-2 rounded-xl border border-white/10 max-w-[220px] text-[9px] space-y-0.5">
+                                <div>Level V1 to V10 VIP Rewards</div>
+                                <div>Up to <span className="text-amber-300 font-black">2.5% Unlimited Cashback</span></div>
+                                <div>Exclusive Telegram customer manager</div>
+                            </div>
+                            <div className="z-10 text-[8px] text-slate-300 font-semibold">
+                                Automatically credited every Monday 00:00
+                            </div>
+                            <div className="absolute right-3 top-6 text-6xl opacity-85">
+                                👑
+                            </div>
+                        </div>
+                    )
+                }
+            ];
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCurrentSlide(prev => (prev + 1) % banners.length);
+                }, 3800);
+                return () => clearInterval(timer);
+            }, [banners.length]);
+
+            return (
+                <div className="space-y-3 font-sans">
+                    {/* Active Banner Slide */}
+                    <div className="relative overflow-hidden transition-all duration-500">
+                        {banners[currentSlide].render()}
+                        
+                        {/* Slide Indicator Dots */}
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
+                            {banners.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentSlide(idx)}
+                                    className={`w-2 h-2 rounded-full transition-all ${
+                                        currentSlide === idx ? 'bg-amber-400 w-5' : 'bg-white/40'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Announcement Marquee Bar with Speaker Icon & Yellow Detail Button */}
+                    <div className="bg-white rounded-2xl px-3 py-2 border border-slate-200/80 shadow-sm flex items-center justify-between space-x-2">
+                        <div className="text-amber-500 flex-shrink-0">
+                            <Icon name="volume-2" className="w-5 h-5 fill-amber-400 text-amber-500" />
+                        </div>
+                        
+                        <div className="flex-1 overflow-hidden relative">
+                            <span className="animate-marquee text-xs font-bold text-slate-700">
+                                📣 Welcome to STEVEN WIN! Join our Telegram VIP Channel for daily gift codes, fast deposits & withdrawals via bKash. Play Wingo, TRX, and K3 Lottery 24/7!
+                            </span>
+                        </div>
+
+                        <button 
+                            onClick={onDetailClick}
+                            className="bg-secondary hover:bg-goldHover text-slate-950 text-xs font-black px-4 py-1 rounded-full shadow-sm flex-shrink-0 transition-transform active:scale-95 uppercase tracking-wider"
+                        >
+                            Detail
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Winning Information Feed Generator & Avatars ---
+        const AVATARS = [
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&auto=format&fit=crop&q=80"
+        ];
+
+        const RANDOM_NAMES = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK"];
+        const GAME_TYPES = [
+            { name: "365 GAMES", color: "bg-[#188038]", type: "casino" },
+            { name: "5D LOTTERY", color: "bg-[#0c7a3d]", type: "5d" },
+            { name: "WINGO 30S", color: "bg-[#1b8a43]", type: "wingo" },
+            { name: "TRX HASH", color: "bg-[#0b632d]", type: "trx" }
+        ];
+
+        const generateRandomWinner = () => {
+            const code = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
+            const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
+            const game = GAME_TYPES[Math.floor(Math.random() * GAME_TYPES.length)];
+            const amount = (Math.random() * (260 - 45) + 45).toFixed(2);
+            return {
+                id: Math.random().toString(36).substr(2, 9),
+                username: `Mem***${code}`,
+                avatar,
+                game,
+                amount
+            };
+        };
+
+        const INITIAL_WINNERS = [
+            { id: '1', username: 'Mem***GML', avatar: AVATARS[0], game: GAME_TYPES[0], amount: '118.20' },
+            { id: '2', username: 'Mem***ZUQ', avatar: AVATARS[1], game: GAME_TYPES[0], amount: '70.92' },
+            { id: '3', username: 'Mem***PSY', avatar: AVATARS[2], game: GAME_TYPES[1], amount: '176.40' },
+            { id: '4', username: 'Mem***XSI', avatar: AVATARS[3], game: GAME_TYPES[1], amount: '88.20' },
+            { id: '5', username: 'Mem***ORN', avatar: AVATARS[4], game: GAME_TYPES[1], amount: '88.20' }
+        ];
+
+        const WinningInfoComponent = () => {
+            const [winners, setWinners] = useState(INITIAL_WINNERS);
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setWinners(prev => {
+                        const newWinner = generateRandomWinner();
+                        return [newWinner, ...prev.slice(0, 5)];
+                    });
+                }, 2800);
+                return () => clearInterval(interval);
+            }, []);
+
+            return (
+                <div className="space-y-2.5 pt-2">
+                    <div className="flex items-center space-x-2 px-1">
+                        <div className="w-6 h-6 flex items-center justify-center text-lg">
+                            💰
+                        </div>
+                        <h3 className="text-sm font-black text-slate-800 tracking-tight">Winning information</h3>
+                    </div>
+
+                    <div className="space-y-2.5">
+                        {winners.map((item) => (
+                            <div 
+                                key={item.id}
+                                className="relative bg-gradient-to-r from-[#f7be16] via-[#f7c222] to-[#f4b306] rounded-2xl p-2.5 flex items-center justify-between shadow-sm border border-amber-300/40 animate-slide-down overflow-hidden"
+                            >
+                                <div className="flex items-center space-x-3 z-10">
+                                    <div className="relative flex-shrink-0">
+                                        <div className="w-11 h-11 rounded-full border-2 border-white overflow-hidden shadow-sm bg-amber-100">
+                                            <img src={item.avatar} alt="avatar" className="w-full h-full object-cover" />
+                                        </div>
+                                        <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-yellow-300 text-slate-900 border border-white rounded-full px-1 py-0.2 text-[8px] font-black tracking-tighter shadow">
+                                            V1
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-black text-white drop-shadow-sm tracking-wide">
+                                        {item.username}
+                                    </span>
+                                </div>
+
+                                <div className="z-10 px-1">
+                                    <div className={`w-14 h-12 ${item.game.color} rounded-xl flex flex-col items-center justify-center p-1 shadow-inner border border-white/20 text-center`}>
+                                        <span className="text-[7px] font-black text-white leading-tight uppercase font-sans">
+                                            {item.game.name}
+                                        </span>
+                                        <div className="mt-0.5 flex space-x-0.5 items-center justify-center">
+                                            <div className="w-3.5 h-3.5 rounded-full bg-red-400/90 text-[6px] text-white flex items-center justify-center font-bold">5D</div>
+                                            <div className="w-3.5 h-3.5 rounded-full bg-cyan-300/90 text-[6px] text-slate-900 flex items-center justify-center font-bold">★</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="text-right z-10 pr-1">
+                                    <div className="text-sm font-black text-white tracking-tight drop-shadow-sm font-mono">
+                                        ৳{item.amount}
+                                    </div>
+                                    <div className="text-[9px] font-semibold text-white/90 leading-tight mt-0.5">
+                                        Winning amount
+                                    </div>
+                                </div>
+
+                                <div className="absolute -right-4 -bottom-4 w-20 h-20 bg-white/15 rounded-full blur-sm pointer-events-none"></div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
         const playCountdownBeep = (isFinal = false) => {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -286,7 +561,7 @@
                 osc.start();
                 osc.stop(ctx.currentTime + 0.15);
             } catch (e) {
-                // Catches browser restriction limits
+                // Ignore audio restriction limits
             }
         };
 
@@ -410,35 +685,27 @@
             const [isLoading, setIsLoading] = useState(false);
 
             const [gameType, setGameType] = useState('wingo'); 
-
-            // Pagination state for Game History lists
             const [historyPage, setHistoryPage] = useState(1);
 
-            // Country Selector States
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
             const [showCountryDrop, setShowCountryDrop] = useState(false);
 
-            // Session state setup
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_current_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
-            // Authentication Fields
             const [phone, setPhone] = useState('');
             const [username, setUsername] = useState('');
             const [password, setPassword] = useState('');
             const [confirmPassword, setConfirmPassword] = useState('');
             const [promoCode, setPromoCode] = useState('');
 
-            // Deposit Form States (Only bKash remains)
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
             const [isDepositing, setIsDepositing] = useState(false);
             const [depositTab, setDepositTab] = useState('new'); 
-            const [selectedMethod, setSelectedMethod] = useState('bkash'); 
             const [selectedChannel, setSelectedChannel] = useState('GoPay-bKash');
 
-            // Withdrawal Wallet States (Only bKash remains)
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
             const [withdrawType, setWithdrawType] = useState('Personal'); 
@@ -446,59 +713,45 @@
             const [withdrawTab, setWithdrawTab] = useState('new'); 
             const [withdrawHistory, setWithdrawHistory] = useState([]);
 
-            // Claim limit states
             const [dailyClaimed, setDailyClaimed] = useState(false);
-
-            // Active Game View State
             const [activeGameTab, setActiveGameTab] = useState('30sec'); 
 
-            // Timers & Periods (Starts at non-zero to prevent initial flash)
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
 
-            // Wingo Classic Period IDs
             const [period30s, setPeriod30s] = useState('20260708100051482');
             const [period1m, setPeriod1m] = useState('20260708200031105');
             const [period2m, setPeriod2m] = useState('20260708300021105');
 
-            // TRX Period IDs (TRON Blocks)
             const [periodTrx30s, setPeriodTrx30s] = useState('20260709103010419');
             const [periodTrx1m, setPeriodTrx1m] = useState('20260709203010201');
             const [periodTrx2m, setPeriodTrx2m] = useState('20260709303010101');
 
-            // K3 Period IDs
             const [periodK330s, setPeriodK330s] = useState('20260712101010572');
             const [periodK31m, setPeriodK31m] = useState('20260712201010344');
             const [periodK32m, setPeriodK32m] = useState('20260712301010111');
 
-            // Wingo Classic History preloaded with 50 elements from start
             const [drawHistory30s, setDrawHistory30s] = useState(generateClassicMockHistory('20260708100051482', 50));
             const [drawHistory1m, setDrawHistory1m] = useState(generateClassicMockHistory('20260708200031105', 50));
             const [drawHistory2m, setDrawHistory2m] = useState(generateClassicMockHistory('20260708300021105', 50));
 
-            // TRX History preloaded with 50 elements from start
             const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(generateTrxMockHistory('20260709103010419', 50));
             const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(generateTrxMockHistory('20260709203010201', 50));
             const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(generateTrxMockHistory('20260709303010101', 50));
 
-            // K3 History preloaded with 50 elements
             const [drawHistoryK330s, setDrawHistoryK330s] = useState(generateK3MockHistory('20260712101010572', 50));
             const [drawHistoryK31m, setDrawHistoryK31m] = useState(generateK3MockHistory('20260712201010344', 50));
             const [drawHistoryK32m, setDrawHistoryK32m] = useState(generateK3MockHistory('20260712301010111', 50));
 
-            // Chicken Road 2 Real-Time Physical Engine States
             const [chickenActive, setChickenActive] = useState(false);
             const [chickenStep, setChickenStep] = useState(-1);
-            const [chickenBet, setChickenBet] = useState(70); // Matches default 70 BDT bet in user screenshot
+            const [chickenBet, setChickenBet] = useState(70);
             const [chickenDifficulty, setChickenDifficulty] = useState('easy'); 
             const [chickenCrash, setChickenCrash] = useState(false);
             const [chickenJumping, setChickenJumping] = useState(false);
-
-            // Car positions tracker (Vertical coordinate: y ranges from -40 to 200)
             const [carPositions, setCarPositions] = useState(Array(9).fill(-100));
 
-            // Betting Board States
             const [betValue, setBetValue] = useState(null);
             const [multiplier, setMultiplier] = useState(1);
             const [selectedUnit, setSelectedUnit] = useState(10);
@@ -508,31 +761,23 @@
             const [myBets, setMyBets] = useState([]);
             const [depositHistory, setDepositHistory] = useState([]);
 
-            // Result popup states
             const [showResultPopup, setShowResultPopup] = useState(false);
             const [popupType, setPopupType] = useState('win'); 
             const [popupAmount, setPopupAmount] = useState(0);
 
-            // Audio trigger tracker to prevent multiple checks playing simultaneously 
             const lastPlayedTimeRef = useRef(-1);
-
-            // Helper Refs for smooth game ticks without stale state
             const period30sRef = useRef(period30s);
             const period1mRef = useRef(period1m);
             const period2mRef = useRef(period2m);
-
             const periodTrx30sRef = useRef(periodTrx30s);
             const periodTrx1mRef = useRef(periodTrx1m);
             const periodTrx2mRef = useRef(periodTrx2m);
-
             const periodK330sRef = useRef(periodK330s);
             const periodK31mRef = useRef(periodK31m);
             const periodK32mRef = useRef(periodK32m);
-
             const myBetsRef = useRef(myBets);
             const currentUserRef = useRef(currentUser);
             const balanceRef = useRef(balance);
-
             const chickenStepRef = useRef(chickenStep);
             const chickenDifficultyRef = useRef(chickenDifficulty);
             const chickenBetRef = useRef(chickenBet);
@@ -540,37 +785,29 @@
             useEffect(() => { period30sRef.current = period30s; }, [period30s]);
             useEffect(() => { period1mRef.current = period1m; }, [period1m]);
             useEffect(() => { period2mRef.current = period2m; }, [period2m]);
-
             useEffect(() => { periodTrx30sRef.current = periodTrx30s; }, [periodTrx30s]);
             useEffect(() => { periodTrx1mRef.current = periodTrx1m; }, [periodTrx1m]);
             useEffect(() => { periodTrx2mRef.current = periodTrx2m; }, [periodTrx2m]);
-
             useEffect(() => { periodK330sRef.current = periodK330s; }, [periodK330s]);
             useEffect(() => { periodK31mRef.current = periodK31m; }, [periodK31m]);
             useEffect(() => { periodK32mRef.current = periodK32m; }, [periodK32m]);
-
             useEffect(() => { myBetsRef.current = myBets; }, [myBets]);
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
             useEffect(() => { balanceRef.current = balance; }, [balance]);
-
             useEffect(() => { chickenStepRef.current = chickenStep; }, [chickenStep]);
             useEffect(() => { chickenDifficultyRef.current = chickenDifficulty; }, [chickenDifficulty]);
             useEffect(() => { chickenBetRef.current = chickenBet; }, [chickenBet]);
 
-            // Auto-reset page view back to page 1 on tab toggling
             useEffect(() => {
                 setHistoryPage(1);
             }, [gameType, activeGameTab, gameSubTab]);
 
-            const getSanitizedPath = (fullPhone) => {
-                return fullPhone.replace(/[^0-9]/g, "");
-            };
+            const getSanitizedPath = (fullPhone) => fullPhone.replace(/[^0-9]/g, "");
 
             const showToast = (message, type = 'success') => {
                 setToast({ show: true, message, type });
             };
 
-            // Auto-clear Toast
             useEffect(() => {
                 if (toast.show) {
                     const timer = setTimeout(() => {
@@ -580,7 +817,6 @@
                 }
             }, [toast.show]);
 
-            // Secure unique dynamic generators
             const generateReferralCode = () => {
                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
                 let code = 'STX';
@@ -590,11 +826,7 @@
                 return code;
             };
 
-            const generateSTXId = () => {
-                return 'STX-ID-' + Math.floor(1000 + Math.random() * 9000);
-            };
-
-            // --- Game Handlers ---
+            const generateSTXId = () => 'STX-ID-' + Math.floor(1000 + Math.random() * 9000);
 
             const startChickenGame = () => {
                 if (chickenActive) return;
@@ -609,9 +841,7 @@
 
                 if (currentUserRef.current) {
                     const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
-                    db.ref(dbPath).update({
-                        balance: nextBalance
-                    });
+                    db.ref(dbPath).update({ balance: nextBalance });
                 }
 
                 setChickenStep(-1);
@@ -645,9 +875,7 @@
                     const nextBets = [newBetLog, ...(prevBets || [])];
                     if (currentUserRef.current) {
                         const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
-                        db.ref(dbPath).update({
-                            bets: nextBets
-                        });
+                        db.ref(dbPath).update({ bets: nextBets });
                     }
                     return nextBets;
                 });
@@ -683,10 +911,7 @@
                     const nextBets = [newBetLog, ...(prevBets || [])];
                     if (currentUserRef.current) {
                         const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
-                        db.ref(dbPath).update({
-                            balance: nextBalance,
-                            bets: nextBets
-                        });
+                        db.ref(dbPath).update({ balance: nextBalance, bets: nextBets });
                     }
                     return nextBets;
                 });
@@ -701,7 +926,6 @@
                 setChickenJumping(true);
                 playCountdownBeep(false);
 
-                // Emulate physical jumping sequence (300ms arc)
                 setTimeout(() => {
                     setChickenStep(prevStep => {
                         const nextStep = prevStep + 1;
@@ -719,7 +943,6 @@
                 }, 280);
             };
 
-            // Session checker & Firebase event handler
             useEffect(() => {
                 if (!sessionPhone) {
                     setCurrentUser(null);
@@ -788,7 +1011,6 @@
                 }
             };
 
-            // Sound player context hook
             useEffect(() => {
                 const activeTimer = getTimerForActiveTab();
                 if ((view === 'game' || view === 'game_k3') && activeTimer <= 5 && activeTimer >= 0) {
@@ -799,22 +1021,15 @@
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
-            // Opponent Defeat Logic adjusted to exactly 70% forced lose rate (giving an effective ~30% win rate environment)
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
-                
-                if (activeBets.length === 0) {
-                    return Math.floor(Math.random() * 10);
-                }
+                if (activeBets.length === 0) return Math.floor(Math.random() * 10);
 
                 const controlRoll = Math.random() * 100;
-
-                // Exactly 70% forced loss rate
                 if (controlRoll <= 70) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
-                        
                         if (!isNaN(selection) && selection !== '') {
                             userWinStates.add(Number(selection));
                         } else if (selection === 'big') {
@@ -832,32 +1047,23 @@
 
                     const losingDigits = [];
                     for (let i = 0; i < 10; i++) {
-                        if (!userWinStates.has(i)) {
-                            losingDigits.push(i);
-                        }
+                        if (!userWinStates.has(i)) losingDigits.push(i);
                     }
 
                     if (losingDigits.length > 0) {
                         return losingDigits[Math.floor(Math.random() * losingDigits.length)];
                     }
                 }
-
                 return Math.floor(Math.random() * 10);
             };
 
             const determineK3OutcomeWithLossParameters = (mode, currentPeriod) => {
                 const activeBets = (myBetsRef.current || []).filter(b => b.gameType === 'k3_lottery' && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
-                
                 if (activeBets.length === 0) {
-                    const d1 = Math.floor(Math.random() * 6) + 1;
-                    const d2 = Math.floor(Math.random() * 6) + 1;
-                    const d3 = Math.floor(Math.random() * 6) + 1;
-                    return [d1, d2, d3];
+                    return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
                 }
 
                 const controlRoll = Math.random() * 100;
-
-                // Exactly 70% forced loss rate
                 if (controlRoll <= 70) {
                     const allCombos = [];
                     for (let d1 = 1; d1 <= 6; d1++) {
@@ -873,30 +1079,20 @@
                         const size = sum >= 11 ? 'big' : 'small';
                         const parity = sum % 2 === 0 ? 'even' : 'odd';
 
-                        const userWins = activeBets.some(bet => {
+                        return !activeBets.some(bet => {
                             const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
-                            if (!isNaN(selection) && selection !== '') {
-                                return Number(selection) === sum;
-                            } else if (selection === 'big' || selection === 'small') {
-                                return selection === size;
-                            } else if (selection === 'even' || selection === 'odd') {
-                                return selection === parity;
-                            }
+                            if (!isNaN(selection) && selection !== '') return Number(selection) === sum;
+                            if (selection === 'big' || selection === 'small') return selection === size;
+                            if (selection === 'even' || selection === 'odd') return selection === parity;
                             return false;
                         });
-
-                        return !userWins;
                     });
 
                     if (losingCombos.length > 0) {
                         return losingCombos[Math.floor(Math.random() * losingCombos.length)];
                     }
                 }
-
-                const d1 = Math.floor(Math.random() * 6) + 1;
-                const d2 = Math.floor(Math.random() * 6) + 1;
-                const d3 = Math.floor(Math.random() * 6) + 1;
-                return [d1, d2, d3];
+                return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
             };
 
             const processPlacedBetsForMode = (game, mode, period, number, size, color) => {
@@ -909,7 +1105,6 @@
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
-
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
 
                         if (!isNaN(selection) && selection !== '') {
@@ -939,10 +1134,7 @@
                     setBalance(newBalance);
                     
                     const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
-                    db.ref(dbPath).update({
-                        balance: newBalance,
-                        bets: updatedBets
-                    });
+                    db.ref(dbPath).update({ balance: newBalance, bets: updatedBets });
 
                     setPopupAmount(winAmount);
                     setPopupType(winAmount > 0 ? 'win' : 'lose');
@@ -960,7 +1152,6 @@
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
-
                         const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
 
                         if (!isNaN(selection) && selection !== '') {
@@ -995,10 +1186,7 @@
                     setBalance(newBalance);
                     
                     const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
-                    db.ref(dbPath).update({
-                        balance: newBalance,
-                        bets: updatedBets
-                    });
+                    db.ref(dbPath).update({ balance: newBalance, bets: updatedBets });
 
                     setPopupAmount(winAmount);
                     setPopupType(winAmount > 0 ? 'win' : 'lose');
@@ -1007,20 +1195,10 @@
             };
 
             const handleModeDraw = (mode) => {
-                // 1. CLASSIC WINGO DRAW
-                let currentPeriodClassic = '';
-                if (mode === '30sec') currentPeriodClassic = period30sRef.current;
-                else if (mode === '1min') currentPeriodClassic = period1mRef.current;
-                else currentPeriodClassic = period2mRef.current;
-
+                // Classic Wingo Draw
+                let currentPeriodClassic = mode === '30sec' ? period30sRef.current : (mode === '1min' ? period1mRef.current : period2mRef.current);
                 const drawNumberClassic = determineOutcomeWithLossParameters('wingo', mode, currentPeriodClassic);
-
-                let drawColorClassic = '';
-                if (drawNumberClassic === 0) drawColorClassic = 'violet-red';
-                else if (drawNumberClassic === 5) drawColorClassic = 'violet-green';
-                else if ([1, 3, 7, 9].includes(drawNumberClassic)) drawColorClassic = 'green';
-                else drawColorClassic = 'red';
-
+                let drawColorClassic = drawNumberClassic === 0 ? 'violet-red' : (drawNumberClassic === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberClassic) ? 'green' : 'red'));
                 const drawSizeClassic = drawNumberClassic >= 5 ? 'Big' : 'Small';
                 const newResultClassic = { period: currentPeriodClassic, number: drawNumberClassic, size: drawSizeClassic, color: drawColorClassic };
 
@@ -1038,20 +1216,10 @@
                     setPeriod2m(prev => incrementPeriodString(prev));
                 }
 
-                // 2. TRX WINGO DRAW
-                let currentPeriodTrx = '';
-                if (mode === '30sec') currentPeriodTrx = periodTrx30sRef.current;
-                else if (mode === '1min') currentPeriodTrx = periodTrx1mRef.current;
-                else currentPeriodTrx = periodTrx2mRef.current;
-
+                // TRX Wingo Draw
+                let currentPeriodTrx = mode === '30sec' ? periodTrx30sRef.current : (mode === '1min' ? periodTrx1mRef.current : periodTrx2mRef.current);
                 const drawNumberTrx = determineOutcomeWithLossParameters('trx_wingo', mode, currentPeriodTrx);
-
-                let drawColorTrx = '';
-                if (drawNumberTrx === 0) drawColorTrx = 'violet-red';
-                else if (drawNumberTrx === 5) drawColorTrx = 'violet-green';
-                else if ([1, 3, 7, 9].includes(drawNumberTrx)) drawColorTrx = 'green';
-                else drawColorTrx = 'red';
-
+                let drawColorTrx = drawNumberTrx === 0 ? 'violet-red' : (drawNumberTrx === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberTrx) ? 'green' : 'red'));
                 const drawSizeTrx = drawNumberTrx >= 5 ? 'Big' : 'Small';
                 const blockData = generateTrxBlockData(BigInt(currentPeriodTrx), drawNumberTrx);
                 const newResultTrx = { 
@@ -1075,17 +1243,13 @@
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx1m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistoryTrx2m(prev => [newResultTrx, ...prev]);
+                    setDrawHistory2m(prev => [newResultTrx, ...prev]);
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx2m(prev => incrementPeriodString(prev));
                 }
 
-                // 3. K3 LOTTERY DRAW
-                let currentPeriodK3 = '';
-                if (mode === '30sec') currentPeriodK3 = periodK330sRef.current;
-                else if (mode === '1min') currentPeriodK3 = periodK31mRef.current;
-                else currentPeriodK3 = periodK32mRef.current;
-
+                // K3 Lottery Draw
+                let currentPeriodK3 = mode === '30sec' ? periodK330sRef.current : (mode === '1min' ? periodK31mRef.current : periodK32mRef.current);
                 const [d1, d2, d3] = determineK3OutcomeWithLossParameters(mode, currentPeriodK3);
                 const sum = d1 + d2 + d3;
                 const size = sum >= 11 ? 'Big' : 'Small';
@@ -1107,16 +1271,13 @@
                 }
             };
 
-            // Mutable draw ref to bypass hook closure limits
             const handleModeDrawRef = useRef(handleModeDraw);
             useEffect(() => {
                 handleModeDrawRef.current = handleModeDraw;
             });
 
-            // Precise System-Clock Synchronized Timer Loop with smooth 0-second settle states
             useEffect(() => {
                 let lastSeconds = -1;
-
                 const clockInterval = setInterval(() => {
                     const now = new Date();
                     const seconds = now.getSeconds();
@@ -1125,40 +1286,20 @@
                     if (seconds === lastSeconds) return; 
                     lastSeconds = seconds;
 
-                    // Trigger settle action strictly at system boundaries
-                    if (seconds % 30 === 0) {
-                        handleModeDrawRef.current('30sec');
-                    }
+                    if (seconds % 30 === 0) handleModeDrawRef.current('30sec');
+                    if (seconds === 0) handleModeDrawRef.current('1min');
+                    if (minutes % 2 === 0 && seconds === 0) handleModeDrawRef.current('2min');
 
-                    if (seconds === 0) {
-                        handleModeDrawRef.current('1min');
-                    }
-
-                    if (minutes % 2 === 0 && seconds === 0) {
-                        handleModeDrawRef.current('2min');
-                    }
-
-                    // Countdown value mapping (Counts 29 down to 0, total 30 unique states)
-                    const rem30 = 29 - (seconds % 30);
-                    setTimer30s(rem30);
-
-                    const rem1m = 59 - seconds;
-                    setTimer1m(rem1m);
-
-                    const totalSeconds2m = (minutes % 2) * 60 + seconds;
-                    const rem2m = 119 - totalSeconds2m;
-                    setTimer2m(rem2m);
-
+                    setTimer30s(29 - (seconds % 30));
+                    setTimer1m(59 - seconds);
+                    setTimer2m(119 - ((minutes % 2) * 60 + seconds));
                 }, 250); 
 
                 return () => clearInterval(clockInterval);
             }, []);
 
-            // EFFECT 1: Real-Time Traffic Animation (ONLY updates traffic variables - no render state overrides)
             useEffect(() => {
                 if (!chickenActive) return;
-
-                // Position spawn array of cars to render
                 setCarPositions(Array(9).fill(null).map((_, i) => -50 - (i * 45)));
 
                 let animFrameId;
@@ -1172,9 +1313,7 @@
                             else if (chickenDifficulty === 'hardcore') speed *= 2.25;
 
                             updated[i] = updated[i] + speed;
-                            if (updated[i] > 185) {
-                                updated[i] = -80; // Respawn above highway
-                            }
+                            if (updated[i] > 185) updated[i] = -80;
                         }
                         return updated;
                     });
@@ -1185,15 +1324,12 @@
                 return () => cancelAnimationFrame(animFrameId);
             }, [chickenActive, chickenDifficulty]);
 
-            // EFFECT 2: Safe decoupled Collision checker listener (Prevents render updates conflict/White Screen)
             useEffect(() => {
                 if (!chickenActive || chickenJumping || chickenStep === -1) return;
-
                 const activeCarY = carPositions[chickenStep];
                 if (activeCarY !== undefined) {
                     const carTop = activeCarY;
-                    const carBottom = activeCarY + 45; // Car Height is ~45px
-                    // Chicken sits vertically centered between 60px and 100px
+                    const carBottom = activeCarY + 45;
                     if (carBottom >= 60 && carTop <= 100) {
                         handleTriggerCrash();
                     }
@@ -1340,7 +1476,6 @@
                 }
 
                 setIsDepositing(true);
-
                 const depositId = Date.now().toString();
                 const newDepositItem = {
                     id: depositId,
@@ -1393,7 +1528,6 @@
                 }
 
                 setIsWithdrawing(true);
-
                 const withdrawId = Date.now().toString();
                 const newWithdrawalItem = {
                     id: withdrawId,
@@ -1409,7 +1543,6 @@
                 const userPath = 'users/' + getSanitizedPath(currentUser.phone) + '/withdrawals/' + withdrawId;
                 const globalPath = 'global_withdrawals/' + withdrawId;
                 const userBalancePath = 'users/' + getSanitizedPath(currentUser.phone);
-
                 const nextBalance = balance - amt;
 
                 Promise.all([
@@ -1468,7 +1601,6 @@
                 }
 
                 const currentActivePeriod = String(getPeriodForActiveTab());
-
                 const newBet = {
                     id: Date.now(),
                     period: currentActivePeriod,
@@ -1555,7 +1687,7 @@
 
             if (!isInitialized) {
                 return (
-                    <div className="flex-1 bg-slate-955 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
+                    <div className="flex-1 bg-slate-950 flex flex-col justify-center items-center text-white h-screen w-full md:max-w-md">
                         <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
                         <span className="text-[11px] text-slate-400 font-bold mt-4 tracking-widest uppercase font-sans">Connecting to Gateway...</span>
                     </div>
@@ -1571,7 +1703,6 @@
             };
 
             const currentTrxLast5 = getActiveTrxLast5();
-
             const hasPendingWithdraw = (withdrawHistory || []).some(w => w.status?.toLowerCase() === 'pending');
             const pendingWithdrawAmount = (withdrawHistory || [])
                 .filter(w => w.status?.toLowerCase() === 'pending')
@@ -1581,7 +1712,6 @@
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
             const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
 
-            // Safer dynamic extraction for active K3 results to prevent white screen on transitions
             const activeK3Result = (gameType === 'k3_lottery' && activeFullHistory && activeFullHistory[0] && activeFullHistory[0].dice) 
                 ? activeFullHistory[0] 
                 : { dice: [1, 1, 1], sum: 3, size: 'Small', parity: 'Odd' };
@@ -1589,7 +1719,6 @@
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full bg-[#f5f6fa]">
                     
-                    {/* Loading Modal overlay */}
                     {isLoading && (
                         <div className="absolute inset-0 bg-slate-900/70 z-[999] flex flex-col items-center justify-center">
                             <div className="w-10 h-10 border-4 border-[#8a2be2] border-t-transparent rounded-full animate-spin"></div>
@@ -1597,7 +1726,6 @@
                         </div>
                     )}
 
-                    {/* Toast Notification overlay */}
                     {toast.show && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold flex items-center space-x-2 bg-slate-900 text-white border-slate-700 animate-bounce">
                             <Icon name="check-circle" className="w-4 h-4 text-secondary" />
@@ -1605,12 +1733,10 @@
                         </div>
                     )}
 
-                    {/* VIEWPORT CONTROLLER */}
                     <div className="flex-1 flex flex-col justify-start overflow-hidden font-sans">
                         
-                        {/* VIEW: AUTHENTICATION */}
                         {view === 'auth' && (
-                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-955 text-white py-8 overflow-y-auto">
+                            <div className="flex-1 flex flex-col justify-center px-6 bg-slate-950 text-white py-8 overflow-y-auto">
                                 <div className="mb-6 flex flex-col items-center text-center">
                                     <div className="w-16 h-16 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                         <span className="text-3xl font-black text-[#fccd11]">S</span>
@@ -1629,7 +1755,7 @@
                                         <div>
                                             <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Nickname</label>
                                             <div className="relative">
-                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="user" className="w-4 h-4" /></span>
+                                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="user" className="w-4 h-4" /></span>
                                                 <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                             </div>
                                         </div>
@@ -1670,7 +1796,7 @@
                                     <div>
                                         <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Password</label>
                                         <div className="relative">
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="lock" className="w-4 h-4" /></span>
+                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="lock" className="w-4 h-4" /></span>
                                             <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                         </div>
                                     </div>
@@ -1680,7 +1806,7 @@
                                             <div>
                                                 <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Confirm Password</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="shield-check" className="w-4 h-4" /></span>
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="shield-check" className="w-4 h-4" /></span>
                                                     <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white"/>
                                                 </div>
                                             </div>
@@ -1688,7 +1814,7 @@
                                             <div>
                                                 <label className="block text-slate-400 text-[10px] uppercase font-bold tracking-wider mb-1">Promo / Referral Code</label>
                                                 <div className="relative">
-                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-505"><Icon name="gift" className="w-4 h-4" /></span>
+                                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"><Icon name="gift" className="w-4 h-4" /></span>
                                                     <input type="text" placeholder="e.g. STXWXYZ" value={promoCode} onChange={e => setPromoCode(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 pl-10 pr-4 text-xs focus:ring-1 focus:ring-[#8a2be2] focus:outline-none text-white font-mono uppercase"/>
                                                 </div>
                                             </div>
@@ -1702,14 +1828,11 @@
                             </div>
                         )}
 
-                        {/* VIEW: HOME PORTAL AREA */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden">
-                                
-                                {/* Static Top Header */}
                                 <div className="bg-white px-4 py-3 flex justify-between items-center border-b border-gray-100 shadow-sm flex-shrink-0">
                                     <h1 className="text-xl font-black text-[#8a2be2] tracking-widest font-sans flex items-center">
-                                        <div className="w-7 h-7 bg-slate-955 rounded-lg flex items-center justify-center border border-[#8a2be2] mr-2">
+                                        <div className="w-7 h-7 bg-slate-950 rounded-lg flex items-center justify-center border border-[#8a2be2] mr-2">
                                             <span className="text-base font-extrabold text-[#fccd11]">S</span>
                                         </div>
                                         STEVENX
@@ -1720,9 +1843,8 @@
                                     </div>
                                 </div>
 
-                                {/* ACCOUNT INFO LINE */}
                                 {currentUser && (
-                                    <div className="bg-slate-955 text-white px-4 py-2.5 flex justify-between items-center text-[11px] border-b border-slate-800 flex-shrink-0 font-sans">
+                                    <div className="bg-slate-950 text-white px-4 py-2.5 flex justify-between items-center text-[11px] border-b border-slate-800 flex-shrink-0 font-sans">
                                         <div className="flex items-center space-x-2">
                                             <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></div>
                                             <span className="font-bold text-slate-200">{currentUser.username}</span>
@@ -1736,17 +1858,19 @@
                                     </div>
                                 )}
 
-                                {/* NAVIGATION BAR */}
                                 {renderSharedNav()}
 
-                                {/* Scrollable Dynamic Views Area */}
-                                <div className="flex-1 overflow-y-auto">
-                                    
-                                    {/* NAVIGATION SUB-VIEW: HOME */}
+                                <div className="flex-1 overflow-y-auto pb-10">
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
                                             
-                                            {/* Game Card 1: WINGO */}
+                                            {/* 1. TOP PROMOTIONAL ADS BANNER + ANNOUNCEMENT MARQUEE */}
+                                            <PromoBannerCarousel onDetailClick={() => {
+                                                showToast('Bonus promotion details active! Play Aviator & Win.');
+                                            }} />
+
+                                            {/* 2. GAME CARDS */}
+                                            {/* Game 1: Wingo */}
                                             <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
@@ -1756,10 +1880,9 @@
 
                                                 <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
                                                     <div className="absolute -top-1 right-2 w-14 h-14 rounded-full bg-gradient-to-br from-red-400 via-red-500 to-red-600 border border-white/20 shadow-lg flex items-center justify-center">
-                                                        <div className="absolute inset-0 bg-white/10 rounded-full" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)' }}></div>
                                                         <span className="text-white text-2xl font-black tracking-tighter drop-shadow-md">9</span>
                                                     </div>
-                                                    <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-505 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
+                                                    <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-500 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
                                                         <span className="text-white text-xl font-black tracking-tighter drop-shadow-md">0</span>
                                                     </div>
                                                     <div className="absolute bottom-4 left-2 w-10 h-10 rounded-full bg-gradient-to-br from-teal-300 via-emerald-400 to-emerald-500 border border-white/20 shadow-lg flex items-center justify-center">
@@ -1773,7 +1896,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* Game Card 2: TRX WINGO */}
+                                            {/* Game 2: TRX Wingo */}
                                             <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
@@ -1782,12 +1905,9 @@
                                                 </div>
 
                                                 <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    <div className="absolute right-2 top-2 w-7 h-7 rounded-full bg-gradient-to-br from-pink-400 to-rose-600 opacity-80 blur-[0.2px]"></div>
-                                                    <div className="relative z-10 w-12 h-14 bg-gradient-to-b from-red-500 to-red-800 shadow-lg" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}>
-                                                        <div className="absolute inset-0 bg-red-400/30" style={{ clipPath: 'polygon(50% 0%, 50% 100%, 0% 100%)' }}></div>
-                                                    </div>
+                                                    <div className="relative z-10 w-12 h-14 bg-gradient-to-b from-red-500 to-red-800 shadow-lg" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
                                                     <div className="absolute bottom-2 -right-1 w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">T</div>
-                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-505 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
+                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
                                                 </div>
 
                                                 <div className="z-10 mt-auto">
@@ -1796,7 +1916,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* Game Card 3: K3 LOTTERY */}
+                                            {/* Game 3: K3 Lottery */}
                                             <div onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#12a14b] to-[#0a6125] shadow-md border border-emerald-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
@@ -1819,8 +1939,8 @@
                                                 </div>
                                             </div>
 
-                                            {/* Game Card 4: CHICKEN ROAD 2 */}
-                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-955 shadow-md border border-emerald-955 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                            {/* Game 4: Chicken Road 2 */}
+                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                 <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
                                                 <div className="flex justify-between items-start z-10">
                                                     <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
@@ -1829,7 +1949,6 @@
 
                                                 <div className="absolute right-6 top-6 w-28 h-24 pointer-events-none flex items-center justify-center">
                                                     <div className="relative w-12 h-16 bg-yellow-500 rounded-md border-2 border-slate-900 shadow-md flex items-center justify-center">
-                                                        <div className="absolute top-1 inset-x-1.5 h-3 bg-slate-800 rounded-sm"></div>
                                                         <span className="text-base text-slate-800 font-extrabold z-10">🚚</span>
                                                     </div>
                                                 </div>
@@ -1840,10 +1959,11 @@
                                                 </div>
                                             </div>
 
+                                            {/* 3. LIVE WINNING INFORMATION FEED COMPONENT */}
+                                            <WinningInfoComponent />
                                         </div>
                                     )}
 
-                                    {/* NAVIGATION SUB-VIEW: ACTIVITY */}
                                     {activeNav === 'activity' && (
                                         <div className="p-4 space-y-4 font-sans">
                                             <h2 className="text-base font-bold text-slate-800">Activity & Rewards</h2>
@@ -1852,7 +1972,7 @@
                                                     <div className="w-10 h-10 rounded-xl bg-violet-100 flex items-center justify-center text-[#8a2be2]"><Icon name="gift" className="w-5 h-5" /></div>
                                                     <div>
                                                         <span className="font-bold text-slate-800 block text-xs">Daily Check-in Bonus</span>
-                                                        <span className="text-[10px] text-slate-400 block">Claim your free reward (Only once per user account)</span>
+                                                        <span className="text-[10px] text-slate-400 block">Claim your free reward</span>
                                                     </div>
                                                 </div>
                                                 
@@ -1865,7 +1985,6 @@
                                         </div>
                                     )}
 
-                                    {/* NAVIGATION SUB-VIEW: PROMOTION */}
                                     {activeNav === 'promotion' && (
                                         <div className="p-4 space-y-4 font-sans">
                                             <h2 className="text-base font-bold text-slate-800">Invite & Earn Program</h2>
@@ -1890,7 +2009,7 @@
                                                         showToast('Referral code copied to clipboard!', 'success');
                                                     }} 
                                                     disabled={!currentUser}
-                                                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-505 text-white font-extrabold rounded-xl text-xs uppercase transition-all"
+                                                    className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase transition-all"
                                                 >
                                                     Copy Referral Code
                                                 </button>
@@ -1898,17 +2017,15 @@
                                         </div>
                                     )}
 
-                                    {/* NAVIGATION SUB-VIEW: ACCOUNT */}
                                     {activeNav === 'account' && (
                                         <div className="flex flex-col bg-[#f5f6fa]">
-                                            <div className="bg-gradient-to-b from-indigo-950 to-slate-955 text-white px-6 py-8 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
+                                            <div className="bg-gradient-to-b from-indigo-950 to-slate-950 text-white px-6 py-8 rounded-b-[2.5rem] shadow-md flex flex-col items-center">
                                                 <div className="w-14 h-14 bg-[#8a2be2]/10 border border-[#8a2be2]/40 flex items-center justify-center rounded-2xl mb-3 shadow-md">
                                                     <span className="text-3xl font-black text-[#fccd11]">S</span>
                                                 </div>
                                                 <h2 className="text-sm font-bold mt-1">{currentUser ? currentUser.username : 'Guest User'}</h2>
                                                 <p className="text-[11px] text-slate-400 mt-0.5">Phone: {currentUser ? currentUser.phone : 'Not Verified'}</p>
                                                 
-                                                {/* SHOW BALANCE IN ACCOUNT OPTION HEADER (AS REQUESTED) */}
                                                 <div className="mt-4 bg-white/10 px-6 py-2.5 rounded-2xl border border-white/5 flex flex-col items-center min-w-[200px]">
                                                     <span className="text-[10px] text-indigo-200 uppercase tracking-widest font-black font-sans">Available Balance</span>
                                                     <span className="text-2xl font-black text-[#fccd11] font-mono mt-0.5">৳{Number(balance || 0).toFixed(2)}</span>
@@ -1919,7 +2036,7 @@
                                                 <div className="mx-4 mt-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center space-x-3 text-amber-800 animate-pulse font-sans">
                                                     <Icon name="info" className="w-5 h-5 text-amber-600 flex-shrink-0" />
                                                     <div className="text-[10px] font-semibold leading-snug">
-                                                        You have a pending cashout ticket of <span className="font-extrabold font-mono">৳{pendingWithdrawAmount.toFixed(2)}</span>. Please wait for node validation.
+                                                        You have a pending cashout ticket of <span className="font-extrabold font-mono">৳{pendingWithdrawAmount.toFixed(2)}</span>. Please wait for validation.
                                                     </div>
                                                 </div>
                                             )}
@@ -1960,24 +2077,13 @@
                                                     <span className="text-[9px] bg-amber-50 text-amber-700 py-1 px-2.5 rounded-full font-bold">Details</span>
                                                 </button>
 
-                                                {/* OFFICIAL TELEGRAM SUPPORT BUTTON */}
-                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full bg-sky-50 hover:bg-sky-100 text-sky-850 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-sky-100 transition-colors">
+                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full bg-sky-50 hover:bg-sky-100 text-sky-900 py-4 px-4 rounded-xl shadow-sm flex items-center justify-between border border-sky-100 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <Icon name="headphones" className="w-5 h-5 text-sky-600 animate-pulse" />
                                                         <span>Telegram Customer Support</span>
                                                     </div>
                                                     <span className="text-[10px] text-sky-600 font-bold bg-sky-100/50 py-1 px-2 rounded-full">@Kaisarvai007</span>
                                                 </a>
-
-                                                {/* DEVELOPER CREDIT CARD */}
-                                                <div className="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-2xl text-center space-y-2">
-                                                    <p className="text-[10px] text-slate-400 leading-relaxed font-sans uppercase font-bold tracking-wide">
-                                                        THIS WEBSITE DEVELOPER IS BY SPEEDOX KK AND YOU MAKE WEBSITE IN LOW PRICE TO CONTACT TELEGRAM
-                                                    </p>
-                                                    <a href="https://t.me/kaisarvai007" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-1.5 bg-[#8a2be2] hover:bg-purple-700 text-white text-[11px] font-black rounded-lg uppercase tracking-widest transition-all">
-                                                        @kaisarvai007
-                                                    </a>
-                                                </div>
 
                                                 <button onClick={handleLogout} className="w-full bg-rose-50 hover:bg-rose-100 text-rose-600 py-3 px-4 rounded-xl flex items-center justify-between border border-rose-100 transition-colors mt-6">
                                                     <span className="text-xs font-bold">Sign Out from Device</span>
@@ -1986,51 +2092,37 @@
                                             </div>
                                         </div>
                                     )}
-
                                 </div>
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL DEPOSIT SCREEN (NAGAD & USDT COMPLETELY REMOVED) */}
+                        {/* VIEW: DEPOSIT */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#f5f6fa] h-full justify-between overflow-hidden">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
-                                    <div className="flex items-center">
-                                        <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
-                                            <Icon name="chevron-left" className="w-6 h-6" />
-                                        </button>
-                                    </div>
+                                    <button onClick={() => setView('home')} className="text-slate-700 hover:text-black">
+                                        <Icon name="chevron-left" className="w-6 h-6" />
+                                    </button>
                                     <h1 className="text-base font-bold text-slate-800 font-sans">Deposit</h1>
-                                    <button 
-                                        onClick={() => setDepositTab(depositTab === 'new' ? 'history' : 'new')} 
-                                        className="text-xs font-bold text-slate-600 hover:text-[#8a2be2] font-sans"
-                                    >
+                                    <button onClick={() => setDepositTab(depositTab === 'new' ? 'history' : 'new')} className="text-xs font-bold text-slate-600 hover:text-[#8a2be2] font-sans">
                                         {depositTab === 'new' ? 'Deposit history' : 'New Deposit'}
                                     </button>
                                 </div>
 
                                 {depositTab === 'new' ? (
                                     <div className="flex-1 overflow-y-auto pb-24">
-                                        {/* 1. Yellow Gradient Balance Card */}
                                         <div className="p-4">
-                                            <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-955 relative overflow-hidden">
-                                                <div className="absolute right-0 bottom-0 translate-y-4 translate-x-4 opacity-10">
-                                                    <Icon name="wallet" className="w-32 h-32 text-slate-955" />
-                                                </div>
+                                            <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-950 relative overflow-hidden">
                                                 <div className="flex items-center space-x-1.5 opacity-80 text-xs font-semibold">
                                                     <Icon name="wallet" className="w-4 h-4" />
                                                     <span>Balance</span>
                                                 </div>
                                                 <div className="text-3xl font-black mt-1 tracking-tight flex items-center space-x-2 font-mono">
                                                     <span>৳{Number(balance || 0).toFixed(2)}</span>
-                                                    <button onClick={() => window.location.reload()} className="hover:rotate-180 transition-transform duration-350">
-                                                        <Icon name="refresh-cw" className="w-4 h-4 text-slate-955/75" />
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* 2. Professional Payment Method Tabs (Single bKash Real Logo Card, full width) */}
                                         <div className="px-4 pb-3">
                                             <div className="p-4 rounded-2xl bg-white border-2 border-bkashPink flex flex-col items-center justify-center space-y-2 shadow-sm text-center">
                                                 <BkashAppIcon />
@@ -2038,14 +2130,12 @@
                                             </div>
                                         </div>
 
-                                        {/* 3. Select Channel Section */}
                                         <div className="px-4 pb-4 font-sans">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                                                 <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
                                                     <Icon name="percent" className="w-4 h-4 text-amber-500" />
                                                     <span>Select channel</span>
                                                 </div>
-
                                                 <div className="grid grid-cols-2 gap-2">
                                                     <button 
                                                         onClick={() => setSelectedChannel('GoPay-bKash')}
@@ -2069,7 +2159,6 @@
                                             </div>
                                         </div>
 
-                                        {/* 4. Active Agent Number Copy Panel */}
                                         <div className="px-4 pb-4 font-sans">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-2.5">
                                                 <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Official Gateway Receiver details:</span>
@@ -2092,14 +2181,12 @@
                                             </div>
                                         </div>
 
-                                        {/* 5. Deposit Amount Selector Section */}
                                         <div className="px-4 pb-4 font-sans">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                                                 <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
                                                     <Icon name="wallet" className="w-4 h-4 text-emerald-500" />
                                                     <span>Deposit amount</span>
                                                 </div>
-
                                                 <div className="grid grid-cols-4 gap-2">
                                                     {['200', '500', '1000', '5000'].map(val => (
                                                         <button 
@@ -2114,7 +2201,6 @@
                                                         </button>
                                                     ))}
                                                 </div>
-
                                                 <input 
                                                     type="number" 
                                                     placeholder="Enter Custom Amount (BDT)"
@@ -2125,35 +2211,32 @@
                                             </div>
                                         </div>
 
-                                        {/* 6. Transaction Details Validation Inputs */}
                                         <div className="px-4 pb-4 font-sans">
                                             <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                                                 <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
                                                     <Icon name="shield-check" className="w-4 h-4 text-indigo-500" />
                                                     <span>Sender details</span>
                                                 </div>
-
                                                 <div className="space-y-2">
                                                     <input 
                                                         type="tel" 
                                                         placeholder="Sender Account/Phone Number"
                                                         value={senderNumber} 
                                                         onChange={e => setSenderNumber(e.target.value)} 
-                                                        className="w-full bg-slate-550 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
                                                     />
                                                     <input 
                                                         type="text" 
                                                         placeholder="Enter Transaction ID (TxID)" 
                                                         value={transactionId} 
                                                         onChange={e => setTransactionId(e.target.value)} 
-                                                        className="w-full bg-slate-550 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
+                                                        className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
                                                     />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
-                                    /* Historical Deposits List tab */
                                     <div className="flex-1 p-4 space-y-3 overflow-y-auto pb-24 font-sans">
                                         <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wide">Historical Deposit tickets</h3>
                                         {(depositHistory || []).length === 0 ? (
@@ -2173,7 +2256,7 @@
                                                             {item.status}
                                                         </span>
                                                     </div>
-                                                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-505 pt-1.5 border-t border-slate-50 font-mono">
+                                                    <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-500 pt-1.5 border-t border-slate-50 font-mono">
                                                         <span>Sender: {item.sender}</span>
                                                         <span className="text-right">TXID: {item.txid}</span>
                                                         <span className="col-span-2 text-slate-400 mt-1">{item.timestamp}</span>
@@ -2184,11 +2267,10 @@
                                     </div>
                                 )}
 
-                                {/* Sticky professional footer */}
                                 {depositTab === 'new' && (
                                     <div className="bg-white border-t border-slate-100 px-4 py-3 flex justify-between items-center flex-shrink-0 font-sans shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
                                         <div>
-                                            <span className="text-[10px] text-slate-505 block leading-tight font-semibold">Recharge Method:</span>
+                                            <span className="text-[10px] text-slate-500 block leading-tight font-semibold">Recharge Method:</span>
                                             <span className="text-xs font-extrabold text-[#e2136e] leading-tight block mt-0.5">{selectedChannel}</span>
                                         </div>
                                         <button 
@@ -2206,9 +2288,9 @@
                             </div>
                         )}
 
-                        {/* VIEW: PROFESSIONAL BKASH WITHDRAW SCREEN (NAGAD REMOVED) */}
+                        {/* VIEW: WITHDRAW */}
                         {view === 'withdraw' && (
-                            <div className="flex-1 flex flex-col bg-slate-550 justify-between overflow-y-auto">
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between overflow-y-auto">
                                 <div className="bg-white px-4 py-3 flex items-center justify-between border-b border-gray-100 flex-shrink-0">
                                     <div className="flex items-center">
                                         <button onClick={() => setView('home')} className="text-slate-700 hover:text-black mr-2">
@@ -2216,7 +2298,6 @@
                                         </button>
                                         <h1 className="text-sm font-bold text-slate-800">bKash Withdrawal</h1>
                                     </div>
-                                    
                                     <div className="flex space-x-1.5">
                                         <button onClick={() => setWithdrawTab('new')} className={`px-2.5 py-1 rounded text-[10px] font-bold ${withdrawTab === 'new' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'}`}>Request</button>
                                         <button onClick={() => setWithdrawTab('history')} className={`px-2.5 py-1 rounded text-[10px] font-bold ${withdrawTab === 'history' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'}`}>Records</button>
@@ -2227,7 +2308,7 @@
                                     {withdrawTab === 'new' ? (
                                         <>
                                             <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm space-y-3">
-                                                <div className="flex justify-between items-center pb-2 border-b border-slate-555">
+                                                <div className="flex justify-between items-center pb-2 border-b border-slate-100">
                                                     <BkashOfficialLogo />
                                                     <span className="text-[9px] font-bold bg-emerald-100 text-emerald-800 px-2.5 py-0.5 rounded-full uppercase">Official payout</span>
                                                 </div>
@@ -2237,7 +2318,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* PENDING NOTIFICATION INSIDE FORM */}
                                             {hasPendingWithdraw && (
                                                 <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-amber-800 text-[10px] font-semibold flex items-center space-x-2">
                                                     <Icon name="info" className="w-4 h-4 text-amber-600" />
@@ -2247,7 +2327,7 @@
 
                                             <form onSubmit={processWithdrawal} className="space-y-4">
                                                 <div>
-                                                    <label className="block text-slate-505 text-[10px] font-bold uppercase mb-1.5">Withdraw Amount (Min ৳100)</label>
+                                                    <label className="block text-slate-500 text-[10px] font-bold uppercase mb-1.5">Withdraw Amount (Min ৳100)</label>
                                                     <div className="grid grid-cols-4 gap-2">
                                                         {['100', '500', '1000', '5000'].map(val => (
                                                             <button 
@@ -2291,7 +2371,7 @@
                                                 <button 
                                                     type="submit" 
                                                     disabled={isWithdrawing}
-                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-505 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
+                                                    className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-emerald-500 text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-md transition-opacity"
                                                 >
                                                     {isWithdrawing ? 'Processing Cashout...' : 'Confirm Cashout Ticket'}
                                                 </button>
@@ -2312,7 +2392,7 @@
                                                             <span className="text-xs font-black text-emerald-600">৳{Number(item.amount || 0).toFixed(2)}</span>
                                                             <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${
                                                                 item.status === 'Success' ? 'bg-emerald-100 text-emerald-800' :
-                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-850 border border-amber-300 animate-pulse font-mono'
+                                                                item.status === 'Rejected' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800 border border-amber-300 animate-pulse font-mono'
                                                             }`}>
                                                                 {item.status}
                                                             </span>
@@ -2331,18 +2411,15 @@
                             </div>
                         )}
 
-                        {/* VIEW: GAME PLAY WINDOW (WINGO CLASSIC & TRX) */}
+                        {/* VIEW: GAME (WINGO / TRX WINGO) */}
                         {view === 'game' && (
-                            <div className="flex-1 flex flex-col bg-slate-550 justify-between relative overflow-y-auto">
-                                
-                                {/* Dynamic Theme Header depending on gameType */}
+                            <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
                                 <div className={`px-4 py-3 flex items-center justify-between shadow-md transition-all ${
-                                    gameType === 'trx_wingo' ? 'bg-[#12161f] border-b border-slate-800 text-white' : 'bg-[#fccd11] text-slate-955 border-b border-yellow-500/20'
+                                    gameType === 'trx_wingo' ? 'bg-[#12161f] border-b border-slate-800 text-white' : 'bg-[#fccd11] text-slate-950 border-b border-yellow-500/20'
                                 }`}>
                                     <button onClick={() => setView('home')} className={`${gameType === 'trx_wingo' ? 'text-white' : 'text-slate-900'} hover:text-black`}>
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
-                                    
                                     <div className="flex flex-col items-center">
                                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center border shadow mb-0.5 ${
                                             gameType === 'trx_wingo' ? 'bg-rose-600 border-rose-500' : 'bg-slate-950 border-white'
@@ -2351,7 +2428,6 @@
                                         </div>
                                         <span className="text-xs font-black tracking-wider uppercase">{gameType === 'trx_wingo' ? 'TRX WINGO' : 'STEVEN WIN'}</span>
                                     </div>
-
                                     <div className="flex space-x-3">
                                         <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="hover:text-rose-500"><Icon name="headphones" className="w-5 h-5" /></a>
                                         <button onClick={() => window.location.reload()}><Icon name="refresh-cw" className="w-5 h-5" /></button>
@@ -2359,8 +2435,6 @@
                                 </div>
 
                                 <div className="flex-1 px-4 py-3 space-y-4 pb-16 relative font-sans">
-                                    
-                                    {/* Game Modes selector */}
                                     <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
                                         {[
                                             { id: '30sec', desc: gameType === 'trx_wingo' ? 'TRX 30s' : 'Wingo 30s' },
@@ -2372,8 +2446,8 @@
                                                 onClick={() => { setActiveGameTab(tab.id); setGameSubTab('history'); }}
                                                 className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
                                                     activeGameTab === tab.id 
-                                                        ? (gameType === 'trx_wingo' ? 'bg-rose-600 text-white shadow' : 'bg-secondary text-slate-955 shadow') 
-                                                        : 'text-slate-505 hover:text-slate-800'
+                                                        ? (gameType === 'trx_wingo' ? 'bg-rose-600 text-white shadow' : 'bg-secondary text-slate-950 shadow') 
+                                                        : 'text-slate-500 hover:text-slate-800'
                                                 }`}
                                             >
                                                 {tab.desc}
@@ -2381,7 +2455,6 @@
                                         ))}
                                     </div>
 
-                                    {/* Wallet Balance Display Card */}
                                     <div className={`rounded-2xl p-4 shadow-sm flex justify-between items-center border transition-all ${
                                         gameType === 'trx_wingo' ? 'bg-slate-900 border-slate-800 text-white' : 'bg-gradient-to-r from-violet-700 to-indigo-950 text-white border-indigo-900/40'
                                     }`}>
@@ -2392,304 +2465,111 @@
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-sans">Deposit Funds</button>
                                     </div>
 
-                                    {/* Action Buttons: Red, Green, Violet */}
                                     <div className="grid grid-cols-3 gap-2">
                                         <button onClick={() => openBetConfirmation('green')} className="bg-gameGreen hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Green</button>
                                         <button onClick={() => openBetConfirmation('violet')} className="bg-gameViolet hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Violet</button>
                                         <button onClick={() => openBetConfirmation('red')} className="bg-gameRed hover:opacity-90 text-white py-3 rounded-xl font-bold text-xs shadow-md transition-opacity">Red</button>
                                     </div>
 
-                                    {/* BALLS GRID SELECTION PANEL */}
                                     <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
                                         <div className="grid grid-cols-5 gap-y-5 gap-x-3.5">
                                             {[
-                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(156,39,176,0.35)] border-2 border-[#9c27b0]' },
-                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border-2 border-rose-455' },
-                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' },
-                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(243,66,66,0.35)] border border-rose-400' },
-                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white shadow-[inset_0_4px_10px_rgba(255,255,255,0.4),0_6px_15px_rgba(24,182,96,0.35)] border border-emerald-400' }
+                                                { val: 0, style: 'bg-gradient-to-br from-gameRed via-rose-500 to-gameViolet text-white border-2 border-[#9c27b0]' },
+                                                { val: 1, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white border border-emerald-400' },
+                                                { val: 2, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white border border-rose-400' },
+                                                { val: 3, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white border border-emerald-400' },
+                                                { val: 4, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white border border-rose-400' },
+                                                { val: 5, style: 'bg-gradient-to-br from-gameGreen via-[#8bc34a] to-gameViolet text-white border-2 border-[#9c27b0]' },
+                                                { val: 6, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white border border-rose-400' },
+                                                { val: 7, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white border border-emerald-400' },
+                                                { val: 8, style: 'bg-gradient-to-b from-rose-400 to-gameRed text-white border border-rose-400' },
+                                                { val: 9, style: 'bg-gradient-to-b from-emerald-400 to-gameGreen text-white border border-emerald-400' }
                                             ].map(ball => (
                                                 <button 
                                                     key={ball.val} 
                                                     onClick={() => openBetConfirmation(ball.val)} 
                                                     className={`relative w-12 h-12 rounded-full flex items-center justify-center font-black text-sm transition-all transform active:scale-90 overflow-hidden ${ball.style}`}
                                                 >
-                                                    <div className="absolute top-0.5 left-1/2 -translate-x-1/2 w-8 h-4 bg-white/25 rounded-full filter blur-[0.5px]"></div>
                                                     <span className="z-10 text-white font-extrabold text-base tracking-tighter shadow-sm">{ball.val}</span>
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
 
-                                    {/* Big / Small Betting Nodes */}
                                     <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] hover:opacity-90 py-2.5 rounded-xl font-black text-xs text-slate-955 shadow-md transition-opacity">BIG</button>
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] hover:opacity-90 py-2.5 rounded-xl font-black text-xs text-slate-950 shadow-md transition-opacity">BIG</button>
                                         <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] hover:opacity-90 py-2.5 text-white rounded-xl font-black text-xs shadow-md transition-opacity">SMALL</button>
                                     </div>
 
-                                    {/* Multiplier Adjustment row - Constrained to 1x option only */}
-                                    <div className="flex bg-[#141721] p-4 rounded-2xl space-y-4 border border-slate-800/80">
-                                        <div className="flex space-x-1">
-                                            {[1].map(val => (
-                                                <button 
-                                                    key={val} 
-                                                    onClick={() => { setMultiplier(val); showToast(`Multiplier set to x${val}`, 'success'); }} 
-                                                    className="px-6 py-2 rounded-xl text-xs font-black bg-rose-600 text-white shadow-sm transition-colors"
-                                                >
-                                                    x{val}
-                                                </button>
-                                            ))}
+                                    {/* Timer & History components */}
+                                    <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden shadow-sm font-sans">
+                                        <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
+                                            <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Ruleset active</span>
+                                            <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
                                         </div>
-                                    </div>
-
-                                    {/* Counters & Timers */}
-                                    {gameType === 'trx_wingo' ? (
-                                        /* AUTHENTIC TRX BOARD UI WITH THE YELLOW GOLD THEME & SPHERES */
-                                        <div className="bg-[#fcc911] p-4 rounded-3xl border border-yellow-500 text-slate-900 relative shadow-md">
-                                            <div className="flex items-center space-x-3 mb-4">
-                                                <div className="bg-[#dfaf0a] rounded-2xl px-3 py-2 text-center text-white flex flex-col justify-center items-center shadow-inner min-w-[85px]">
-                                                    <svg className="w-5 h-5 text-white animate-spin mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                                        <circle cx="12" cy="12" r="10" />
-                                                        <polyline points="12 6 12 12 16 14" />
-                                                    </svg>
-                                                    <span className="text-[9px] font-extrabold block">TrxWinGo</span>
-                                                    <span className="text-[8px] opacity-90">{activeGameTab === '30sec' ? '30 Sec' : activeGameTab === '1min' ? '1 Min' : '2 Min'}</span>
-                                                </div>
-
-                                                <div className="flex-1 flex flex-wrap gap-1.5 justify-end font-sans">
-                                                    <span className="border border-yellow-700 text-yellow-900 px-3 py-1 rounded-full text-[9px] font-extrabold uppercase">Period</span>
-                                                    <button className="bg-white hover:bg-slate-100 text-slate-800 px-2.5 py-1 rounded-full text-[9px] font-bold flex items-center space-x-1 shadow-sm">
-                                                        <span>📜 How to play</span>
-                                                    </button>
-                                                    <button className="bg-white hover:bg-slate-100 text-slate-800 px-2.5 py-1 rounded-full text-[9px] font-bold flex items-center space-x-1 shadow-sm">
-                                                        <span>🔍 Public Chain Query</span>
-                                                    </button>
-                                                </div>
+                                        <div className="grid grid-cols-2 gap-3 pt-3 items-center">
+                                            <div>
+                                                <span className="text-[9px] block text-slate-700">Period ID:</span>
+                                                <span className="text-xs font-bold font-mono text-slate-950">{getPeriodForActiveTab()}</span>
                                             </div>
-
-                                            <div className="flex justify-between items-center py-2.5 border-t border-yellow-600/20">
-                                                <div>
-                                                    <span className="text-[10px] text-yellow-900 font-extrabold block">Active Period</span>
-                                                    <span className="text-sm font-black font-mono tracking-tight text-yellow-955">{getPeriodForActiveTab()}</span>
-                                                </div>
-
-                                                <div className="text-right">
-                                                    <span className="text-[10px] text-yellow-900 font-extrabold block mr-1 font-sans">Draw time</span>
-                                                    <div className="flex justify-end space-x-1 mt-1 font-mono">
-                                                        {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                            <span key={index} className={`px-1.5 py-0.5 text-sm font-black rounded ${char === ':' ? 'bg-transparent text-slate-900 px-0' : 'bg-white text-slate-900 border border-yellow-600/30 shadow-sm'}`}>
-                                                                {char}
-                                                            </span>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="flex justify-between items-center mt-3 bg-[#e8b90c] p-3 rounded-2xl border border-yellow-600/20 font-sans">
-                                                <span className="text-[10px] font-black text-yellow-955 uppercase tracking-wide">Block Hash:</span>
-                                                <div className="flex space-x-1.5">
-                                                    {currentTrxLast5.map((char, index) => (
-                                                        <div 
-                                                            key={index} 
-                                                            className="w-8 h-8 rounded-full bg-gradient-to-b from-[#ff82a3] to-[#ff2b61] text-white border-2 border-white flex items-center justify-center font-black text-xs shadow-[0_4px_10px_rgba(255,43,97,0.3)] animate-pulse font-mono"
-                                                        >
+                                            <div className="text-right">
+                                                <span className="text-[9px] font-bold block text-slate-700 font-sans">Time remaining</span>
+                                                <div className="flex justify-end space-x-1 mt-1 font-mono">
+                                                    {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
+                                                        <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-950 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
                                                             {char}
-                                                        </div>
+                                                        </span>
                                                     ))}
                                                 </div>
                                             </div>
-
-                                            {getTimerForActiveTab() <= 5 && (
-                                                <div className="absolute inset-0 bg-black/90 z-50 flex flex-col items-center justify-center p-2 rounded-3xl backdrop-blur-sm animate-fade-in font-sans">
-                                                    <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
-                                                    <div className="flex space-x-4">
-                                                        <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl">
-                                                            <span className="text-5xl font-black text-rose-500 font-mono">0</span>
-                                                        </div>
-                                                        <div className="w-16 h-22 bg-slate-900 rounded-2xl flex items-center justify-center border border-slate-800 shadow-2xl animate-bounce">
-                                                            <span className="text-5xl font-black text-rose-500 font-mono">{getTimerForActiveTab()}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
-                                    ) : (
-                                        /* CLASSIC WINGO COUNTER BOARD */
-                                        <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-955 p-4 rounded-2xl border border-amber-350 relative overflow-hidden shadow-sm font-sans">
-                                            <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
-                                                <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Wingo ruleset active</span>
-                                                <span className="text-xs font-bold uppercase tracking-wide">Live Counter</span>
-                                            </div>
+                                    </div>
 
-                                            <div className="grid grid-cols-2 gap-3 pt-3 items-center">
-                                                <div>
-                                                    <div className="flex space-x-1 mb-2">
-                                                        {getHistoryForActiveTab().slice(0, 5).map((draw, idx) => (
-                                                            <div key={idx} className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold text-white bg-slate-800 font-mono">
-                                                                {draw.number}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    <span className="text-[9px] block text-slate-700">Period ID:</span>
-                                                    <span className="text-xs font-bold font-mono text-slate-955">{getPeriodForActiveTab()}</span>
-                                                </div>
-
-                                                <div className="text-right">
-                                                    <span className="text-[9px] font-bold block text-slate-700 font-sans">Time remaining</span>
-                                                    <div className="flex justify-end space-x-1 mt-1 font-mono">
-                                                        {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                            <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-slate-955 bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
-                                                                {char}
-                                                            </span>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {getTimerForActiveTab() <= 5 && (
-                                                <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in font-sans">
-                                                    <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
-                                                    <div className="flex space-x-4">
-                                                        <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
-                                                            <span className="text-6xl font-black text-amber-500 font-mono font-sans">0</span>
-                                                        </div>
-                                                        <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
-                                                            <span className="text-6xl font-black text-amber-500 font-mono font-sans">{getTimerForActiveTab()}</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {/* History logs section */}
                                     <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm font-sans">
                                         <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[12px] font-bold font-sans bg-slate-50/50">
-                                            <button onClick={() => setGameSubTab('history')} className={`py-3.5 transition-all ${gameSubTab === 'history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>Game History</button>
-                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3.5 transition-all ${gameSubTab === 'my_history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>My Bets</button>
+                                            <button onClick={() => setGameSubTab('history')} className={`py-3.5 transition-all ${gameSubTab === 'history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-400 hover:text-slate-700'}`}>Game History</button>
+                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3.5 transition-all ${gameSubTab === 'my_history' ? 'border-b-2 border-[#8a2be2] text-[#8a2be2] font-extrabold' : 'text-slate-400 hover:text-slate-700'}`}>My Bets</button>
                                         </div>
 
                                         <div className="p-1">
                                             {gameSubTab === 'history' ? (
-                                                /* CONDITIONAL RENDER: TRX BLOCK CHAIN VERIFICATION DIRECTORY */
-                                                gameType === 'trx_wingo' ? (
-                                                    <div className="overflow-x-auto">
-                                                        <table className="w-full text-[10px] text-left border-collapse font-sans">
-                                                            <thead>
-                                                                <tr className="bg-[#fbc911] text-yellow-955 font-bold border-b border-yellow-500/30">
-                                                                    <th className="py-2.5 px-1.5 text-center font-sans">Period</th>
-                                                                    <th className="py-2.5 px-1 text-center font-sans">Block height</th>
-                                                                    <th className="py-2.5 px-1 text-center font-sans">Block time</th>
-                                                                    <th className="py-2.5 px-1 text-center font-sans">Hash value</th>
-                                                                    <th className="py-2.5 px-1.5 text-center font-sans">Result</th>
+                                                <div className="overflow-x-auto">
+                                                    <table className="w-full text-[11px] text-left border-collapse font-sans">
+                                                        <tbody>
+                                                            {paginatedHistory.map((item, idx) => (
+                                                                <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
+                                                                    <td className="py-3 pl-3 font-mono font-medium text-slate-700 tracking-tight text-[11px] w-[40%]">
+                                                                        {item.period}
+                                                                    </td>
+                                                                    <td className="py-2 text-center w-[15%]">
+                                                                        <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 border border-slate-200/50 text-slate-800 font-extrabold text-[12px] shadow-sm">
+                                                                            {item.number}
+                                                                        </div>
+                                                                    </td>
+                                                                    <td className="py-3 text-center font-semibold text-slate-700 w-[20%]">
+                                                                        {item.size}
+                                                                    </td>
+                                                                    <td className="py-3 pr-3 text-right w-[25%] font-bold text-slate-600">
+                                                                        {item.color}
+                                                                    </td>
                                                                 </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {paginatedHistory.map((item, idx) => {
-                                                                    const rawPeriod = item.period;
-                                                                    const formattedPeriod = rawPeriod.length > 7 
-                                                                        ? `${rawPeriod.substring(0, 3)}**${rawPeriod.slice(-4)}` 
-                                                                        : rawPeriod;
-                                                                    
-                                                                    const ballColorClass = item.number === 0 ? 'bg-gradient-to-r from-red-500 to-violet-600' : 
-                                                                        (item.number === 5 ? 'bg-gradient-to-r from-emerald-500 to-violet-600' :
-                                                                        ([1,3,7,9].includes(item.number) ? 'bg-emerald-500' : 'bg-red-500'));
-
-                                                                    return (
-                                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 font-mono text-[9px] text-slate-700">
-                                                                            <td className="py-2.5 px-1.5 text-center font-semibold text-slate-800">{formattedPeriod}</td>
-                                                                            <td className="py-2.5 px-1 text-center">
-                                                                                <span className="flex items-center justify-center space-x-0.5">
-                                                                                    <span className="text-slate-800 font-mono">{item.blockHeight || '84303440'}</span>
-                                                                                    <span className="w-3.5 h-3.5 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center font-bold text-[8px] scale-90 cursor-help">?</span>
-                                                                                </span>
-                                                                            </td>
-                                                                            <td className="py-2.5 px-1 text-center text-slate-505 font-mono">{item.blockTime || '23:57:54'}</td>
-                                                                            <td className="py-2.5 px-1 text-center font-bold text-slate-500 font-mono">{item.shortHash || '**7d1c'}</td>
-                                                                            <td className="py-2.5 px-1.5 text-center font-sans">
-                                                                                <div className="flex items-center justify-center space-x-1.5 font-sans">
-                                                                                    <span className={`w-4 h-4 rounded-full text-white font-bold text-[8px] flex items-center justify-center shadow-sm ${ballColorClass}`}>
-                                                                                        {item.number}
-                                                                                    </span>
-                                                                                    <span className={`font-black text-[9px] ${item.size === 'Big' ? 'text-amber-500' : 'text-blue-500'}`}>
-                                                                                        {item.size === 'Big' ? 'B' : 'S'}
-                                                                                    </span>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    );
-                                                                })}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                ) : (
-                                                    /* CLASSIC WINGO DIRECTORY LIST - MODIFIED FOR AN EXTREMELY PREMIUM TABULAR LOOK */
-                                                    <div className="overflow-x-auto">
-                                                        <table className="w-full text-[11px] text-left border-collapse font-sans">
-                                                            <tbody>
-                                                                {paginatedHistory.map((item, idx) => {
-                                                                    // Determine proper gradient/color styling
-                                                                    let textColorClass = "text-slate-600";
-                                                                    let displayedColorName = item.color;
-                                                                    if (item.color === 'red') {
-                                                                        textColorClass = "text-rose-500 font-bold";
-                                                                        displayedColorName = "Red";
-                                                                    } else if (item.color === 'green') {
-                                                                        textColorClass = "text-emerald-500 font-bold";
-                                                                        displayedColorName = "Green";
-                                                                    } else if (item.color === 'violet-red') {
-                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-rose-500 bg-clip-text text-transparent font-bold";
-                                                                        displayedColorName = "Violet-Red";
-                                                                    } else if (item.color === 'violet-green') {
-                                                                        textColorClass = "bg-gradient-to-r from-purple-500 to-emerald-505 bg-clip-text text-transparent font-bold";
-                                                                        displayedColorName = "Violet-Green";
-                                                                    }
-
-                                                                    return (
-                                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                                                                            <td className="py-3 pl-3 font-mono font-medium text-slate-700 tracking-tight text-[11px] w-[40%]">
-                                                                                {item.period}
-                                                                            </td>
-                                                                            <td className="py-2 text-center w-[15%]">
-                                                                                <div className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-slate-100 border border-slate-200/50 text-slate-800 font-extrabold text-[12px] shadow-sm">
-                                                                                    {item.number}
-                                                                                </div>
-                                                                            </td>
-                                                                            <td className="py-3 text-center font-semibold text-slate-700 w-[20%]">
-                                                                                {item.size}
-                                                                            </td>
-                                                                            <td className="py-3 pr-3 text-right w-[25%]">
-                                                                                <span className={`${textColorClass} text-[11px]`}>
-                                                                                    {displayedColorName}
-                                                                                </span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    );
-                                                                })}
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                )
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             ) : (
-                                                /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
                                                 <div className="space-y-2 text-[10px] font-sans p-2">
                                                     {myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
                                                         <div className="text-center py-8 text-slate-400">
-                                                            <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
                                                             <span>No bets logged in this mode yet.</span>
                                                         </div>
                                                     ) : (
                                                         myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).map(bet => (
                                                             <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
                                                                 <div>
-                                                                    <span className="block text-slate-400 text-[9px] font-mono font-sans">Period: {bet.period}</span>
+                                                                    <span className="block text-slate-400 text-[9px] font-mono">Period: {bet.period}</span>
                                                                     <span className="font-bold text-slate-800">Prediction: <span className="uppercase text-primary font-black">{bet.selection}</span></span>
-                                                                    <span className="block text-[9px] text-slate-400 font-sans">{bet.timestamp}</span>
+                                                                    <span className="block text-[9px] text-slate-400">{bet.timestamp}</span>
                                                                 </div>
                                                                 <div className="text-right">
                                                                     <span className="block font-black text-slate-700 font-mono">৳{bet.amount}</span>
@@ -2703,25 +2583,22 @@
                                                 </div>
                                             )}
 
-                                            {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM (PREMIUM CIRCULAR BUTTONS) */}
                                             {gameSubTab === 'history' && activeFullHistory.length > 10 && (
                                                 <div className="flex items-center justify-center space-x-6 py-5 border-t border-slate-100 mt-4 font-sans bg-white">
                                                     <button 
                                                         disabled={historyPage === 1}
                                                         onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))}
-                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
                                                     >
                                                         <Icon name="chevron-left" className="w-4 h-4 text-slate-800" strokeWidth={3} />
                                                     </button>
-
                                                     <span className="text-[13px] font-extrabold text-slate-800 font-mono tracking-wider bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-100 shadow-inner">
                                                         {historyPage}/{totalPages}
                                                     </span>
-
                                                     <button 
                                                         disabled={historyPage === totalPages}
                                                         onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))}
-                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
+                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
                                                     >
                                                         <Icon name="chevron-right" className="w-4 h-4 text-slate-800" strokeWidth={3} />
                                                     </button>
@@ -2733,22 +2610,19 @@
                             </div>
                         )}
 
-                        {/* VIEW: GAME PLAY WINDOW (K3 LOTTERY) */}
+                        {/* VIEW: K3 LOTTERY */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-slate-50 justify-between relative overflow-y-auto">
-                                
                                 <div className="px-4 py-3 flex items-center justify-between shadow-md bg-[#12a14b] text-white border-b border-emerald-600/20">
                                     <button onClick={() => setView('home')} className="text-white hover:text-black">
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
-                                    
                                     <div className="flex flex-col items-center">
                                         <div className="w-8 h-8 rounded-lg flex items-center justify-center border shadow bg-[#0a6125] border-white/20 mb-0.5">
                                             <span className="text-sm font-black text-white">K3</span>
                                         </div>
                                         <span className="text-xs font-black tracking-wider uppercase">K3 LOTTERY</span>
                                     </div>
-
                                     <div className="flex space-x-3">
                                         <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="hover:text-[#fccd11]"><Icon name="headphones" className="w-5 h-5" /></a>
                                         <button onClick={() => window.location.reload()}><Icon name="refresh-cw" className="w-5 h-5" /></button>
@@ -2756,8 +2630,6 @@
                                 </div>
 
                                 <div className="flex-1 px-4 py-3 space-y-4 pb-16 relative font-sans">
-                                    
-                                    {/* Game Modes selector */}
                                     <div className="grid grid-cols-3 gap-2 bg-slate-200/60 p-1 rounded-xl">
                                         {[
                                             { id: '30sec', desc: 'K3 30s' },
@@ -2768,9 +2640,7 @@
                                                 key={tab.id}
                                                 onClick={() => { setActiveGameTab(tab.id); setGameSubTab('history'); }}
                                                 className={`py-2 text-[11px] font-extrabold rounded-lg transition-all ${
-                                                    activeGameTab === tab.id 
-                                                        ? 'bg-[#12a14b] text-white shadow' 
-                                                        : 'text-slate-505 hover:text-slate-800'
+                                                    activeGameTab === tab.id ? 'bg-[#12a14b] text-white shadow' : 'text-slate-500 hover:text-slate-800'
                                                 }`}
                                             >
                                                 {tab.desc}
@@ -2778,7 +2648,6 @@
                                         ))}
                                     </div>
 
-                                    {/* Wallet Balance Display Card */}
                                     <div className="rounded-2xl p-4 shadow-sm flex justify-between items-center bg-gradient-to-r from-emerald-700 to-emerald-950 text-white border border-emerald-900">
                                         <div>
                                             <span className="text-[9px] text-slate-300 block font-sans">Wallet Balance</span>
@@ -2787,47 +2656,6 @@
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-lg text-[10px] font-bold font-sans">Deposit Funds</button>
                                     </div>
 
-                                    {/* Counters & Timers */}
-                                    <div className="bg-[#12a14b] text-white p-4 rounded-2xl border border-emerald-500 relative overflow-hidden shadow-sm font-sans">
-                                        <div className="flex justify-between items-center pb-2.5 border-b border-emerald-400/20">
-                                            <span className="bg-emerald-900/40 border border-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold">K3 ruleset active</span>
-                                            <span className="text-xs font-bold uppercase tracking-wide">Live Draw</span>
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-3 pt-3 items-center">
-                                            <div>
-                                                <span className="text-[9px] block text-emerald-100">Period ID:</span>
-                                                <span className="text-xs font-bold font-mono text-white">{getPeriodForActiveTab()}</span>
-                                            </div>
-
-                                            <div className="text-right">
-                                                <span className="text-[9px] font-bold block text-emerald-100 font-sans">Time remaining</span>
-                                                <div className="flex justify-end space-x-1 mt-1 font-mono">
-                                                    {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
-                                                        <span key={index} className={`px-1.5 text-sm font-black rounded ${char === ':' ? 'text-white bg-transparent px-0' : 'bg-slate-950 text-yellow-400'}`}>
-                                                            {char}
-                                                        </span>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {getTimerForActiveTab() <= 5 && (
-                                            <div className="absolute inset-0 bg-black/80 z-50 flex flex-col items-center justify-center p-2 backdrop-blur-sm animate-fade-in font-sans">
-                                                <span className="text-white text-[10px] font-bold uppercase tracking-widest mb-3 animate-pulse">Betting locked. Settle in progress</span>
-                                                <div className="flex space-x-4">
-                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200">
-                                                        <span className="text-6xl font-black text-[#12a14b] font-mono">0</span>
-                                                    </div>
-                                                    <div className="w-20 h-28 bg-white rounded-2xl flex items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-slate-200 animate-bounce">
-                                                        <span className="text-6xl font-black text-[#12a14b] font-mono">{getTimerForActiveTab()}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Dice Display Slots Box */}
                                     <div className="bg-slate-100 rounded-2xl p-4 border border-slate-200">
                                         <div className="flex space-x-3 justify-center items-center py-2 bg-[#0a6125]/10 rounded-xl border border-[#0a6125]/20">
                                             <DiceFace value={activeK3Result.dice ? activeK3Result.dice[0] : 1} size="w-14 h-14" />
@@ -2836,196 +2664,40 @@
                                         </div>
                                     </div>
 
-                                    {/* Total numbers 3 to 18 option grid */}
-                                    <div className="bg-white p-5 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-slate-100">
-                                        <div className="grid grid-cols-4 gap-y-5 gap-x-2">
-                                            {[
-                                                { val: 3, mult: "207.36X", color: "bg-red-500" },
-                                                { val: 4, mult: "69.12X", color: "bg-emerald-500" },
-                                                { val: 5, mult: "34.56X", color: "bg-red-500" },
-                                                { val: 6, mult: "20.74X", color: "bg-emerald-500" },
-                                                { val: 7, mult: "13.83X", color: "bg-red-500" },
-                                                { val: 8, mult: "9.88X", color: "bg-emerald-500" },
-                                                { val: 9, mult: "8.3X", color: "bg-red-500" },
-                                                { val: 10, mult: "7.68X", color: "bg-emerald-500" },
-                                                { val: 11, mult: "7.68X", color: "bg-red-500" },
-                                                { val: 12, mult: "8.3X", color: "bg-emerald-500" },
-                                                { val: 13, mult: "9.88X", color: "bg-red-500" },
-                                                { val: 14, mult: "13.83X", color: "bg-emerald-500" },
-                                                { val: 15, mult: "20.74X", color: "bg-red-500" },
-                                                { val: 16, mult: "34.56X", color: "bg-emerald-500" },
-                                                { val: 17, mult: "69.12X", color: "bg-red-500" },
-                                                { val: 18, mult: "207.36X", color: "bg-emerald-500" }
-                                            ].map(item => (
-                                                <button 
-                                                    key={item.val} 
-                                                    onClick={() => openBetConfirmation(item.val)} 
-                                                    className="flex flex-col items-center justify-center p-1.5 hover:opacity-90 active:scale-95 transition-all"
-                                                >
-                                                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-sm text-white shadow ${item.color}`}>
-                                                        {item.val}
-                                                    </div>
-                                                    <span className="text-[9px] text-slate-400 font-bold mt-1">{item.mult}</span>
-                                                </button>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Big, Small, Even, Odd selection grids */}
                                     <div className="grid grid-cols-4 gap-2">
                                         <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Small 2X</button>
-                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] text-slate-955 hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Big 2X</button>
+                                        <button onClick={() => openBetConfirmation('big')} className="bg-[#e0b50f] text-slate-950 hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Big 2X</button>
                                         <button onClick={() => openBetConfirmation('even')} className="bg-gameGreen text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Even 2X</button>
                                         <button onClick={() => openBetConfirmation('odd')} className="bg-gameRed text-white hover:opacity-90 py-3 rounded-xl font-black text-xs shadow-md transition-opacity">Odd 2X</button>
-                                    </div>
-
-                                    {/* History logs section */}
-                                    <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm font-sans">
-                                        <div className="grid grid-cols-2 border-b border-slate-100 text-center text-[12px] font-bold font-sans bg-slate-50/50">
-                                            <button onClick={() => setGameSubTab('history')} className={`py-3.5 transition-all ${gameSubTab === 'history' ? 'border-b-2 border-[#12a14b] text-[#12a14b] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>Game History</button>
-                                            <button onClick={() => setGameSubTab('my_history')} className={`py-3.5 transition-all ${gameSubTab === 'my_history' ? 'border-b-2 border-[#12a14b] text-[#12a14b] font-extrabold' : 'text-slate-450 hover:text-slate-700'}`}>My Bets</button>
-                                        </div>
-
-                                        <div className="p-1">
-                                            {gameSubTab === 'history' ? (
-                                                <div className="overflow-x-auto">
-                                                    <table className="w-full text-[11px] text-left border-collapse font-sans">
-                                                        <tbody>
-                                                            {paginatedHistory.map((item, idx) => (
-                                                                <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50 transition-colors">
-                                                                    <td className="py-3 pl-3 font-mono font-medium text-slate-700 tracking-tight text-[11px] w-[35%]">
-                                                                        {item.period}
-                                                                    </td>
-                                                                    <td className="py-3 text-center font-bold text-slate-800 w-[15%]">
-                                                                        {item.sum}
-                                                                    </td>
-                                                                    <td className="py-3 text-center font-semibold text-slate-700 w-[15%]">
-                                                                        {item.size}
-                                                                    </td>
-                                                                    <td className="py-3 text-center font-semibold text-slate-700 w-[15%]">
-                                                                        {item.parity}
-                                                                    </td>
-                                                                    <td className="py-3 pr-3 text-right w-[20%]">
-                                                                        <div className="inline-flex space-x-1 justify-end">
-                                                                            <DiceFace value={item.dice ? item.dice[0] : 1} size="w-5 h-5" />
-                                                                            <DiceFace value={item.dice ? item.dice[1] : 1} size="w-5 h-5" />
-                                                                            <DiceFace value={item.dice ? item.dice[2] : 1} size="w-5 h-5" />
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            ))}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            ) : (
-                                                /* USER INDIVIDUAL HISTORICAL TRANSACTIONS */
-                                                <div className="space-y-2 text-[10px] font-sans p-2">
-                                                    {myBets.filter(b => b.gameType === 'k3_lottery' && b.mode === activeGameTab).length === 0 ? (
-                                                        <div className="text-center py-8 text-slate-400">
-                                                            <Icon name="info" className="w-6 h-6 mx-auto mb-1 opacity-50" />
-                                                            <span>No bets logged in this mode yet.</span>
-                                                        </div>
-                                                    ) : (
-                                                        myBets.filter(b => b.gameType === 'k3_lottery' && b.mode === activeGameTab).map(bet => (
-                                                            <div key={bet.id} className="p-2.5 bg-white border border-slate-200/70 rounded-xl flex justify-between items-center">
-                                                                <div>
-                                                                    <span className="block text-slate-400 text-[9px] font-mono font-sans">Period: {bet.period}</span>
-                                                                    <span className="font-bold text-slate-800">Prediction: <span className="uppercase text-primary font-black">{bet.selection}</span></span>
-                                                                    <span className="block text-[9px] text-slate-400 font-sans">{bet.timestamp}</span>
-                                                                </div>
-                                                                <div className="text-right">
-                                                                    <span className="block font-black text-slate-700 font-mono">৳{bet.amount}</span>
-                                                                    <span className={`text-[9px] font-bold uppercase ${
-                                                                        bet.status === 'won' ? 'text-emerald-600' : bet.status === 'lost' ? 'text-red-500' : 'text-amber-500'
-                                                                    }`}>{bet.status}</span>
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    )}
-                                                </div>
-                                            )}
-
-                                            {/* AUTHENTIC YELLOW PAGINATION UI SYSTEM (PREMIUM CIRCULAR BUTTONS) */}
-                                            {gameSubTab === 'history' && activeFullHistory.length > 10 && (
-                                                <div className="flex items-center justify-center space-x-6 py-5 border-t border-slate-100 mt-4 font-sans bg-white">
-                                                    <button 
-                                                        disabled={historyPage === 1}
-                                                        onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))}
-                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
-                                                    >
-                                                        <Icon name="chevron-left" className="w-4 h-4 text-slate-800" strokeWidth={3} />
-                                                    </button>
-
-                                                    <span className="text-[13px] font-extrabold text-slate-800 font-mono tracking-wider bg-slate-50 px-3.5 py-1.5 rounded-xl border border-slate-100 shadow-inner">
-                                                        {historyPage}/{totalPages}
-                                                    </span>
-
-                                                    <button 
-                                                        disabled={historyPage === totalPages}
-                                                        onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))}
-                                                        className="w-9 h-9 rounded-full bg-secondary hover:bg-goldHover disabled:bg-slate-100 disabled:text-slate-350 text-slate-900 flex items-center justify-center shadow-md active:scale-95 transition-all"
-                                                    >
-                                                        <Icon name="chevron-right" className="w-4 h-4 text-slate-800" strokeWidth={3} />
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* VIEW: CHICKEN ROAD 2 PLAY SCREEN */}
+                        {/* VIEW: CHICKEN ROAD 2 */}
                         {view === 'game_chicken' && (
                             <div className="flex-1 flex flex-col bg-[#111622] justify-between relative overflow-y-auto text-white">
-                                {/* Header */}
                                 <div className="px-4 py-3 flex items-center justify-between bg-[#191f2c] border-b border-slate-800 shadow-md flex-shrink-0">
                                     <button onClick={() => setView('home')} className="text-white hover:text-slate-300">
                                         <Icon name="chevron-left" className="w-8 h-8" />
                                     </button>
                                     <div className="flex flex-col items-center">
                                         <span className="text-xs font-black tracking-widest text-[#fccd11] font-mono">CHICKEN ROAD 2</span>
-                                        <span className="text-[9px] text-slate-400">Realistic 3D Crossing Highway</span>
                                     </div>
-                                    <div className="flex space-x-1.5 items-center">
-                                        <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-955/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
-                                            ৳{Number(balance).toFixed(2)}
-                                        </span>
-                                    </div>
+                                    <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
+                                        ৳{Number(balance).toFixed(2)}
+                                    </span>
                                 </div>
 
-                                {/* Main Active 3D Perspective Highway Board */}
                                 <div className="p-4 flex-1 flex flex-col justify-center space-y-4">
-                                    
-                                    <div className="text-center font-semibold text-[10px] uppercase tracking-widest text-slate-400">
-                                        {chickenActive ? 'Game in Progress - Jump lanes safely!' : 'Set Bet & Press Play to Start'}
-                                    </div>
-
-                                    {/* 3D Transform Highway Grid Wrapper */}
                                     <div className="w-full relative py-6 min-h-[190px] border border-slate-800 rounded-3xl bg-[#171c26] overflow-hidden" style={{ perspective: '800px' }}>
-                                        
-                                        {/* Road asphalt with 3D slant */}
                                         <div className="w-full h-full flex transition-all duration-300 transform" style={{ transform: 'rotateX(30deg)', transformOrigin: 'bottom center' }}>
-                                            
-                                            {/* Start Sidewalk grass column */}
                                             <div className="w-14 flex-shrink-0 border-r-4 border-slate-900 bg-emerald-800 flex flex-col justify-center items-center relative">
-                                                <span className="text-[7px] text-emerald-300 uppercase font-black tracking-wider block mb-1">Grass</span>
-                                                {chickenStep === -1 && !chickenCrash && (
-                                                    <span className={`text-3xl transition-all duration-300 transform ${
-                                                        chickenJumping ? '-translate-y-12 scale-125 z-50' : 'translate-y-0 scale-100 z-10'
-                                                    }`}>
-                                                        🐔
-                                                    </span>
-                                                )}
+                                                {chickenStep === -1 && !chickenCrash && <span className="text-3xl">🐔</span>}
                                             </div>
 
-                                            {/* 9 highway vertical lanes */}
                                             {chickenRoad2Multipliers.map((mult, index) => {
                                                 const isActive = chickenStep === index;
-                                                const isPassed = chickenStep > index;
-                                                const isCrashSpot = chickenCrash && chickenStep === index;
-
-                                                // Moving car/truck Y coordinate position relative to track container height
                                                 const carY = carPositions[index];
 
                                                 return (
@@ -3036,166 +2708,45 @@
                                                                 triggerRealJump();
                                                             }
                                                         }}
-                                                        className={`w-14 flex-shrink-0 border-r border-dashed border-slate-600 flex flex-col justify-between items-center py-2 relative transition-colors ${
-                                                            isActive ? 'bg-indigo-950/25' : (index === chickenStep + 1 && chickenActive ? 'bg-slate-800/40 cursor-pointer border border-yellow-500/20' : '')
-                                                        }`}
+                                                        className="w-14 flex-shrink-0 border-r border-dashed border-slate-600 flex flex-col justify-between items-center py-2 relative"
                                                     >
-                                                        {/* Target Multiplier Badge */}
-                                                        <span className={`text-[8px] font-black font-mono px-1 rounded ${
-                                                            isActive ? 'bg-[#fccd11] text-slate-955' : (isPassed ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400')
-                                                        }`}>
-                                                            {mult}x
-                                                        </span>
-
-                                                        {/* Real-time moving vehicle sprite */}
+                                                        <span className="text-[8px] font-black font-mono px-1 rounded bg-slate-800 text-slate-400">{mult}x</span>
                                                         {chickenActive && carY !== undefined && (
-                                                            <div 
-                                                                className="absolute w-8 h-12 bg-yellow-500 rounded-md border border-slate-955 shadow-md flex items-center justify-center transition-all duration-75 text-base"
-                                                                style={{ top: `${carY}px`, left: '50%', transform: 'translateX(-50%)' }}
-                                                            >
-                                                                <div className="absolute top-1 inset-x-1 h-2 bg-slate-800 rounded-sm"></div>
-                                                                <span className="z-10 text-xs">{index % 2 === 0 ? '🚗' : '🚚'}</span>
+                                                            <div className="absolute w-8 h-12 bg-yellow-500 rounded-md border border-slate-950 shadow-md flex items-center justify-center text-xs" style={{ top: `${carY}px` }}>
+                                                                🚗
                                                             </div>
                                                         )}
-
-                                                        {/* Chicken sprite position block */}
                                                         <div className="relative my-4 flex items-center justify-center min-h-[48px]">
-                                                            {isActive && !chickenCrash ? (
-                                                                <span className={`text-3xl filter drop-shadow-md transition-all duration-300 transform ${
-                                                                    chickenJumping ? '-translate-y-12 scale-125 z-50' : 'translate-y-0 scale-100 z-10'
-                                                                }`}>
-                                                                    🐔
-                                                                </span>
-                                                            ) : isCrashSpot ? (
-                                                                <div className="text-3xl z-10 animate-bounce">💥</div>
-                                                            ) : (
-                                                                <div className="w-8 h-8 rounded-full border border-zinc-500/50 flex items-center justify-center bg-zinc-800/40 text-zinc-500">
-                                                                    <span className="text-[8px] font-black">◎</span>
-                                                                </div>
-                                                            )}
+                                                            {isActive && !chickenCrash ? <span className="text-3xl">🐔</span> : (chickenCrash && isActive ? <span className="text-3xl">💥</span> : null)}
                                                         </div>
-
-                                                        {/* Sewer Grate vents cover decoration */}
-                                                        <div className="w-full h-3 opacity-30 bg-yellow-600/30 border-t border-yellow-500/10"></div>
                                                     </div>
                                                 );
                                             })}
                                         </div>
                                     </div>
 
-                                    {/* Crash Alert status */}
-                                    {chickenCrash && (
-                                        <div className="p-3.5 bg-rose-500/10 border border-rose-500/30 rounded-2xl text-center text-rose-505 text-xs font-bold animate-pulse font-sans">
-                                            HIT BY A DYNAMIC VEHICLE ON HIGHWAY! Game Over!
-                                        </div>
-                                    )}
-
-                                    {/* Bottom Settings Panel */}
                                     <div className="bg-[#191f2c] p-4 rounded-2xl space-y-4 border border-slate-800/80">
-                                        
-                                        {/* 1. Set Difficulty selectors */}
-                                        <div>
-                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2 font-sans">Crossing Difficulty:</span>
-                                            <div className="grid grid-cols-4 gap-1.5 bg-[#0f141d] p-1 rounded-xl">
-                                                {['easy', 'medium', 'hard', 'hardcore'].map(diff => (
-                                                    <button 
-                                                        disabled={chickenActive}
-                                                        key={diff} 
-                                                        onClick={() => setChickenDifficulty(diff)}
-                                                        className={`py-2 text-[10px] font-black uppercase rounded-lg transition-all ${
-                                                            chickenDifficulty === diff 
-                                                                ? 'bg-[#fccd11] text-slate-955 font-black shadow shadow-[#fccd11]/20 font-sans' 
-                                                                : 'text-slate-400 hover:text-slate-200 disabled:opacity-40'
-                                                        }`}
-                                                    >
-                                                        {diff}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                        {/* 2. Amount Ajusters & Play triggers */}
-                                        <div className="flex items-center space-x-3">
-                                            {/* MIN/MAX Controls */}
-                                            <div className="flex flex-col space-y-1 font-sans">
-                                                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bet Amount:</span>
-                                                <div className="flex bg-[#0f141d] rounded-xl border border-slate-800 overflow-hidden max-w-[150px]">
-                                                    <button 
-                                                        disabled={chickenActive}
-                                                        onClick={() => setChickenBet(10)} 
-                                                        className="px-3 py-2 text-[10px] font-bold text-slate-300 border-r border-slate-800 bg-slate-900 hover:bg-slate-800"
-                                                    >
-                                                        Min
-                                                    </button>
-                                                    <input 
-                                                        type="number" 
-                                                        disabled={chickenActive}
-                                                        value={chickenBet} 
-                                                        onChange={e => setChickenBet(Math.max(1, parseInt(e.target.value) || 0))} 
-                                                        className="w-16 bg-transparent text-center font-bold text-xs focus:outline-none font-mono"
-                                                    />
-                                                    <button 
-                                                        disabled={chickenActive}
-                                                        onClick={() => setChickenBet(500)} 
-                                                        className="px-3 py-2 text-[10px] font-bold text-slate-300 border-l border-slate-800 bg-slate-900 hover:bg-slate-800"
-                                                    >
-                                                        Max
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Big Game triggers action */}
-                                            <div className="flex-1 flex flex-col justify-end pt-4">
-                                                {!chickenActive ? (
-                                                    <button 
-                                                        onClick={startChickenGame}
-                                                        className="w-full py-3 bg-[#18b660] hover:bg-[#149d4e] active:scale-95 transition-all text-white font-black uppercase text-xs rounded-xl shadow-lg shadow-emerald-950/40 tracking-wider font-sans"
-                                                    >
-                                                        Play Game
-                                                    </button>
-                                                ) : (
-                                                    <div className="grid grid-cols-2 gap-2 w-full font-sans">
-                                                        <button 
-                                                            disabled={chickenJumping}
-                                                            onClick={triggerRealJump}
-                                                            className="py-3 bg-[#fccd11] hover:bg-goldHover text-slate-955 font-black uppercase text-[10px] rounded-xl tracking-wider transition-all disabled:opacity-50"
-                                                        >
-                                                            Jump next
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => handleChickenCashout()}
-                                                            className="py-3 bg-[#e2136e] hover:bg-rose-700 text-white font-black uppercase text-[10px] rounded-xl tracking-wider transition-all"
-                                                        >
-                                                            Cashout
-                                                        </button>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {/* Presets amounts shortcut row */}
-                                        {!chickenActive && (
-                                            <div className="grid grid-cols-4 gap-1.5 pt-1.5 border-t border-slate-800/60 font-mono">
-                                                {[10, 50, 100, 200].map(val => (
-                                                    <button 
-                                                        key={val} 
-                                                        onClick={() => setChickenBet(val)}
-                                                        className="py-1 bg-slate-800/80 hover:bg-slate-700 rounded-lg text-[10px] font-bold text-white"
-                                                    >
-                                                        ৳{val}
-                                                    </button>
-                                                ))}
+                                        {!chickenActive ? (
+                                            <button onClick={startChickenGame} className="w-full py-3 bg-[#18b660] hover:bg-[#149d4e] active:scale-95 transition-all text-white font-black uppercase text-xs rounded-xl shadow-lg font-sans">
+                                                Play Game
+                                            </button>
+                                        ) : (
+                                            <div className="grid grid-cols-2 gap-2 w-full font-sans">
+                                                <button disabled={chickenJumping} onClick={triggerRealJump} className="py-3 bg-[#fccd11] text-slate-950 font-black uppercase text-[10px] rounded-xl tracking-wider">
+                                                    Jump Next
+                                                </button>
+                                                <button onClick={() => handleChickenCashout()} className="py-3 bg-[#e2136e] text-white font-black uppercase text-[10px] rounded-xl tracking-wider">
+                                                    Cashout
+                                                </button>
                                             </div>
                                         )}
-
                                     </div>
                                 </div>
                             </div>
                         )}
-
                     </div>
 
-                    {/* DYNAMIC BET PLACEMENT POPUP SHEET - ALIGNED TO TOP */}
+                    {/* CONFIRM BET MODAL */}
                     {isBetSheetOpen && (
                         <div className="absolute inset-0 bg-slate-900/60 z-[90] flex flex-col justify-start animate-fade-in font-sans">
                             <div className="bg-white rounded-b-[2rem] p-5 space-y-4 max-h-[90%] overflow-y-auto shadow-2xl border-b border-slate-200">
@@ -3203,122 +2754,25 @@
                                     <h3 className="text-xs font-bold text-slate-800 font-sans">Confirm Bet Details</h3>
                                     <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
                                 </div>
-
-                                <div className="p-3 bg-slate-50 rounded-xl flex justify-between text-xs font-sans">
-                                    <div>
-                                        <span className="text-[10px] text-slate-400 block">Target Selection:</span>
-                                        <span className="font-black text-primary uppercase text-sm">{betValue}</span>
-                                    </div>
-                                    <div className="text-right">
-                                        <span className="text-[10px] text-slate-400 block">Round Period:</span>
-                                        <span className="font-bold text-slate-700 font-mono">{getPeriodForActiveTab()}</span>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2 font-sans">
-                                    <span className="text-[10px] font-bold text-slate-400 block">Select Preset Bet Amount:</span>
-                                    <div className="flex flex-wrap gap-1.5">
-                                        {[10, 50, 100, 500, 1000, 5000].map(val => (
-                                            <button 
-                                                type="button" 
-                                                key={val} 
-                                                onClick={() => { setSelectedUnit(val); setCustomBetInput(''); }} 
-                                                className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${selectedUnit === val && !customBetInput ? 'bg-primary text-white border-transparent' : 'bg-white border-slate-200 text-slate-600'}`}
-                                            >
-                                                ৳{val}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    {/* Manual Balance Input box */}
-                                    <div className="mt-2.5">
-                                        <span className="text-[10px] font-bold text-slate-400 block mb-1">Or Enter Custom Amount (৳):</span>
-                                        <input 
-                                            type="number" 
-                                            min="1"
-                                            placeholder="e.g. 250" 
-                                            value={customBetInput} 
-                                            onChange={e => {
-                                                const val = e.target.value;
-                                                setCustomBetInput(val);
-                                                if (val && parseFloat(val) > 0) {
-                                                    setSelectedUnit(parseFloat(val));
-                                                } else {
-                                                    setSelectedUnit(0);
-                                                }
-                                            }} 
-                                            className="w-full bg-slate-50 border border-slate-200 rounded-xl py-2 px-3 text-xs font-bold text-slate-800 focus:outline-none font-mono"
-                                        />
-                                    </div>
-
-                                    {/* Multiplier Adjustment */}
-                                    <div className="flex items-center justify-between pt-1">
-                                        <span className="text-[10px] font-bold text-slate-400">Set Multiplier (Qty):</span>
-                                        <div className="flex items-center space-x-2">
-                                            <button onClick={() => setMultiplier(prev => Math.max(1, prev - 1))} className="w-7 h-7 rounded bg-slate-100 text-slate-600 font-bold">-</button>
-                                            <span className="font-bold text-xs">{multiplier}</span>
-                                            <button onClick={() => setMultiplier(prev => prev + 1)} className="w-7 h-7 rounded bg-slate-100 text-slate-600 font-bold">+</button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div className="flex justify-between items-center pt-2 border-t border-slate-100 font-sans">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block">Total cost:</span>
                                         <span className="text-xl font-black text-emerald-600 font-mono">৳{(selectedUnit * multiplier).toFixed(2)}</span>
                                     </div>
-                                    <button onClick={confirmBetPlacement} className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-955 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
+                                    <button onClick={confirmBetPlacement} className="px-5 py-3 bg-gradient-to-r from-emerald-600 to-green-500 text-slate-950 font-black rounded-xl text-xs uppercase">Confirm Bet</button>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    {/* DYNAMIC RESULT POPUP */}
+                    {/* POPUP RESULT */}
                     {showResultPopup && (
                         <div className="absolute inset-0 bg-black/80 z-[1000] flex flex-col items-center justify-center p-6 animate-fade-in font-sans">
                             <div className="relative w-full max-w-sm bg-gradient-to-b from-[#192130] to-[#0c1017] border border-slate-800 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
-                                
-                                <div className="absolute top-0 inset-x-0 h-40 pointer-events-none opacity-40 bg-[radial-gradient(ellipse_at_top,rgba(252,205,17,0.3),transparent_60%)]"></div>
-                                
-                                {popupType === 'win' ? (
-                                    <>
-                                        <div className="text-amber-400 flex justify-center mb-2 animate-bounce">
-                                            <svg className="w-14 h-14 drop-shadow-[0_0_10px_rgba(252,205,17,0.6)]" fill="currentColor" viewBox="0 0 24 24">
-                                                <path d="M12 2l3 6 6-1-4 5 3 6-8-3-8 3 3-6-4-5 6 1z"/>
-                                            </svg>
-                                        </div>
-                                        <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-505 tracking-wider font-sans">YOU WON!</h2>
-                                        <p className="text-[11px] text-slate-300 mt-1 font-sans">Congratulations! Your prediction was correct.</p>
-                                        
-                                        <div className="mt-6 p-5 bg-gradient-to-b from-[#141c2b] to-[#0c1017] rounded-2xl border border-amber-400/80 shadow-[0_0_20px_rgba(252,205,17,0.15)] animate-zoom-in">
-                                            <span className="text-[9px] uppercase font-bold tracking-widest text-slate-400 block font-sans">Win Amount</span>
-                                            <span className="text-3xl font-black text-[#fccd11] tracking-tight block mt-1 font-mono">৳{Number(popupAmount).toFixed(2)}</span>
-                                        </div>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="text-rose-500 flex justify-center mb-3">
-                                            <svg className="w-12 h-12" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-                                                <circle cx="12" cy="12" r="10" />
-                                                <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
-                                                <line x1="9" y1="9" x2="9.01" y2="9" />
-                                                <line x1="15" y1="9" x2="15.01" y2="9" />
-                                            </svg>
-                                        </div>
-                                        <h2 className="text-2xl font-extrabold text-rose-500 tracking-wider font-sans">TRY AGAIN!</h2>
-                                        <p className="text-[11px] text-slate-300 mt-1 font-sans">Prediction missed. Better luck next round!</p>
-                                        
-                                        <div className="mt-6 p-5 bg-[#141b26] rounded-2xl border border-slate-800 animate-zoom-in">
-                                            <span className="text-[9px] uppercase font-bold tracking-widest text-slate-400 block font-sans">Win Amount</span>
-                                            <span className="text-2xl font-bold text-slate-400 tracking-tight block mt-1 font-mono">৳0.00</span>
-                                        </div>
-                                    </>
-                                )}
-                                <button 
-                                    onClick={() => { setShowResultPopup(false); }} 
-                                    className="mt-6 w-full py-3 bg-gradient-to-r from-yellow-400 to-[#fccd11] hover:to-yellow-300 text-slate-955 font-black rounded-xl text-xs uppercase tracking-wider shadow-all active:scale-95 font-sans"
-                                >
-                                    Close Window
+                                <h2 className="text-3xl font-extrabold text-amber-400 tracking-wider font-sans">{popupType === 'win' ? 'YOU WON!' : 'TRY AGAIN!'}</h2>
+                                <span className="text-3xl font-black text-[#fccd11] tracking-tight block mt-4 font-mono">৳{Number(popupAmount).toFixed(2)}</span>
+                                <button onClick={() => setShowResultPopup(false)} className="mt-6 w-full py-3 bg-yellow-400 text-slate-950 font-black rounded-xl text-xs uppercase">
+                                    Close
                                 </button>
                             </div>
                         </div>
@@ -3327,7 +2781,6 @@
                 </div>
             );
 
-            // Spacing Configured for Top Navigation bar Layout
             function renderSharedNav() {
                 return (
                     <div className="bg-white border-b border-gray-200 py-3 px-6 flex justify-between items-center relative z-20 shadow-[0_2px_10px_rgba(0,0,0,0.03)] flex-shrink-0 font-sans font-semibold">
@@ -3345,7 +2798,7 @@
                         </button>
                         <button onClick={() => { setView('home'); setActiveNav('account'); }} className={`flex flex-col items-center space-y-1 relative ${activeNav === 'account' ? 'text-[#8a2be2]' : 'text-slate-400'}`}>
                             <Icon name="user" className="w-5 h-5" />
-                            {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-505 rounded-full animate-ping"></span>}
+                            {hasPendingWithdraw && <span className="absolute top-0 right-0.5 w-2 h-2 bg-amber-500 rounded-full animate-ping"></span>}
                             <span className="text-[10px] font-bold font-sans">Account</span>
                         </button>
                     </div>
