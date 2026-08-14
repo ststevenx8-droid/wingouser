@@ -25,7 +25,8 @@
                         gameViolet: '#9c27b0',
                         bkashPink: '#e2136e',
                         bkashBlack: '#231f20',
-                        stevenXPurple: '#8a2be2'
+                        stevenXPurple: '#8a2be2',
+                        jiliGold: '#ffcc00'
                     },
                     boxShadow: {
                         'neon-gold': '0 0 15px rgba(252, 205, 17, 0.4)',
@@ -79,7 +80,6 @@
         .glow-pulse {
             animation: pulseGlow 2s infinite ease-in-out;
         }
-        /* Custom 3D text stroke for Bangla Banner */
         .text-3d-bengali {
             color: #ffeb3b;
             text-shadow: 
@@ -97,6 +97,14 @@
                 -1.5px  1.5px 0 #ff007f,
                  1.5px  1.5px 0 #ff007f,
                  0px 3px 8px rgba(0, 0, 0, 0.9);
+        }
+        @keyframes spinReel {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50%); }
+            100% { transform: translateY(0); }
+        }
+        .animate-reel {
+            animation: spinReel 0.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
         }
     </style>
 </head>
@@ -303,7 +311,6 @@
             </svg>
         );
 
-        // --- REAL SX WIN LOGO EMBLEM ---
         const SxWinLogo = () => (
             <div className="flex items-center space-x-1 font-mono">
                 <div className="w-5 h-5 bg-gradient-to-br from-amber-400 to-yellow-600 rounded-md flex items-center justify-center font-black text-[9px] text-black shadow-md">
@@ -313,22 +320,101 @@
             </div>
         );
 
-        // --- REAL COMMERCIAL PROMO CAROUSEL WITH EXACT BANNER GRAPHICS ---
+        // --- 6 JILI GAMES CONFIGURATION WITH REAL ASSETS ---
+        const JILI_GAMES = [
+            {
+                id: 'super_ace',
+                title: 'Super Ace',
+                subtitle: 'SUPER ACE',
+                tag: 'HOT',
+                category: 'slots',
+                bgGradient: 'from-[#0e4b25] via-[#157a3d] to-[#0a381b]',
+                cardBg: 'bg-gradient-to-b from-[#18b660]/30 to-[#064e26]',
+                icon: '👑',
+                extraIcon: '🃏',
+                accentColor: '#18b660',
+                type: 'slot'
+            },
+            {
+                id: 'go_rush',
+                title: 'Go Rush',
+                subtitle: 'GO RUSH',
+                tag: 'CRASH',
+                category: 'crash',
+                bgGradient: 'from-[#172347] via-[#203673] to-[#0f1730]',
+                cardBg: 'bg-gradient-to-b from-blue-600/30 to-indigo-950',
+                icon: '🚀',
+                extraIcon: '💥',
+                accentColor: '#3b82f6',
+                type: 'crash'
+            },
+            {
+                id: '7up_7down',
+                title: '7up 7down',
+                subtitle: '7UP 7DOWN',
+                tag: 'EXTRA PAY',
+                category: 'lottery',
+                bgGradient: 'from-[#11243f] via-[#1a3a69] to-[#0c1626]',
+                cardBg: 'bg-gradient-to-b from-sky-500/30 to-slate-900',
+                icon: '🎲',
+                extraIcon: '✨',
+                accentColor: '#0ea5e9',
+                type: '7up'
+            },
+            {
+                id: 'fortune_gems',
+                title: 'Fortune Gems',
+                subtitle: 'FORTUNE GEMS',
+                tag: 'POPULAR',
+                category: 'slots',
+                bgGradient: 'from-[#613608] via-[#a35e12] to-[#452304]',
+                cardBg: 'bg-gradient-to-b from-amber-600/30 to-yellow-950',
+                icon: '🗿',
+                extraIcon: '💎',
+                accentColor: '#f59e0b',
+                type: 'slot'
+            },
+            {
+                id: 'money_coming',
+                title: 'Money Coming',
+                subtitle: 'MONEY COMING',
+                tag: 'BIG WIN',
+                category: 'slots',
+                bgGradient: 'from-[#541212] via-[#8f1e1e] to-[#360a0a]',
+                cardBg: 'bg-gradient-to-b from-red-600/30 to-rose-950',
+                icon: '💵',
+                extraIcon: '💰',
+                accentColor: '#ef4444',
+                type: 'slot'
+            },
+            {
+                id: 'super_ace_deluxe',
+                title: 'Super Ace Deluxe',
+                subtitle: 'SUPER ACE DELUXE',
+                tag: 'DELUXE',
+                category: 'slots',
+                bgGradient: 'from-[#0d4722] via-[#168a44] to-[#083017]',
+                cardBg: 'bg-gradient-to-b from-emerald-500/30 to-green-950',
+                icon: '👑',
+                extraIcon: '⭐',
+                accentColor: '#10b981',
+                type: 'slot'
+            }
+        ];
+
+        // --- REAL COMMERCIAL PROMO CAROUSEL ---
         const PromoBannerCarousel = ({ onOpenDetail }) => {
             const [currentSlide, setCurrentSlide] = useState(0);
 
             const banners = [
-                // 1. BANNER 1: শীর্ষস্থানীয় প্ল্যাটফর্মে আপনাকে স্বাগতম
                 {
                     id: 'welcome_bangla',
                     title: 'শীর্ষস্থানীয় প্ল্যাটফর্মে স্বাগতম',
                     subtitle: 'Play on the #1 Official Certified Gaming Platform',
                     render: () => (
                         <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#0c0d12] via-[#1c1811] to-[#3a2908] p-3 text-white relative overflow-hidden border border-amber-500/40 flex flex-col justify-between shadow-xl">
-                            {/* Dotted dark mesh background */}
                             <div className="absolute inset-0 bg-[radial-gradient(#fccd11_1px,transparent_1px)] [background-size:12px_12px] opacity-15 pointer-events-none"></div>
 
-                            {/* SX WIN Logo top right */}
                             <div className="flex justify-between items-start z-10">
                                 <div className="bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-[8px] px-2.5 py-0.5 rounded-full uppercase shadow">
                                     Official #1 Platform
@@ -336,7 +422,6 @@
                                 <SxWinLogo />
                             </div>
 
-                            {/* Center Bengali 3D Glowing Text */}
                             <div className="z-10 my-auto text-left pl-1">
                                 <h2 className="text-2xl font-black text-3d-bengali tracking-tight leading-tight drop-shadow-lg">
                                     শীর্ষস্থানীয় প্ল্যাটফর্মে
@@ -346,13 +431,11 @@
                                 </h2>
                             </div>
 
-                            {/* Bottom tag */}
                             <div className="z-10 flex items-center space-x-2 text-[8.5px] font-bold text-amber-200">
                                 <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">🏆 100% Trusted</span>
                                 <span className="bg-black/50 px-2 py-0.5 rounded border border-amber-400/30">⚡ Instant bKash</span>
                             </div>
 
-                            {/* Left Golden Trophy & Gold Coins Graphic */}
                             <div className="absolute -left-3 -bottom-2 w-28 h-28 pointer-events-none flex items-center justify-center">
                                 <div className="text-6xl drop-shadow-[0_4px_12px_rgba(252,205,17,0.7)] animate-bounce">
                                     🏆
@@ -360,7 +443,6 @@
                                 <div className="absolute top-1 right-2 text-2xl animate-pulse">🪙</div>
                             </div>
 
-                            {/* Right Casino Dealer Woman & Roulette Table Graphic */}
                             <div className="absolute right-0 top-3 bottom-0 w-36 pointer-events-none flex items-end justify-center">
                                 <div className="relative z-10 w-24 h-40 rounded-t-full overflow-hidden border-t-2 border-l-2 border-amber-400/60 shadow-2xl bg-gradient-to-b from-amber-900/60 to-transparent flex items-center justify-center">
                                     <img 
@@ -369,7 +451,6 @@
                                         className="w-full h-full object-cover opacity-90 scale-110"
                                     />
                                 </div>
-                                {/* Golden Cards in hand */}
                                 <div className="absolute top-8 right-1 z-20 text-2xl drop-shadow-md rotate-12">
                                     🃏
                                 </div>
@@ -377,18 +458,14 @@
                         </div>
                     )
                 },
-
-                // 2. BANNER 2: MEMBER ACTIVITIES - WINNING STREAK
                 {
                     id: 'winning_streak',
                     title: 'MEMBER ACTIVITIES - WINNING STREAK',
                     subtitle: 'Earn More with Every Win • Climb the Leaderboard • Glory Awaits',
                     render: () => (
                         <div className="w-full h-48 rounded-2xl bg-gradient-to-r from-[#120f06] via-[#241a06] to-[#402a04] p-3 text-white relative overflow-hidden border border-yellow-500/40 flex flex-col justify-between shadow-xl">
-                            {/* Dotted texture */}
                             <div className="absolute inset-0 bg-[radial-gradient(#fccd11_1px,transparent_1px)] [background-size:12px_12px] opacity-15 pointer-events-none"></div>
 
-                            {/* Top line with Neon MEMBER ACTIVITIES and SX WIN */}
                             <div className="flex justify-between items-center z-10">
                                 <h2 className="text-xl font-black text-3d-neon tracking-wider uppercase drop-shadow-md">
                                     MEMBER ACTIVITIES
@@ -396,7 +473,6 @@
                                 <SxWinLogo />
                             </div>
 
-                            {/* Center Dark Inner Frame for WINNING STREAK */}
                             <div className="z-10 bg-black/65 backdrop-blur-md p-2.5 rounded-xl border border-white/20 max-w-[250px] shadow-lg space-y-0.5">
                                 <div className="text-base font-black text-amber-400 tracking-wide uppercase font-sans drop-shadow-sm">
                                     WINNING STREAK
@@ -409,17 +485,14 @@
                                 </div>
                             </div>
 
-                            {/* Bottom Note */}
                             <div className="z-10 text-[8px] text-amber-200/90 font-semibold">
                                 Daily Jackpot Pool: ৳500,000.00
                             </div>
 
-                            {/* Left Slot Machine Graphic */}
                             <div className="absolute left-1 bottom-1 w-16 h-16 pointer-events-none opacity-40 text-4xl">
                                 🎰
                             </div>
 
-                            {/* Right Casino Lady in Golden Dress */}
                             <div className="absolute right-0 top-2 bottom-0 w-36 pointer-events-none flex items-end justify-center">
                                 <div className="relative z-10 w-24 h-40 rounded-t-full overflow-hidden border-t-2 border-amber-400 shadow-2xl bg-gradient-to-b from-amber-900/60 to-transparent flex items-center justify-center">
                                     <img 
@@ -435,8 +508,6 @@
                         </div>
                     )
                 },
-
-                // 3. BANNER 3: AVIATOR BONUS
                 {
                     id: 'aviator',
                     title: 'AVIATOR BONUS',
@@ -491,11 +562,9 @@
 
             return (
                 <div className="space-y-3 font-sans">
-                    {/* Carousel Frame */}
                     <div className="relative overflow-hidden cursor-pointer" onClick={() => onOpenDetail(banners[currentSlide])}>
                         {banners[currentSlide].render()}
                         
-                        {/* Slide Indicator Dots */}
                         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
                             {banners.map((_, idx) => (
                                 <button
@@ -509,7 +578,6 @@
                         </div>
                     </div>
 
-                    {/* Announcement Marquee Bar with Speaker Icon & Yellow Detail Button */}
                     <div className="bg-white rounded-2xl px-3 py-2 border border-slate-200/80 shadow-sm flex items-center justify-between space-x-2">
                         <div className="text-amber-500 flex-shrink-0">
                             <Icon name="volume-2" className="w-5 h-5 text-amber-500" />
@@ -517,7 +585,7 @@
                         
                         <div className="flex-1 overflow-hidden relative py-0.5">
                             <span className="animate-marquee text-xs font-bold text-slate-700 font-sans">
-                                📣 Welcome to STEVEN WIN! Join our Official Telegram for daily redeem codes, fast bKash deposits & 24/7 withdrawals. Play Wingo, TRX Hash & K3 Lottery!
+                                📣 Welcome to STEVEN WIN! Official JILI games, Super Ace, Fortune Gems, Go Rush & 7Up 7Down are now live with 100% instant bKash cashback!
                             </span>
                         </div>
 
@@ -532,7 +600,7 @@
             );
         };
 
-        // --- REAL LIVE WINNING INFORMATION FEED COMPONENT ---
+        // --- REAL LIVE WINNING INFORMATION FEED ---
         const AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=120&auto=format&fit=crop&q=80",
@@ -545,17 +613,17 @@
 
         const RANDOM_NAMES = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK", "NMB", "PLO"];
         const GAME_TYPES = [
-            { name: "365 GAMES", color: "bg-[#147a38]", sub: "CASINO" },
-            { name: "5D LOTTERY", color: "bg-[#0c7a3d]", sub: "LOTTERY" },
-            { name: "WINGO 30S", color: "bg-[#1b8a43]", sub: "COLOR" },
-            { name: "TRX HASH", color: "bg-[#0b5f2c]", sub: "TRON" }
+            { name: "SUPER ACE", color: "bg-[#147a38]", sub: "JILI" },
+            { name: "FORTUNE GEMS", color: "bg-[#8f4f09]", sub: "JILI" },
+            { name: "GO RUSH", color: "bg-[#1d3557]", sub: "CRASH" },
+            { name: "WINGO 30S", color: "bg-[#1b8a43]", sub: "COLOR" }
         ];
 
         const generateRandomWinner = () => {
             const code = RANDOM_NAMES[Math.floor(Math.random() * RANDOM_NAMES.length)];
             const avatar = AVATARS[Math.floor(Math.random() * AVATARS.length)];
             const game = GAME_TYPES[Math.floor(Math.random() * GAME_TYPES.length)];
-            const amount = (Math.random() * (280 - 40) + 40).toFixed(2);
+            const amount = (Math.random() * (350 - 60) + 60).toFixed(2);
             return {
                 id: Math.random().toString(36).substr(2, 9),
                 username: `Mem***${code}`,
@@ -569,7 +637,7 @@
             { id: '1', username: 'Mem***GML', avatar: AVATARS[0], game: GAME_TYPES[0], amount: '118.20' },
             { id: '2', username: 'Mem***ZUQ', avatar: AVATARS[1], game: GAME_TYPES[0], amount: '70.92' },
             { id: '3', username: 'Mem***PSY', avatar: AVATARS[2], game: GAME_TYPES[1], amount: '176.40' },
-            { id: '4', username: 'Mem***XSI', avatar: AVATARS[3], game: GAME_TYPES[1], amount: '88.20' },
+            { id: '4', username: 'Mem***XSI', avatar: AVATARS[3], game: GAME_TYPES[2], amount: '88.20' },
             { id: '5', username: 'Mem***ORN', avatar: AVATARS[4], game: GAME_TYPES[1], amount: '88.20' }
         ];
 
@@ -621,7 +689,7 @@
                                             {item.game.name}
                                         </span>
                                         <div className="mt-0.5 flex space-x-0.5 items-center justify-center">
-                                            <div className="w-3.5 h-3.5 rounded-full bg-red-500/90 text-[6px] text-white flex items-center justify-center font-bold">5D</div>
+                                            <div className="w-3.5 h-3.5 rounded-full bg-red-500/90 text-[6px] text-white flex items-center justify-center font-bold">JILI</div>
                                             <div className="w-3.5 h-3.5 rounded-full bg-yellow-300 text-[6px] text-slate-900 flex items-center justify-center font-black">★</div>
                                         </div>
                                     </div>
@@ -791,7 +859,28 @@
             const [historyPage, setHistoryPage] = useState(1);
             const [homeCategory, setHomeCategory] = useState('all');
 
-            // Detail Modal State for Promo Banners
+            // Active JILI game object
+            const [activeJiliGame, setActiveJiliGame] = useState(null);
+
+            // JILI Real Slot Engine States
+            const [slotBet, setSlotBet] = useState(20);
+            const [slotSpinning, setSlotSpinning] = useState(false);
+            const [slotReels, setSlotReels] = useState(['👑', '🃏', '👑']);
+            const [slotWinAmount, setSlotWinAmount] = useState(0);
+
+            // JILI 7Up 7Down Engine States
+            const [diceSelection, setDiceSelection] = useState(null);
+            const [diceBetAmount, setDiceBetAmount] = useState(50);
+            const [diceRolling, setDiceRolling] = useState(false);
+            const [diceValues, setDiceValues] = useState([3, 4]);
+
+            // JILI Go Rush (Rocket Crash) Engine States
+            const [rocketActive, setRocketActive] = useState(false);
+            const [rocketMultiplier, setRocketMultiplier] = useState(1.00);
+            const [rocketCrashed, setRocketCrashed] = useState(false);
+            const [rocketBet, setRocketBet] = useState(50);
+
+            // Promo Banner Detail Modal
             const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
 
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
@@ -934,6 +1023,169 @@
             };
 
             const generateSTXId = () => 'STX-ID-' + Math.floor(1000 + Math.random() * 9000);
+
+            // --- JILI SLOT MACHINE SPIN HANDLER ---
+            const spinSlotMachine = () => {
+                if (slotSpinning) return;
+                if (balanceRef.current < slotBet) {
+                    showToast('Insufficient balance for spin!', 'error');
+                    return;
+                }
+
+                const newBal = balanceRef.current - slotBet;
+                setBalance(newBal);
+
+                if (currentUserRef.current) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({ balance: newBal });
+                }
+
+                setSlotSpinning(true);
+                playCountdownBeep(false);
+
+                // Slot symbols palette
+                const symbols = activeJiliGame?.id === 'fortune_gems' 
+                    ? ['🗿', '💎', '👑', '7️⃣', '🔔']
+                    : (activeJiliGame?.id === 'money_coming' ? ['💵', '💰', '7️⃣', '⭐', '🪙'] : ['👑', '🃏', '💎', '♠️', '7️⃣']);
+
+                setTimeout(() => {
+                    const r1 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const r2 = symbols[Math.floor(Math.random() * symbols.length)];
+                    const r3 = symbols[Math.floor(Math.random() * symbols.length)];
+                    setSlotReels([r1, r2, r3]);
+                    setSlotSpinning(false);
+
+                    let winMultiplier = 0;
+                    if (r1 === r2 && r2 === r3) {
+                        winMultiplier = 10; // 3 of a kind: 10X
+                    } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                        winMultiplier = 2; // 2 of a kind: 2X
+                    }
+
+                    if (winMultiplier > 0) {
+                        const winTotal = slotBet * winMultiplier;
+                        const finalBal = newBal + winTotal;
+                        setBalance(finalBal);
+                        setSlotWinAmount(winTotal);
+                        setPopupAmount(winTotal);
+                        setPopupType('win');
+                        setShowResultPopup(true);
+
+                        if (currentUserRef.current) {
+                            const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                            db.ref(dbPath).update({ balance: finalBal });
+                        }
+                    }
+                }, 1200);
+            };
+
+            // --- JILI 7UP 7DOWN HANDLER ---
+            const roll7UpDice = () => {
+                if (diceRolling || !diceSelection) {
+                    showToast('Please select 7 Down, Lucky 7, or 7 Up!', 'error');
+                    return;
+                }
+                if (balanceRef.current < diceBetAmount) {
+                    showToast('Insufficient balance!', 'error');
+                    return;
+                }
+
+                const newBal = balanceRef.current - diceBetAmount;
+                setBalance(newBal);
+
+                if (currentUserRef.current) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({ balance: newBal });
+                }
+
+                setDiceRolling(true);
+                playCountdownBeep(false);
+
+                setTimeout(() => {
+                    const d1 = Math.floor(Math.random() * 6) + 1;
+                    const d2 = Math.floor(Math.random() * 6) + 1;
+                    const sum = d1 + d2;
+                    setDiceValues([d1, d2]);
+                    setDiceRolling(false);
+
+                    let won = false;
+                    let mult = 0;
+                    if (diceSelection === 'down' && sum < 7) { won = true; mult = 2; }
+                    else if (diceSelection === 'lucky7' && sum === 7) { won = true; mult = 5; }
+                    else if (diceSelection === 'up' && sum > 7) { won = true; mult = 2; }
+
+                    if (won) {
+                        const winTotal = diceBetAmount * mult;
+                        const finalBal = newBal + winTotal;
+                        setBalance(finalBal);
+                        setPopupAmount(winTotal);
+                        setPopupType('win');
+                        setShowResultPopup(true);
+
+                        if (currentUserRef.current) {
+                            const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                            db.ref(dbPath).update({ balance: finalBal });
+                        }
+                    } else {
+                        setPopupAmount(0);
+                        setPopupType('lose');
+                        setShowResultPopup(true);
+                    }
+                }, 1100);
+            };
+
+            // --- JILI GO RUSH CRASH HANDLER ---
+            const startGoRushGame = () => {
+                if (rocketActive) return;
+                if (balanceRef.current < rocketBet) {
+                    showToast('Insufficient balance!', 'error');
+                    return;
+                }
+
+                const newBal = balanceRef.current - rocketBet;
+                setBalance(newBal);
+
+                if (currentUserRef.current) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({ balance: newBal });
+                }
+
+                setRocketActive(true);
+                setRocketCrashed(false);
+                setRocketMultiplier(1.00);
+
+                const crashPoint = (Math.random() * 4 + 1.15).toFixed(2);
+                let current = 1.00;
+
+                const timer = setInterval(() => {
+                    current = parseFloat((current + 0.05).toFixed(2));
+                    setRocketMultiplier(current);
+
+                    if (current >= crashPoint) {
+                        clearInterval(timer);
+                        setRocketCrashed(true);
+                        setRocketActive(false);
+                        playCountdownBeep(true);
+                    }
+                }, 100);
+            };
+
+            const cashoutGoRush = () => {
+                if (!rocketActive || rocketCrashed) return;
+                const winTotal = parseFloat((rocketBet * rocketMultiplier).toFixed(2));
+                const finalBal = balanceRef.current + winTotal;
+                setBalance(finalBal);
+                setRocketActive(false);
+
+                if (currentUserRef.current) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
+                    db.ref(dbPath).update({ balance: finalBal });
+                }
+
+                setPopupAmount(winTotal);
+                setPopupType('win');
+                setShowResultPopup(true);
+            };
 
             const startChickenGame = () => {
                 if (chickenActive) return;
@@ -1369,7 +1621,7 @@
                     processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
                     setPeriodK31m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistoryK32m(prev => [newResultK3, ...prev]);
+                    setDrawHistory2m(prev => [newResultK3, ...prev]);
                     processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
                     setPeriodK32m(prev => incrementPeriodString(prev));
                 }
@@ -1968,7 +2220,7 @@
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
                                             
-                                            {/* 1. TOP PROMOTIONAL REAL ADS CAROUSEL + SPEAKER ANNOUNCEMENT BAR */}
+                                            {/* 1. TOP PROMOTIONAL REAL ADS CAROUSEL */}
                                             <PromoBannerCarousel onOpenDetail={(bannerData) => {
                                                 setPromoModal({ isOpen: true, data: bannerData });
                                             }} />
@@ -1977,9 +2229,9 @@
                                             <div className="flex space-x-2 overflow-x-auto py-1 font-sans">
                                                 {[
                                                     { id: 'all', label: '🔥 All Games' },
+                                                    { id: 'jili', label: '🎰 JILI Slots' },
                                                     { id: 'lottery', label: '🎲 Lottery' },
-                                                    { id: 'original', label: '🚀 Original' },
-                                                    { id: 'slots', label: '🎰 Slots' }
+                                                    { id: 'crash', label: '🚀 Crash & Mini' }
                                                 ].map(cat => (
                                                     <button
                                                         key={cat.id}
@@ -1995,97 +2247,124 @@
                                                 ))}
                                             </div>
 
-                                            {/* 3. GAME CARDS */}
-                                            {/* Game 1: Wingo */}
-                                            <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Classic Live</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">WINGO 30s/1m/2m</span>
-                                                </div>
-
-                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    <div className="absolute -top-1 right-2 w-14 h-14 rounded-full bg-gradient-to-br from-red-400 via-red-500 to-red-600 border border-white/20 shadow-lg flex items-center justify-center">
-                                                        <span className="text-white text-2xl font-black tracking-tighter drop-shadow-md">9</span>
+                                            {/* 3. JILI SLOTS & POPULAR GAMES 6-GRID */}
+                                            {(homeCategory === 'all' || homeCategory === 'jili' || homeCategory === 'crash') && (
+                                                <div className="space-y-2">
+                                                    <div className="flex justify-between items-center px-1">
+                                                        <div className="flex items-center space-x-1.5">
+                                                            <span className="text-amber-500 font-black text-sm">JILI</span>
+                                                            <span className="text-xs font-black text-slate-800 tracking-wide">Popular Games</span>
+                                                        </div>
+                                                        <span className="text-[10px] text-slate-400 font-bold">Official Certified</span>
                                                     </div>
-                                                    <div className="absolute bottom-2 right-1 w-11 h-11 rounded-full bg-gradient-to-br from-violet-400 via-violet-500 to-indigo-600 border border-white/20 shadow-lg flex items-center justify-center">
-                                                        <span className="text-white text-xl font-black tracking-tighter drop-shadow-md">0</span>
-                                                    </div>
-                                                    <div className="absolute bottom-4 left-2 w-10 h-10 rounded-full bg-gradient-to-br from-teal-300 via-emerald-400 to-emerald-500 border border-white/20 shadow-lg flex items-center justify-center">
-                                                        <span className="text-white text-lg font-black tracking-tighter drop-shadow-md">4</span>
-                                                    </div>
-                                                </div>
 
-                                                <div className="z-10 mt-auto">
-                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Wingo</h2>
-                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Classic Color Prediction Game</span>
-                                                </div>
-                                            </div>
+                                                    <div className="grid grid-cols-3 gap-2.5 font-sans">
+                                                        {JILI_GAMES.map((game) => (
+                                                            <div 
+                                                                key={game.id}
+                                                                onClick={() => {
+                                                                    setActiveJiliGame(game);
+                                                                    if (game.type === 'slot') setView('game_slot');
+                                                                    else if (game.type === '7up') setView('game_7up');
+                                                                    else if (game.type === 'crash') setView('game_gorush');
+                                                                }}
+                                                                className={`relative rounded-2xl bg-gradient-to-b ${game.bgGradient} p-2 flex flex-col justify-between items-center h-36 border border-white/10 shadow-md cursor-pointer transform active:scale-95 transition-all overflow-hidden`}
+                                                            >
+                                                                {/* Golden JILI Logo in top right */}
+                                                                <div className="absolute top-1.5 right-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[7.5px] px-1.5 py-0.2 rounded font-mono shadow">
+                                                                    JILI
+                                                                </div>
 
-                                            {/* Game 2: TRX Wingo */}
-                                            <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">TRX Hash Live</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">TRON Block</span>
-                                                </div>
+                                                                {/* Tag badge top left */}
+                                                                <div className="self-start text-[6.5px] font-black uppercase tracking-wider text-white/80 bg-black/40 px-1.5 py-0.5 rounded-full">
+                                                                    {game.tag}
+                                                                </div>
 
-                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    <div className="relative z-10 w-12 h-14 bg-gradient-to-b from-red-500 to-red-800 shadow-lg" style={{ clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)' }}></div>
-                                                    <div className="absolute bottom-2 -right-1 w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">T</div>
-                                                    <div className="absolute bottom-2 left-0 w-7 h-7 rounded-full bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center font-black text-white text-xs border border-white/25 shadow-md">R</div>
-                                                </div>
+                                                                {/* Center 3D Themed Mascot/Icon */}
+                                                                <div className="my-auto relative flex items-center justify-center">
+                                                                    <span className="text-3xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] animate-pulse">
+                                                                        {game.icon}
+                                                                    </span>
+                                                                    <span className="absolute -bottom-1 -right-2 text-sm drop-shadow">
+                                                                        {game.extraIcon}
+                                                                    </span>
+                                                                </div>
 
-                                                <div className="z-10 mt-auto">
-                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">TRX Wingo</h2>
-                                                    <span className="text-[10px] text-emerald-200 block mt-0.5 font-sans">Hash Block Color Prediction</span>
-                                                </div>
-                                            </div>
-
-                                            {/* Game 3: K3 Lottery */}
-                                            <div onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-[#12a14b] to-[#0a6125] shadow-md border border-emerald-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">K3 Dice Live</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">K3 30s/1m/2m</span>
-                                                </div>
-
-                                                <div className="absolute right-6 top-8 w-28 h-24 pointer-events-none flex items-center justify-center space-x-1">
-                                                    <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-md flex items-center justify-center rotate-12">
-                                                        <span className="text-xl text-red-500">⚂</span>
-                                                    </div>
-                                                    <div className="w-10 h-10 rounded-lg bg-white border border-slate-200 shadow-md flex items-center justify-center -rotate-12">
-                                                        <span className="text-xl text-red-500">⚄</span>
+                                                                {/* Bottom Title Frame */}
+                                                                <div className="w-full text-center bg-black/50 backdrop-blur-xs py-1 rounded-xl border border-white/10">
+                                                                    <span className="text-[9px] font-black text-white uppercase tracking-tight block truncate px-1">
+                                                                        {game.subtitle}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        ))}
                                                     </div>
                                                 </div>
+                                            )}
 
-                                                <div className="z-10 mt-auto">
-                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">K3 Lottery</h2>
-                                                    <span className="text-[10px] text-emerald-200 block mt-0.5">Premium 3 Dice Betting Game</span>
-                                                </div>
-                                            </div>
+                                            {/* 4. LOTTERY & CLASSIC GAME CARDS */}
+                                            {(homeCategory === 'all' || homeCategory === 'lottery') && (
+                                                <div className="space-y-3 pt-1">
+                                                    <div className="flex items-center space-x-1.5 px-1">
+                                                        <span className="text-emerald-600 font-black text-sm">🎲</span>
+                                                        <span className="text-xs font-black text-slate-800 tracking-wide">Lottery & Color Games</span>
+                                                    </div>
 
-                                            {/* Game 4: Chicken Road 2 */}
-                                            <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-44 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
-                                                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(circle_at_top_right,white,transparent_50%)]"></div>
-                                                <div className="flex justify-between items-start z-10">
-                                                    <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
-                                                    <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono font-sans">CHICKEN ROAD 2</span>
-                                                </div>
+                                                    {/* Game 1: Wingo */}
+                                                    <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                        <div className="flex justify-between items-start z-10">
+                                                            <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Classic Live</span>
+                                                            <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">WINGO 30s/1m/2m</span>
+                                                        </div>
 
-                                                <div className="absolute right-6 top-6 w-28 h-24 pointer-events-none flex items-center justify-center">
-                                                    <div className="relative w-12 h-16 bg-yellow-500 rounded-md border-2 border-slate-900 shadow-md flex items-center justify-center">
-                                                        <span className="text-base text-slate-800 font-extrabold z-10">🚚</span>
+                                                        <div className="z-10 mt-auto">
+                                                            <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Wingo</h2>
+                                                            <span className="text-[10px] text-emerald-200 block mt-0.5">Classic Color Prediction Game</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Game 2: TRX Wingo */}
+                                                    <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                        <div className="flex justify-between items-start z-10">
+                                                            <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">TRX Hash Live</span>
+                                                            <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">TRON Block</span>
+                                                        </div>
+
+                                                        <div className="z-10 mt-auto">
+                                                            <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">TRX Wingo</h2>
+                                                            <span className="text-[10px] text-emerald-200 block mt-0.5 font-sans">Hash Block Color Prediction</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Game 3: K3 Lottery */}
+                                                    <div onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#12a14b] to-[#0a6125] shadow-md border border-emerald-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                        <div className="flex justify-between items-start z-10">
+                                                            <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">K3 Dice Live</span>
+                                                            <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono">K3 30s/1m/2m</span>
+                                                        </div>
+
+                                                        <div className="z-10 mt-auto">
+                                                            <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">K3 Lottery</h2>
+                                                            <span className="text-[10px] text-emerald-200 block mt-0.5">Premium 3 Dice Betting Game</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Game 4: Chicken Road 2 */}
+                                                    <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
+                                                        <div className="flex justify-between items-start z-10">
+                                                            <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
+                                                            <span className="text-[10px] font-black text-[#fccd11] tracking-wide font-mono font-sans">CHICKEN ROAD 2</span>
+                                                        </div>
+
+                                                        <div className="z-10 mt-auto">
+                                                            <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road 2</h2>
+                                                            <span className="text-[10px] text-emerald-200 block mt-0.5 font-sans">Highway Traffic Survival Game</span>
+                                                        </div>
                                                     </div>
                                                 </div>
+                                            )}
 
-                                                <div className="z-10 mt-auto">
-                                                    <h2 className="text-xl font-black text-white tracking-widest font-sans uppercase">Chicken Road 2</h2>
-                                                    <span className="text-[10px] text-emerald-200 block mt-0.5 font-sans">Highway Traffic Survival Game</span>
-                                                </div>
-                                            </div>
-
-                                            {/* 4. REAL LIVE WINNING INFORMATION FEED */}
+                                            {/* 5. REAL LIVE WINNING INFORMATION FEED */}
                                             <WinningInfoComponent />
                                         </div>
                                     )}
@@ -2217,6 +2496,175 @@
                                                 </button>
                                             </div>
                                         </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW: JILI SLOT GAME PLAY VIEW */}
+                        {view === 'game_slot' && (
+                            <div className="flex-1 flex flex-col bg-[#0f141e] text-white justify-between relative overflow-y-auto">
+                                <div className="px-4 py-3 flex items-center justify-between bg-[#171d2b] border-b border-slate-800 shadow-md">
+                                    <button onClick={() => setView('home')} className="text-white hover:text-slate-300">
+                                        <Icon name="chevron-left" className="w-8 h-8" />
+                                    </button>
+                                    <div className="flex flex-col items-center">
+                                        <div className="flex items-center space-x-1">
+                                            <span className="text-[10px] bg-amber-400 text-slate-950 font-black px-1.5 rounded font-mono">JILI</span>
+                                            <span className="text-xs font-black text-amber-300 uppercase tracking-wider">{activeJiliGame?.title || 'Slot Game'}</span>
+                                        </div>
+                                    </div>
+                                    <span className="text-xs font-mono font-black text-emerald-400 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                                        ৳{Number(balance).toFixed(2)}
+                                    </span>
+                                </div>
+
+                                <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
+                                    {/* 3-Reel Slot Machine Frame */}
+                                    <div className="w-full max-w-sm bg-gradient-to-b from-amber-600 via-yellow-500 to-amber-700 p-4 rounded-3xl shadow-2xl border-4 border-amber-300/60">
+                                        <div className="bg-[#0b0f19] p-4 rounded-2xl border-2 border-slate-900 flex justify-around items-center min-h-[140px] shadow-inner">
+                                            {slotReels.map((sym, idx) => (
+                                                <div key={idx} className={`w-20 h-24 bg-gradient-to-b from-slate-800 to-slate-900 rounded-xl border border-slate-700 flex items-center justify-center text-5xl shadow-lg ${slotSpinning ? 'animate-reel' : ''}`}>
+                                                    {sym}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Bet Adjustment Row */}
+                                    <div className="w-full max-w-sm bg-[#171d2b] p-3 rounded-2xl border border-slate-800 flex justify-between items-center font-sans">
+                                        <span className="text-xs font-bold text-slate-400">Bet Amount:</span>
+                                        <div className="flex space-x-1.5 font-mono">
+                                            {[10, 20, 50, 100].map(amt => (
+                                                <button
+                                                    key={amt}
+                                                    disabled={slotSpinning}
+                                                    onClick={() => setSlotBet(amt)}
+                                                    className={`px-3 py-1 text-xs font-black rounded-lg transition-all ${slotBet === amt ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-white'}`}
+                                                >
+                                                    ৳{amt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Big Spin Button */}
+                                    <button
+                                        onClick={spinSlotMachine}
+                                        disabled={slotSpinning}
+                                        className={`w-full max-w-sm py-4 rounded-2xl text-slate-950 font-black text-sm uppercase tracking-widest transition-all shadow-xl font-sans ${
+                                            slotSpinning 
+                                                ? 'bg-slate-600 cursor-not-allowed opacity-50' 
+                                                : 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:scale-102 active:scale-95 shadow-neon-gold'
+                                        }`}
+                                    >
+                                        {slotSpinning ? 'SPINNING...' : `SPIN (৳${slotBet})`}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW: JILI 7UP 7DOWN GAME VIEW */}
+                        {view === 'game_7up' && (
+                            <div className="flex-1 flex flex-col bg-[#0b1424] text-white justify-between relative overflow-y-auto font-sans">
+                                <div className="px-4 py-3 flex items-center justify-between bg-[#121f36] border-b border-slate-800 shadow-md">
+                                    <button onClick={() => setView('home')} className="text-white hover:text-slate-300">
+                                        <Icon name="chevron-left" className="w-8 h-8" />
+                                    </button>
+                                    <span className="text-xs font-black text-sky-400 uppercase tracking-widest">7UP 7DOWN DICE</span>
+                                    <span className="text-xs font-mono font-black text-emerald-400">৳{Number(balance).toFixed(2)}</span>
+                                </div>
+
+                                <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
+                                    {/* Glass Dome with 2 Dice */}
+                                    <div className="w-48 h-48 rounded-full bg-gradient-to-b from-sky-400/20 to-blue-900/40 border-4 border-sky-400/50 flex items-center justify-center space-x-4 shadow-2xl">
+                                        <DiceFace value={diceValues[0]} size="w-16 h-16" />
+                                        <DiceFace value={diceValues[1]} size="w-16 h-16" />
+                                    </div>
+
+                                    {/* 3 Bet Sections */}
+                                    <div className="w-full grid grid-cols-3 gap-2">
+                                        <button
+                                            onClick={() => setDiceSelection('down')}
+                                            className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${diceSelection === 'down' ? 'bg-sky-500/20 border-sky-400 text-sky-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
+                                        >
+                                            <span className="text-sm font-black">7 DOWN</span>
+                                            <span className="text-[10px] font-bold mt-1 text-slate-300">2 - 6 (2X)</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setDiceSelection('lucky7')}
+                                            className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${diceSelection === 'lucky7' ? 'bg-amber-500/20 border-amber-400 text-amber-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
+                                        >
+                                            <span className="text-sm font-black text-amber-400">LUCKY 7</span>
+                                            <span className="text-[10px] font-bold mt-1 text-amber-300">Exact 7 (5X)</span>
+                                        </button>
+                                        <button
+                                            onClick={() => setDiceSelection('up')}
+                                            className={`p-3 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${diceSelection === 'up' ? 'bg-rose-500/20 border-rose-400 text-rose-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
+                                        >
+                                            <span className="text-sm font-black">7 UP</span>
+                                            <span className="text-[10px] font-bold mt-1 text-slate-300">8 - 12 (2X)</span>
+                                        </button>
+                                    </div>
+
+                                    <button
+                                        onClick={roll7UpDice}
+                                        disabled={diceRolling}
+                                        className="w-full py-3.5 bg-gradient-to-r from-sky-500 to-blue-600 rounded-2xl font-black text-xs uppercase tracking-wider text-white shadow-lg active:scale-95 transition-all"
+                                    >
+                                        {diceRolling ? 'ROLLING DICE...' : 'ROLL DICE (৳50)'}
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* VIEW: JILI GO RUSH (ROCKET CRASH) VIEW */}
+                        {view === 'game_gorush' && (
+                            <div className="flex-1 flex flex-col bg-[#0b101c] text-white justify-between relative overflow-y-auto font-sans">
+                                <div className="px-4 py-3 flex items-center justify-between bg-[#141b2c] border-b border-slate-800 shadow-md">
+                                    <button onClick={() => setView('home')} className="text-white hover:text-slate-300">
+                                        <Icon name="chevron-left" className="w-8 h-8" />
+                                    </button>
+                                    <span className="text-xs font-black text-amber-300 uppercase tracking-widest font-mono">GO RUSH CRASH</span>
+                                    <span className="text-xs font-mono font-black text-emerald-400">৳{Number(balance).toFixed(2)}</span>
+                                </div>
+
+                                <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
+                                    {/* Space Screen with Multiplier & Rocket */}
+                                    <div className="w-full h-56 bg-gradient-to-b from-[#0a0f1d] to-[#121c33] rounded-3xl border border-slate-800 relative flex flex-col items-center justify-center overflow-hidden">
+                                        <div className="text-5xl font-black font-mono text-amber-400 tracking-tight drop-shadow-md">
+                                            {rocketMultiplier.toFixed(2)}x
+                                        </div>
+                                        {rocketCrashed ? (
+                                            <div className="text-rose-500 text-xs font-black uppercase mt-2 animate-bounce">
+                                                💥 CRASHED!
+                                            </div>
+                                        ) : rocketActive ? (
+                                            <div className="text-4xl mt-3 animate-bounce">
+                                                🚀
+                                            </div>
+                                        ) : (
+                                            <div className="text-xs text-slate-400 font-semibold mt-2">
+                                                Press Launch to start rocket flight
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {!rocketActive ? (
+                                        <button
+                                            onClick={startGoRushGame}
+                                            className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 rounded-2xl font-black text-xs uppercase tracking-wider text-slate-950 shadow-lg active:scale-95 transition-all"
+                                        >
+                                            LAUNCH ROCKET (৳50)
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={cashoutGoRush}
+                                            disabled={rocketCrashed}
+                                            className="w-full py-4 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-2xl font-black text-xs uppercase tracking-wider text-slate-950 shadow-lg active:scale-95 transition-all"
+                                        >
+                                            CASHOUT ৳{(rocketBet * rocketMultiplier).toFixed(2)}
+                                        </button>
                                     )}
                                 </div>
                             </div>
@@ -2810,7 +3258,7 @@
                                     <div className="flex flex-col items-center">
                                         <span className="text-xs font-black tracking-widest text-[#fccd11] font-mono">CHICKEN ROAD 2</span>
                                     </div>
-                                    <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
+                                    <span className="text-[10px] text-emerald-400 font-extrabold bg-emerald-955/80 px-2.5 py-1 rounded-full border border-emerald-900 font-mono">
                                         ৳{Number(balance).toFixed(2)}
                                     </span>
                                 </div>
