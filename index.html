@@ -23,7 +23,8 @@
                         gameRed: '#e11d48',
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
-                        bkashDark: '#990b49',
+                        nagadOrange: '#f7941d',
+                        rocketPurple: '#8c3494',
                         aviatorRed: '#e51e38',
                         darkBg: '#05070e',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
@@ -131,10 +132,10 @@
 
         @keyframes planeFloat {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-5px) rotate(2deg); }
+            50% { transform: translateY(-4px) rotate(1.5deg); }
         }
         .plane-anim {
-            animation: planeFloat 1.8s infinite ease-in-out;
+            animation: planeFloat 2.2s infinite ease-in-out;
         }
 
         .safe-bottom {
@@ -175,9 +176,7 @@
             { code: '+91', name: 'India', flag: '🇮🇳' },
             { code: '+92', name: 'Pakistan', flag: '🇵🇰' },
             { code: '+971', name: 'UAE', flag: '🇦🇪' },
-            { code: '+60', name: 'Malaysia', flag: '🇲🇾' },
-            { code: '+1', name: 'United States', flag: '🇺🇸' },
-            { code: '+44', name: 'United Kingdom', flag: '🇬🇧' }
+            { code: '+60', name: 'Malaysia', flag: '🇲🇾' }
         ];
 
         const Icons = {
@@ -254,12 +253,6 @@
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                     <polyline points="16 17 21 12 16 7" />
                     <line x1="21" y1="12" x2="9" y2="12" />
-                </svg>
-            ),
-            headphones: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" />
                 </svg>
             ),
             volume2: (props) => (
@@ -394,21 +387,27 @@
             </div>
         );
 
-        const BkashAppIcon = () => (
-            <svg viewBox="0 0 350 120" className="w-32 h-auto" xmlns="http://www.w3.org/2000/svg">
-                <text x="10" y="90" fontFamily="'Plus Jakarta Sans', sans-serif" fontWeight="800" fontSize="88" fill="#e2136e">b</text>
-                <text x="65" y="90" fontFamily="'Plus Jakarta Sans', sans-serif" fontWeight="600" fontSize="78" fill="#ffffff">Kash</text>
-                <g transform="translate(245, 10)">
-                    <polygon points="10,12 80,18 64,52" fill="#bc1055" />
-                    <polygon points="10,12 64,52 14,24" fill="#8e0a3f" />
-                    <polygon points="80,18 112,62 64,52" fill="#e2136e" />
-                    <polygon points="64,52 74,75 42,98" fill="#a00d4c" />
-                    <polygon points="64,52 74,75 125,58" fill="#ff248a" />
-                    <polygon points="80,18 132,44 112,62" fill="#00f03e" />
-                    <polygon points="132,44 148,38 142,48" fill="#e2136e" />
-                </g>
-            </svg>
-        );
+        // --- GATEWAYS LOGOS ---
+        const GatewayLogos = {
+            bkash: () => (
+                <div className="flex items-center space-x-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-pink-600 flex items-center justify-center font-black text-white text-[11px] shadow">b</div>
+                    <span className="font-bold text-xs text-pink-400">bKash</span>
+                </div>
+            ),
+            nagad: () => (
+                <div className="flex items-center space-x-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-orange-500 flex items-center justify-center font-black text-white text-[11px] shadow">N</div>
+                    <span className="font-bold text-xs text-orange-400">Nagad</span>
+                </div>
+            ),
+            rocket: () => (
+                <div className="flex items-center space-x-1.5">
+                    <div className="w-6 h-6 rounded-lg bg-purple-700 flex items-center justify-center font-black text-white text-[11px] shadow">R</div>
+                    <span className="font-bold text-xs text-purple-400">Rocket</span>
+                </div>
+            )
+        };
 
         // --- 1000 ROUNDS GENERATORS ---
         const generateClassicMockHistory = (basePeriod, count = 1000) => {
@@ -428,17 +427,12 @@
                 const pBig = typeof period === 'bigint' ? period : BigInt(period || 0);
                 const baseBlockHeight = 84300000 + (Number(pBig % 100000n) * 20);
                 const hexChars = 'abcdef';
-                const suffixLength = Math.floor(Math.random() * 3); 
                 let suffix = '';
-                for (let i = 0; i < suffixLength; i++) {
-                    suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
-                }
+                for (let i = 0; i < 3; i++) suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
                 
                 const randomPrefixChars = '0123456789abcdef';
                 let prefix = '';
-                for (let i = 0; i < 12; i++) {
-                    prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
-                }
+                for (let i = 0; i < 12; i++) prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
                 
                 const fullHash = prefix + targetDigit + suffix;
                 const last5 = fullHash.slice(-5).toUpperCase().split('');
@@ -524,16 +518,73 @@
             );
         };
 
-        const AVIATOR_USERS = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK", "PLO", "MNB", "KSA"];
+        // --- REALISTIC BANGLADESHI LIVE PLAYERS FOR AVIATOR ---
+        const BD_PLAYER_NAMES = [
+            "Shakib_***75", "Tamim_***28", "Tanvir_***BD", "Rahim_***99", "Sabbir_***07", 
+            "Kaisar_***VIP", "Nayeem_***12", "Fahim_***BD", "Ashiq_***77", "Shohel_***55", 
+            "Mehedi_***91", "Hasan_***BD", "Bijoy_***71", "Rifat_***03", "Alamin_***88", 
+            "Soumya_***59", "Mustafiz_***90", "Mahmudullah_***"
+        ];
+
         const generateAviatorLiveBets = () => {
-            return AVIATOR_USERS.map((code, idx) => ({
-                id: 'av_' + idx,
-                username: `Mem***${code}`,
-                amount: [50, 100, 200, 500, 1000, 2000][Math.floor(Math.random() * 6)],
-                cashoutTarget: parseFloat((Math.random() * 3.8 + 1.12).toFixed(2)),
+            return BD_PLAYER_NAMES.map((name, idx) => ({
+                id: 'av_bd_' + idx + '_' + Math.floor(Math.random() * 1000),
+                username: name,
+                amount: [10, 20, 50, 100, 200, 500, 1000, 2000][Math.floor(Math.random() * 8)],
+                cashoutTarget: parseFloat((Math.random() * 3.4 + 1.15).toFixed(2)),
                 cashedOut: false,
                 payout: 0
             }));
+        };
+
+        // --- WEB AUDIO SOUND ENGINE FOR AVIATOR ---
+        const soundEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    try {
+                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                        if (AudioCtx) this.ctx = new AudioCtx();
+                    } catch (e) {}
+                }
+            },
+            playCashoutWin() {
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const ctx = this.ctx;
+                    const freqs = [523.25, 659.25, 783.99, 1046.50];
+                    freqs.forEach((f, i) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.frequency.value = f;
+                        gain.gain.setValueAtTime(0.06, ctx.currentTime + i * 0.06);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.06 + 0.25);
+                        osc.start(ctx.currentTime + i * 0.06);
+                        osc.stop(ctx.currentTime + i * 0.06 + 0.26);
+                    });
+                } catch (e) {}
+            },
+            playCrash() {
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const ctx = this.ctx;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(200, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.35);
+                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.38);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                } catch (e) {}
+            }
         };
 
         // --- PROMOTIONS COMMERCIAL CAROUSEL ---
@@ -544,7 +595,7 @@
                 {
                     id: 'first_deposit_100',
                     title: '100% প্রথম ডিপোজিট ক্যাশব্যাক বোনাস',
-                    subtitle: 'Double Your Wallet with bKash Instant Deposit',
+                    subtitle: 'Double Your Wallet with bKash, Nagad & Rocket Instant Deposit',
                     badge: '🔥 100% MATCH BONUS',
                     desc: 'প্রথমবার সর্বনিম্ন ১০০ টাকা ডিপোজিটে পান ১০০% অতিরিক্ত বোনাস ক্যাশ যা যেকোনো খেলায় ব্যবহার করা যাবে।',
                     render: () => (
@@ -568,7 +619,7 @@
                             <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-pink-200">
                                 <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40 flex items-center space-x-1">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                    <span>bKash 0s Fast Settle</span>
+                                    <span>Instant Gateways</span>
                                 </span>
                                 <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40">Min ৳100</span>
                             </div>
@@ -643,12 +694,12 @@
 
                     <div className="bg-[#0b101c] rounded-2xl px-3.5 py-2.5 border border-slate-800 flex items-center justify-between space-x-2 shadow-inner">
                         <div className="text-amber-400 flex-shrink-0">
-                            <Icon name="volume-2" className="w-4 h-4 text-amber-400 animate-pulse" />
+                            <Icon name="volume2" className="w-4 h-4 text-amber-400 animate-pulse" />
                         </div>
                         
                         <div className="flex-1 overflow-hidden relative py-0.5">
                             <span className="animate-marquee text-xs font-bold text-slate-300 font-sans tracking-wide">
-                                📢 Welcome to STEVEN WIN! Wingo, TRX Wingo, K3 Dice (1000 Rounds History) & Aviator ✈️ Crash are live with 100% instant bKash bonus!
+                                📢 Welcome to STEVEN WIN! Wingo, TRX Wingo, K3 Dice (1000 Rounds History) & Aviator ✈️ (BD Live Bets) are live with instant 100% bonus!
                             </span>
                         </div>
 
@@ -663,7 +714,7 @@
             );
         };
 
-        // --- 100% SCREENSHOT REPLICA AVIATOR FLIGHT CANVAS ---
+        // --- 100% ACCURATE SLOW & LOW FLIGHT CANVAS TRAJECTORY ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
@@ -701,13 +752,14 @@
                     ctx.restore();
 
                     if (phase === 'flying' || phase === 'crashed') {
-                        const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 6.0));
+                        // Slower, lower gradual trajectory climb
+                        const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
                         const startX = 20;
                         const startY = height - 20;
-                        const cpX = width * 0.45;
+                        const cpX = width * 0.42;
                         const cpY = height - 20;
-                        const targetX = startX + (width - 65) * Math.min(1, progress * 1.12 + 0.1);
-                        const targetY = startY - (height - 50) * Math.min(0.92, Math.pow(progress, 0.85) + 0.08);
+                        const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
+                        const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
 
                         // Fill Under Curve
                         ctx.save();
@@ -726,7 +778,7 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // Golden Trajectory
+                        // Golden Path
                         ctx.save();
                         ctx.shadowColor = '#f59e0b';
                         ctx.shadowBlur = 16;
@@ -738,15 +790,15 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Fire Particles
+                        // Exhaust Fire Particles
                         if (phase === 'flying') {
-                            if (Math.random() < 0.8) {
+                            if (Math.random() < 0.75) {
                                 particlesRef.current.push({
                                     x: targetX - 5,
                                     y: targetY + 5,
-                                    vx: -Math.random() * 2.5 - 1.0,
-                                    vy: Math.random() * 2.0 + 0.5,
-                                    size: Math.random() * 3.5 + 1.5,
+                                    vx: -Math.random() * 2.2 - 0.8,
+                                    vy: Math.random() * 1.8 + 0.4,
+                                    size: Math.random() * 3 + 1.5,
                                     alpha: 1.0,
                                     color: Math.random() > 0.4 ? '#f59e0b' : '#ef4444'
                                 });
@@ -770,11 +822,11 @@
                             ctx.restore();
                         });
 
-                        // Draw Rocket Plane
+                        // Draw Realistic Fighter Jet Plane
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
-                            ctx.rotate(-Math.PI / 5.2);
+                            ctx.rotate(-Math.PI / 6.5);
 
                             const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 24);
                             glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
@@ -790,14 +842,14 @@
                             ctx.fillStyle = '#ffffff';
 
                             ctx.beginPath();
-                            ctx.moveTo(12, 0);
+                            ctx.moveTo(13, 0);
                             ctx.quadraticCurveTo(5, -6, -7, -5);
                             ctx.lineTo(-10, -8);
                             ctx.lineTo(-8, -2);
                             ctx.lineTo(-10, 2);
                             ctx.lineTo(-8, 8);
                             ctx.lineTo(-7, 5);
-                            ctx.quadraticCurveTo(5, 6, 12, 0);
+                            ctx.quadraticCurveTo(5, 6, 13, 0);
                             ctx.closePath();
                             ctx.fill();
 
@@ -837,21 +889,21 @@
 
             const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
 
-            // --- AVIATOR STATE ---
+            // --- AVIATOR STATE ENGINE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
             const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05, 1.18, 3.45]);
             
-            // Dual Bet
-            const [betAmount1, setBetAmount1] = useState(50);
+            // Dual Bet Decks (Starting from Min ৳10)
+            const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
             const [autoCashout1, setAutoCashout1] = useState(false);
             const [autoCashoutVal1, setAutoCashoutVal1] = useState('2.00');
 
-            const [betAmount2, setBetAmount2] = useState(100);
+            const [betAmount2, setBetAmount2] = useState(20);
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
             const [autoCashout2, setAutoCashout2] = useState(false);
@@ -888,7 +940,8 @@
             const [multiplier, setMultiplier] = useState(1);
             const [myBets, setMyBets] = useState([]);
 
-            // Deposit & Withdrawal
+            // Deposit & Withdrawal State
+            const [selectedGateway, setSelectedGateway] = useState('bkash'); // bkash, nagad, rocket
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
@@ -927,7 +980,7 @@
             }, [toast.show]);
 
             // =========================================================================
-            // AVIATOR FLIGHT LOOP
+            // AUTONOMOUS FLIGHT LOOP ENGINE (Runs continuously regardless of bets)
             // =========================================================================
             useEffect(() => {
                 let aviatorInterval;
@@ -956,16 +1009,20 @@
                     let startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        const currentMult = parseFloat((1.00 + Math.pow(elapsed * 0.45, 1.80)).toFixed(2));
+                        // Slower, smooth and pleasant climb
+                        const currentMult = parseFloat((1.00 + Math.pow(elapsed * 0.28, 1.45)).toFixed(2));
                         setAviatorMult(currentMult);
 
+                        // Auto Cashout Deck 1
                         if (isBetPlaced1 && !isCashedOut1 && autoCashout1 && currentMult >= parseFloat(autoCashoutVal1)) {
                             triggerAviatorCashout(1, currentMult);
                         }
+                        // Auto Cashout Deck 2
                         if (isBetPlaced2 && !isCashedOut2 && autoCashout2 && currentMult >= parseFloat(autoCashoutVal2)) {
                             triggerAviatorCashout(2, currentMult);
                         }
 
+                        // Live Bangladeshi Player Cashouts
                         setAviatorLiveBets(prev => prev.map(ob => {
                             if (!ob.cashedOut && currentMult >= ob.cashoutTarget) {
                                 return { ...ob, cashedOut: true, payout: parseFloat((ob.amount * currentMult).toFixed(2)) };
@@ -973,9 +1030,11 @@
                             return ob;
                         }));
 
+                        // Flight Crash Trigger
                         if (currentMult >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
+                            soundEngine.playCrash();
                             setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 15));
 
                             setTimeout(() => {
@@ -987,7 +1046,7 @@
                                 setAviatorCountdown(5);
                             }, 3800);
                         }
-                    }, 55);
+                    }, 50);
                 }
 
                 return () => clearInterval(aviatorInterval);
@@ -1080,6 +1139,7 @@
                 if (deckNum === 1) setIsCashedOut1(true);
                 else setIsCashedOut2(true);
 
+                soundEngine.playCashoutWin();
                 setPopupAmount(winPayout);
                 setPopupType('win');
                 setShowResultPopup(true);
@@ -1198,7 +1258,6 @@
                 }
             };
 
-            // Safe bounded metrics calculations
             const safeAdd = (acc, val) => {
                 const n = parseFloat(val);
                 return isNaN(n) || !isFinite(n) || n > 10000000 ? acc : acc + n;
@@ -1238,7 +1297,7 @@
                     
                     {toast.show && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-2 rounded-2xl shadow-luxury border text-xs font-semibold flex items-center space-x-2 bg-slate-900 text-amber-300 border-amber-500/40 animate-bounce">
-                            <Icon name="check-circle" className="w-4 h-4 text-amber-400" />
+                            <Icon name="checkCircle" className="w-4 h-4 text-amber-400" />
                             <span>{toast.message}</span>
                         </div>
                     )}
@@ -1307,13 +1366,7 @@
                                         <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shadow-md">
                                             <span className="text-sm font-black text-slate-950 font-mono">SX</span>
                                         </div>
-                                        <div>
-                                            <span className="text-base font-black tracking-wider text-gradient-gold font-mono leading-none block">STEVEN WIN</span>
-                                            <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-widest flex items-center space-x-1 mt-0.5">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                                <span>24,820 Active Online</span>
-                                            </span>
-                                        </div>
+                                        <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <span className="text-xs font-black text-amber-400 font-mono bg-slate-900 px-2.5 py-1 rounded-xl border border-amber-500/30">৳{formatMoney(balance)}</span>
@@ -1384,7 +1437,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-emerald-900 border border-emerald-400 text-emerald-300 px-2 py-0.5 rounded-full font-black uppercase">
+                                                    <span className="text-[9px] bg-emerald-900 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase">
                                                         30s / 1m / 2m
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo</h2>
@@ -1399,7 +1452,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-rose-900 border border-rose-400 text-rose-300 px-2 py-0.5 rounded-full font-black uppercase">
+                                                    <span className="text-[9px] bg-rose-900 border border-rose-400 text-rose-300 px-2.5 py-0.5 rounded-full font-black uppercase">
                                                         BLOCKCHAIN HASH
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">TRX Wingo</h2>
@@ -1414,7 +1467,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-amber-900 border border-amber-400 text-amber-300 px-2 py-0.5 rounded-full font-black uppercase">
+                                                    <span className="text-[9px] bg-amber-900 border border-amber-400 text-amber-300 px-2.5 py-0.5 rounded-full font-black uppercase">
                                                         3 DICE UP TO 207X
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery</h2>
@@ -1444,9 +1497,7 @@
                                         </div>
                                     )}
 
-                                    {/* ========================================================================= */}
-                                    {/* ULTRA-PREMIUM LUXURY VIP ACCOUNT / PROFILE CENTER                         */}
-                                    {/* ========================================================================= */}
+                                    {/* ULTRA-PREMIUM LUXURY VIP ACCOUNT / PROFILE CENTER */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4">
                                             {/* VIP Profile Card */}
@@ -1519,11 +1570,11 @@
                                                     <div className="flex items-center space-x-2">
                                                         <span className="text-xs text-slate-400 font-bold uppercase font-mono tracking-wider">Total Wallet Balance</span>
                                                         <button onClick={() => setHideBalance(!hideBalance)} className="text-slate-400 hover:text-amber-400">
-                                                            <Icon name={hideBalance ? "eye-off" : "eye"} className="w-4 h-4" />
+                                                            <Icon name={hideBalance ? "eyeOff" : "eye"} className="w-4 h-4" />
                                                         </button>
                                                     </div>
                                                     <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
-                                                        <Icon name="refresh-cw" className="w-3.5 h-3.5" />
+                                                        <Icon name="refreshCw" className="w-3.5 h-3.5" />
                                                         <span>Sync</span>
                                                     </button>
                                                 </div>
@@ -1550,7 +1601,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* Financial Metrics (Clean Safe Data) */}
+                                            {/* Financial Metrics */}
                                             <div className="grid grid-cols-2 gap-2.5">
                                                 <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
                                                     <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
@@ -1600,9 +1651,9 @@
                                                         <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
                                                             <Icon name="receipt" className="w-4 h-4" />
                                                         </div>
-                                                        <span className="text-xs font-bold text-slate-200">bKash Deposit Records</span>
+                                                        <span className="text-xs font-bold text-slate-200">Deposit Records</span>
                                                     </div>
-                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </button>
 
                                                 <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
@@ -1610,9 +1661,9 @@
                                                         <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                                                             <Icon name="receipt" className="w-4 h-4" />
                                                         </div>
-                                                        <span className="text-xs font-bold text-slate-200">bKash Withdrawal History</span>
+                                                        <span className="text-xs font-bold text-slate-200">Withdrawal History</span>
                                                     </div>
-                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </button>
 
                                                 <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
@@ -1625,7 +1676,7 @@
                                                             <span className="text-[9px] text-sky-400 font-mono">Telegram: @Kaisarvai007</span>
                                                         </div>
                                                     </div>
-                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </a>
                                             </div>
 
@@ -1634,7 +1685,7 @@
                                                 onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
                                                 className="w-full py-3.5 bg-rose-950/30 hover:bg-rose-950/60 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl border border-rose-800/40 flex items-center justify-center space-x-2 transition-all cursor-pointer"
                                             >
-                                                <Icon name="log-out" className="w-4 h-4" />
+                                                <Icon name="logOut" className="w-4 h-4" />
                                                 <span>Sign Out Account</span>
                                             </button>
                                         </div>
@@ -1665,7 +1716,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️ (100% REAL FLIGHT & LIVE BET FEED VIEW)                 */}
+                        {/* VIEW 3: AVIATOR ✈️ (100% REAL FLIGHT & BD LIVE BET FEED VIEW)             */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1690,7 +1741,7 @@
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
                                     
-                                    {/* 🌟 Flight Canvas Stage */}
+                                    {/* Flight Canvas Stage */}
                                     <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-slate-800/80 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
@@ -1723,7 +1774,7 @@
                                         )}
                                     </div>
 
-                                    {/* DUAL BET DECKS */}
+                                    {/* DUAL BET DECKS (Starting from Min ৳10) */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
                                             <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
@@ -1735,7 +1786,7 @@
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
-                                                {[50, 100, 200, 500].map(amt => (
+                                                {[10, 20, 50, 100].map(amt => (
                                                     <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
@@ -1758,7 +1809,7 @@
                                                 </div>
                                             </div>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
-                                                {[100, 200, 500, 1000].map(amt => (
+                                                {[50, 100, 200, 500].map(amt => (
                                                     <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
@@ -1772,16 +1823,16 @@
                                         </div>
                                     </div>
 
-                                    {/* LIVE ALL BETS TABLE */}
+                                    {/* LIVE BD PLAYERS ALL BETS TABLE */}
                                     <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
                                         <div className="flex justify-between items-center text-xs font-mono border-b border-slate-800 pb-2">
-                                            <span className="text-amber-400 font-bold">ALL BETS FEED</span>
+                                            <span className="text-amber-400 font-bold">🇧🇩 BD LIVE BETS FEED</span>
                                             <span className="text-slate-400 text-[10px]">Real-Time Multiplier</span>
                                         </div>
                                         <div className="space-y-1 max-h-40 overflow-y-auto">
                                             {aviatorLiveBets.map(bot => (
                                                 <div key={bot.id} className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 flex justify-between items-center text-xs font-mono">
-                                                    <span className="text-slate-300">{bot.username}</span>
+                                                    <span className="text-slate-300 font-semibold">{bot.username}</span>
                                                     <span className="text-slate-400">৳{bot.amount}</span>
                                                     {bot.cashedOut ? (
                                                         <span className="text-emerald-400 font-bold">+{bot.cashoutTarget}x (৳{bot.payout})</span>
@@ -1979,34 +2030,69 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 6: DEPOSIT VIEW                                                      */}
+                        {/* VIEW 6: DEPOSIT VIEW WITH MULTI-GATEWAY SELECTOR (bKash/Nagad/Rocket)     */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800">
                                     <BackButton onClick={() => setView('home')} label="Back" />
-                                    <h1 className="text-sm font-bold text-slate-100">bKash Fast Deposit</h1>
+                                    <h1 className="text-sm font-bold text-slate-100">Fast Deposit</h1>
                                     <span className="w-10"></span>
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
-                                    <div className="p-3.5 rounded-3xl bg-[#0b101c] border-2 border-bkashPink flex flex-col items-center justify-center space-y-1.5 text-center">
-                                        <BkashAppIcon />
-                                        <span className="text-xs font-black text-slate-200 uppercase tracking-widest block">Official bKash Gateway</span>
+                                    
+                                    {/* Multi-Gateway Account Selector */}
+                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono">Select Payment Account</span>
+                                        <div className="grid grid-cols-3 gap-2">
+                                            <button 
+                                                onClick={() => setSelectedGateway('bkash')}
+                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+                                                    selectedGateway === 'bkash' ? 'bg-pink-950/40 border-pink-500 shadow-neon-pink' : 'bg-slate-900 border-slate-800'
+                                                }`}
+                                            >
+                                                <GatewayLogos.bkash />
+                                            </button>
+
+                                            <button 
+                                                onClick={() => setSelectedGateway('nagad')}
+                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+                                                    selectedGateway === 'nagad' ? 'bg-orange-950/40 border-orange-500' : 'bg-slate-900 border-slate-800'
+                                                }`}
+                                            >
+                                                <GatewayLogos.nagad />
+                                            </button>
+
+                                            <button 
+                                                onClick={() => setSelectedGateway('rocket')}
+                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
+                                                    selectedGateway === 'rocket' ? 'bg-purple-950/40 border-purple-500' : 'bg-slate-900 border-slate-800'
+                                                }`}
+                                            >
+                                                <GatewayLogos.rocket />
+                                            </button>
+                                        </div>
                                     </div>
 
+                                    {/* Gateway Receiver Number Box */}
                                     <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2">
-                                        <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">Official Agent Receiver:</span>
+                                        <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">
+                                            Official {selectedGateway.toUpperCase()} Agent Receiver:
+                                        </span>
                                         <div className="p-3 bg-slate-900 rounded-2xl border border-slate-800 flex items-center justify-between">
                                             <div>
-                                                <span className="text-xs sm:text-sm font-black text-amber-300 font-mono select-all">01860909272</span>
+                                                <span className="text-xs sm:text-sm font-black text-amber-300 font-mono select-all">
+                                                    {selectedGateway === 'bkash' ? '01860909272' : (selectedGateway === 'nagad' ? '01798124578' : '01912456789')}
+                                                </span>
                                             </div>
                                             <button 
                                                 onClick={() => {
-                                                    navigator.clipboard.writeText('01860909272');
-                                                    showToast('Agent number copied!', 'success');
+                                                    const num = selectedGateway === 'bkash' ? '01860909272' : (selectedGateway === 'nagad' ? '01798124578' : '01912456789');
+                                                    navigator.clipboard.writeText(num);
+                                                    showToast(`${selectedGateway.toUpperCase()} number copied!`, 'success');
                                                 }} 
-                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black"
+                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
                                             >
                                                 Copy
                                             </button>
@@ -2014,10 +2100,16 @@
                                     </div>
 
                                     <form onSubmit={processDeposit} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
-                                        <input type="tel" placeholder="Sender bKash Number" value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
+                                        <div className="grid grid-cols-4 gap-1.5 font-mono">
+                                            {['200', '500', '1000', '5000'].map(val => (
+                                                <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-amber-400 text-slate-950 border-amber-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
+                                            ))}
+                                        </div>
+                                        <input type="number" placeholder="Deposit Amount (Min ৳100)" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
+                                        <input type="tel" placeholder={`Sender ${selectedGateway.toUpperCase()} Number`} value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
                                         <input type="text" placeholder="Transaction ID / TxID" value={transactionId} onChange={e => setTransactionId(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono uppercase text-white"/>
-                                        <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] text-white font-black text-xs uppercase shadow-neon-pink">
-                                            Submit Recharge
+                                        <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black text-xs uppercase shadow-neon-pink">
+                                            Submit Recharge (৳{depositAmount})
                                         </button>
                                     </form>
                                 </div>
@@ -2059,35 +2151,6 @@
                         )}
 
                     </div>
-
-                    {/* AVATAR SELECTOR MODAL */}
-                    {showAvatarModal && (
-                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-5 animate-fade-in font-sans backdrop-blur-md">
-                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
-                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
-                                    <h3 className="text-sm font-black text-amber-300 font-mono">Choose Profile Avatar</h3>
-                                    <button onClick={() => setShowAvatarModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
-                                        <Icon name="x" className="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-3 gap-2.5 py-1">
-                                    {PRESET_AVATARS.map((avUrl, idx) => (
-                                        <div 
-                                            key={idx} 
-                                            onClick={() => updateUserAvatar(avUrl)}
-                                            className={`relative w-18 h-18 mx-auto rounded-2xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-105 active:scale-95 ${currentUser?.avatar === avUrl ? 'border-amber-400 shadow-neon-gold' : 'border-slate-700 opacity-70 hover:opacity-100'}`}
-                                        >
-                                            <img src={avUrl} alt={`Avatar ${idx}`} className="w-full h-full object-cover" />
-                                            {currentUser?.avatar === avUrl && (
-                                                <div className="absolute top-1 right-1 bg-amber-400 text-slate-950 p-0.5 rounded-full text-[8px] font-black">✓</div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
 
                     {/* DETAIL MODAL FOR PROMO BANNERS */}
                     {promoModal.isOpen && (
@@ -2141,15 +2204,26 @@
                         </div>
                     )}
 
-                    {/* POPUP RESULT */}
+                    {/* LUXURY GOLDEN POPUP RESULT */}
                     {showResultPopup && (
-                        <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md">
-                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/60 rounded-3xl p-5 text-center shadow-2xl">
-                                <div className="text-4xl mb-1.5">🎉</div>
-                                <h2 className="text-2xl font-black text-amber-400 tracking-wider font-mono">YOU WON!</h2>
-                                <span className="text-3xl font-black text-yellow-300 tracking-tight block mt-2 font-mono">৳{formatMoney(popupAmount)}</span>
-                                <button onClick={() => setShowResultPopup(false)} className="mt-5 w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold">
-                                    Continue
+                        <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md animate-fade-in">
+                            <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden">
+                                <div className="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none"></div>
+                                <div className="text-5xl mb-2 filter drop-shadow">🏆</div>
+                                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider font-mono">
+                                    BIG WIN CASHOUT!
+                                </h2>
+                                <div className="p-3 bg-black/60 rounded-2xl border border-amber-400/40 my-3">
+                                    <span className="text-[11px] text-slate-300 font-bold uppercase font-mono block">Cashout Payout</span>
+                                    <span className="text-3xl font-black text-yellow-300 font-mono tracking-tight block mt-0.5">
+                                        ৳{formatMoney(popupAmount)}
+                                    </span>
+                                </div>
+                                <button 
+                                    onClick={() => setShowResultPopup(false)} 
+                                    className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider shadow-neon-gold active:scale-95 transition-all"
+                                >
+                                    Collect Winnings
                                 </button>
                             </div>
                         </div>
