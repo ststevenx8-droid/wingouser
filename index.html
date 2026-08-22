@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Authentic Spribe Aviator & Elite Gaming Platform</title>
+    <title>STEVEN WIN - Elite Gaming, Aviator & Lottery Platform</title>
     
     <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -25,8 +25,6 @@
                         bkashPink: '#e2136e',
                         bkashDark: '#990b49',
                         aviatorRed: '#e51e38',
-                        aviatorDark: '#0e1117',
-                        chickenGold: '#f59e0b',
                         darkBg: '#020408',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
                         cardBorder: 'rgba(255, 255, 255, 0.08)'
@@ -101,13 +99,13 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glass-panel-gold {
+        .glass-panel-glow {
             background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(251, 191, 36, 0.35);
         }
 
-        .vip-compact-card {
+        .vip-card-gradient {
             background: radial-gradient(circle at top right, #382405, #171002 60%, #070501 100%);
             border: 1px solid rgba(251, 191, 36, 0.45);
             box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 10px 25px rgba(0, 0, 0, 0.8);
@@ -120,14 +118,6 @@
 
         .safe-bottom {
             padding-bottom: env(safe-area-inset-bottom, 12px);
-        }
-
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.95; }
-            50% { transform: scale(1.03); opacity: 1; }
-        }
-        .pulse-text-glow {
-            animation: pulseGlow 1.2s infinite ease-in-out;
         }
     </style>
 </head>
@@ -189,13 +179,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" /></svg>
             ),
             receipt: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
             ),
             headphones: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
-            ),
-            x: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
             ),
             home: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
@@ -227,8 +214,7 @@
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=200&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80"
         ];
 
         const BackButton = ({ onClick, label = "Back" }) => (
@@ -249,6 +235,32 @@
         const BkashLogo = ({ className = "w-14 h-14 rounded-2xl" }) => (
             <img src="https://i.ibb.co/xTgMb9X/11623.jpg" alt="bKash" className={`${className} object-cover shadow-neon-pink border border-pink-500/50`} />
         );
+
+        // --- 🎲 1,000 ROUNDS MASSIVE HISTORY GENERATOR ---
+        const generate1000GameHistory = (basePeriod, count = 1000) => {
+            const list = [];
+            let currentP = BigInt(basePeriod);
+            for (let i = 0; i < count; i++) {
+                const pStr = String(currentP - BigInt(i));
+                const dig = Math.floor(Math.random() * 10);
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const d3 = Math.floor(Math.random() * 6) + 1;
+                const sum = d1 + d2 + d3;
+                list.push({
+                    period: pStr,
+                    number: dig,
+                    size: dig >= 5 ? 'Big' : 'Small',
+                    color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
+                    shortHash: '**' + Math.random().toString(16).substring(2, 6),
+                    dice: [d1, d2, d3],
+                    sum: sum,
+                    k3Size: sum >= 11 ? 'Big' : 'Small',
+                    parity: sum % 2 === 0 ? 'Even' : 'Odd'
+                });
+            }
+            return list;
+        };
 
         // --- WEB AUDIO SYNTHESIZER ---
         const soundEngine = {
@@ -335,7 +347,7 @@
             }
         };
 
-        // --- ✈️ AUTHENTIC SPRIBE AVIATOR RED FLIGHT CANVAS ---
+        // --- ✈️ AUTHENTIC SPRIBE AVIATOR RED FLIGHT CANVAS (GLITCH-FREE) ---
         const AviatorFlightCanvas = memo(({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
@@ -374,7 +386,7 @@
 
                     ctx.clearRect(0, 0, width, height);
 
-                    // Grid lines
+                    // Grid
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
                     ctx.lineWidth = 1;
@@ -396,14 +408,12 @@
                         let targetX = startX + (width - 75) * Math.min(1, progress * 1.05 + 0.1);
                         let targetY = startY - (height - 65) * Math.min(0.92, Math.pow(progress, 0.85) + 0.08);
 
-                        // If crashed, smoothly fly plane away off the right-top corner!
                         if (curPhase === 'crashed') {
                             crashProgressRef.current += 7;
                             targetX += crashProgressRef.current * 1.5;
                             targetY -= crashProgressRef.current * 1.2;
                         }
 
-                        // Red Gradient under curve
                         if (curPhase === 'flying' || targetX <= width) {
                             ctx.save();
                             const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
@@ -420,7 +430,6 @@
                             ctx.fill();
                             ctx.restore();
 
-                            // Glowing Crimson Flight Line
                             ctx.save();
                             ctx.shadowColor = '#e51e38';
                             ctx.shadowBlur = 16;
@@ -433,7 +442,6 @@
                             ctx.restore();
                         }
 
-                        // Red Jet Exhaust Sparks
                         if (curPhase === 'flying') {
                             if (Math.random() < 0.75) {
                                 particlesRef.current.push({
@@ -451,13 +459,11 @@
                             ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
                         });
 
-                        // ✈️ Red Fighter Jet Model
                         if (targetX < width + 60 && targetY > -60) {
                             ctx.save();
                             ctx.translate(targetX, targetY);
                             ctx.rotate(-Math.PI / 7);
 
-                            // Jet Propeller Glow
                             const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
                             glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
                             glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.85)');
@@ -467,7 +473,6 @@
                             ctx.arc(0, 0, 26, 0, Math.PI * 2);
                             ctx.fill();
 
-                            // Jet Body
                             ctx.shadowColor = '#e51e38';
                             ctx.shadowBlur = 12;
                             ctx.fillStyle = '#ffffff';
@@ -497,14 +502,27 @@
             return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />;
         });
 
-        // --- MOCK LIVE BETTING PLAYERS DATA ---
-        const INITIAL_LIVE_PLAYERS = [
-            { id: 1, user: 'Shakib_***75', bet: 200, target: 1.65, cashed: false },
-            { id: 2, user: 'Tamim_***28', bet: 500, target: 2.10, cashed: false },
-            { id: 3, user: 'Tanvir_***BD', bet: 100, target: 1.35, cashed: false },
-            { id: 4, user: 'Rahim_***99', bet: 1000, target: 3.50, cashed: false },
-            { id: 5, user: 'Kaisar_***VIP', bet: 50, target: 1.80, cashed: false }
-        ];
+        // --- SVG 3D DICE FACE ---
+        const DiceFace = ({ value, size = "w-9 h-9" }) => {
+            const dots = {
+                1: [[50, 50]],
+                2: [[25, 25], [75, 75]],
+                3: [[25, 25], [50, 50], [75, 75]],
+                4: [[25, 25], [25, 75], [75, 25], [75, 75]],
+                5: [[25, 25], [25, 75], [50, 50], [75, 25], [75, 75]],
+                6: [[25, 25], [25, 50], [25, 75], [75, 25], [75, 50], [75, 75]]
+            }[value] || [];
+
+            return (
+                <div className={`${size} bg-white rounded-xl shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                        {dots.map(([cx, cy], i) => (
+                            <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 10} fill={value === 1 || value === 4 ? "#e11d48" : "#0f172a"} />
+                        ))}
+                    </svg>
+                </div>
+            );
+        };
 
         const OFFICIAL_BKASH_AGENT = "01860909272";
 
@@ -516,39 +534,47 @@
             const [balance, setBalance] = useState(0.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             
-            // --- ✈️ REAL AVIATOR GAME STATE ---
-            const [aviatorPhase, setAviatorPhase] = useState('waiting'); // 'waiting' | 'flying' | 'crashed'
+            // --- AVIATOR STATE ---
+            const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.20);
             const [adminTargetCrash, setAdminTargetCrash] = useState(null);
             const [aviatorHistory, setAviatorHistory] = useState([2.15, 1.45, 8.20, 1.10, 3.42, 12.05, 1.88, 1.05]);
 
-            // DECK 1 STATE
+            // Deck 1
             const [bet1Amount, setBet1Amount] = useState(10);
-            const [bet1Status, setBet1Status] = useState('idle'); // 'idle' | 'queued' | 'active' | 'cashed'
+            const [bet1Status, setBet1Status] = useState('idle');
             const [auto1Enabled, setAuto1Enabled] = useState(false);
             const [auto1Target, setAuto1Target] = useState('2.00');
 
-            // DECK 2 STATE
+            // Deck 2
             const [bet2Amount, setBet2Amount] = useState(50);
-            const [bet2Status, setBet2Status] = useState('idle'); // 'idle' | 'queued' | 'active' | 'cashed'
+            const [bet2Status, setBet2Status] = useState('idle');
             const [auto2Enabled, setAuto2Enabled] = useState(false);
             const [auto2Target, setAuto2Target] = useState('3.00');
 
-            // LIVE SIMULATED PLAYERS FEED
-            const [liveBetsList, setLiveBetsList] = useState(INITIAL_LIVE_PLAYERS);
-
-            // --- 🐔 10-LANE REAL CHICKEN ROAD STATE ---
-            const [chickenBet, setChickenBet] = useState(50);
-            const [chickenActive, setChickenActive] = useState(false);
-            const [chickenStep, setChickenStep] = useState(0); // 0 to 10
-            const [chickenStatus, setChickenStatus] = useState('idle');
-
-            // --- LOTTERY TIMERS & MASSIVE 10,000 ROUNDS HISTORY ---
-            const [gameType, setGameType] = useState('wingo');
+            // --- LOTTERY WINGO / TRX / K3 (WITH 1,000 ROUNDS HISTORY) ---
+            const [gameType, setGameType] = useState('wingo'); // 'wingo' | 'trx_wingo' | 'k3_lottery'
+            const [activeGameTab, setActiveGameTab] = useState('30sec');
             const [timer30s, setTimer30s] = useState(30);
             const [period30s, setPeriod30s] = useState('20260822100051482');
+
+            // 1,000 Rounds History with Pagination
+            const [fullMassiveHistory, setFullMassiveHistory] = useState(() => generate1000GameHistory('20260822100051482', 1000));
+            const [historyPage, setHistoryPage] = useState(1);
+            const itemsPerPage = 10;
+
+            const currentHistorySlice = useMemo(() => {
+                const start = (historyPage - 1) * itemsPerPage;
+                return fullMassiveHistory.slice(start, start + itemsPerPage);
+            }, [fullMassiveHistory, historyPage]);
+
+            const totalPages = Math.ceil(fullMassiveHistory.length / itemsPerPage);
+
+            const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
+            const [betValue, setBetValue] = useState(null);
+            const [selectedUnit, setSelectedUnit] = useState(10);
 
             // --- BKASH DEPOSIT & WITHDRAW ---
             const [depositAmount, setDepositAmount] = useState('500');
@@ -571,7 +597,6 @@
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_current_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
-            // Popups
             const [showResultPopup, setShowResultPopup] = useState(false);
             const [popupAmount, setPopupAmount] = useState(0);
 
@@ -633,7 +658,7 @@
                 });
             }, []);
 
-            // ✈️ REAL AVIATOR MAIN GAME LOOP
+            // ✈️ AVIATOR MAIN GAME LOOP
             useEffect(() => {
                 let aviatorInterval;
                 
@@ -641,15 +666,12 @@
                     aviatorInterval = setInterval(() => {
                         setAviatorCountdown(prev => {
                             if (prev <= 1) {
-                                // Transition to FLYING phase
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
 
-                                // Activate queued bets
                                 setBet1Status(prev => prev === 'queued' ? 'active' : prev);
                                 setBet2Status(prev => prev === 'queued' ? 'active' : prev);
 
-                                // Generate Next Crash Point
                                 let nextCrash = 1.00;
                                 if (adminTargetCrash !== null) {
                                     nextCrash = adminTargetCrash;
@@ -661,7 +683,6 @@
                                 }
 
                                 setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
-                                setLiveBetsList(INITIAL_LIVE_PLAYERS.map(p => ({ ...p, cashed: false })));
                                 if (view === 'game_aviator') soundEngine.startJetSound();
                                 return 5;
                             }
@@ -677,20 +698,10 @@
 
                         if (view === 'game_aviator') soundEngine.updateJetPitch(currentMult);
 
-                        // Update Live Players Feed
-                        setLiveBetsList(prev => prev.map(p => {
-                            if (!p.cashed && currentMult >= p.target) {
-                                return { ...p, cashed: true };
-                            }
-                            return p;
-                        }));
-
-                        // Check Auto-Cashout for Deck 1
+                        // Auto Cashout
                         if (bet1Status === 'active' && auto1Enabled && parseFloat(auto1Target) <= currentMult) {
                             executeCashout(1, currentMult);
                         }
-
-                        // Check Auto-Cashout for Deck 2
                         if (bet2Status === 'active' && auto2Enabled && parseFloat(auto2Target) <= currentMult) {
                             executeCashout(2, currentMult);
                         }
@@ -701,7 +712,6 @@
                             setAviatorPhase('crashed');
                             if (view === 'game_aviator') soundEngine.playCrash();
 
-                            // Reset Uncashed Bets to Idle
                             setBet1Status(prev => prev === 'active' ? 'idle' : prev);
                             setBet2Status(prev => prev === 'active' ? 'idle' : prev);
 
@@ -720,22 +730,45 @@
                 return () => clearInterval(aviatorInterval);
             }, [aviatorPhase, aviatorCrashPoint, adminTargetCrash, bet1Status, bet2Status, auto1Enabled, auto2Enabled, auto1Target, auto2Target, view]);
 
-            // Wingo Timers Loop
+            // Wingo Timers Loop & 1,000 History Prepend
             useEffect(() => {
                 const interval = setInterval(() => {
                     const sec = new Date().getSeconds();
-                    setTimer30s(Math.max(0, 29 - (sec % 30)));
+                    const rem = Math.max(0, 29 - (sec % 30));
+                    setTimer30s(rem);
+
+                    if (sec % 30 === 0) {
+                        const nextP = String(BigInt(period30s) + 1n);
+                        const dig = Math.floor(Math.random() * 10);
+                        const d1 = Math.floor(Math.random() * 6) + 1;
+                        const d2 = Math.floor(Math.random() * 6) + 1;
+                        const d3 = Math.floor(Math.random() * 6) + 1;
+                        const sum = d1 + d2 + d3;
+                        setPeriod30s(nextP);
+                        
+                        const newEntry = {
+                            period: nextP,
+                            number: dig,
+                            size: dig >= 5 ? 'Big' : 'Small',
+                            color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
+                            shortHash: '**' + Math.random().toString(16).substring(2, 6),
+                            dice: [d1, d2, d3],
+                            sum: sum,
+                            k3Size: sum >= 11 ? 'Big' : 'Small',
+                            parity: sum % 2 === 0 ? 'Even' : 'Odd'
+                        };
+                        setFullMassiveHistory(prev => [newEntry, ...prev.slice(0, 999)]);
+                    }
                 }, 500);
                 return () => clearInterval(interval);
-            }, []);
+            }, [period30s]);
 
-            // ✈️ AVIATOR ACTION HANDLERS (QUEUING & CASHOUT)
+            // Aviator Handlers
             const handleAviatorBetClick = (deck) => {
                 const amt = deck === 1 ? bet1Amount : bet2Amount;
                 const status = deck === 1 ? bet1Status : bet2Status;
 
                 if (status === 'idle') {
-                    // Place Bet
                     if (balance < amt) {
                         showToast('পর্যাপ্ত ব্যালেন্স নেই!', 'error');
                         return;
@@ -747,18 +780,10 @@
                         db.ref('users/' + san).update({ balance: newBal });
                     }
 
-                    if (aviatorPhase === 'waiting') {
-                        if (deck === 1) setBet1Status('queued');
-                        else setBet2Status('queued');
-                        showToast(`৳${amt} বেট প্লেস হয়েছে!`, 'success');
-                    } else {
-                        // Queued for next round
-                        if (deck === 1) setBet1Status('queued');
-                        else setBet2Status('queued');
-                        showToast(`পরবর্তী রাউন্ডের জন্য ৳${amt} বেট সেট করা হলো!`, 'success');
-                    }
+                    if (deck === 1) setBet1Status('queued');
+                    else setBet2Status('queued');
+                    showToast(`৳${amt} বেট সেট হয়েছে!`, 'success');
                 } else if (status === 'queued') {
-                    // Cancel Bet before flight starts
                     const refundBal = balance + amt;
                     setBalance(refundBal);
                     if (currentUser) {
@@ -769,7 +794,6 @@
                     else setBet2Status('idle');
                     showToast('বেট ক্যানসেল করা হয়েছে!', 'success');
                 } else if (status === 'active' && aviatorPhase === 'flying') {
-                    // Manual Cashout
                     executeCashout(deck, aviatorMult);
                 }
             };
@@ -990,6 +1014,7 @@
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
+                                
                                 <div className="px-4 py-3 bg-[#080d1a] border-b border-slate-800 flex justify-between items-center shadow-lg flex-shrink-0">
                                     <div className="flex items-center space-x-2">
                                         <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-slate-900 border border-amber-500/30">
@@ -997,6 +1022,7 @@
                                         </div>
                                         <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
                                     </div>
+                                    
                                     <button 
                                         onClick={() => setView('deposit')}
                                         className="text-xs font-black text-white bg-gradient-to-r from-pink-600 to-rose-600 px-3 py-1.5 rounded-xl shadow-neon-pink flex items-center space-x-1 active:scale-95 cursor-pointer"
@@ -1007,9 +1033,11 @@
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
+                                    
+                                    {/* 2.1 HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* 1. AVIATOR SPRIBE BANNER CARD */}
+                                            {/* 1. AVIATOR SPRIBE (CRASH 1000X) */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#29030c] via-[#5e0c1c] to-[#140206] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1029,31 +1057,84 @@
                                                 </div>
                                             </div>
 
-                                            {/* 2. CHICKEN ROAD BANNER */}
+                                            {/* 2. WINGO LIVE (COLOR & 0-9) */}
                                             <div 
-                                                onClick={() => setView('game_chicken')}
-                                                className="relative rounded-3xl bg-gradient-to-r from-[#331c00] via-[#613600] to-[#1a0e00] shadow-luxury border-2 border-amber-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                                onClick={() => { setGameType('wingo'); setView('game_wingo'); }}
+                                                className="relative rounded-3xl bg-gradient-to-r from-[#082915] via-[#0d4a24] to-[#041a0d] shadow-luxury border border-emerald-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-black uppercase tracking-wider font-mono">
-                                                        🍗 10-LANE ROAD • 250X
+                                                    <span className="text-[9px] bg-emerald-900 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
+                                                        1,000 ROUNDS HISTORY
                                                     </span>
-                                                    <h2 className="text-2xl font-black text-amber-300 font-mono uppercase flex items-center space-x-1">
-                                                        <span>Chicken Road</span>
-                                                        <span className="text-lg">🐔</span>
-                                                    </h2>
-                                                    <span className="text-[11px] text-amber-200 block font-medium">Cross 10 Steps & Win Multiplier</span>
+                                                    <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo Live</h2>
+                                                    <span className="text-[11px] text-emerald-200 block font-medium">Color & 0-9 Number Prediction</span>
                                                 </div>
-                                                <div className="w-16 h-16 rounded-2xl bg-amber-500/20 border border-amber-400 flex items-center justify-center text-3xl shadow flex-shrink-0">
-                                                    🐔
+                                                <div className="w-16 h-16 rounded-2xl bg-emerald-600/30 border border-emerald-400 flex items-center justify-center text-3xl shadow-neon-green flex-shrink-0">
+                                                    🎲
+                                                </div>
+                                            </div>
+
+                                            {/* 3. TRX WINGO (BLOCKCHAIN HASH) */}
+                                            <div 
+                                                onClick={() => { setGameType('trx_wingo'); setView('game_wingo'); }}
+                                                className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                            >
+                                                <div className="space-y-1">
+                                                    <span className="text-[9px] bg-rose-900 border border-rose-400 text-rose-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
+                                                        BLOCKCHAIN HASH
+                                                    </span>
+                                                    <h2 className="text-2xl font-black text-white font-mono uppercase">TRX Wingo</h2>
+                                                    <span className="text-[11px] text-rose-200 block font-medium">TRON Live Decentralized Block Draw</span>
+                                                </div>
+                                                <div className="w-16 h-16 rounded-2xl bg-rose-600/30 border border-rose-400 flex items-center justify-center text-3xl shadow-neon-pink flex-shrink-0">
+                                                    ⚡
+                                                </div>
+                                            </div>
+
+                                            {/* 4. K3 3-DICE LOTTERY */}
+                                            <div 
+                                                onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }}
+                                                className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                            >
+                                                <div className="space-y-1">
+                                                    <span className="text-[9px] bg-amber-900 border border-amber-400 text-amber-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
+                                                        3 DICE UP TO 207X
+                                                    </span>
+                                                    <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery</h2>
+                                                    <span className="text-[11px] text-amber-200 block font-medium">Dice Sum, Big/Small & Parity Draw</span>
+                                                </div>
+                                                <div className="w-16 h-16 rounded-2xl bg-amber-600/30 border border-amber-400 flex items-center justify-center text-3xl shadow-neon-gold flex-shrink-0">
+                                                    ⚂
                                                 </div>
                                             </div>
                                         </>
                                     )}
 
+                                    {/* 2.2 ACTIVITY TAB */}
+                                    {activeNav === 'activity' && (
+                                        <div className="glass-panel p-4 rounded-3xl space-y-3">
+                                            <h2 className="text-xs font-bold text-amber-400 font-mono">🎁 Daily Check-in Rewards</h2>
+                                            <p className="text-xs text-slate-300">Check in every day to claim bonus rewards!</p>
+                                            <button onClick={() => showToast('Check-in bonus claimed!', 'success')} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-xl text-xs uppercase shadow-neon-gold cursor-pointer">Claim Daily Reward</button>
+                                        </div>
+                                    )}
+
+                                    {/* 2.3 PROMOTION TAB */}
+                                    {activeNav === 'promotion' && (
+                                        <div className="glass-panel p-4 rounded-3xl space-y-2.5">
+                                            <h2 className="text-xs font-bold text-emerald-400 font-mono">👥 Invite Friends & Earn Commission</h2>
+                                            <p className="text-xs text-slate-300">Share your referral code to earn commission directly to wallet.</p>
+                                            <div className="p-2.5 bg-slate-900 rounded-xl font-mono text-center text-amber-300 text-sm font-bold">
+                                                {currentUser?.referralCode || 'STX8888'}
+                                            </div>
+                                            <button onClick={() => { copyToClipboard(currentUser?.referralCode || 'STX8888'); }} className="w-full py-2.5 bg-emerald-600 text-white font-black rounded-xl text-xs uppercase shadow-neon-green cursor-pointer">Copy Code</button>
+                                        </div>
+                                    )}
+
+                                    {/* 2.4 VIP PROFILE */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-3 font-sans">
-                                            <div className="vip-compact-card rounded-3xl p-4 relative overflow-hidden">
+                                            <div className="vip-card-gradient rounded-3xl p-4 relative overflow-hidden">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center space-x-3">
                                                         <div className="relative w-12 h-12 rounded-2xl border border-amber-400 overflow-hidden bg-slate-900 flex-shrink-0">
@@ -1089,6 +1170,32 @@
                                                 </div>
                                             </div>
 
+                                            <div className="glass-panel rounded-3xl divide-y divide-slate-800/80 overflow-hidden text-xs">
+                                                <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-3 flex items-center justify-between hover:bg-slate-800/40">
+                                                    <div className="flex items-center space-x-2.5">
+                                                        <span className="text-base text-pink-400">💳</span>
+                                                        <span className="font-bold text-slate-200">Recharge Records</span>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-3.5 h-3.5 text-slate-500" />
+                                                </button>
+
+                                                <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-3 flex items-center justify-between hover:bg-slate-800/40">
+                                                    <div className="flex items-center space-x-2.5">
+                                                        <span className="text-base text-emerald-400">💸</span>
+                                                        <span className="font-bold text-slate-200">Cashout Records</span>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-3.5 h-3.5 text-slate-500" />
+                                                </button>
+
+                                                <a href="https://t.me/Ststevenx36" target="_blank" rel="noopener noreferrer" className="w-full p-3 flex items-center justify-between hover:bg-slate-800/40">
+                                                    <div className="flex items-center space-x-2.5">
+                                                        <span className="text-base text-sky-400">💬</span>
+                                                        <span className="font-bold text-slate-200">24/7 VIP Telegram Support</span>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-3.5 h-3.5 text-slate-500" />
+                                                </a>
+                                            </div>
+
                                             <button 
                                                 onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
                                                 className="w-full py-2.5 bg-rose-950/30 border border-rose-800/40 text-rose-300 font-bold text-xs uppercase rounded-2xl flex items-center justify-center space-x-1.5"
@@ -1098,6 +1205,7 @@
                                             </button>
                                         </div>
                                     )}
+
                                 </div>
 
                                 {/* Bottom Nav */}
@@ -1106,9 +1214,13 @@
                                         <Icon name="home" className="w-4 h-4" />
                                         <span className="text-[9px] font-black">Home</span>
                                     </button>
-                                    <button onClick={() => setView('game_aviator')} className="flex flex-col items-center space-y-0.5 cursor-pointer text-rose-400">
-                                        <span className="text-base leading-none">✈️</span>
-                                        <span className="text-[9px] font-black">Aviator</span>
+                                    <button onClick={() => setActiveNav('activity')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'activity' ? 'text-amber-400' : 'text-slate-400'}`}>
+                                        <Icon name="gift" className="w-4 h-4" />
+                                        <span className="text-[9px] font-black">Activity</span>
+                                    </button>
+                                    <button onClick={() => setActiveNav('promotion')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'promotion' ? 'text-amber-400' : 'text-slate-400'}`}>
+                                        <Icon name="percent" className="w-4 h-4" />
+                                        <span className="text-[9px] font-black">Promo</span>
                                     </button>
                                     <button onClick={() => setActiveNav('account')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'account' ? 'text-amber-400' : 'text-slate-400'}`}>
                                         <Icon name="user" className="w-4 h-4" />
@@ -1119,7 +1231,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* 3. ✈️ 100% AUTHENTIC SPRIBE AVIATOR GAME VIEW                             */}
+                        {/* 3. ✈️ AVIATOR SPRIBE CRASH                                                */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#07090e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1135,7 +1247,7 @@
                                     </span>
                                 </div>
 
-                                {/* Previous Round History Pills */}
+                                {/* Previous Multiplier Pills */}
                                 <div className="px-3 py-1.5 bg-[#05070c] border-b border-slate-800/80 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                     {aviatorHistory.map((mult, i) => (
                                         <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border flex-shrink-0 ${
@@ -1149,7 +1261,7 @@
 
                                 <div className="flex-1 flex flex-col p-2.5 space-y-2 overflow-y-auto min-h-0">
                                     
-                                    {/* ✈️ Spribe Flight Stage Canvas */}
+                                    {/* Flight Stage Frame */}
                                     <div className="w-full h-48 sm:h-52 bg-[#090c14] rounded-3xl border border-red-900/60 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
@@ -1176,7 +1288,7 @@
                                         )}
                                     </div>
 
-                                    {/* 🎮 Dual Bet Decks (Deck 1 & Deck 2) */}
+                                    {/* Dual Bet Decks (100% Isolated - No Plane Reset on Click!) */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono">
                                         
                                         {/* DECK 1 */}
@@ -1216,7 +1328,6 @@
                                                 ))}
                                             </div>
 
-                                            {/* Dynamic Deck 1 Action Button */}
                                             {bet1Status === 'idle' && (
                                                 <button 
                                                     type="button" 
@@ -1288,7 +1399,6 @@
                                                 ))}
                                             </div>
 
-                                            {/* Dynamic Deck 2 Action Button */}
                                             {bet2Status === 'idle' && (
                                                 <button 
                                                     type="button" 
@@ -1324,66 +1434,194 @@
                                         </div>
 
                                     </div>
+                                </div>
+                            </div>
+                        )}
 
-                                    {/* 👥 Live Bets Feed of other players */}
-                                    <div className="bg-[#0b0e16] rounded-2xl p-2.5 border border-slate-800/80 font-mono text-[10px] space-y-1.5">
-                                        <div className="flex justify-between text-slate-400 border-b border-slate-800 pb-1 font-bold">
-                                            <span>Live Player Bets</span>
-                                            <span>Cashout</span>
+                        {/* ========================================================================= */}
+                        {/* 4. WINGO & TRX WINGO (1,000 ROUNDS MASSIVE HISTORY)                       */}
+                        {/* ========================================================================= */}
+                        {view === 'game_wingo' && (
+                            <div className="flex-1 flex flex-col bg-[#030509] justify-between overflow-hidden min-h-0">
+                                <div className="px-4 py-3 bg-[#082915] text-white flex items-center justify-between border-b border-emerald-900/40">
+                                    <BackButton onClick={() => setView('home')} label="Back" />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">
+                                        {gameType === 'trx_wingo' ? 'TRX WINGO ⚡' : 'WINGO LIVE 🎲'}
+                                    </span>
+                                    <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                                </div>
+
+                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    <div className="glass-panel-glow p-3 rounded-2xl border border-amber-500/40 flex justify-between items-center font-mono">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
+                                            <span className="text-xs font-bold text-amber-300">30s Draw Countdown</span>
                                         </div>
-                                        {liveBetsList.map(p => (
-                                            <div key={p.id} className="flex justify-between items-center text-slate-300">
-                                                <span>{p.user} (৳{p.bet})</span>
-                                                <span className={`px-1.5 py-0.5 rounded font-bold ${p.cashed ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-500'}`}>
-                                                    {p.cashed ? `${p.target.toFixed(2)}x (+৳${(p.bet * p.target).toFixed(0)})` : 'In Flight...'}
-                                                </span>
-                                            </div>
+                                        <span className="text-2xl font-black text-yellow-400">{timer30s}s</span>
+                                    </div>
+
+                                    <div className="grid grid-cols-3 gap-2 font-mono">
+                                        <button onClick={() => { setBetValue('green'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-2.5 rounded-2xl font-black text-xs uppercase cursor-pointer">Green (2X)</button>
+                                        <button onClick={() => { setBetValue('violet'); setIsBetSheetOpen(true); }} className="bg-purple-600 text-white py-2.5 rounded-2xl font-black text-xs uppercase cursor-pointer">Violet (4.5X)</button>
+                                        <button onClick={() => { setBetValue('red'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-2.5 rounded-2xl font-black text-xs uppercase cursor-pointer">Red (2X)</button>
+                                    </div>
+
+                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 grid grid-cols-5 gap-2 font-mono">
+                                        {[0,1,2,3,4,5,6,7,8,9].map(num => (
+                                            <button key={num} onClick={() => { setBetValue(num); setIsBetSheetOpen(true); }} className="w-10 h-10 mx-auto rounded-full bg-slate-800 border border-slate-700 text-white font-black text-sm flex items-center justify-center cursor-pointer">
+                                                {num}
+                                            </button>
                                         ))}
                                     </div>
 
+                                    {/* 1,000 Rounds History Table with Pagination */}
+                                    <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden font-mono text-[10px]">
+                                        <div className="p-2.5 bg-slate-900 font-bold text-amber-400 border-b border-slate-800 flex justify-between items-center">
+                                            <span>History (1,000 Rounds)</span>
+                                            <span className="text-[9px] text-slate-400">Page {historyPage} / {totalPages}</span>
+                                        </div>
+                                        <table className="w-full text-left">
+                                            <thead>
+                                                <tr className="border-b border-slate-800 text-slate-400">
+                                                    <th className="py-2 pl-3">Period</th>
+                                                    {gameType === 'trx_wingo' && <th className="py-2 text-center">Hash</th>}
+                                                    <th className="py-2 text-center">Number</th>
+                                                    <th className="py-2 text-center">Size</th>
+                                                    <th className="py-2 pr-3 text-right">Color</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {currentHistorySlice.map((item, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/30">
+                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
+                                                        {gameType === 'trx_wingo' && <td className="py-2 text-center text-slate-300">{item.shortHash}</td>}
+                                                        <td className="py-2 text-center font-bold text-yellow-300">{item.number}</td>
+                                                        <td className="py-2 text-center text-slate-300">{item.size}</td>
+                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.color}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+
+                                        <div className="p-2 bg-slate-900/80 flex items-center justify-between border-t border-slate-800">
+                                            <button 
+                                                disabled={historyPage <= 1} 
+                                                onClick={() => setHistoryPage(p => Math.max(1, p - 1))}
+                                                className="px-3 py-1 bg-slate-800 text-slate-200 rounded-lg disabled:opacity-40"
+                                            >
+                                                Prev
+                                            </button>
+                                            <span className="text-slate-400">Page {historyPage} of {totalPages}</span>
+                                            <button 
+                                                disabled={historyPage >= totalPages} 
+                                                onClick={() => setHistoryPage(p => Math.min(totalPages, p + 1))}
+                                                className="px-3 py-1 bg-slate-800 text-slate-200 rounded-lg disabled:opacity-40"
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* 4. CHICKEN ROAD ROYALE                                                    */}
+                        {/* 5. K3 3-DICE LOTTERY (1,000 ROUNDS MASSIVE HISTORY)                       */}
                         {/* ========================================================================= */}
-                        {view === 'game_chicken' && (
-                            <div className="flex-1 flex flex-col bg-[#06080e] justify-between overflow-hidden min-h-0 font-sans">
-                                <div className="px-3.5 py-2.5 bg-[#120a02] border-b border-amber-900/60 flex items-center justify-between flex-shrink-0">
-                                    <BackButton onClick={() => setView('home')} label="Exit" />
-                                    <span className="text-amber-400 font-black text-sm tracking-wider font-mono">CHICKEN ROAD 🐔</span>
-                                    <span className="text-xs font-black text-amber-400 bg-black/60 px-2.5 py-1 rounded-xl border border-amber-500/30 font-mono">
-                                        ৳{formatMoney(balance)}
-                                    </span>
+                        {view === 'game_k3' && (
+                            <div className="flex-1 flex flex-col bg-[#030509] justify-between overflow-hidden min-h-0">
+                                <div className="px-4 py-3 bg-[#261400] text-white flex items-center justify-between border-b border-amber-900/40">
+                                    <BackButton onClick={() => setView('home')} label="Back" />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">K3 3-DICE LOTTO 🎲</span>
+                                    <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                                 </div>
 
-                                <div className="flex-1 p-3.5 flex flex-col space-y-3 overflow-y-auto min-h-0">
-                                    <div className="glass-panel-glow rounded-3xl p-4 border-2 border-amber-500/50 flex flex-col items-center justify-center space-y-2 relative overflow-hidden shadow-neon-chicken">
-                                        <span className="text-xs font-black text-amber-300 uppercase tracking-widest font-mono">
-                                            {chickenStatus === 'playing' ? `STEP ${chickenStep} / 10 • MULTIPLIER 2.5X` : 'CROSS 10 LANES & WIN'}
-                                        </span>
-                                        <div className="text-5xl py-2">
-                                            {chickenStatus === 'roasted' ? '🍗' : (chickenStatus === 'won' ? '👑🐔' : '🐔')}
+                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    <div className="glass-panel-glow p-3 rounded-2xl border border-amber-500/40 flex justify-between items-center font-mono">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
+                                            <span className="text-xs font-bold text-amber-300">K3 Draw Countdown</span>
+                                        </div>
+                                        <span className="text-2xl font-black text-yellow-400">{timer30s}s</span>
+                                    </div>
+
+                                    {/* 3D Dice Showcase */}
+                                    <div className="glass-panel rounded-3xl p-4 flex flex-col items-center justify-center space-y-2 border border-amber-500/40">
+                                        <span className="text-[10px] uppercase font-bold text-amber-300 font-mono">Last Round Result</span>
+                                        <div className="flex space-x-3 items-center py-1">
+                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[0] : 1} />
+                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[1] : 4} />
+                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[2] : 6} />
+                                        </div>
+                                        <div className="text-xs font-mono font-black text-yellow-300">
+                                            Sum: {fullMassiveHistory[0]?.sum || 11} • {fullMassiveHistory[0]?.k3Size || 'Big'} • {fullMassiveHistory[0]?.parity || 'Odd'}
                                         </div>
                                     </div>
 
-                                    <div className="space-y-2 pt-2 font-mono">
-                                        <div className="grid grid-cols-4 gap-1.5">
-                                            {[20, 50, 100, 500].map(amt => (
-                                                <button key={amt} onClick={() => setChickenBet(amt)} className={`py-1.5 rounded-xl border text-xs font-bold ${chickenBet === amt ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
-                                            ))}
+                                    <div className="grid grid-cols-4 gap-1.5 font-mono">
+                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase cursor-pointer">Small 2X</button>
+                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase cursor-pointer">Big 2X</button>
+                                        <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-2.5 rounded-xl font-black text-xs uppercase cursor-pointer">Even 2X</button>
+                                        <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-2.5 rounded-xl font-black text-xs uppercase cursor-pointer">Odd 2X</button>
+                                    </div>
+
+                                    {/* K3 1,000 Rounds History Table with Pagination */}
+                                    <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden font-mono text-[10px]">
+                                        <div className="p-2.5 bg-slate-900 font-bold text-amber-400 border-b border-slate-800 flex justify-between items-center">
+                                            <span>K3 History (1,000 Rounds)</span>
+                                            <span className="text-[9px] text-slate-400">Page {historyPage} / {totalPages}</span>
                                         </div>
-                                        <button onClick={() => showToast('Chicken game active!', 'success')} className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold active:scale-95 cursor-pointer">
-                                            START CHICKEN RUN (৳{chickenBet})
-                                        </button>
+                                        <table className="w-full text-left">
+                                            <thead>
+                                                <tr className="border-b border-slate-800 text-slate-400">
+                                                    <th className="py-2 pl-3">Period</th>
+                                                    <th className="py-2 text-center">Dice</th>
+                                                    <th className="py-2 text-center">Sum</th>
+                                                    <th className="py-2 pr-3 text-right">Result</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {currentHistorySlice.map((item, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/30">
+                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
+                                                        <td className="py-1 text-center">
+                                                            <span className="inline-flex space-x-1">
+                                                                {(item.dice || [1, 1, 1]).map((d, dI) => (
+                                                                    <span key={dI} className="w-3.5 h-3.5 bg-white text-slate-950 font-bold rounded text-[8px] flex items-center justify-center">{d}</span>
+                                                                ))}
+                                                            </span>
+                                                        </td>
+                                                        <td className="py-2 text-center font-bold text-yellow-300">{item.sum}</td>
+                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.k3Size} / {item.parity}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+
+                                        <div className="p-2 bg-slate-900/80 flex items-center justify-between border-t border-slate-800">
+                                            <button 
+                                                disabled={historyPage <= 1} 
+                                                onClick={() => setHistoryPage(p => Math.max(1, p - 1))}
+                                                className="px-3 py-1 bg-slate-800 text-slate-200 rounded-lg disabled:opacity-40"
+                                            >
+                                                Prev
+                                            </button>
+                                            <span className="text-slate-400">Page {historyPage} of {totalPages}</span>
+                                            <button 
+                                                disabled={historyPage >= totalPages} 
+                                                onClick={() => setHistoryPage(p => Math.min(totalPages, p + 1))}
+                                                className="px-3 py-1 bg-slate-800 text-slate-200 rounded-lg disabled:opacity-40"
+                                            >
+                                                Next
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* 5. BKASH DEPOSIT & WITHDRAW VIEWS                                         */}
+                        {/* 6. BKASH DEPOSIT & WITHDRAW VIEWS                                         */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#04060b] justify-between overflow-hidden min-h-0">
@@ -1476,10 +1714,30 @@
 
                     </div>
 
+                    {/* CONFIRM LOTTERY BET MODAL */}
+                    {isBetSheetOpen && (
+                        <div className="absolute inset-0 bg-black/80 z-[90] flex flex-col justify-end font-sans backdrop-blur-sm">
+                            <div className="bg-[#0f172a] rounded-t-[2rem] p-4 space-y-3 border-t border-slate-800 text-white safe-bottom">
+                                <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                                    <span className="text-xs text-slate-400 uppercase font-bold">Selection: <strong className="text-amber-400">{betValue}</strong></span>
+                                    <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-4 h-4 text-slate-400" /></button>
+                                </div>
+                                <div className="grid grid-cols-4 gap-1.5 font-mono">
+                                    {[10, 50, 100, 500].map(amt => (
+                                        <button key={amt} onClick={() => setSelectedUnit(amt)} className={`py-1.5 rounded-xl text-xs font-bold border ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-900 border-slate-800'}`}>৳{amt}</button>
+                                    ))}
+                                </div>
+                                <button onClick={() => { setBalance(prev => prev - selectedUnit); showToast(`Bet placed!`, 'success'); setIsBetSheetOpen(false); }} className="w-full py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
+                                    Confirm (৳{selectedUnit})
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
                     {/* BIG WIN CELEBRATION POPUP */}
                     {showResultPopup && (
                         <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md">
-                            <div className="relative w-full max-w-sm glass-panel-gold border-2 border-amber-400/80 rounded-3xl p-5 text-center shadow-2xl space-y-3">
+                            <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-5 text-center shadow-2xl space-y-3">
                                 <div className="text-5xl animate-bounce">🏆</div>
                                 <h2 className="text-xl font-black text-gradient-gold font-mono uppercase">CASHOUT SUCCESS!</h2>
                                 <div className="p-2.5 bg-black/60 rounded-2xl border border-amber-400/40">
