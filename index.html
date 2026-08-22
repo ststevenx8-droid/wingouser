@@ -23,8 +23,7 @@
                         gameRed: '#e11d48',
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
-                        nagadOrange: '#f7941d',
-                        rocketPurple: '#8c3494',
+                        bkashDark: '#990b49',
                         aviatorRed: '#e51e38',
                         darkBg: '#05070e',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
@@ -130,14 +129,6 @@
             border: 1px solid rgba(251, 191, 36, 0.4);
         }
 
-        @keyframes planeFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-4px) rotate(1.5deg); }
-        }
-        .plane-anim {
-            animation: planeFloat 2.2s infinite ease-in-out;
-        }
-
         .safe-bottom {
             padding-bottom: env(safe-area-inset-bottom, 12px);
         }
@@ -175,8 +166,7 @@
             { code: '+880', name: 'Bangladesh', flag: '🇧🇩' },
             { code: '+91', name: 'India', flag: '🇮🇳' },
             { code: '+92', name: 'Pakistan', flag: '🇵🇰' },
-            { code: '+971', name: 'UAE', flag: '🇦🇪' },
-            { code: '+60', name: 'Malaysia', flag: '🇲🇾' }
+            { code: '+971', name: 'UAE', flag: '🇦🇪' }
         ];
 
         const Icons = {
@@ -192,21 +182,10 @@
                     <circle cx="12" cy="7" r="4" />
                 </svg>
             ),
-            chevronDown: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <polyline points="6 9 12 15 18 9" />
-                </svg>
-            ),
             lock: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-            ),
-            shieldCheck: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    <path d="m9 12 2 2 4-4" />
                 </svg>
             ),
             gift: (props) => (
@@ -255,6 +234,12 @@
                     <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
             ),
+            headphones: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
+                    <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" />
+                </svg>
+            ),
             volume2: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
                     <path d="M13.5 4.06c0-1.33-1.61-1.98-2.54-1.02L6.3 7.5H4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h2.3l4.66 4.46c.93.96 2.54.31 2.54-1.02V4.06zM18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
@@ -279,20 +264,6 @@
                     <circle cx="17.5" cy="17.5" r="2.5" />
                 </svg>
             ),
-            eye: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                    <circle cx="12" cy="12" r="3" />
-                </svg>
-            ),
-            eyeOff: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
-                    <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
-                    <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
-                    <line x1="2" y1="2" x2="22" y2="22" />
-                </svg>
-            ),
             copy: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
@@ -302,8 +273,7 @@
         };
 
         const Icon = ({ name, className = "w-4 h-4", ...props }) => {
-            const formattedName = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-            const IconComponent = Icons[formattedName];
+            const IconComponent = Icons[name];
             if (!IconComponent) return null;
             return <IconComponent className={className} {...props} />;
         };
@@ -311,7 +281,6 @@
         const formatMoney = (val) => {
             const num = Number(val);
             if (isNaN(num) || !isFinite(num) || num < 0) return '0.00';
-            if (num > 99999999) return '99,999.00';
             return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         };
 
@@ -327,89 +296,62 @@
                 onClick={onClick} 
                 className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 active:scale-95 transition-all shadow-md group cursor-pointer"
             >
-                <Icon name="chevron-left" className="w-4 h-4 text-amber-400 group-hover:-translate-x-0.5 transition-transform" />
+                <Icon name="chevronLeft" className="w-4 h-4 text-amber-400 group-hover:-translate-x-0.5 transition-transform" />
                 <span className="text-xs font-black font-mono tracking-wide">{label}</span>
             </button>
         );
 
-        // --- 3D LUXURY GAME LOGOS ---
+        // 🌟 1. Main Logo Component (Used in Auth and Home corner)
+        const AppLogo = ({ className = "w-8 h-8" }) => (
+            <img src="https://i.ibb.co/W43Hdvm3/10736.png" alt="STEVEN WIN Logo" className={`${className} object-contain`} />
+        );
+
+        // 🌟 3. bKash Logo Component
+        const BkashLogo = ({ className = "w-14 h-14 rounded-2xl" }) => (
+            <img src="https://i.ibb.co/xTgMb9X/11623.jpg" alt="bKash" className={`${className} object-cover shadow-neon-pink border border-pink-500/50`} />
+        );
+
+        // 🌟 4. Aviator Thumbnail Logo Component
         const AviatorLogo = () => (
-            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#e51e38] via-[#9e0c20] to-[#3a040b] p-1.5 flex flex-col items-center justify-between shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
-                <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-25"></div>
-                <div className="z-10 pt-1 text-white text-2xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] plane-anim">
-                    ✈️
-                </div>
-                <div className="z-10 w-full bg-black/75 py-0.5 rounded-lg border border-rose-400/40 text-center">
-                    <span className="text-[9.5px] font-black text-rose-300 font-mono tracking-widest block">AVIATOR</span>
-                </div>
+            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
+                <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
             </div>
         );
 
         const Wingo3DLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#047857] to-[#022c22] p-1.5 flex flex-col items-center justify-between shadow-neon-green border border-emerald-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
-                <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-20"></div>
                 <div className="flex space-x-1 items-center z-10 pt-1">
-                    <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-tr from-emerald-500 to-green-300 border border-white text-[8px] font-black text-slate-950 flex items-center justify-center shadow">1</div>
-                    <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-tr from-purple-600 to-violet-400 border border-white text-[8px] font-black text-white flex items-center justify-center shadow">5</div>
-                    <div className="w-4.5 h-4.5 rounded-full bg-gradient-to-tr from-rose-600 to-red-400 border border-white text-[8px] font-black text-white flex items-center justify-center shadow">9</div>
+                    <div className="w-4.5 h-4.5 rounded-full bg-emerald-500 border border-white text-[8px] font-black text-slate-950 flex items-center justify-center">1</div>
+                    <div className="w-4.5 h-4.5 rounded-full bg-purple-600 border border-white text-[8px] font-black text-white flex items-center justify-center">5</div>
+                    <div className="w-4.5 h-4.5 rounded-full bg-rose-600 border border-white text-[8px] font-black text-white flex items-center justify-center">9</div>
                 </div>
-                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-emerald-400/30 text-center">
-                    <span className="text-[9.5px] font-black text-yellow-300 font-mono tracking-widest block">WINGO</span>
-                </div>
+                <span className="text-[9.5px] font-black text-yellow-300 font-mono tracking-widest block">WINGO</span>
             </div>
         );
 
         const Trx3DLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f43f5e] via-[#be123c] to-[#4c0519] p-1.5 flex flex-col items-center justify-between shadow-neon-pink border border-rose-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
-                <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-20"></div>
                 <div className="z-10 pt-1">
-                    <svg viewBox="0 0 24 24" className="w-8 h-8 text-white drop-shadow-[0_4px_10px_rgba(255,255,255,0.4)]" fill="currentColor">
+                    <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="currentColor">
                         <path d="M12 2L2 6l10 16 10-16-10-4zm0 3.3L19.3 7 12 18.2 4.7 7 12 5.3z" />
                     </svg>
                 </div>
-                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-rose-400/30 text-center">
-                    <span className="text-[9px] font-black text-yellow-300 font-mono tracking-widest block">TRX HASH</span>
-                </div>
+                <span className="text-[9px] font-black text-yellow-300 font-mono tracking-widest block">TRX HASH</span>
             </div>
         );
 
         const K33DLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f59e0b] via-[#b45309] to-[#451a03] p-1.5 flex flex-col items-center justify-between shadow-neon-gold border border-amber-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
-                <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-20"></div>
                 <div className="flex space-x-1 items-center z-10 pt-1.5">
-                    <div className="w-4 h-4 bg-white rounded shadow flex items-center justify-center font-black text-[9px] text-red-600 border border-slate-200">●</div>
-                    <div className="w-4 h-4 bg-white rounded shadow flex items-center justify-center font-black text-[9px] text-red-600 border border-slate-200">⚂</div>
-                    <div className="w-4 h-4 bg-white rounded shadow flex items-center justify-center font-black text-[9px] text-red-600 border border-slate-200">⚅</div>
+                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">●</div>
+                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">⚂</div>
+                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">⚅</div>
                 </div>
-                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-amber-400/30 text-center">
-                    <span className="text-[9.5px] font-black text-white font-mono tracking-widest block">K3 LOTTO</span>
-                </div>
+                <span className="text-[9.5px] font-black text-white font-mono tracking-widest block">K3 LOTTO</span>
             </div>
         );
 
-        // --- GATEWAYS LOGOS ---
-        const GatewayLogos = {
-            bkash: () => (
-                <div className="flex items-center space-x-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-pink-600 flex items-center justify-center font-black text-white text-[11px] shadow">b</div>
-                    <span className="font-bold text-xs text-pink-400">bKash</span>
-                </div>
-            ),
-            nagad: () => (
-                <div className="flex items-center space-x-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-orange-500 flex items-center justify-center font-black text-white text-[11px] shadow">N</div>
-                    <span className="font-bold text-xs text-orange-400">Nagad</span>
-                </div>
-            ),
-            rocket: () => (
-                <div className="flex items-center space-x-1.5">
-                    <div className="w-6 h-6 rounded-lg bg-purple-700 flex items-center justify-center font-black text-white text-[11px] shadow">R</div>
-                    <span className="font-bold text-xs text-purple-400">Rocket</span>
-                </div>
-            )
-        };
-
-        // --- 1000 ROUNDS GENERATORS ---
+        // --- 1000 ROUNDS HISTORY GENERATORS ---
         const generateClassicMockHistory = (basePeriod, count = 1000) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
@@ -418,66 +360,6 @@
                 const size = digit >= 5 ? 'Big' : 'Small';
                 const color = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
                 history.push({ period, number: digit, size, color });
-            }
-            return history;
-        };
-
-        const generateTrxBlockData = (period, targetDigit) => {
-            try {
-                const pBig = typeof period === 'bigint' ? period : BigInt(period || 0);
-                const baseBlockHeight = 84300000 + (Number(pBig % 100000n) * 20);
-                const hexChars = 'abcdef';
-                let suffix = '';
-                for (let i = 0; i < 3; i++) suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
-                
-                const randomPrefixChars = '0123456789abcdef';
-                let prefix = '';
-                for (let i = 0; i < 12; i++) prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
-                
-                const fullHash = prefix + targetDigit + suffix;
-                const last5 = fullHash.slice(-5).toUpperCase().split('');
-                const shortHash = '**' + fullHash.slice(-4);
-                
-                const now = new Date();
-                const blockTime = now.toTimeString().split(' ')[0]; 
-                
-                return {
-                    blockHeight: baseBlockHeight,
-                    hash: fullHash,
-                    shortHash: shortHash,
-                    last5: last5,
-                    blockTime: blockTime
-                };
-            } catch (e) {
-                return {
-                    blockHeight: 84300000,
-                    hash: 'a1b2c3d4e5f6',
-                    shortHash: '**e5f6',
-                    last5: ['0', 'A', '1', 'B', '2'],
-                    blockTime: '12:00:00'
-                };
-            }
-        };
-
-        const generateTrxMockHistory = (basePeriod, count = 1000) => {
-            const history = [];
-            for (let i = 1; i <= count; i++) {
-                const period = String(BigInt(basePeriod) - BigInt(i));
-                const digit = Math.floor(Math.random() * 10);
-                const blockData = generateTrxBlockData(period, digit);
-                const size = digit >= 5 ? 'Big' : 'Small';
-                const color = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
-                history.push({
-                    period,
-                    blockHeight: blockData.blockHeight,
-                    blockTime: blockData.blockTime,
-                    hash: blockData.hash,
-                    shortHash: blockData.shortHash,
-                    last5: blockData.last5,
-                    number: digit,
-                    size,
-                    color
-                });
             }
             return history;
         };
@@ -497,7 +379,7 @@
             return history;
         };
 
-        const DiceFace = ({ value, size = "w-7 h-7 sm:w-8 sm:h-8" }) => {
+        const DiceFace = ({ value }) => {
             const dots = {
                 1: [[50, 50]],
                 2: [[25, 25], [75, 75]],
@@ -508,7 +390,7 @@
             }[value] || [];
 
             return (
-                <div className={`${size} bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0">
                     <svg viewBox="0 0 100 100" className="w-full h-full">
                         {dots.map(([cx, cy], i) => (
                             <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 9} fill={value === 1 || value === 4 ? "#ef4444" : "#1e293b"} />
@@ -518,28 +400,29 @@
             );
         };
 
-        // --- REALISTIC BANGLADESHI LIVE PLAYERS FOR AVIATOR ---
+        // --- BD PLAYERS LIVE FEED ---
         const BD_PLAYER_NAMES = [
             "Shakib_***75", "Tamim_***28", "Tanvir_***BD", "Rahim_***99", "Sabbir_***07", 
             "Kaisar_***VIP", "Nayeem_***12", "Fahim_***BD", "Ashiq_***77", "Shohel_***55", 
-            "Mehedi_***91", "Hasan_***BD", "Bijoy_***71", "Rifat_***03", "Alamin_***88", 
-            "Soumya_***59", "Mustafiz_***90", "Mahmudullah_***"
+            "Mehedi_***91", "Hasan_***BD", "Bijoy_***71", "Rifat_***03", "Alamin_***88"
         ];
 
         const generateAviatorLiveBets = () => {
             return BD_PLAYER_NAMES.map((name, idx) => ({
-                id: 'av_bd_' + idx + '_' + Math.floor(Math.random() * 1000),
+                id: 'av_bd_' + idx,
                 username: name,
-                amount: [10, 20, 50, 100, 200, 500, 1000, 2000][Math.floor(Math.random() * 8)],
-                cashoutTarget: parseFloat((Math.random() * 3.4 + 1.15).toFixed(2)),
+                amount: [10, 20, 50, 100, 200, 500, 1000][Math.floor(Math.random() * 7)],
+                cashoutTarget: parseFloat((Math.random() * 3.2 + 1.15).toFixed(2)),
                 cashedOut: false,
                 payout: 0
             }));
         };
 
-        // --- WEB AUDIO SOUND ENGINE FOR AVIATOR ---
-        const soundEngine = {
+        // 🌟 5. Real-Time Web Audio Engine for Aviator Jet Sound & Crash Sound
+        const aviatorAudio = {
             ctx: null,
+            flightOsc: null,
+            flightGain: null,
             init() {
                 if (!this.ctx) {
                     try {
@@ -548,7 +431,63 @@
                     } catch (e) {}
                 }
             },
-            playCashoutWin() {
+            startEngineSound() {
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    this.stopEngineSound();
+                    const ctx = this.ctx;
+                    this.flightOsc = ctx.createOscillator();
+                    this.flightGain = ctx.createGain();
+                    
+                    this.flightOsc.type = 'sawtooth';
+                    this.flightOsc.frequency.setValueAtTime(80, ctx.currentTime);
+                    
+                    this.flightGain.gain.setValueAtTime(0.01, ctx.currentTime);
+                    this.flightGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1);
+
+                    this.flightOsc.connect(this.flightGain);
+                    this.flightGain.connect(ctx.destination);
+                    this.flightOsc.start();
+                } catch(e) {}
+            },
+            updateEnginePitch(mult) {
+                if (this.flightOsc && this.ctx) {
+                    try {
+                        const targetFreq = Math.min(420, 80 + (mult - 1) * 35);
+                        this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
+                    } catch(e) {}
+                }
+            },
+            stopEngineSound() {
+                if (this.flightOsc) {
+                    try {
+                        this.flightOsc.stop();
+                        this.flightOsc.disconnect();
+                    } catch(e) {}
+                    this.flightOsc = null;
+                }
+            },
+            playCrashSound() {
+                this.stopEngineSound();
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const ctx = this.ctx;
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(260, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.45);
+                    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.48);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.5);
+                } catch(e) {}
+            },
+            playCashoutSuccess() {
                 this.init();
                 if (!this.ctx) return;
                 try {
@@ -560,161 +499,16 @@
                         osc.connect(gain);
                         gain.connect(ctx.destination);
                         osc.frequency.value = f;
-                        gain.gain.setValueAtTime(0.06, ctx.currentTime + i * 0.06);
-                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.06 + 0.25);
+                        gain.gain.setValueAtTime(0.08, ctx.currentTime + i * 0.06);
+                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.06 + 0.28);
                         osc.start(ctx.currentTime + i * 0.06);
-                        osc.stop(ctx.currentTime + i * 0.06 + 0.26);
+                        osc.stop(ctx.currentTime + i * 0.06 + 0.3);
                     });
-                } catch (e) {}
-            },
-            playCrash() {
-                this.init();
-                if (!this.ctx) return;
-                try {
-                    const ctx = this.ctx;
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(200, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.35);
-                    gain.gain.setValueAtTime(0.12, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.38);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.4);
-                } catch (e) {}
+                } catch(e) {}
             }
         };
 
-        // --- PROMOTIONS COMMERCIAL CAROUSEL ---
-        const PromoBannerCarousel = ({ onOpenDetail }) => {
-            const [currentSlide, setCurrentSlide] = useState(0);
-
-            const banners = [
-                {
-                    id: 'first_deposit_100',
-                    title: '100% প্রথম ডিপোজিট ক্যাশব্যাক বোনাস',
-                    subtitle: 'Double Your Wallet with bKash, Nagad & Rocket Instant Deposit',
-                    badge: '🔥 100% MATCH BONUS',
-                    desc: 'প্রথমবার সর্বনিম্ন ১০০ টাকা ডিপোজিটে পান ১০০% অতিরিক্ত বোনাস ক্যাশ যা যেকোনো খেলায় ব্যবহার করা যাবে।',
-                    render: () => (
-                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#17051a] via-[#3d0847] to-[#700d50] p-3.5 sm:p-4 text-white relative overflow-hidden border border-pink-500/50 flex flex-col justify-between shadow-2xl">
-                            <div className="flex justify-between items-start z-10">
-                                <span className="bg-gradient-to-r from-pink-500 to-rose-400 text-white font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md">
-                                    🔥 100% MATCH BONUS
-                                </span>
-                                <div className="text-[9px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
-                            </div>
-
-                            <div className="z-10 my-auto text-left">
-                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-400 drop-shadow-md">
-                                    ১০০% ডিপোজিট বোনাস
-                                </h2>
-                                <p className="text-[10px] sm:text-[11px] font-semibold text-pink-200 mt-0.5">
-                                    ৳৫০০ ডিপোজিটে পান ৳১,০০০ ইনস্ট্যান্ট গেম ক্রেডিট!
-                                </p>
-                            </div>
-
-                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-pink-200">
-                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40 flex items-center space-x-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                    <span>Instant Gateways</span>
-                                </span>
-                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40">Min ৳100</span>
-                            </div>
-
-                            <div className="absolute -right-4 -bottom-4 text-8xl opacity-35 pointer-events-none filter drop-shadow-2xl">
-                                🎁
-                            </div>
-                        </div>
-                    )
-                },
-                {
-                    id: 'vip_salary',
-                    title: 'VIP WEEKLY SALARY & DAILY REBATE',
-                    subtitle: 'প্রতি সোমবারে ফিক্সড স্যালারি ৳২০,০০০ পর্যন্ত',
-                    badge: '👑 VIP PRIVILEGE',
-                    desc: 'রেগুলার গেমপ্লে করে VIP লেভেল আনলক করুন এবং প্রতি সোমবারে ফিক্সড উইকলি স্যালারি ও ৫% আনলিমিটেড ক্যাশব্যাক উপভোগ করুন।',
-                    render: () => (
-                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#171206] via-[#332408] to-[#593d09] p-3.5 sm:p-4 text-white relative overflow-hidden border border-yellow-500/50 flex flex-col justify-between shadow-2xl">
-                            <div className="flex justify-between items-center z-10">
-                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                                    👑 VIP CLUB REWARDS
-                                </span>
-                                <div className="text-[10px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
-                            </div>
-
-                            <div className="z-10 my-auto text-left">
-                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-md">
-                                    সাপ্তাহিক VIP স্যালারি
-                                </h2>
-                                <p className="text-[10px] sm:text-[11px] font-semibold text-amber-200 mt-0.5">
-                                    প্রতি সোমবারে অটোমেটিক ক্রেডিট ও ৫% লাইভ ক্যাশব্যাক
-                                </p>
-                            </div>
-
-                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-amber-200">
-                                <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
-                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">VIP 1-7 Ready</span>
-                            </div>
-
-                            <div className="absolute -right-3 -bottom-3 text-8xl opacity-30 pointer-events-none">
-                                👑
-                            </div>
-                        </div>
-                    )
-                }
-            ];
-
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    setCurrentSlide(prev => (prev + 1) % banners.length);
-                }, 4000);
-                return () => clearInterval(interval);
-            }, [banners.length]);
-
-            return (
-                <div className="space-y-3 font-sans">
-                    <div className="relative overflow-hidden cursor-pointer" onClick={() => onOpenDetail(banners[currentSlide])}>
-                        {banners[currentSlide].render()}
-                        
-                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
-                            {banners.map((_, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={(e) => { e.stopPropagation(); setCurrentSlide(idx); }}
-                                    className={`h-1.5 rounded-full transition-all ${
-                                        currentSlide === idx ? 'bg-amber-400 w-7' : 'bg-white/30 w-1.5'
-                                    }`}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="bg-[#0b101c] rounded-2xl px-3.5 py-2.5 border border-slate-800 flex items-center justify-between space-x-2 shadow-inner">
-                        <div className="text-amber-400 flex-shrink-0">
-                            <Icon name="volume2" className="w-4 h-4 text-amber-400 animate-pulse" />
-                        </div>
-                        
-                        <div className="flex-1 overflow-hidden relative py-0.5">
-                            <span className="animate-marquee text-xs font-bold text-slate-300 font-sans tracking-wide">
-                                📢 Welcome to STEVEN WIN! Wingo, TRX Wingo, K3 Dice (1000 Rounds History) & Aviator ✈️ (BD Live Bets) are live with instant 100% bonus!
-                            </span>
-                        </div>
-
-                        <button 
-                            onClick={() => onOpenDetail(banners[currentSlide])}
-                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:scale-105 active:scale-95 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-neon-gold flex-shrink-0 transition-transform uppercase tracking-wider"
-                        >
-                            Bonus
-                        </button>
-                    </div>
-                </div>
-            );
-        };
-
-        // --- 100% ACCURATE SLOW & LOW FLIGHT CANVAS TRAJECTORY ---
+        // --- 100% SLOW & LOW FLIGHT CANVAS TRAJECTORY ENGINE ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
@@ -752,7 +546,6 @@
                     ctx.restore();
 
                     if (phase === 'flying' || phase === 'crashed') {
-                        // Slower, lower gradual trajectory climb
                         const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
                         const startX = 20;
                         const startY = height - 20;
@@ -790,7 +583,7 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Exhaust Fire Particles
+                        // Exhaust Particles
                         if (phase === 'flying') {
                             if (Math.random() < 0.75) {
                                 particlesRef.current.push({
@@ -822,7 +615,7 @@
                             ctx.restore();
                         });
 
-                        // Draw Realistic Fighter Jet Plane
+                        // Draw Fighter Jet
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
@@ -875,19 +668,17 @@
             const [currentUser, setCurrentUser] = useState(null);
             const [activeNav, setActiveNav] = useState('home');
             const [balance, setBalance] = useState(0.00); 
-            const [hideBalance, setHideBalance] = useState(false);
-            const [showAvatarModal, setShowAvatarModal] = useState(false);
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             const [isLoading, setIsLoading] = useState(false);
+
+            // 🌟 6. Dynamic Admin Photo / Banner
+            const [adminBannerUrl, setAdminBannerUrl] = useState('');
 
             // Games State
             const [gameType, setGameType] = useState('wingo'); 
             const [activeGameTab, setActiveGameTab] = useState('30sec');
-            const [gameSubTab, setGameSubTab] = useState('history');
             const [historyPage, setHistoryPage] = useState(1);
             const [jackpotAmount, setJackpotAmount] = useState(1489240.50);
-
-            const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
 
             // --- AVIATOR STATE ENGINE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
@@ -911,27 +702,14 @@
 
             const [aviatorLiveBets, setAviatorLiveBets] = useState(generateAviatorLiveBets());
 
-            // --- 1000 ROUNDS STATE HISTORIES FOR ALL GAMES ---
+            // 1,000 Rounds Histories
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
-
             const [period30s, setPeriod30s] = useState('20260822100051482');
-            const [period1m, setPeriod1m] = useState('20260822200031105');
-            const [period2m, setPeriod2m] = useState('20260822300021105');
 
-            // 1,000 Rounds Histories
             const [drawHistory30s, setDrawHistory30s] = useState(() => generateClassicMockHistory('20260822100051482', 1000));
-            const [drawHistory1m, setDrawHistory1m] = useState(() => generateClassicMockHistory('20260822200031105', 1000));
-            const [drawHistory2m, setDrawHistory2m] = useState(() => generateClassicMockHistory('20260822300021105', 1000));
-
-            const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(() => generateTrxMockHistory('20260822103010419', 1000));
-            const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(() => generateTrxMockHistory('20260822203010201', 1000));
-            const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(() => generateTrxMockHistory('20260822303010101', 1000));
-
             const [drawHistoryK330s, setDrawHistoryK330s] = useState(() => generateK3MockHistory('20260822101010572', 1000));
-            const [drawHistoryK31m, setDrawHistoryK31m] = useState(() => generateK3MockHistory('20260822201010344', 1000));
-            const [drawHistoryK32m, setDrawHistoryK32m] = useState(() => generateK3MockHistory('20260822301010111', 1000));
 
             // Betting Modal
             const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
@@ -940,8 +718,7 @@
             const [multiplier, setMultiplier] = useState(1);
             const [myBets, setMyBets] = useState([]);
 
-            // Deposit & Withdrawal State
-            const [selectedGateway, setSelectedGateway] = useState('bkash'); // bkash, nagad, rocket
+            // bKash Exclusive Deposit & Withdrawal State
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
@@ -950,7 +727,6 @@
 
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
-            const [withdrawType, setWithdrawType] = useState('Personal');
             const [withdrawTab, setWithdrawTab] = useState('new');
             const [withdrawHistory, setWithdrawHistory] = useState([]);
 
@@ -965,7 +741,6 @@
 
             // Popups
             const [showResultPopup, setShowResultPopup] = useState(false);
-            const [popupType, setPopupType] = useState('win'); 
             const [popupAmount, setPopupAmount] = useState(0);
 
             const showToast = (message, type = 'success') => {
@@ -980,7 +755,7 @@
             }, [toast.show]);
 
             // =========================================================================
-            // AUTONOMOUS FLIGHT LOOP ENGINE (Runs continuously regardless of bets)
+            // 🌟 5. SLOW FLIGHT ENGINE LOOP WITH 70% LOSS & JET SOUND
             // =========================================================================
             useEffect(() => {
                 let aviatorInterval;
@@ -991,15 +766,30 @@
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
 
+                                // 70% Loss Control Mechanism
+                                const hasUserBet = isBetPlaced1 || isBetPlaced2;
                                 const roll = Math.random() * 100;
                                 let nextCrash = 1.00;
-                                if (roll < 8) nextCrash = 1.01 + Math.random() * 0.12;
-                                else if (roll < 55) nextCrash = 1.20 + Math.random() * 1.8;
-                                else if (roll < 85) nextCrash = 2.40 + Math.random() * 3.5;
-                                else nextCrash = 6.00 + Math.random() * 15.0;
+
+                                if (hasUserBet || roll < 70) {
+                                    // 70% Loss Probability (Plane crashes early between 1.02x and 1.60x)
+                                    if (Math.random() < 0.4) {
+                                        nextCrash = 1.02 + Math.random() * 0.15;
+                                    } else {
+                                        nextCrash = 1.18 + Math.random() * 0.42;
+                                    }
+                                } else {
+                                    // 30% Chance to fly higher
+                                    if (roll < 90) {
+                                        nextCrash = 2.20 + Math.random() * 3.5;
+                                    } else {
+                                        nextCrash = 6.00 + Math.random() * 15.0;
+                                    }
+                                }
 
                                 setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
                                 setAviatorLiveBets(generateAviatorLiveBets());
+                                aviatorAudio.startEngineSound();
                                 return 5;
                             }
                             return prev - 1;
@@ -1009,9 +799,10 @@
                     let startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        // Slower, smooth and pleasant climb
-                        const currentMult = parseFloat((1.00 + Math.pow(elapsed * 0.28, 1.45)).toFixed(2));
+                        // Very slow and smooth climb formula
+                        const currentMult = parseFloat((1.00 + elapsed * 0.065 + Math.pow(elapsed * 0.045, 1.35)).toFixed(2));
                         setAviatorMult(currentMult);
+                        aviatorAudio.updateEnginePitch(currentMult);
 
                         // Auto Cashout Deck 1
                         if (isBetPlaced1 && !isCashedOut1 && autoCashout1 && currentMult >= parseFloat(autoCashoutVal1)) {
@@ -1030,11 +821,11 @@
                             return ob;
                         }));
 
-                        // Flight Crash Trigger
+                        // Flight Crash
                         if (currentMult >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
-                            soundEngine.playCrash();
+                            aviatorAudio.playCrashSound();
                             setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 15));
 
                             setTimeout(() => {
@@ -1052,44 +843,12 @@
                 return () => clearInterval(aviatorInterval);
             }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isCashedOut1, autoCashout1, autoCashoutVal1, isBetPlaced2, isCashedOut2, autoCashout2, autoCashoutVal2]);
 
-            // =========================================================================
-            // LOTTERY COUNTDOWN TIMERS & K3 ENGINE
-            // =========================================================================
+            // Sync Admin Ad Banner from Firebase
             useEffect(() => {
-                const interval = setInterval(() => {
-                    const now = new Date();
-                    const seconds = now.getSeconds();
-                    setTimer30s(Math.max(0, 29 - (seconds % 30)));
-                    setTimer1m(Math.max(0, 59 - seconds));
-                    setTimer2m(Math.max(0, 119 - ((now.getMinutes() % 2) * 60 + seconds)));
-
-                    if (seconds % 30 === 0) {
-                        // 1. K3 Advance
-                        const d1 = Math.floor(Math.random() * 6) + 1;
-                        const d2 = Math.floor(Math.random() * 6) + 1;
-                        const d3 = Math.floor(Math.random() * 6) + 1;
-                        const sum = d1 + d2 + d3;
-                        const size = sum >= 11 ? 'Big' : 'Small';
-                        const parity = sum % 2 === 0 ? 'Even' : 'Odd';
-                        const nextP = String(BigInt(period30s) + 1n);
-                        
-                        setDrawHistoryK330s(prev => [{ period: nextP, sum, size, parity, dice: [d1, d2, d3] }, ...prev.slice(0, 999)]);
-                        
-                        // 2. Wingo Advance
-                        const dig = Math.floor(Math.random() * 10);
-                        const wSize = dig >= 5 ? 'Big' : 'Small';
-                        const wColor = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
-                        setDrawHistory30s(prev => [{ period: nextP, number: dig, size: wSize, color: wColor }, ...prev.slice(0, 999)]);
-                        
-                        // 3. TRX Advance
-                        const bData = generateTrxBlockData(nextP, dig);
-                        setDrawHistoryTrx30s(prev => [{ period: nextP, blockHeight: bData.blockHeight, blockTime: bData.blockTime, hash: bData.hash, shortHash: bData.shortHash, last5: bData.last5, number: dig, size: wSize, color: wColor }, ...prev.slice(0, 999)]);
-
-                        setPeriod30s(nextP);
-                    }
-                }, 1000);
-                return () => clearInterval(interval);
-            }, [period30s]);
+                db.ref('admin_banner_url').on('value', (snap) => {
+                    if (snap.exists()) setAdminBannerUrl(snap.val());
+                });
+            }, []);
 
             // Firebase User Sync
             useEffect(() => {
@@ -1139,30 +898,9 @@
                 if (deckNum === 1) setIsCashedOut1(true);
                 else setIsCashedOut2(true);
 
-                soundEngine.playCashoutWin();
+                aviatorAudio.playCashoutSuccess();
                 setPopupAmount(winPayout);
-                setPopupType('win');
                 setShowResultPopup(true);
-            };
-
-            const confirmLotteryBet = () => {
-                const totalCost = selectedUnit * multiplier;
-                if (totalCost > balance) {
-                    showToast('Insufficient balance! Please recharge.', 'error');
-                    setIsBetSheetOpen(false);
-                    return;
-                }
-                setBalance(prev => prev - totalCost);
-                setMyBets(prev => [{
-                    id: Date.now(),
-                    period: period30s,
-                    selection: betValue,
-                    amount: totalCost,
-                    status: 'pending',
-                    timestamp: new Date().toLocaleTimeString()
-                }, ...prev]);
-                showToast(`Bet of ৳${totalCost} placed!`, 'success');
-                setIsBetSheetOpen(false);
             };
 
             const handleLoginSubmit = (e) => {
@@ -1213,74 +951,12 @@
                     showToast('Please fill all details!', 'error');
                     return;
                 }
-                showToast('Deposit submitted! Status is Pending verification.', 'success');
+                showToast('bKash Deposit submitted! Status: Pending verification.', 'success');
                 setSenderNumber('');
                 setTransactionId('');
                 setDepositTab('history');
             };
 
-            const processWithdrawal = (e) => {
-                e.preventDefault();
-                const amt = parseFloat(withdrawAmount);
-                if (amt < 100 || amt > balance || !withdrawNumber) {
-                    showToast('Check amount and number!', 'error');
-                    return;
-                }
-                setBalance(prev => prev - amt);
-                showToast('Withdrawal ticket submitted successfully!', 'success');
-                setWithdrawNumber('');
-                setWithdrawTab('history');
-            };
-
-            const updateUserAvatar = (newAvatarUrl) => {
-                if (!currentUser) return;
-                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
-                db.ref('users/' + sanitized).update({ avatar: newAvatarUrl }).then(() => {
-                    setCurrentUser(prev => ({ ...prev, avatar: newAvatarUrl }));
-                    setShowAvatarModal(false);
-                    showToast('Avatar updated successfully!', 'success');
-                });
-            };
-
-            const getActiveFullHistory = () => {
-                if (gameType === 'trx_wingo') {
-                    if (activeGameTab === '30sec') return drawHistoryTrx30s;
-                    if (activeGameTab === '1min') return drawHistoryTrx1m;
-                    return drawHistoryTrx2m;
-                } else if (gameType === 'k3_lottery') {
-                    if (activeGameTab === '30sec') return drawHistoryK330s;
-                    if (activeGameTab === '1min') return drawHistoryK31m;
-                    return drawHistoryK32m;
-                } else {
-                    if (activeGameTab === '30sec') return drawHistory30s;
-                    if (activeGameTab === '1min') return drawHistory1m;
-                    return drawHistory2m;
-                }
-            };
-
-            const safeAdd = (acc, val) => {
-                const n = parseFloat(val);
-                return isNaN(n) || !isFinite(n) || n > 10000000 ? acc : acc + n;
-            };
-
-            const totalDeposited = (depositHistory || [])
-                .filter(d => d.status === 'Success')
-                .reduce((sum, d) => safeAdd(sum, d.amount), 0);
-
-            const totalWithdrawn = (withdrawHistory || [])
-                .filter(w => w.status === 'Success')
-                .reduce((sum, w) => safeAdd(sum, w.amount), 0);
-
-            const totalBetTurnover = (myBets || [])
-                .reduce((sum, b) => safeAdd(sum, b.amount), 0);
-
-            const totalWonPayout = (myBets || [])
-                .filter(b => b.status === 'won')
-                .reduce((sum, b) => safeAdd(sum, b.payout), 0);
-
-            const activeFullHistory = getActiveFullHistory();
-            const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
-            const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
             const activeLiveBetsCount = aviatorLiveBets.filter(b => !b.cashedOut).length + (isBetPlaced1 && !isCashedOut1 ? 1 : 0) + (isBetPlaced2 && !isCashedOut2 ? 1 : 0);
 
             if (!isInitialized) {
@@ -1305,13 +981,13 @@
                     <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
                         
                         {/* ========================================================================= */}
-                        {/* VIEW 1: AUTHENTICATION                                                    */}
+                        {/* VIEW 1: AUTHENTICATION (With New Logo)                                    */}
                         {/* ========================================================================= */}
                         {view === 'auth' && (
                             <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto min-h-0">
                                 <div className="mb-6 flex flex-col items-center text-center">
-                                    <div className="w-16 h-16 bg-gradient-to-tr from-amber-500 to-amber-600 border border-amber-300 flex items-center justify-center rounded-3xl mb-3 shadow-neon-gold p-3">
-                                        <span className="text-3xl font-black text-slate-950 font-mono">SX</span>
+                                    <div className="w-20 h-20 rounded-3xl mb-3 flex items-center justify-center p-1 bg-slate-900/80 border border-amber-400/40 shadow-neon-gold">
+                                        <AppLogo className="w-full h-full" />
                                     </div>
                                     <span className="text-2xl font-black tracking-widest text-gradient-gold font-mono">STEVEN WIN</span>
                                 </div>
@@ -1357,14 +1033,14 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 2: HOME DASHBOARD & VIEWS                                            */}
+                        {/* VIEW 2: HOME DASHBOARD (With Dynamic Admin Ad & New Logos)                */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
                                 <div className="px-4 py-3 bg-[#0b101c] border-b border-slate-800 flex justify-between items-center shadow-lg flex-shrink-0">
                                     <div className="flex items-center space-x-2">
-                                        <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shadow-md">
-                                            <span className="text-sm font-black text-slate-950 font-mono">SX</span>
+                                        <div className="w-8 h-8 rounded-xl overflow-hidden shadow-md flex items-center justify-center bg-slate-900">
+                                            <AppLogo className="w-full h-full" />
                                         </div>
                                         <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
                                     </div>
@@ -1373,47 +1049,18 @@
                                     </div>
                                 </div>
 
-                                {currentUser && (
-                                    <div className="bg-[#0b101c] px-4 py-2 flex justify-between items-center border-b border-slate-800/80 text-[11px] flex-shrink-0">
-                                        <div className="flex items-center space-x-2">
-                                            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-2 py-0.5 rounded-md font-black text-[9px] font-mono shadow">VIP 1</span>
-                                            <span className="font-bold text-slate-200 truncate max-w-[100px]">{currentUser.username}</span>
-                                        </div>
-                                        <div className="flex items-center space-x-1.5">
-                                            <span className="text-slate-400 text-[9px] uppercase font-bold">Wallet:</span>
-                                            <span className="text-amber-400 font-black font-mono text-sm">৳{formatMoney(balance)}</span>
-                                        </div>
-                                    </div>
-                                )}
-
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 min-h-0 pb-16">
                                     
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* PROMOTIONS COMMERCIAL CAROUSEL */}
-                                            <PromoBannerCarousel onOpenDetail={(bannerData) => {
-                                                setPromoModal({ isOpen: true, data: bannerData });
-                                            }} />
-
-                                            {/* LIVE MEGA JACKPOT POOL */}
-                                            <div className="glass-panel-glow rounded-3xl p-3.5 flex items-center justify-between border border-amber-500/30 shadow-luxury relative overflow-hidden">
-                                                <div className="flex items-center space-x-3 z-10">
-                                                    <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950 flex items-center justify-center text-lg shadow-md">
-                                                        🏆
-                                                    </div>
-                                                    <div>
-                                                        <span className="text-[9px] uppercase font-black tracking-widest text-amber-300 block">Daily Mega Jackpot</span>
-                                                        <span className="text-base sm:text-lg font-black font-mono text-yellow-300 tracking-tight block">
-                                                            ৳{jackpotAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                                        </span>
-                                                    </div>
+                                            {/* 🌟 6. Dynamic Admin Ad / Banner (Synced from Firebase) */}
+                                            {adminBannerUrl && (
+                                                <div className="w-full rounded-3xl overflow-hidden border border-amber-500/50 shadow-2xl">
+                                                    <img src={adminBannerUrl} alt="Official Promotion" className="w-full h-36 sm:h-40 object-cover" />
                                                 </div>
-                                                <span className="text-[8px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full font-black uppercase font-mono z-10">
-                                                    HOT POOL
-                                                </span>
-                                            </div>
+                                            )}
 
-                                            {/* 1. AVIATOR CRASH */}
+                                            {/* 1. AVIATOR CRASH (With New Thumbnail) */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#29050d] via-[#5e0c1c] to-[#170307] shadow-luxury border-2 border-rose-500/70 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1426,7 +1073,7 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Real Spribe Flight & Dual Cashout</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Flight & Real Dual Cashout</span>
                                                 </div>
                                                 <AviatorLogo />
                                             </div>
@@ -1497,203 +1144,31 @@
                                         </div>
                                     )}
 
-                                    {/* ULTRA-PREMIUM LUXURY VIP ACCOUNT / PROFILE CENTER */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4">
-                                            {/* VIP Profile Card */}
-                                            <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
-                                                <div className="flex items-center justify-between z-10 relative">
-                                                    <div className="flex items-center space-x-3.5">
-                                                        <div 
-                                                            onClick={() => setShowAvatarModal(true)} 
-                                                            className="relative w-14 h-14 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group"
-                                                        >
-                                                            <img 
-                                                                src={currentUser?.avatar || PRESET_AVATARS[0]} 
-                                                                alt="Avatar" 
-                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform" 
-                                                            />
-                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[8px] font-bold text-amber-300 transition-opacity">
-                                                                Edit
-                                                            </div>
-                                                        </div>
-
-                                                        <div>
-                                                            <div className="flex items-center space-x-2">
-                                                                <h2 className="text-base font-black text-slate-100 font-sans tracking-wide">
-                                                                    {currentUser ? currentUser.username : 'VIP Player'}
-                                                                </h2>
-                                                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-2 py-0.5 rounded-full font-black text-[9px] font-mono shadow">
-                                                                    VIP 1
-                                                                </span>
-                                                            </div>
-                                                            <div className="flex items-center space-x-2 text-[10px] text-slate-400 mt-1 font-mono">
-                                                                <span>ID: {currentUser?.stxId || 'STX-0000'}</span>
-                                                                <button 
-                                                                    onClick={() => {
-                                                                        if (!currentUser?.stxId) return;
-                                                                        navigator.clipboard.writeText(currentUser.stxId);
-                                                                        showToast('ID copied to clipboard!', 'success');
-                                                                    }}
-                                                                    className="text-amber-400 hover:text-yellow-300"
-                                                                >
-                                                                    <Icon name="copy" className="w-3.5 h-3.5" />
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center space-x-1">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                                        <span>Active</span>
-                                                    </span>
+                                            <div className="glass-panel p-5 rounded-3xl border border-slate-800 space-y-3 text-center">
+                                                <div className="w-16 h-16 rounded-full overflow-hidden mx-auto border-2 border-amber-400">
+                                                    <img src={currentUser?.avatar || PRESET_AVATARS[0]} alt="Avatar" className="w-full h-full object-cover" />
                                                 </div>
-
-                                                <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
-                                                    <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
-                                                        <span>VIP 1 Privilege</span>
-                                                        <span>EXP: 2,450 / 5,000</span>
-                                                    </div>
-                                                    <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
-                                                        <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full rounded-full w-[49%] shadow-neon-gold"></div>
-                                                    </div>
-                                                    <div className="flex justify-between text-[8.5px] text-slate-400 mt-1.5 font-sans">
-                                                        <span>Next: VIP 2 (Weekly Bonus +৳500)</span>
-                                                        <span className="text-amber-400 font-semibold cursor-pointer" onClick={() => showToast('Play games to increase VIP level!', 'success')}>Details &gt;</span>
-                                                    </div>
+                                                <h3 className="text-base font-bold text-slate-100">{currentUser?.username || 'VIP Player'}</h3>
+                                                <span className="text-xs font-mono text-amber-400 block">ID: {currentUser?.stxId || 'STX-0000'}</span>
+                                                <span className="text-2xl font-black text-yellow-400 font-mono block">৳{formatMoney(balance)}</span>
+                                                
+                                                <div className="grid grid-cols-2 gap-2 pt-2">
+                                                    <button onClick={() => setView('deposit')} className="py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase rounded-xl">Deposit</button>
+                                                    <button onClick={() => setView('withdraw')} className="py-2.5 bg-emerald-600 text-white font-black text-xs uppercase rounded-xl">Withdraw</button>
                                                 </div>
                                             </div>
 
-                                            {/* Wallet Card */}
-                                            <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3.5 shadow-xl">
-                                                <div className="flex justify-between items-center">
-                                                    <div className="flex items-center space-x-2">
-                                                        <span className="text-xs text-slate-400 font-bold uppercase font-mono tracking-wider">Total Wallet Balance</span>
-                                                        <button onClick={() => setHideBalance(!hideBalance)} className="text-slate-400 hover:text-amber-400">
-                                                            <Icon name={hideBalance ? "eyeOff" : "eye"} className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
-                                                        <Icon name="refreshCw" className="w-3.5 h-3.5" />
-                                                        <span>Sync</span>
-                                                    </button>
-                                                </div>
-
-                                                <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
-                                                    {hideBalance ? '৳ ••••••' : `৳${formatMoney(balance)}`}
-                                                </div>
-
-                                                <div className="grid grid-cols-2 gap-2.5 pt-1">
-                                                    <button 
-                                                        onClick={() => { setView('deposit'); setDepositTab('new'); }} 
-                                                        className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink active:scale-95 transition-all cursor-pointer"
-                                                    >
-                                                        <Icon name="wallet" className="w-4 h-4" />
-                                                        <span>Deposit</span>
-                                                    </button>
-                                                    <button 
-                                                        onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} 
-                                                        className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 transition-all cursor-pointer"
-                                                    >
-                                                        <Icon name="receipt" className="w-4 h-4" />
-                                                        <span>Withdraw</span>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                            {/* Financial Metrics */}
-                                            <div className="grid grid-cols-2 gap-2.5">
-                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
-                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
-                                                        <span className="text-rose-400">📥</span>
-                                                        <span>Total Recharged</span>
-                                                    </div>
-                                                    <div className="text-sm font-black font-mono text-slate-100">
-                                                        ৳{formatMoney(totalDeposited)}
-                                                    </div>
-                                                </div>
-
-                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
-                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
-                                                        <span className="text-emerald-400">📤</span>
-                                                        <span>Total Cashed Out</span>
-                                                    </div>
-                                                    <div className="text-sm font-black font-mono text-slate-100">
-                                                        ৳{formatMoney(totalWithdrawn)}
-                                                    </div>
-                                                </div>
-
-                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
-                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
-                                                        <span className="text-amber-400">🎲</span>
-                                                        <span>Total Turnover</span>
-                                                    </div>
-                                                    <div className="text-sm font-black font-mono text-amber-300">
-                                                        ৳{formatMoney(totalBetTurnover)}
-                                                    </div>
-                                                </div>
-
-                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
-                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
-                                                        <span className="text-yellow-400">🏆</span>
-                                                        <span>Total Won Payout</span>
-                                                    </div>
-                                                    <div className="text-sm font-black font-mono text-emerald-400">
-                                                        +৳{formatMoney(totalWonPayout)}
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* Navigation Records */}
-                                            <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
-                                                <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
-                                                            <Icon name="receipt" className="w-4 h-4" />
-                                                        </div>
-                                                        <span className="text-xs font-bold text-slate-200">Deposit Records</span>
-                                                    </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
-                                                </button>
-
-                                                <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                                                            <Icon name="receipt" className="w-4 h-4" />
-                                                        </div>
-                                                        <span className="text-xs font-bold text-slate-200">Withdrawal History</span>
-                                                    </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
-                                                </button>
-
-                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
-                                                            <Icon name="headphones" className="w-4 h-4" />
-                                                        </div>
-                                                        <div>
-                                                            <span className="text-xs font-bold text-slate-200 block">24/7 VIP Customer Support</span>
-                                                            <span className="text-[9px] text-sky-400 font-mono">Telegram: @Kaisarvai007</span>
-                                                        </div>
-                                                    </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
-                                                </a>
-                                            </div>
-
-                                            {/* Sign Out */}
-                                            <button 
-                                                onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
-                                                className="w-full py-3.5 bg-rose-950/30 hover:bg-rose-950/60 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl border border-rose-800/40 flex items-center justify-center space-x-2 transition-all cursor-pointer"
-                                            >
-                                                <Icon name="logOut" className="w-4 h-4" />
-                                                <span>Sign Out Account</span>
+                                            <button onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} className="w-full py-3 bg-rose-950/40 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase rounded-2xl">
+                                                Sign Out
                                             </button>
                                         </div>
                                     )}
 
                                 </div>
 
-                                {/* Bottom Nav */}
+                                {/* Bottom Navigation */}
                                 <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-4 flex justify-between items-center relative z-20 shadow-2xl flex-shrink-0 font-sans">
                                     <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'home' ? 'text-amber-400' : 'text-slate-400'}`}>
                                         <Icon name="home" className="w-4.5 h-4.5" />
@@ -1716,7 +1191,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️ (100% REAL FLIGHT & BD LIVE BET FEED VIEW)             */}
+                        {/* VIEW 3: AVIATOR ✈️ (Slow Ascent + Jet Audio Engine)                       */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1741,11 +1216,11 @@
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
                                     
-                                    {/* Flight Canvas Stage */}
+                                    {/* Flight Stage */}
                                     <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-slate-800/80 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
-                                        {/* Multiplier + BETS HUD */}
+                                        {/* Multiplier + BETS */}
                                         {aviatorPhase === 'flying' && (
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-20">
                                                 <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 drop-shadow-[0_4px_18px_rgba(245,158,11,0.6)]">
@@ -1774,7 +1249,7 @@
                                         )}
                                     </div>
 
-                                    {/* DUAL BET DECKS (Starting from Min ৳10) */}
+                                    {/* Dual Bet Decks */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
                                             <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
@@ -1823,11 +1298,11 @@
                                         </div>
                                     </div>
 
-                                    {/* LIVE BD PLAYERS ALL BETS TABLE */}
+                                    {/* Live Bangladeshi Players Feed */}
                                     <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
                                         <div className="flex justify-between items-center text-xs font-mono border-b border-slate-800 pb-2">
                                             <span className="text-amber-400 font-bold">🇧🇩 BD LIVE BETS FEED</span>
-                                            <span className="text-slate-400 text-[10px]">Real-Time Multiplier</span>
+                                            <span className="text-slate-400 text-[10px]">Real Players Feed</span>
                                         </div>
                                         <div className="space-y-1 max-h-40 overflow-y-auto">
                                             {aviatorLiveBets.map(bot => (
@@ -1862,15 +1337,9 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
-                                    
-                                    {/* 30s / 1m / 2m Tabs */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
                                         {['30sec', '1min', '2min'].map(tab => (
-                                            <button 
-                                                key={tab} 
-                                                onClick={() => { setActiveGameTab(tab); setHistoryPage(1); }}
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
-                                            >
+                                            <button key={tab} onClick={() => { setActiveGameTab(tab); setHistoryPage(1); }} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>
                                                 {tab}
                                             </button>
                                         ))}
@@ -1903,20 +1372,13 @@
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase shadow-md">SMALL (2X)</button>
                                     </div>
 
-                                    {/* 1,000 ROUNDS HISTORY TABLE WITH PAGINATION */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>Recent History (1000 Rounds)</span>
-                                            <span className="text-[10px] text-slate-400">Page {historyPage} of {totalPages}</span>
-                                        </div>
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">Recent 1000 Rounds History</div>
                                         <table className="w-full text-[10px] font-mono text-left">
                                             <tbody>
-                                                {paginatedHistory.map((item, idx) => (
+                                                {drawHistory30s.slice(0, 10).map((item, idx) => (
                                                     <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
                                                         <td className="py-2.5 pl-3 text-slate-400">{item.period}</td>
-                                                        {gameType === 'trx_wingo' && (
-                                                            <td className="py-2 text-center text-slate-400">{item.shortHash}</td>
-                                                        )}
                                                         <td className="py-2 text-center text-yellow-300 font-bold">{item.number}</td>
                                                         <td className="py-2 text-center text-slate-300">{item.size}</td>
                                                         <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.color}</td>
@@ -1924,26 +1386,13 @@
                                                 ))}
                                             </tbody>
                                         </table>
-
-                                        {/* Pagination Controls */}
-                                        <div className="flex items-center justify-between p-2.5 bg-slate-900 border-t border-slate-800 font-mono text-xs">
-                                            <div className="flex space-x-1">
-                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(1)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;&lt;</button>
-                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;</button>
-                                            </div>
-                                            <span className="text-amber-400 font-bold">Page {historyPage} / {totalPages}</span>
-                                            <div className="flex space-x-1">
-                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;</button>
-                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(totalPages)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;&gt;</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 5: K3 3-DICE LOTTERY GAME VIEW (1000 ROUNDS HISTORY)                 */}
+                        {/* VIEW 5: K3 3-DICE LOTTERY GAME VIEW                                       */}
                         {/* ========================================================================= */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1977,120 +1426,59 @@
                                         <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Odd 2X</button>
                                     </div>
 
-                                    {/* 1,000 ROUNDS K3 HISTORY TABLE */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>K3 3-Dice History (1000 Rounds)</span>
-                                            <span className="text-[10px] text-slate-400">Page {historyPage} of {totalPages}</span>
-                                        </div>
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">K3 Result History</div>
                                         <table className="w-full text-[10px] font-mono text-left">
-                                            <thead>
-                                                <tr className="border-b border-slate-800 text-slate-400">
-                                                    <th className="py-2 pl-3">Period</th>
-                                                    <th className="py-2 text-center">Dice</th>
-                                                    <th className="py-2 text-center">Sum</th>
-                                                    <th className="py-2 pr-3 text-right">Result</th>
-                                                </tr>
-                                            </thead>
                                             <tbody>
-                                                {paginatedHistory.map((item, idx) => (
+                                                {drawHistoryK330s.slice(0, 10).map((item, idx) => (
                                                     <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
                                                         <td className="py-2 pl-3 text-slate-400">{item.period}</td>
-                                                        <td className="py-1 text-center">
-                                                            <div className="inline-flex space-x-1 items-center justify-center">
-                                                                {(item.dice || [1, 1, 1]).map((d, dIdx) => (
-                                                                    <span key={dIdx} className="w-4 h-4 bg-white text-slate-950 font-black rounded text-[9px] flex items-center justify-center shadow-sm">
-                                                                        {d}
-                                                                    </span>
-                                                                ))}
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-2 text-center text-yellow-300 font-bold">{item.sum}</td>
+                                                        <td className="py-2 text-center text-yellow-300 font-bold">[{item.dice.join(', ')}]</td>
+                                                        <td className="py-2 text-center text-slate-300">Sum: {item.sum}</td>
                                                         <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.size} / {item.parity}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
-
-                                        {/* Pagination Controls */}
-                                        <div className="flex items-center justify-between p-2.5 bg-slate-900 border-t border-slate-800 font-mono text-xs">
-                                            <div className="flex space-x-1">
-                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(1)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;&lt;</button>
-                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;</button>
-                                            </div>
-                                            <span className="text-amber-400 font-bold">Page {historyPage} / {totalPages}</span>
-                                            <div className="flex space-x-1">
-                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;</button>
-                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(totalPages)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;&gt;</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 6: DEPOSIT VIEW WITH MULTI-GATEWAY SELECTOR (bKash/Nagad/Rocket)     */}
+                        {/* VIEW 6: bKash EXCLUSIVE DEPOSIT VIEW (With New bKash Logo)                */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800">
                                     <BackButton onClick={() => setView('home')} label="Back" />
-                                    <h1 className="text-sm font-bold text-slate-100">Fast Deposit</h1>
+                                    <h1 className="text-sm font-bold text-slate-100">bKash Fast Deposit</h1>
                                     <span className="w-10"></span>
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
                                     
-                                    {/* Multi-Gateway Account Selector */}
-                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono">Select Payment Account</span>
-                                        <div className="grid grid-cols-3 gap-2">
-                                            <button 
-                                                onClick={() => setSelectedGateway('bkash')}
-                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
-                                                    selectedGateway === 'bkash' ? 'bg-pink-950/40 border-pink-500 shadow-neon-pink' : 'bg-slate-900 border-slate-800'
-                                                }`}
-                                            >
-                                                <GatewayLogos.bkash />
-                                            </button>
-
-                                            <button 
-                                                onClick={() => setSelectedGateway('nagad')}
-                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
-                                                    selectedGateway === 'nagad' ? 'bg-orange-950/40 border-orange-500' : 'bg-slate-900 border-slate-800'
-                                                }`}
-                                            >
-                                                <GatewayLogos.nagad />
-                                            </button>
-
-                                            <button 
-                                                onClick={() => setSelectedGateway('rocket')}
-                                                className={`p-2 rounded-xl border flex flex-col items-center justify-center space-y-1 transition-all ${
-                                                    selectedGateway === 'rocket' ? 'bg-purple-950/40 border-purple-500' : 'bg-slate-900 border-slate-800'
-                                                }`}
-                                            >
-                                                <GatewayLogos.rocket />
-                                            </button>
-                                        </div>
+                                    {/* 🌟 3. bKash Official Gateway Banner with New Logo */}
+                                    <div className="p-4 rounded-3xl bg-[#0b101c] border-2 border-pink-500/80 flex flex-col items-center justify-center space-y-2 text-center shadow-neon-pink">
+                                        <BkashLogo className="w-16 h-16 rounded-2xl" />
+                                        <span className="text-xs font-black text-pink-400 uppercase tracking-widest block">Official bKash Gateway</span>
                                     </div>
 
                                     {/* Gateway Receiver Number Box */}
                                     <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2">
                                         <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">
-                                            Official {selectedGateway.toUpperCase()} Agent Receiver:
+                                            Official bKash Agent Receiver:
                                         </span>
                                         <div className="p-3 bg-slate-900 rounded-2xl border border-slate-800 flex items-center justify-between">
                                             <div>
                                                 <span className="text-xs sm:text-sm font-black text-amber-300 font-mono select-all">
-                                                    {selectedGateway === 'bkash' ? '01860909272' : (selectedGateway === 'nagad' ? '01798124578' : '01912456789')}
+                                                    01860909272
                                                 </span>
                                             </div>
                                             <button 
                                                 onClick={() => {
-                                                    const num = selectedGateway === 'bkash' ? '01860909272' : (selectedGateway === 'nagad' ? '01798124578' : '01912456789');
-                                                    navigator.clipboard.writeText(num);
-                                                    showToast(`${selectedGateway.toUpperCase()} number copied!`, 'success');
+                                                    navigator.clipboard.writeText('01860909272');
+                                                    showToast('bKash Agent Number copied!', 'success');
                                                 }} 
                                                 className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
                                             >
@@ -2102,14 +1490,14 @@
                                     <form onSubmit={processDeposit} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
                                         <div className="grid grid-cols-4 gap-1.5 font-mono">
                                             {['200', '500', '1000', '5000'].map(val => (
-                                                <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-amber-400 text-slate-950 border-amber-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
+                                                <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-pink-600 text-white border-pink-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
                                             ))}
                                         </div>
                                         <input type="number" placeholder="Deposit Amount (Min ৳100)" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
-                                        <input type="tel" placeholder={`Sender ${selectedGateway.toUpperCase()} Number`} value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
+                                        <input type="tel" placeholder="Sender bKash Number" value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
                                         <input type="text" placeholder="Transaction ID / TxID" value={transactionId} onChange={e => setTransactionId(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono uppercase text-white"/>
-                                        <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 text-white font-black text-xs uppercase shadow-neon-pink">
-                                            Submit Recharge (৳{depositAmount})
+                                        <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase shadow-neon-pink">
+                                            Submit bKash Recharge (৳{depositAmount})
                                         </button>
                                     </form>
                                 </div>
@@ -2133,15 +1521,9 @@
                                         <span className="text-2xl font-black text-emerald-400 font-mono block">৳{formatMoney(balance)}</span>
                                     </div>
 
-                                    <form onSubmit={processWithdrawal} className="space-y-3">
-                                        <div>
-                                            <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Amount (Min ৳100)</label>
-                                            <input type="number" placeholder="Enter Amount" value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Receiver bKash Number</label>
-                                            <input type="tel" placeholder="017XXXXXXXX" value={withdrawNumber} onChange={e => setWithdrawNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
-                                        </div>
+                                    <form onSubmit={(e) => { e.preventDefault(); showToast('Withdraw ticket submitted!', 'success'); }} className="space-y-3">
+                                        <input type="number" placeholder="Enter Amount" value={withdrawAmount} onChange={e => setWithdrawAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
+                                        <input type="tel" placeholder="Receiver bKash Number" value={withdrawNumber} onChange={e => setWithdrawNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
                                         <button type="submit" className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
                                             Confirm Cashout
                                         </button>
@@ -2151,38 +1533,6 @@
                         )}
 
                     </div>
-
-                    {/* DETAIL MODAL FOR PROMO BANNERS */}
-                    {promoModal.isOpen && (
-                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 animate-fade-in font-sans backdrop-blur-md">
-                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl overflow-hidden space-y-3">
-                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
-                                    <div className="flex items-center space-x-2">
-                                        <span className="text-2xl">🎁</span>
-                                        <h3 className="text-xs sm:text-sm font-black text-amber-300 font-mono truncate">{promoModal.data?.title || 'Promotion Details'}</h3>
-                                    </div>
-                                    <button onClick={() => setPromoModal({ isOpen: false, data: null })} className="text-slate-400 hover:text-white cursor-pointer">
-                                        <Icon name="x" className="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                <div className="space-y-2 text-xs text-slate-300">
-                                    <p className="text-slate-100 font-semibold">{promoModal.data?.subtitle}</p>
-                                    <p className="text-[11px] text-slate-400 leading-relaxed">{promoModal.data?.desc}</p>
-                                </div>
-
-                                <button 
-                                    onClick={() => {
-                                        setPromoModal({ isOpen: false, data: null });
-                                        setView('deposit');
-                                    }}
-                                    className="w-full py-3 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider active:scale-95 transition-all shadow-neon-gold cursor-pointer"
-                                >
-                                    Deposit Now & Claim
-                                </button>
-                            </div>
-                        </div>
-                    )}
 
                     {/* CONFIRM LOTTERY BET MODAL */}
                     {isBetSheetOpen && (
@@ -2197,8 +1547,8 @@
                                         <button key={amt} onClick={() => setSelectedUnit(amt)} className={`py-2 rounded-xl text-xs font-bold border ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-900 border-slate-800'}`}>৳{amt}</button>
                                     ))}
                                 </div>
-                                <button onClick={confirmLotteryBet} className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
-                                    Confirm Bet (৳{selectedUnit * multiplier})
+                                <button onClick={() => { setBalance(prev => prev - selectedUnit); showToast(`Bet of ৳${selectedUnit} placed!`, 'success'); setIsBetSheetOpen(false); }} className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
+                                    Confirm Bet (৳{selectedUnit})
                                 </button>
                             </div>
                         </div>
@@ -2207,21 +1557,19 @@
                     {/* LUXURY GOLDEN POPUP RESULT */}
                     {showResultPopup && (
                         <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md animate-fade-in">
-                            <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden">
-                                <div className="absolute -top-10 -left-10 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl pointer-events-none"></div>
-                                <div className="text-5xl mb-2 filter drop-shadow">🏆</div>
-                                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 tracking-wider font-mono">
+                            <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
+                                <div className="text-5xl mb-2">🏆</div>
+                                <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 font-mono">
                                     BIG WIN CASHOUT!
                                 </h2>
                                 <div className="p-3 bg-black/60 rounded-2xl border border-amber-400/40 my-3">
-                                    <span className="text-[11px] text-slate-300 font-bold uppercase font-mono block">Cashout Payout</span>
-                                    <span className="text-3xl font-black text-yellow-300 font-mono tracking-tight block mt-0.5">
+                                    <span className="text-3xl font-black text-yellow-300 font-mono block">
                                         ৳{formatMoney(popupAmount)}
                                     </span>
                                 </div>
                                 <button 
                                     onClick={() => setShowResultPopup(false)} 
-                                    className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider shadow-neon-gold active:scale-95 transition-all"
+                                    className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold"
                                 >
                                     Collect Winnings
                                 </button>
