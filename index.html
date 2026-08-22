@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>STEVEN WIN - Next-Gen Elite Gaming</title>
+    <title>STEVEN WIN - Elite Gaming Platform</title>
     
     <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -32,7 +32,7 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.4)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.4)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.4)',
-                        'floating': '0 20px 35px -10px rgba(0, 0, 0, 0.7)'
+                        'luxury': '0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)'
                     }
                 }
             }
@@ -260,12 +260,6 @@
                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                 </svg>
-            ),
-            award: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <circle cx="12" cy="8" r="6"/>
-                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/>
-                </svg>
             )
         };
 
@@ -276,17 +270,14 @@
             return <IconComponent className={className} {...props} />;
         };
 
-        // --- PRESET AVATARS ---
         const PRESET_AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80"
         ];
 
-        // --- REUSABLE PREMIER BACK BUTTON ---
         const BackButton = ({ onClick, label = "Back" }) => (
             <button 
                 type="button" 
@@ -298,7 +289,6 @@
             </button>
         );
 
-        // --- ULTRA 3D LUXURY LOGOS ---
         const Wingo3DLogo = () => (
             <div className="relative w-20 h-20 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#047857] to-[#022c22] p-1.5 flex flex-col items-center justify-between shadow-neon-green border border-emerald-400/40 transform hover:scale-105 transition-transform overflow-hidden">
                 <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-20"></div>
@@ -307,7 +297,7 @@
                     <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-purple-600 to-violet-400 border border-white text-[8px] font-black text-white flex items-center justify-center shadow">5</div>
                     <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-rose-600 to-red-400 border border-white text-[8px] font-black text-white flex items-center justify-center shadow">9</div>
                 </div>
-                <div className="z-10 w-full bg-black/70 backdrop-blur-xs py-0.5 rounded-lg border border-emerald-400/30 text-center">
+                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-emerald-400/30 text-center">
                     <span className="text-[10px] font-black text-yellow-300 font-mono tracking-widest block">WINGO</span>
                 </div>
             </div>
@@ -321,7 +311,7 @@
                         <path d="M12 2L2 6l10 16 10-16-10-4zm0 3.3L19.3 7 12 18.2 4.7 7 12 5.3z" />
                     </svg>
                 </div>
-                <div className="z-10 w-full bg-black/70 backdrop-blur-xs py-0.5 rounded-lg border border-rose-400/30 text-center">
+                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-rose-400/30 text-center">
                     <span className="text-[9.5px] font-black text-yellow-300 font-mono tracking-widest block">TRX HASH</span>
                 </div>
             </div>
@@ -335,7 +325,7 @@
                     <div className="w-4 h-4 bg-white rounded-md shadow flex items-center justify-center font-black text-[9px] text-red-600 border border-slate-200">⚂</div>
                     <div className="w-4 h-4 bg-white rounded-md shadow flex items-center justify-center font-black text-[9px] text-red-600 border border-slate-200">⚅</div>
                 </div>
-                <div className="z-10 w-full bg-black/70 backdrop-blur-xs py-0.5 rounded-lg border border-amber-400/30 text-center">
+                <div className="z-10 w-full bg-black/70 py-0.5 rounded-lg border border-amber-400/30 text-center">
                     <span className="text-[10px] font-black text-white font-mono tracking-widest block">K3 LOTTO</span>
                 </div>
             </div>
@@ -357,7 +347,6 @@
             </svg>
         );
 
-        // --- ULTRA COMMERCIAL BANNER CAROUSEL ---
         const PromoBannerCarousel = ({ onOpenDetail }) => {
             const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -370,8 +359,6 @@
                     desc: 'প্রথমবার সর্বনিম্ন ১০০ টাকা ডিপোজিটে পান ১০০% অতিরিক্ত বোনাস ক্যাশ যা যেকোনো খেলায় ব্যবহার করা যাবে।',
                     render: () => (
                         <div className="w-full h-44 rounded-3xl bg-gradient-to-r from-[#17051a] via-[#3d0847] to-[#700d50] p-4 text-white relative overflow-hidden border border-pink-500/50 flex flex-col justify-between shadow-2xl">
-                            <div className="absolute inset-0 bg-[radial-gradient(#ff248a_1px,transparent_1px)] [background-size:12px_12px] opacity-25 pointer-events-none"></div>
-
                             <div className="flex justify-between items-start z-10">
                                 <span className="bg-gradient-to-r from-pink-500 to-rose-400 text-white font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                                     🔥 100% MATCH BONUS
@@ -389,7 +376,7 @@
                             </div>
 
                             <div className="z-10 flex items-center space-x-2 text-[9px] font-mono text-pink-200">
-                                <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-pink-500/40 flex items-center space-x-1">
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-pink-500/40 flex items-center space-x-1">
                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
                                     <span>bKash 0s Fast Settle</span>
                                 </span>
@@ -410,8 +397,6 @@
                     desc: 'রেগুলার গেমপ্লে করে VIP লেভেল আনলক করুন এবং প্রতি সোমবারে ফিক্সড উইকলি স্যালারি ও ৫% আনলিমিটেড ক্যাশব্যাক উপভোগ করুন।',
                     render: () => (
                         <div className="w-full h-44 rounded-3xl bg-gradient-to-r from-[#171206] via-[#332408] to-[#593d09] p-4 text-white relative overflow-hidden border border-yellow-500/50 flex flex-col justify-between shadow-2xl">
-                            <div className="absolute inset-0 bg-[radial-gradient(#fccd11_1px,transparent_1px)] [background-size:12px_12px] opacity-20 pointer-events-none"></div>
-
                             <div className="flex justify-between items-center z-10">
                                 <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                                     👑 VIP CLUB REWARDS
@@ -429,8 +414,8 @@
                             </div>
 
                             <div className="z-10 flex items-center space-x-2 text-[9px] font-mono text-amber-200">
-                                <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
-                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">VIP 1-7 Ready</span>
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">VIP Ready</span>
                             </div>
 
                             <div className="absolute -right-3 -bottom-3 text-8xl opacity-30 pointer-events-none">
@@ -466,7 +451,6 @@
                         </div>
                     </div>
 
-                    {/* Commercial Live Marquee */}
                     <div className="bg-[#0b101c] rounded-2xl px-3.5 py-2.5 border border-slate-800 flex items-center justify-between space-x-2 shadow-inner">
                         <div className="text-amber-400 flex-shrink-0">
                             <Icon name="volume-2" className="w-5 h-5 text-amber-400 animate-pulse" />
@@ -480,7 +464,7 @@
 
                         <button 
                             onClick={() => onOpenDetail(banners[currentSlide])}
-                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:scale-105 active:scale-95 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-neon-gold flex-shrink-0 transition-transform uppercase tracking-wider"
+                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:scale-105 active:scale-95 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-neon-gold flex-shrink-0 transition-transform uppercase tracking-wider cursor-pointer"
                         >
                             Bonus
                         </button>
@@ -502,34 +486,45 @@
         };
 
         const generateTrxBlockData = (period, targetDigit) => {
-            const baseBlockHeight = 84300000 + (Number(period % 100000n) * 20);
-            const hexChars = 'abcdef';
-            const suffixLength = Math.floor(Math.random() * 3); 
-            let suffix = '';
-            for (let i = 0; i < suffixLength; i++) {
-                suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+            try {
+                const pBig = typeof period === 'bigint' ? period : BigInt(period || 0);
+                const baseBlockHeight = 84300000 + (Number(pBig % 100000n) * 20);
+                const hexChars = 'abcdef';
+                const suffixLength = Math.floor(Math.random() * 3); 
+                let suffix = '';
+                for (let i = 0; i < suffixLength; i++) {
+                    suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+                }
+                
+                const randomPrefixChars = '0123456789abcdef';
+                let prefix = '';
+                for (let i = 0; i < 12; i++) {
+                    prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
+                }
+                
+                const fullHash = prefix + targetDigit + suffix;
+                const last5 = fullHash.slice(-5).toUpperCase().split('');
+                const shortHash = '**' + fullHash.slice(-4);
+                
+                const now = new Date();
+                const blockTime = now.toTimeString().split(' ')[0]; 
+                
+                return {
+                    blockHeight: baseBlockHeight,
+                    hash: fullHash,
+                    shortHash: shortHash,
+                    last5: last5,
+                    blockTime: blockTime
+                };
+            } catch (e) {
+                return {
+                    blockHeight: 84300000,
+                    hash: 'a1b2c3d4e5f6',
+                    shortHash: '**e5f6',
+                    last5: ['0', 'A', '1', 'B', '2'],
+                    blockTime: '12:00:00'
+                };
             }
-            
-            const randomPrefixChars = '0123456789abcdef';
-            let prefix = '';
-            for (let i = 0; i < 12; i++) {
-                prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
-            }
-            
-            const fullHash = prefix + targetDigit + suffix;
-            const last5 = fullHash.slice(-5).toUpperCase().split('');
-            const shortHash = '**' + fullHash.slice(-4);
-            
-            const now = new Date();
-            const blockTime = now.toTimeString().split(' ')[0]; 
-            
-            return {
-                blockHeight: baseBlockHeight,
-                hash: fullHash,
-                shortHash: shortHash,
-                last5: last5,
-                blockTime: blockTime
-            };
         };
 
         const generateTrxMockHistory = (basePeriod, count) => {
@@ -537,7 +532,7 @@
             for (let i = 1; i <= count; i++) {
                 const period = String(BigInt(basePeriod) - BigInt(i));
                 const digit = Math.floor(Math.random() * 10);
-                const blockData = generateTrxBlockData(BigInt(period), digit);
+                const blockData = generateTrxBlockData(period, digit);
                 const size = digit >= 5 ? 'Big' : 'Small';
                 const color = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
                 history.push({
@@ -595,30 +590,6 @@
                     </svg>
                 </div>
             );
-        };
-
-        const playCountdownBeep = (isFinal = false) => {
-            try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                const ctx = new AudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                
-                osc.frequency.value = isFinal ? 950 : 580; 
-                osc.type = 'sine';
-                
-                gain.gain.setValueAtTime(0.08, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.12);
-                
-                osc.start();
-                osc.stop(ctx.currentTime + 0.15);
-            } catch (e) {
-                // Audio fallback
-            }
         };
 
         function App() {
@@ -694,6 +665,7 @@
             const [drawHistoryK31m, setDrawHistoryK31m] = useState(generateK3MockHistory('20260822201010344', 50));
             const [drawHistoryK32m, setDrawHistoryK32m] = useState(generateK3MockHistory('20260822301010111', 50));
 
+            // Bet sheet custom states
             const [betValue, setBetValue] = useState(null);
             const [multiplier, setMultiplier] = useState(1);
             const [selectedUnit, setSelectedUnit] = useState(10);
@@ -734,7 +706,6 @@
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
             useEffect(() => { balanceRef.current = balance; }, [balance]);
 
-            // Live Jackpot Auto-increment
             useEffect(() => {
                 const jInterval = setInterval(() => {
                     setJackpotAmount(prev => prev + (Math.random() * 2.8));
@@ -746,7 +717,7 @@
                 setHistoryPage(1);
             }, [gameType, activeGameTab, gameSubTab]);
 
-            const getSanitizedPath = (fullPhone) => fullPhone.replace(/[^0-9]/g, "");
+            const getSanitizedPath = (fullPhone) => fullPhone ? fullPhone.replace(/[^0-9]/g, "") : "";
 
             const showToast = (message, type = 'success') => {
                 setToast({ show: true, message, type });
@@ -820,9 +791,11 @@
                         setCurrentUser(userData);
                         setBalance(Number(userData.balance || 0));
                         setDailyClaimed(userData.dailyClaimed || false);
-                        setMyBets(userData.bets ? Object.values(userData.bets) : []);
-                        setDepositHistory(userData.deposits ? Object.values(userData.deposits) : []);
-                        setWithdrawHistory(userData.withdrawals ? Object.values(userData.withdrawals) : []);
+                        
+                        // Parse object or array safely
+                        setMyBets(userData.bets ? (Array.isArray(userData.bets) ? userData.bets : Object.values(userData.bets)) : []);
+                        setDepositHistory(userData.deposits ? (Array.isArray(userData.deposits) ? userData.deposits : Object.values(userData.deposits)) : []);
+                        setWithdrawHistory(userData.withdrawals ? (Array.isArray(userData.withdrawals) ? userData.withdrawals : Object.values(userData.withdrawals)) : []);
                         
                         setView(prev => prev === 'auth' ? 'home' : prev);
                     } else {
@@ -860,21 +833,24 @@
                 const activeTimer = getTimerForActiveTab();
                 if ((view === 'game' || view === 'game_k3') && activeTimer <= 5 && activeTimer >= 0) {
                     if (lastPlayedTimeRef.current !== activeTimer) {
-                        playCountdownBeep(activeTimer === 0);
+                        try {
+                            playCountdownBeep(activeTimer === 0);
+                        } catch (e) {}
                         lastPlayedTimeRef.current = activeTimer;
                     }
                 }
             }, [timer30s, timer1m, timer2m, activeGameTab, view]);
 
             const determineOutcomeWithLossParameters = (game, mode, currentPeriod) => {
-                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === game && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
+                const activeBets = (myBetsRef.current || []).filter(b => b && b.gameType === game && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
                 if (activeBets.length === 0) return Math.floor(Math.random() * 10);
 
                 const controlRoll = Math.random() * 100;
                 if (controlRoll <= 70) {
                     const userWinStates = new Set();
                     activeBets.forEach(bet => {
-                        const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+                        const rawSel = bet.selection !== undefined && bet.selection !== null ? bet.selection : '';
+                        const selection = typeof rawSel === 'string' ? rawSel.toLowerCase() : rawSel;
                         if (!isNaN(selection) && selection !== '') {
                             userWinStates.add(Number(selection));
                         } else if (selection === 'big') {
@@ -903,7 +879,7 @@
             };
 
             const determineK3OutcomeWithLossParameters = (mode, currentPeriod) => {
-                const activeBets = (myBetsRef.current || []).filter(b => b.gameType === 'k3_lottery' && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
+                const activeBets = (myBetsRef.current || []).filter(b => b && b.gameType === 'k3_lottery' && b.mode === mode && String(b.period) === String(currentPeriod) && b.status === 'pending');
                 if (activeBets.length === 0) {
                     return [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
                 }
@@ -925,7 +901,8 @@
                         const parity = sum % 2 === 0 ? 'even' : 'odd';
 
                         return !activeBets.some(bet => {
-                            const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+                            const rawSel = bet.selection !== undefined && bet.selection !== null ? bet.selection : '';
+                            const selection = typeof rawSel === 'string' ? rawSel.toLowerCase() : rawSel;
                             if (!isNaN(selection) && selection !== '') return Number(selection) === sum;
                             if (selection === 'big' || selection === 'small') return selection === size;
                             if (selection === 'even' || selection === 'odd') return selection === parity;
@@ -946,25 +923,26 @@
                 let activeBetFound = false;
 
                 const updatedBets = (myBetsRef.current || []).map(bet => {
-                    if (bet.gameType === game && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
+                    if (bet && bet.gameType === game && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
-                        const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+                        const rawSel = bet.selection !== undefined && bet.selection !== null ? bet.selection : '';
+                        const selection = typeof rawSel === 'string' ? rawSel.toLowerCase() : rawSel;
 
                         if (!isNaN(selection) && selection !== '') {
                             if (Number(selection) === Number(number)) { isWin = true; multiplierFactor = 9; }
                         } else if (selection === 'big' || selection === 'small') {
-                            if (selection === size.toLowerCase()) { isWin = true; multiplierFactor = 2; }
+                            if (selection === String(size).toLowerCase()) { isWin = true; multiplierFactor = 2; }
                         } else if (['green', 'red', 'violet'].includes(selection)) {
-                            if (color.includes(selection)) {
+                            if (String(color).includes(selection)) {
                                 isWin = true;
                                 multiplierFactor = selection === 'violet' ? 4.5 : 2;
                             }
                         }
 
                         if (isWin) {
-                            const payout = bet.amount * multiplierFactor;
+                            const payout = Number(bet.amount || 0) * multiplierFactor;
                             winAmount += payout;
                             return { ...bet, status: 'won', payout };
                         }
@@ -975,7 +953,7 @@
 
                 if (activeBetFound) {
                     setMyBets(updatedBets);
-                    const newBalance = balanceRef.current + winAmount;
+                    const newBalance = Number(balanceRef.current || 0) + winAmount;
                     setBalance(newBalance);
                     
                     const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
@@ -993,11 +971,12 @@
                 let activeBetFound = false;
 
                 const updatedBets = (myBetsRef.current || []).map(bet => {
-                    if (bet.gameType === 'k3_lottery' && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
+                    if (bet && bet.gameType === 'k3_lottery' && bet.mode === mode && String(bet.period) === String(period) && bet.status === 'pending') {
                         activeBetFound = true;
                         let isWin = false;
                         let multiplierFactor = 0;
-                        const selection = typeof bet.selection === 'string' ? bet.selection.toLowerCase() : bet.selection;
+                        const rawSel = bet.selection !== undefined && bet.selection !== null ? bet.selection : '';
+                        const selection = typeof rawSel === 'string' ? rawSel.toLowerCase() : rawSel;
 
                         if (!isNaN(selection) && selection !== '') {
                             if (Number(selection) === Number(sum)) {
@@ -1010,13 +989,13 @@
                                 multiplierFactor = sumMultipliers[selection] || 2;
                             }
                         } else if (selection === 'big' || selection === 'small') {
-                            if (selection === size.toLowerCase()) { isWin = true; multiplierFactor = 2; }
+                            if (selection === String(size).toLowerCase()) { isWin = true; multiplierFactor = 2; }
                         } else if (selection === 'even' || selection === 'odd') {
-                            if (selection === parity.toLowerCase()) { isWin = true; multiplierFactor = 2; }
+                            if (selection === String(parity).toLowerCase()) { isWin = true; multiplierFactor = 2; }
                         }
 
                         if (isWin) {
-                            const payout = bet.amount * multiplierFactor;
+                            const payout = Number(bet.amount || 0) * multiplierFactor;
                             winAmount += payout;
                             return { ...bet, status: 'won', payout };
                         }
@@ -1027,7 +1006,7 @@
 
                 if (activeBetFound) {
                     setMyBets(updatedBets);
-                    const newBalance = balanceRef.current + winAmount;
+                    const newBalance = Number(balanceRef.current || 0) + winAmount;
                     setBalance(newBalance);
                     
                     const dbPath = 'users/' + getSanitizedPath(currentUserRef.current.phone);
@@ -1040,31 +1019,33 @@
             };
 
             const handleModeDraw = (mode) => {
-                let currentPeriodClassic = mode === '30sec' ? period30sRef.current : (mode === '1min' ? period1mRef.current : period2mRef.current);
+                // 1. Classic Wingo Draw
+                const currentPeriodClassic = mode === '30sec' ? period30sRef.current : (mode === '1min' ? period1mRef.current : period2mRef.current);
                 const drawNumberClassic = determineOutcomeWithLossParameters('wingo', mode, currentPeriodClassic);
-                let drawColorClassic = drawNumberClassic === 0 ? 'violet-red' : (drawNumberClassic === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberClassic) ? 'green' : 'red'));
+                const drawColorClassic = drawNumberClassic === 0 ? 'violet-red' : (drawNumberClassic === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberClassic) ? 'green' : 'red'));
                 const drawSizeClassic = drawNumberClassic >= 5 ? 'Big' : 'Small';
                 const newResultClassic = { period: currentPeriodClassic, number: drawNumberClassic, size: drawSizeClassic, color: drawColorClassic };
 
                 if (mode === '30sec') {
-                    setDrawHistory30s(prev => [newResultClassic, ...prev]);
+                    setDrawHistory30s(prev => [newResultClassic, ...(prev || [])]);
                     processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod30s(prev => incrementPeriodString(prev));
                 } else if (mode === '1min') {
-                    setDrawHistory1m(prev => [newResultClassic, ...prev]);
+                    setDrawHistory1m(prev => [newResultClassic, ...(prev || [])]);
                     processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod1m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistory2m(prev => [newResultClassic, ...prev]);
+                    setDrawHistory2m(prev => [newResultClassic, ...(prev || [])]);
                     processPlacedBetsForMode('wingo', mode, currentPeriodClassic, drawNumberClassic, drawSizeClassic, drawColorClassic);
                     setPeriod2m(prev => incrementPeriodString(prev));
                 }
 
-                let currentPeriodTrx = mode === '30sec' ? periodTrx30sRef.current : (mode === '1min' ? periodTrx1mRef.current : periodTrx2mRef.current);
+                // 2. TRX Wingo Draw
+                const currentPeriodTrx = mode === '30sec' ? periodTrx30sRef.current : (mode === '1min' ? periodTrx1mRef.current : periodTrx2mRef.current);
                 const drawNumberTrx = determineOutcomeWithLossParameters('trx_wingo', mode, currentPeriodTrx);
-                let drawColorTrx = drawNumberTrx === 0 ? 'violet-red' : (drawNumberTrx === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberTrx) ? 'green' : 'red'));
+                const drawColorTrx = drawNumberTrx === 0 ? 'violet-red' : (drawNumberTrx === 5 ? 'violet-green' : ([1, 3, 7, 9].includes(drawNumberTrx) ? 'green' : 'red'));
                 const drawSizeTrx = drawNumberTrx >= 5 ? 'Big' : 'Small';
-                const blockData = generateTrxBlockData(BigInt(currentPeriodTrx), drawNumberTrx);
+                const blockData = generateTrxBlockData(currentPeriodTrx, drawNumberTrx);
                 const newResultTrx = { 
                     period: currentPeriodTrx, 
                     blockHeight: blockData.blockHeight,
@@ -1078,20 +1059,21 @@
                 };
 
                 if (mode === '30sec') {
-                    setDrawHistoryTrx30s(prev => [newResultTrx, ...prev]);
+                    setDrawHistoryTrx30s(prev => [newResultTrx, ...(prev || [])]);
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx30s(prev => incrementPeriodString(prev));
                 } else if (mode === '1min') {
-                    setDrawHistoryTrx1m(prev => [newResultTrx, ...prev]);
+                    setDrawHistoryTrx1m(prev => [newResultTrx, ...(prev || [])]);
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx1m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistory2m(prev => [newResultTrx, ...prev]);
+                    setDrawHistoryTrx2m(prev => [newResultTrx, ...(prev || [])]);
                     processPlacedBetsForMode('trx_wingo', mode, currentPeriodTrx, drawNumberTrx, drawSizeTrx, drawColorTrx);
                     setPeriodTrx2m(prev => incrementPeriodString(prev));
                 }
 
-                let currentPeriodK3 = mode === '30sec' ? periodK330sRef.current : (mode === '1min' ? periodK31mRef.current : periodK32mRef.current);
+                // 3. K3 Lottery Draw
+                const currentPeriodK3 = mode === '30sec' ? periodK330sRef.current : (mode === '1min' ? periodK31mRef.current : periodK32mRef.current);
                 const [d1, d2, d3] = determineK3OutcomeWithLossParameters(mode, currentPeriodK3);
                 const sum = d1 + d2 + d3;
                 const size = sum >= 11 ? 'Big' : 'Small';
@@ -1099,15 +1081,15 @@
                 const newResultK3 = { period: currentPeriodK3, sum, size, parity, dice: [d1, d2, d3] };
 
                 if (mode === '30sec') {
-                    setDrawHistoryK330s(prev => [newResultK3, ...prev]);
+                    setDrawHistoryK330s(prev => [newResultK3, ...(prev || [])]);
                     processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
                     setPeriodK330s(prev => incrementPeriodString(prev));
                 } else if (mode === '1min') {
-                    setDrawHistoryK31m(prev => [newResultK3, ...prev]);
+                    setDrawHistoryK31m(prev => [newResultK3, ...(prev || [])]);
                     processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
                     setPeriodK31m(prev => incrementPeriodString(prev));
                 } else if (mode === '2min') {
-                    setDrawHistory2m(prev => [newResultK3, ...prev]);
+                    setDrawHistoryK32m(prev => [newResultK3, ...(prev || [])]);
                     processPlacedK3BetsForMode(mode, currentPeriodK3, d1, d2, d3, sum, size, parity);
                     setPeriodK32m(prev => incrementPeriodString(prev));
                 }
@@ -1132,9 +1114,9 @@
                     if (seconds === 0) handleModeDrawRef.current('1min');
                     if (minutes % 2 === 0 && seconds === 0) handleModeDrawRef.current('2min');
 
-                    setTimer30s(29 - (seconds % 30));
-                    setTimer1m(59 - seconds);
-                    setTimer2m(119 - ((minutes % 2) * 60 + seconds));
+                    setTimer30s(Math.max(0, 29 - (seconds % 30)));
+                    setTimer1m(Math.max(0, 59 - seconds));
+                    setTimer2m(Math.max(0, 119 - ((minutes % 2) * 60 + seconds)));
                 }, 250); 
 
                 return () => clearInterval(clockInterval);
@@ -1214,7 +1196,7 @@
                         }
                     })
                     .catch(() => {
-                        showToast('Database sync failure', 'error');
+                        showToast('Database connection failure', 'error');
                         setIsLoading(false);
                     });
             };
@@ -1275,7 +1257,7 @@
                     showToast('Enter valid sender account details', 'error');
                     return;
                 }
-                if (!transactionId || transactionId.length < 8) {
+                if (!transactionId || transactionId.length < 6) {
                     showToast('Provide valid Transaction ID (TxID)', 'error');
                     return;
                 }
@@ -1362,13 +1344,13 @@
                     setWithdrawTab('history');
                 }).catch(() => {
                     setIsWithdrawing(false);
-                    showToast('Deduction loop sync error. Try again.', 'error');
+                    showToast('Deduction sync error. Try again.', 'error');
                 });
             };
 
             const handleDailyBonusClaim = () => {
                 if (dailyClaimed) {
-                    showToast('Already Claimed! Bonus is restricted to once per user.', 'error');
+                    showToast('Already Claimed today!', 'error');
                     return;
                 }
                 if (!currentUser) {
@@ -1385,7 +1367,7 @@
                     balance: nextBalance,
                     dailyClaimed: true
                 }).then(() => {
-                    showToast('Claim Successful! ৳0.00 added to balance.', 'success');
+                    showToast('Daily check-in successful!', 'success');
                 });
             };
 
@@ -1394,13 +1376,13 @@
                     showToast('Please login first to place bets', 'error');
                     return;
                 }
-                const totalCost = selectedUnit * multiplier;
+                const totalCost = Number(selectedUnit) * Number(multiplier);
                 if (totalCost <= 0) {
                     showToast('Please enter a valid bet amount!', 'error');
                     return;
                 }
                 if (totalCost > balance) {
-                    showToast('Insufficient balance!', 'error');
+                    showToast('Insufficient balance! Please deposit.', 'error');
                     setIsBetSheetOpen(false);
                     return;
                 }
@@ -1457,17 +1439,17 @@
 
             const getHistoryForActiveTab = () => {
                 if (gameType === 'trx_wingo') {
-                    if (activeGameTab === '30sec') return drawHistoryTrx30s;
-                    if (activeGameTab === '1min') return drawHistoryTrx1m;
-                    return drawHistoryTrx2m;
+                    if (activeGameTab === '30sec') return drawHistoryTrx30s || [];
+                    if (activeGameTab === '1min') return drawHistoryTrx1m || [];
+                    return drawHistoryTrx2m || [];
                 } else if (gameType === 'k3_lottery') {
-                    if (activeGameTab === '30sec') return drawHistoryK330s;
-                    if (activeGameTab === '1min') return drawHistoryK31m;
-                    return drawHistoryK32m;
+                    if (activeGameTab === '30sec') return drawHistoryK330s || [];
+                    if (activeGameTab === '1min') return drawHistoryK31m || [];
+                    return drawHistoryK32m || [];
                 } else {
-                    if (activeGameTab === '30sec') return drawHistory30s;
-                    if (activeGameTab === '1min') return drawHistory1m;
-                    return drawHistory2m;
+                    if (activeGameTab === '30sec') return drawHistory30s || [];
+                    if (activeGameTab === '1min') return drawHistory1m || [];
+                    return drawHistory2m || [];
                 }
             };
 
@@ -1499,12 +1481,11 @@
                 );
             }
 
-            const hasPendingWithdraw = (withdrawHistory || []).some(w => w.status?.toLowerCase() === 'pending');
+            const hasPendingWithdraw = (withdrawHistory || []).some(w => String(w?.status || '').toLowerCase() === 'pending');
             const pendingWithdrawAmount = (withdrawHistory || [])
-                .filter(w => w.status?.toLowerCase() === 'pending')
+                .filter(w => String(w?.status || '').toLowerCase() === 'pending')
                 .reduce((sum, w) => sum + Number(w.amount || 0), 0);
 
-            // Calculation for Total Deposited, Total Turnover, and Won Amount
             const totalDeposited = (depositHistory || [])
                 .filter(d => d.status === 'Success')
                 .reduce((sum, d) => sum + Number(d.amount || 0), 0);
@@ -1559,8 +1540,8 @@
                                 </div>
 
                                 <div className="flex bg-slate-900/90 p-1.5 rounded-2xl mb-5 border border-slate-800 shadow-inner">
-                                    <button onClick={() => setAuthTab('login')} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${authTab === 'login' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>Log In</button>
-                                    <button onClick={() => setAuthTab('signup')} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all ${authTab === 'signup' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>Register</button>
+                                    <button onClick={() => setAuthTab('login')} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all cursor-pointer ${authTab === 'login' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>Log In</button>
+                                    <button onClick={() => setAuthTab('signup')} className={`flex-1 py-3 text-xs font-black rounded-xl transition-all cursor-pointer ${authTab === 'signup' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>Register</button>
                                 </div>
 
                                 <form onSubmit={authTab === 'login' ? handleLoginSubmit : handleSignupSubmit} className="space-y-4">
@@ -1580,7 +1561,7 @@
                                             <button 
                                                 type="button" 
                                                 onClick={() => setShowCountryDrop(!showCountryDrop)} 
-                                                className="bg-slate-900/80 border border-slate-800 px-3 py-3.5 rounded-2xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-800"
+                                                className="bg-slate-900/80 border border-slate-800 px-3 py-3.5 rounded-2xl text-xs font-bold flex items-center space-x-1 hover:bg-slate-800 cursor-pointer"
                                             >
                                                 <span>{selectedCountry.flag}</span>
                                                 <span>{selectedCountry.code}</span>
@@ -1634,7 +1615,7 @@
                                         </>
                                     )}
 
-                                    <button type="submit" className="w-full py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-widest shadow-neon-gold active:scale-98 transition-all">
+                                    <button type="submit" className="w-full py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:opacity-95 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-widest shadow-neon-gold active:scale-98 transition-all cursor-pointer">
                                         {authTab === 'login' ? 'Instant Sign In' : 'Create VIP Account'}
                                     </button>
                                 </form>
@@ -1646,7 +1627,6 @@
                             <div className="flex-1 flex flex-col justify-start overflow-hidden bg-[#05070e]">
                                 
                                 {activeNav === 'home' ? (
-                                    /* Top Elite Bar for Home */
                                     <div className="px-4 py-3.5 bg-[#0b101c] border-b border-slate-800 flex justify-between items-center shadow-lg flex-shrink-0">
                                         <div className="flex items-center space-x-2">
                                             <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shadow-md">
@@ -1667,7 +1647,6 @@
                                         </div>
                                     </div>
                                 ) : (
-                                    /* Top Header with Prominent BACK BUTTON for Sub-sections */
                                     <div className="px-4 py-3.5 bg-[#0b101c] border-b border-slate-800 flex items-center justify-between shadow-lg flex-shrink-0">
                                         <BackButton onClick={() => setActiveNav('home')} label="Back" />
                                         <h2 className="text-sm font-black text-slate-100 font-sans uppercase tracking-wider text-gradient-gold">
@@ -1677,7 +1656,6 @@
                                     </div>
                                 )}
 
-                                {/* User VIP & Balance Hub */}
                                 {currentUser && (
                                     <div className="bg-[#0b101c] px-4 py-2.5 flex justify-between items-center border-b border-slate-800/80 text-[11px] flex-shrink-0">
                                         <div className="flex items-center space-x-2">
@@ -1694,7 +1672,6 @@
                                 )}
 
                                 {activeNav === 'home' && (
-                                    /* Quick Deposit / Withdraw Fast Action Bar */
                                     <div className="px-4 py-2.5 grid grid-cols-2 gap-2 bg-[#080d1a] border-b border-slate-800">
                                         <button 
                                             onClick={() => { setView('deposit'); setDepositTab('new'); }} 
@@ -1718,13 +1695,11 @@
                                 <div className="flex-1 overflow-y-auto pb-10">
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
-                                            
-                                            {/* 1. TOP COMMERCIAL PROMOTIONAL BANNER */}
                                             <PromoBannerCarousel onOpenDetail={(bannerData) => {
                                                 setPromoModal({ isOpen: true, data: bannerData });
                                             }} />
 
-                                            {/* 2. LIVE PROGRESSIVE JACKPOT POOL */}
+                                            {/* Mega Jackpot Pool */}
                                             <div className="glass-panel-glow rounded-3xl p-3.5 flex items-center justify-between border border-amber-500/30 shadow-luxury relative overflow-hidden">
                                                 <div className="flex items-center space-x-3 z-10">
                                                     <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950 flex items-center justify-center text-xl shadow-md">
@@ -1742,7 +1717,7 @@
                                                 </span>
                                             </div>
 
-                                            {/* 3. 3 MAIN OFFICIAL GAMES */}
+                                            {/* 3 Main Games */}
                                             <div className="space-y-3 pt-1">
                                                 <div className="flex justify-between items-center px-1">
                                                     <div className="flex items-center space-x-1.5">
@@ -1752,10 +1727,10 @@
                                                     <span className="text-[10px] font-black text-emerald-400 font-mono">100% CERTIFIED</span>
                                                 </div>
 
-                                                {/* Game 1: Wingo */}
+                                                {/* Wingo */}
                                                 <div 
                                                     onClick={() => { setGameType('wingo'); setView('game'); }} 
-                                                    className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-floating border border-emerald-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
+                                                    className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-2">
                                                         <div className="flex items-center space-x-2">
@@ -1782,10 +1757,10 @@
                                                     </div>
                                                 </div>
 
-                                                {/* Game 2: TRX Wingo */}
+                                                {/* TRX Wingo */}
                                                 <div 
                                                     onClick={() => { setGameType('trx_wingo'); setView('game'); }} 
-                                                    className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-floating border border-rose-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
+                                                    className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-2">
                                                         <div className="flex items-center space-x-2">
@@ -1811,10 +1786,10 @@
                                                     </div>
                                                 </div>
 
-                                                {/* Game 3: K3 Lottery */}
+                                                {/* K3 Lottery */}
                                                 <div 
                                                     onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} 
-                                                    className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-floating border border-amber-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
+                                                    className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-2">
                                                         <div className="flex items-center space-x-2">
@@ -1841,8 +1816,36 @@
                                                 </div>
                                             </div>
 
-                                            {/* 4. LIVE WINNING FEED */}
-                                            <WinningInfoComponent />
+                                            {/* Winners Feed */}
+                                            <div className="glass-panel p-4 rounded-3xl border border-slate-800 space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="text-xl">💰</span>
+                                                        <h3 className="text-sm font-black text-slate-100 tracking-wide font-sans">Live Winning Feed</h3>
+                                                    </div>
+                                                    <span className="text-[10px] text-emerald-400 font-mono flex items-center space-x-1">
+                                                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                                        <span>Real-Time</span>
+                                                    </span>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    {[
+                                                        { id: 1, name: 'Mem***GML', amount: '288.50', game: 'WINGO 30S', color: 'bg-emerald-600/30 border-emerald-400 text-emerald-300' },
+                                                        { id: 2, name: 'Mem***ZUQ', amount: '450.00', game: 'TRX WINGO', color: 'bg-rose-600/30 border-rose-400 text-rose-300' },
+                                                        { id: 3, name: 'Mem***PSY', amount: '360.20', game: 'K3 LOTTO', color: 'bg-amber-600/30 border-amber-400 text-amber-300' }
+                                                    ].map((item) => (
+                                                        <div key={item.id} className="p-3 bg-slate-900/90 rounded-2xl flex items-center justify-between border border-slate-800">
+                                                            <div className="flex items-center space-x-2.5">
+                                                                <div className="w-8 h-8 rounded-full bg-amber-400/20 text-amber-300 flex items-center justify-center font-bold text-xs">V1</div>
+                                                                <span className="text-xs font-mono font-bold text-slate-200">{item.name}</span>
+                                                            </div>
+                                                            <span className={`text-[8px] font-black px-2 py-0.5 rounded border ${item.color} font-mono`}>{item.game}</span>
+                                                            <span className="text-sm font-black text-emerald-400 font-mono">+৳{item.amount}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         </div>
                                     )}
 
@@ -1899,29 +1902,23 @@
                                         </div>
                                     )}
 
-                                    {/* ========================================================================= */}
-                                    {/* ULTRA-MODERN NEW PROFILE / VIP ACCOUNT CENTER                            */}
-                                    {/* ========================================================================= */}
+                                    {/* VIEW: VIP ACCOUNT PROFILE */}
                                     {activeNav === 'account' && (
                                         <div className="p-4 space-y-4 font-sans">
-                                            
-                                            {/* 1. VIP TIER & PROFILE CARD */}
+                                            {/* VIP Card */}
                                             <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
-                                                <div className="absolute right-0 top-0 w-36 h-36 bg-amber-400/10 rounded-full blur-2xl pointer-events-none"></div>
-
                                                 <div className="flex items-center justify-between z-10 relative">
                                                     <div className="flex items-center space-x-3.5">
-                                                        {/* Avatar with Customizer Button */}
                                                         <div 
                                                             onClick={() => setShowAvatarModal(true)} 
-                                                            className="relative w-15 h-15 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group"
+                                                            className="relative w-14 h-14 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group"
                                                         >
                                                             <img 
                                                                 src={currentUser?.avatar || PRESET_AVATARS[0]} 
                                                                 alt="Avatar" 
                                                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform" 
                                                             />
-                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[9px] font-bold text-amber-300 transition-opacity">
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[8px] font-bold text-amber-300 transition-opacity">
                                                                 Edit
                                                             </div>
                                                         </div>
@@ -1959,7 +1956,6 @@
                                                     </div>
                                                 </div>
 
-                                                {/* VIP Level EXP Progress */}
                                                 <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
                                                     <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
                                                         <span>VIP 1 Privilege</span>
@@ -1968,23 +1964,19 @@
                                                     <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
                                                         <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full rounded-full w-[49%] shadow-neon-gold"></div>
                                                     </div>
-                                                    <div className="flex justify-between text-[8.5px] text-slate-400 mt-1.5 font-sans">
-                                                        <span>Next: VIP 2 (Weekly Bonus +৳500)</span>
-                                                        <span className="text-amber-400 font-semibold cursor-pointer" onClick={() => showToast('Play games to increase VIP level!', 'success')}>Details &gt;</span>
-                                                    </div>
                                                 </div>
                                             </div>
 
-                                            {/* 2. INTERACTIVE WALLET CARD */}
+                                            {/* Wallet */}
                                             <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3.5 shadow-xl">
                                                 <div className="flex justify-between items-center">
                                                     <div className="flex items-center space-x-2">
                                                         <span className="text-xs text-slate-400 font-bold uppercase font-mono tracking-wider">Total Wallet Balance</span>
-                                                        <button onClick={() => setHideBalance(!hideBalance)} className="text-slate-400 hover:text-amber-400">
+                                                        <button onClick={() => setHideBalance(!hideBalance)} className="text-slate-400 hover:text-amber-400 cursor-pointer">
                                                             <Icon name={hideBalance ? "eye-off" : "eye"} className="w-4 h-4" />
                                                         </button>
                                                     </div>
-                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
+                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono cursor-pointer">
                                                         <Icon name="refresh-cw" className="w-3.5 h-3.5" />
                                                         <span>Sync</span>
                                                     </button>
@@ -1994,7 +1986,6 @@
                                                     {hideBalance ? '৳ ••••••' : `৳${Number(balance || 0).toFixed(2)}`}
                                                 </div>
 
-                                                {/* Deposit & Withdraw Big Buttons */}
                                                 <div className="grid grid-cols-2 gap-2.5 pt-1">
                                                     <button 
                                                         onClick={() => { setView('deposit'); setDepositTab('new'); }} 
@@ -2013,7 +2004,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* 3. PERFORMANCE & FINANCIAL METRICS GRID (2x2) */}
+                                            {/* Financial Metrics */}
                                             <div className="grid grid-cols-2 gap-2.5">
                                                 <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
                                                     <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
@@ -2048,7 +2039,7 @@
                                                 <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
                                                     <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
                                                         <span className="text-yellow-400">🏆</span>
-                                                        <span>Total Payouts Won</span>
+                                                        <span>Total Won Payout</span>
                                                     </div>
                                                     <div className="text-sm font-black font-mono text-emerald-400">
                                                         +৳{totalWonPayout.toFixed(2)}
@@ -2056,33 +2047,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* 4. QUICK SERVICE TILES (4-Grid) */}
-                                            <div className="glass-panel p-4 rounded-3xl border border-slate-800 space-y-3">
-                                                <span className="text-xs font-black uppercase tracking-wider text-slate-300 block font-mono">Quick Features</span>
-                                                <div className="grid grid-cols-4 gap-2 text-center">
-                                                    <div onClick={() => { setView('game'); setGameSubTab('my_history'); }} className="p-2.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex flex-col items-center justify-center space-y-1.5 cursor-pointer active:scale-95 transition-all">
-                                                        <div className="w-8 h-8 rounded-xl bg-violet-500/20 text-violet-400 flex items-center justify-center text-sm">📜</div>
-                                                        <span className="text-[9px] font-bold text-slate-300 leading-tight">Game Bets</span>
-                                                    </div>
-
-                                                    <div onClick={() => setActiveNav('activity')} className="p-2.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex flex-col items-center justify-center space-y-1.5 cursor-pointer active:scale-95 transition-all">
-                                                        <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">🎁</div>
-                                                        <span className="text-[9px] font-bold text-slate-300 leading-tight">Rewards</span>
-                                                    </div>
-
-                                                    <div onClick={() => setActiveNav('promotion')} className="p-2.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex flex-col items-center justify-center space-y-1.5 cursor-pointer active:scale-95 transition-all">
-                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">👥</div>
-                                                        <span className="text-[9px] font-bold text-slate-300 leading-tight">Team</span>
-                                                    </div>
-
-                                                    <div onClick={() => setShowAvatarModal(true)} className="p-2.5 rounded-2xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 flex flex-col items-center justify-center space-y-1.5 cursor-pointer active:scale-95 transition-all">
-                                                        <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-sm">🖼️</div>
-                                                        <span className="text-[9px] font-bold text-slate-300 leading-tight">Avatar</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            {/* 5. TRANSACTION & RECORD NAVIGATION LIST */}
+                                            {/* Records Navigation */}
                                             <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
                                                 <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
                                                     <div className="flex items-center space-x-3">
@@ -2118,7 +2083,6 @@
                                                 </a>
                                             </div>
 
-                                            {/* Sign Out Button */}
                                             <button 
                                                 onClick={handleLogout} 
                                                 className="w-full py-3.5 bg-rose-950/30 hover:bg-rose-950/60 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl border border-rose-800/40 flex items-center justify-center space-x-2 transition-all cursor-pointer"
@@ -2508,7 +2472,7 @@
                                         <button onClick={() => openBetConfirmation('small')} className="bg-gradient-to-r from-sky-500 to-blue-600 py-3 text-white rounded-2xl font-black text-xs shadow-md transition-all uppercase tracking-wider cursor-pointer">SMALL (2X)</button>
                                     </div>
 
-                                    {/* Timer & History components */}
+                                    {/* Timer */}
                                     <div className="glass-panel-glow p-4 rounded-3xl border border-amber-500/40 relative overflow-hidden shadow-luxury">
                                         <div className="flex justify-between items-center pb-2.5 border-b border-white/10">
                                             <span className="bg-amber-400/20 border border-amber-400/40 text-amber-300 px-3 py-0.5 rounded-full text-[10px] font-black uppercase font-mono">
@@ -2562,12 +2526,12 @@
                                                 </div>
                                             ) : (
                                                 <div className="space-y-2 text-[10px] font-sans p-2">
-                                                    {myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
+                                                    {myBets.filter(b => b && b.gameType === gameType && b.mode === activeGameTab).length === 0 ? (
                                                         <div className="text-center py-8 text-slate-500">
                                                             <span>No bets placed in this mode yet.</span>
                                                         </div>
                                                     ) : (
-                                                        myBets.filter(b => b.gameType === gameType && b.mode === activeGameTab).map(bet => (
+                                                        myBets.filter(b => b && b.gameType === gameType && b.mode === activeGameTab).map(bet => (
                                                             <div key={bet.id} className="p-3 bg-slate-900 rounded-2xl border border-slate-800 flex justify-between items-center">
                                                                 <div>
                                                                     <span className="block text-slate-500 text-[9px] font-mono">Period: {bet.period}</span>
@@ -2750,26 +2714,58 @@
                         </div>
                     )}
 
-                    {/* CONFIRM BET MODAL */}
+                    {/* CONFIRM BET MODAL WITH INTERACTIVE UNITS & MULTIPLIERS */}
                     {isBetSheetOpen && (
                         <div className="absolute inset-0 bg-black/75 z-[90] flex flex-col justify-end animate-fade-in font-sans backdrop-blur-sm">
-                            <div className="bg-[#0f172a] rounded-t-[2.5rem] p-6 space-y-5 shadow-2xl border-t border-slate-800 text-white">
-                                <div className="flex justify-between items-center">
-                                    <h3 className="text-sm font-black text-amber-300 font-mono uppercase">Confirm Bet Prediction</h3>
-                                    <button onClick={() => setIsBetSheetOpen(false)} className="cursor-pointer"><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
+                            <div className="bg-[#0f172a] rounded-t-[2.5rem] p-6 space-y-4 shadow-2xl border-t border-slate-800 text-white">
+                                <div className="flex justify-between items-center pb-2 border-b border-slate-800">
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-xs text-slate-400 font-bold uppercase">Selection:</span>
+                                        <span className="px-3 py-1 bg-amber-400 text-slate-950 font-black rounded-xl text-xs uppercase font-mono shadow">
+                                            {betValue}
+                                        </span>
+                                    </div>
+                                    <button onClick={() => setIsBetSheetOpen(false)} className="text-slate-400 hover:text-white cursor-pointer"><Icon name="x" className="w-5 h-5" /></button>
                                 </div>
 
-                                <div className="p-3.5 bg-slate-900 rounded-2xl border border-slate-800 flex justify-between items-center text-xs">
-                                    <span className="text-slate-400">Selection:</span>
-                                    <span className="font-black text-amber-400 uppercase font-mono text-sm">{betValue}</span>
+                                {/* Unit Amounts Selection */}
+                                <div>
+                                    <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 block">Select Base Amount</span>
+                                    <div className="grid grid-cols-6 gap-1.5 font-mono">
+                                        {[10, 50, 100, 500, 1000, 5000].map(amt => (
+                                            <button
+                                                key={amt}
+                                                onClick={() => setSelectedUnit(amt)}
+                                                className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400 shadow-neon-gold' : 'bg-slate-900 border-slate-800 text-slate-300'}`}
+                                            >
+                                                ৳{amt}
+                                            </button>
+                                        ))}
+                                    </div>
                                 </div>
 
-                                <div className="flex justify-between items-center pt-2 border-t border-slate-800">
+                                {/* Multiplier Stepper */}
+                                <div>
+                                    <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 block">Multiplier</span>
+                                    <div className="grid grid-cols-6 gap-1.5 font-mono">
+                                        {[1, 5, 10, 20, 50, 100].map(m => (
+                                            <button
+                                                key={m}
+                                                onClick={() => setMultiplier(m)}
+                                                className={`py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${multiplier === m ? 'bg-emerald-500 text-slate-950 border-emerald-500 shadow-neon-green' : 'bg-slate-900 border-slate-800 text-slate-300'}`}
+                                            >
+                                                X{m}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex justify-between items-center pt-3 border-t border-slate-800">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block font-mono">Total Stake:</span>
-                                        <span className="text-2xl font-black text-emerald-400 font-mono">৳{(selectedUnit * multiplier).toFixed(2)}</span>
+                                        <span className="text-2xl font-black text-emerald-400 font-mono">৳{(Number(selectedUnit) * Number(multiplier)).toFixed(2)}</span>
                                     </div>
-                                    <button onClick={confirmBetPlacement} className="px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green active:scale-95 transition-all cursor-pointer">Confirm Bet</button>
+                                    <button onClick={confirmBetPlacement} className="px-7 py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green active:scale-95 transition-all cursor-pointer">Confirm Bet</button>
                                 </div>
                             </div>
                         </div>
@@ -2818,8 +2814,9 @@
         }
 
         function formatTimeToSplit(totalSeconds) {
-            const mins = Math.floor(totalSeconds / 60);
-            const secs = totalSeconds % 60;
+            const safeSeconds = Math.max(0, Math.floor(totalSeconds));
+            const mins = Math.floor(safeSeconds / 60);
+            const secs = safeSeconds % 60;
             const mString = String(mins).padStart(2, '0');
             const sString = String(secs).padStart(2, '0');
             return [mString[0], mString[1], ':', sString[0], sString[1]];
