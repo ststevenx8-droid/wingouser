@@ -95,6 +95,16 @@
             animation: pulseRing 3s infinite ease-in-out;
         }
 
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 13s linear infinite;
+        }
+
         .text-gradient-gold {
             background: linear-gradient(135deg, #fff7c2 0%, #fbbf24 45%, #d97706 100%);
             -webkit-background-clip: text;
@@ -138,7 +148,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- FIREBASE CONFIGURATION (stxwin-82a48) ---
+        // --- FIREBASE CONFIGURATION ---
         const firebaseConfig = {
             apiKey: "AIzaSyAQOxmY1NL-2-NQmtUKgVWgFZ8SaNxlIN4",
             authDomain: "stxwin-82a48.firebaseapp.com",
@@ -380,7 +390,7 @@
             return history;
         };
 
-        const DiceFace = ({ value }) => {
+        const DiceFace = ({ value, size = "w-8 h-8 sm:w-9 sm:h-9" }) => {
             const dots = {
                 1: [[50, 50]],
                 2: [[25, 25], [75, 75]],
@@ -391,7 +401,7 @@
             }[value] || [];
 
             return (
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0">
+                <div className={`${size} bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
                     <svg viewBox="0 0 100 100" className="w-full h-full">
                         {dots.map(([cx, cy], i) => (
                             <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 9} fill={value === 1 || value === 4 ? "#ef4444" : "#1e293b"} />
@@ -488,9 +498,7 @@
             }
         };
 
-        // =========================================================================
-        // 🌟 100% REAL AVIATOR RED TRAJECTORY CANVAS (Replaced Yellow with Red)
-        // =========================================================================
+        // --- AVIATOR RED CANVAS ENGINE ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
@@ -507,7 +515,7 @@
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
 
-                    // 1. Subtle Tech Grid
+                    // Grid
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
@@ -527,16 +535,6 @@
                     }
                     ctx.restore();
 
-                    // 2. Horizon Glow (Dark Crimson Atmosphere)
-                    const planetGrad = ctx.createRadialGradient(0, height * 1.2, 10, 0, height * 1.2, width * 0.9);
-                    planetGrad.addColorStop(0, 'rgba(229, 30, 56, 0.12)');
-                    planetGrad.addColorStop(0.5, 'rgba(30, 41, 59, 0.25)');
-                    planetGrad.addColorStop(1, 'transparent');
-                    ctx.fillStyle = planetGrad;
-                    ctx.beginPath();
-                    ctx.arc(0, height * 1.2, width * 0.9, 0, Math.PI * 2);
-                    ctx.fill();
-
                     if (phase === 'flying' || phase === 'crashed') {
                         const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
                         const startX = 20;
@@ -546,7 +544,7 @@
                         const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
                         const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
 
-                        // 🌟 A. Fill Under Curve with Real Aviator Red Gradient
+                        // Red Gradient Fill
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
                         fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.32)');
@@ -563,7 +561,7 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // 🌟 B. Draw Glowing Crimson Red Trajectory Path (Replaced Yellow)
+                        // Glowing Crimson Red Line
                         ctx.save();
                         ctx.shadowColor = '#e51e38';
                         ctx.shadowBlur = 18;
@@ -575,7 +573,7 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // 🌟 C. Red Jet Exhaust Fire Particles
+                        // Red Sparks
                         if (phase === 'flying') {
                             if (Math.random() < 0.8) {
                                 particlesRef.current.push({
@@ -609,13 +607,12 @@
                             ctx.restore();
                         });
 
-                        // 🌟 D. Draw Red Glowing Fighter Jet Plane
+                        // Fighter Jet
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
                             ctx.rotate(-Math.PI / 6.5);
 
-                            // Intense Red Radial Glow
                             const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
                             glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
                             glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.8)');
@@ -699,11 +696,12 @@
             const [gameType, setGameType] = useState('wingo'); 
             const [activeGameTab, setActiveGameTab] = useState('30sec'); // 30sec, 1min, 2min
 
-            // --- AVIATOR STATE ---
+            // --- AVIATOR STATE & ADMIN REMOTE TARGET CONTROL ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
+            const [adminNextCrash, setAdminNextCrash] = useState(null); // Listened from Firebase (e.g. 10x)
             const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05]);
             
             const [betAmount1, setBetAmount1] = useState(10);
@@ -786,6 +784,23 @@
                 }
             }, [view]);
 
+            // 🌟 Real-time Listen for Admin Remote Aviator Multiplier (e.g. 10x, 15x)
+            useEffect(() => {
+                const targetRef = db.ref('settings/aviator_target_crash');
+                targetRef.on('value', (snap) => {
+                    if (snap.exists() && snap.val() !== null) {
+                        const val = parseFloat(snap.val());
+                        if (!isNaN(val) && val > 1.0) {
+                            setAdminNextCrash(val);
+                        } else {
+                            setAdminNextCrash(null);
+                        }
+                    } else {
+                        setAdminNextCrash(null);
+                    }
+                });
+            }, []);
+
             // Timer Loop
             useEffect(() => {
                 let lastSeconds = -1;
@@ -867,7 +882,7 @@
                 return () => clearInterval(clockInterval);
             }, []);
 
-            // Aviator Loop
+            // 🌟 AVIATOR FLIGHT LOOP (Respects Admin Remote Crash Target)
             useEffect(() => {
                 let aviatorInterval;
                 if (aviatorPhase === 'waiting') {
@@ -877,14 +892,20 @@
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
 
-                                const hasUserBet = isBetPlaced1 || isBetPlaced2;
-                                const roll = Math.random() * 100;
                                 let nextCrash = 1.00;
 
-                                if (hasUserBet || roll < 70) {
-                                    nextCrash = Math.random() < 0.4 ? (1.02 + Math.random() * 0.15) : (1.18 + Math.random() * 0.42);
+                                // If admin commanded specific multiplier (e.g. 10x or 15x) from Admin Panel:
+                                if (adminNextCrash !== null && adminNextCrash > 1.0) {
+                                    nextCrash = adminNextCrash;
                                 } else {
-                                    nextCrash = roll < 90 ? (2.20 + Math.random() * 3.5) : (6.00 + Math.random() * 15.0);
+                                    // Default algorithm with 70% loss
+                                    const hasUserBet = isBetPlaced1 || isBetPlaced2;
+                                    const roll = Math.random() * 100;
+                                    if (hasUserBet || roll < 70) {
+                                        nextCrash = Math.random() < 0.4 ? (1.02 + Math.random() * 0.15) : (1.18 + Math.random() * 0.42);
+                                    } else {
+                                        nextCrash = roll < 90 ? (2.20 + Math.random() * 3.5) : (6.00 + Math.random() * 15.0);
+                                    }
                                 }
 
                                 setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
@@ -930,7 +951,7 @@
                 }
 
                 return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isBetPlaced2, view]);
+            }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, view]);
 
             // Sync Dynamic Admin Ads from Firebase
             useEffect(() => {
@@ -1269,7 +1290,7 @@
 
                                             {/* 4. K3 LOTTERY */}
                                             <div 
-                                                onClick={() => setView('game_k3')}
+                                                onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
@@ -1444,7 +1465,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️ (With Real Red Trajectory & Jet Line)                  */}
+                        {/* VIEW 3: AVIATOR ✈️                                                         */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1468,7 +1489,6 @@
                                 </div>
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
-                                    {/* 🌟 Red Trajectory Flight Stage */}
                                     <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-red-900/50 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
@@ -1616,7 +1636,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 5: K3 3-DICE LOTTERY                                                 */}
+                        {/* VIEW 5: 🌟 100% FIXED K3 3-DICE LOTTERY (Live Seconds & Full History)     */}
                         {/* ========================================================================= */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1627,32 +1647,94 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    {/* 30s, 1m, 2m Selection Tab */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {['30sec', '1min', '2min'].map(tab => (
+                                        {[
+                                            { id: '30sec', label: 'K3 30s' },
+                                            { id: '1min', label: 'K3 1 Min' },
+                                            { id: '2min', label: 'K3 2 Min' }
+                                        ].map(tab => (
                                             <button 
-                                                key={tab} 
-                                                onClick={() => setActiveGameTab(tab)} 
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                                key={tab.id} 
+                                                onClick={() => setActiveGameTab(tab.id)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer transition-all ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
                                             >
-                                                {tab}
+                                                {tab.label}
                                             </button>
                                         ))}
                                     </div>
 
-                                    <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
-                                        <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Period: {getActivePeriod()}</span>
-                                        <div className="flex space-x-3 justify-center items-center py-1">
-                                            <DiceFace value={drawHistoryK330s[0]?.dice[0] || 1} />
-                                            <DiceFace value={drawHistoryK330s[0]?.dice[1] || 4} />
-                                            <DiceFace value={drawHistoryK330s[0]?.dice[2] || 6} />
+                                    {/* 🌟 Live Countdown Seconds Box */}
+                                    <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono shadow-luxury">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {getActivePeriod()}</span>
+                                            <span className="text-sm font-bold text-amber-300">K3 Draw Countdown</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-2xl font-black text-yellow-400 block">{getActiveTimer()}s</span>
+                                            <span className="text-[9px] text-emerald-400 font-bold uppercase">LIVE DRAW</span>
                                         </div>
                                     </div>
 
+                                    {/* 3D Dice Showcase Frame */}
+                                    <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
+                                        <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
+                                        <div className="flex space-x-3 justify-center items-center py-1">
+                                            <DiceFace value={drawHistoryK330s[0]?.dice ? drawHistoryK330s[0].dice[0] : 1} size="w-11 h-11" />
+                                            <DiceFace value={drawHistoryK330s[0]?.dice ? drawHistoryK330s[0].dice[1] : 4} size="w-11 h-11" />
+                                            <DiceFace value={drawHistoryK330s[0]?.dice ? drawHistoryK330s[0].dice[2] : 6} size="w-11 h-11" />
+                                        </div>
+                                        <div className="flex space-x-3 text-xs font-mono font-black text-yellow-300">
+                                            <span>Sum: {drawHistoryK330s[0]?.sum || 11}</span>
+                                            <span>•</span>
+                                            <span>{drawHistoryK330s[0]?.size || 'Big'}</span>
+                                            <span>•</span>
+                                            <span>{drawHistoryK330s[0]?.parity || 'Odd'}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Betting Options */}
                                     <div className="grid grid-cols-4 gap-1.5">
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Small 2X</button>
                                         <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow-neon-gold">Big 2X</button>
                                         <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Even 2X</button>
                                         <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Odd 2X</button>
+                                    </div>
+
+                                    {/* 🌟 K3 Complete Result History Table */}
+                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
+                                            <span>K3 Result History</span>
+                                            <span className="text-[10px] text-slate-400">3-Dice Combination</span>
+                                        </div>
+                                        <table className="w-full text-[10px] font-mono text-left">
+                                            <thead>
+                                                <tr className="border-b border-slate-800 text-slate-400">
+                                                    <th className="py-2 pl-3">Period</th>
+                                                    <th className="py-2 text-center">Dice</th>
+                                                    <th className="py-2 text-center">Sum</th>
+                                                    <th className="py-2 pr-3 text-right">Result</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {drawHistoryK330s.slice(0, 10).map((item, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
+                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
+                                                        <td className="py-1 text-center">
+                                                            <div className="inline-flex space-x-1 items-center justify-center">
+                                                                {(item.dice || [1, 1, 1]).map((d, dIdx) => (
+                                                                    <span key={dIdx} className="w-4 h-4 bg-white text-slate-950 font-black rounded text-[9px] flex items-center justify-center shadow-sm">
+                                                                        {d}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-2 text-center text-yellow-300 font-bold">{item.sum}</td>
+                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.size} / {item.parity}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
