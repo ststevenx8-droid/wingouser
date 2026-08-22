@@ -95,16 +95,6 @@
             animation: pulseRing 3s infinite ease-in-out;
         }
 
-        @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            white-space: nowrap;
-            animation: marquee 13s linear infinite;
-        }
-
         .text-gradient-gold {
             background: linear-gradient(135deg, #fff7c2 0%, #fbbf24 45%, #d97706 100%);
             -webkit-background-clip: text;
@@ -240,11 +230,6 @@
                     <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" />
                 </svg>
             ),
-            volume2: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}>
-                    <path d="M13.5 4.06c0-1.33-1.61-1.98-2.54-1.02L6.3 7.5H4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h2.3l4.66 4.46c.93.96 2.54.31 2.54-1.02V4.06zM18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
-                </svg>
-            ),
             x: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
                     <line x1="18" y1="6" x2="6" y2="18" />
@@ -269,6 +254,17 @@
                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                 </svg>
+            ),
+            camera: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
+                    <circle cx="12" cy="13" r="3"/>
+                </svg>
+            ),
+            shield: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
             )
         };
 
@@ -284,10 +280,16 @@
             return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         };
 
+        // 🌟 HD VIP Avatar Presets
         const PRESET_AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=160&auto=format&fit=crop&q=80"
         ];
 
         const BackButton = ({ onClick, label = "Back" }) => (
@@ -301,17 +303,17 @@
             </button>
         );
 
-        // 🌟 1. Main Logo Component (Used in Auth and Home corner)
+        // 🌟 App Main Logo
         const AppLogo = ({ className = "w-8 h-8" }) => (
             <img src="https://i.ibb.co/W43Hdvm3/10736.png" alt="STEVEN WIN Logo" className={`${className} object-contain`} />
         );
 
-        // 🌟 3. bKash Logo Component
+        // 🌟 bKash Official Logo
         const BkashLogo = ({ className = "w-14 h-14 rounded-2xl" }) => (
             <img src="https://i.ibb.co/xTgMb9X/11623.jpg" alt="bKash" className={`${className} object-cover shadow-neon-pink border border-pink-500/50`} />
         );
 
-        // 🌟 4. Aviator Thumbnail Logo Component
+        // 🌟 Aviator Thumbnail Logo
         const AviatorLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
                 <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
@@ -351,7 +353,7 @@
             </div>
         );
 
-        // --- 1000 ROUNDS HISTORY GENERATORS ---
+        // --- 1000 ROUNDS HISTORY MOCK GENERATORS ---
         const generateClassicMockHistory = (basePeriod, count = 1000) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
@@ -418,7 +420,7 @@
             }));
         };
 
-        // 🌟 5. Real-Time Web Audio Engine for Aviator Jet Sound & Crash Sound
+        // 🌟 Web Audio Engine (STRICTLY ISOLATED TO AVIATOR SCREEN)
         const aviatorAudio = {
             ctx: null,
             flightOsc: null,
@@ -662,6 +664,50 @@
             );
         };
 
+        // 🌟 DYNAMIC ADMIN AD CAROUSEL (Synced from Firebase `admin_ads`)
+        const AdminDynamicAdCarousel = ({ ads }) => {
+            const [currentIdx, setCurrentIdx] = useState(0);
+
+            useEffect(() => {
+                if (!ads || ads.length <= 1) return;
+                const timer = setInterval(() => {
+                    setCurrentIdx(prev => (prev + 1) % ads.length);
+                }, 4000);
+                return () => clearInterval(timer);
+            }, [ads]);
+
+            if (!ads || ads.length === 0) return null;
+
+            const activeAd = ads[currentIdx];
+
+            return (
+                <div className="w-full relative rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 bg-slate-900 group">
+                    <a href={activeAd.targetUrl || '#'} target="_blank" rel="noopener noreferrer" className="block relative w-full h-36 sm:h-40 overflow-hidden">
+                        <img src={activeAd.imageUrl} alt={activeAd.title || 'Special Promotion'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
+                        {activeAd.title && (
+                            <div className="absolute bottom-2 left-3 right-3 text-left">
+                                <span className="text-[9px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">OFFICIAL AD</span>
+                                <p className="text-xs font-bold text-white mt-1 truncate">{activeAd.title}</p>
+                            </div>
+                        )}
+                    </a>
+
+                    {ads.length > 1 && (
+                        <div className="absolute bottom-2 right-3 flex space-x-1 z-10">
+                            {ads.map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setCurrentIdx(i)}
+                                    className={`h-1.5 rounded-full transition-all ${currentIdx === i ? 'bg-amber-400 w-5' : 'bg-white/40 w-1.5'}`}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
         function App() {
             const [view, setView] = useState('auth'); 
             const [authTab, setAuthTab] = useState('login'); 
@@ -671,14 +717,20 @@
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             const [isLoading, setIsLoading] = useState(false);
 
-            // 🌟 6. Dynamic Admin Photo / Banner
-            const [adminBannerUrl, setAdminBannerUrl] = useState('');
+            // 🌟 Dynamic Admin Ads List from Firebase
+            const [adminAds, setAdminAds] = useState([]);
+
+            // Profile Customization Modals
+            const [showAvatarModal, setShowAvatarModal] = useState(false);
+            const [customAvatarUrl, setCustomAvatarUrl] = useState('');
+            const [showPasswordModal, setShowPasswordModal] = useState(false);
+            const [oldPassInput, setOldPassInput] = useState('');
+            const [newPassInput, setNewPassInput] = useState('');
 
             // Games State
             const [gameType, setGameType] = useState('wingo'); 
             const [activeGameTab, setActiveGameTab] = useState('30sec');
             const [historyPage, setHistoryPage] = useState(1);
-            const [jackpotAmount, setJackpotAmount] = useState(1489240.50);
 
             // --- AVIATOR STATE ENGINE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
@@ -687,7 +739,7 @@
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
             const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05, 1.18, 3.45]);
             
-            // Dual Bet Decks (Starting from Min ৳10)
+            // Dual Bet Decks
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
@@ -754,8 +806,15 @@
                 }
             }, [toast.show]);
 
+            // 🌟 STRICT AVIATOR SOUND ISOLATION: Stop sound whenever user is NOT in `game_aviator`
+            useEffect(() => {
+                if (view !== 'game_aviator') {
+                    aviatorAudio.stopEngineSound();
+                }
+            }, [view]);
+
             // =========================================================================
-            // 🌟 5. SLOW FLIGHT ENGINE LOOP WITH 70% LOSS & JET SOUND
+            // AVIATOR FLIGHT ENGINE LOOP (Slow, 70% Loss)
             // =========================================================================
             useEffect(() => {
                 let aviatorInterval;
@@ -766,20 +825,17 @@
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
 
-                                // 70% Loss Control Mechanism
                                 const hasUserBet = isBetPlaced1 || isBetPlaced2;
                                 const roll = Math.random() * 100;
                                 let nextCrash = 1.00;
 
                                 if (hasUserBet || roll < 70) {
-                                    // 70% Loss Probability (Plane crashes early between 1.02x and 1.60x)
                                     if (Math.random() < 0.4) {
                                         nextCrash = 1.02 + Math.random() * 0.15;
                                     } else {
                                         nextCrash = 1.18 + Math.random() * 0.42;
                                     }
                                 } else {
-                                    // 30% Chance to fly higher
                                     if (roll < 90) {
                                         nextCrash = 2.20 + Math.random() * 3.5;
                                     } else {
@@ -789,7 +845,9 @@
 
                                 setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
                                 setAviatorLiveBets(generateAviatorLiveBets());
-                                aviatorAudio.startEngineSound();
+                                if (view === 'game_aviator') {
+                                    aviatorAudio.startEngineSound();
+                                }
                                 return 5;
                             }
                             return prev - 1;
@@ -799,21 +857,22 @@
                     let startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        // Very slow and smooth climb formula
                         const currentMult = parseFloat((1.00 + elapsed * 0.065 + Math.pow(elapsed * 0.045, 1.35)).toFixed(2));
                         setAviatorMult(currentMult);
-                        aviatorAudio.updateEnginePitch(currentMult);
 
-                        // Auto Cashout Deck 1
+                        if (view === 'game_aviator') {
+                            aviatorAudio.updateEnginePitch(currentMult);
+                        }
+
+                        // Auto Cashout
                         if (isBetPlaced1 && !isCashedOut1 && autoCashout1 && currentMult >= parseFloat(autoCashoutVal1)) {
                             triggerAviatorCashout(1, currentMult);
                         }
-                        // Auto Cashout Deck 2
                         if (isBetPlaced2 && !isCashedOut2 && autoCashout2 && currentMult >= parseFloat(autoCashoutVal2)) {
                             triggerAviatorCashout(2, currentMult);
                         }
 
-                        // Live Bangladeshi Player Cashouts
+                        // BD Live Players Cashout
                         setAviatorLiveBets(prev => prev.map(ob => {
                             if (!ob.cashedOut && currentMult >= ob.cashoutTarget) {
                                 return { ...ob, cashedOut: true, payout: parseFloat((ob.amount * currentMult).toFixed(2)) };
@@ -825,7 +884,11 @@
                         if (currentMult >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
-                            aviatorAudio.playCrashSound();
+                            if (view === 'game_aviator') {
+                                aviatorAudio.playCrashSound();
+                            } else {
+                                aviatorAudio.stopEngineSound();
+                            }
                             setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 15));
 
                             setTimeout(() => {
@@ -841,12 +904,19 @@
                 }
 
                 return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isCashedOut1, autoCashout1, autoCashoutVal1, isBetPlaced2, isCashedOut2, autoCashout2, autoCashoutVal2]);
+            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isCashedOut1, autoCashout1, autoCashoutVal1, isBetPlaced2, isCashedOut2, autoCashout2, autoCashoutVal2, view]);
 
-            // Sync Admin Ad Banner from Firebase
+            // Sync Dynamic Admin Ads from Firebase
             useEffect(() => {
-                db.ref('admin_banner_url').on('value', (snap) => {
-                    if (snap.exists()) setAdminBannerUrl(snap.val());
+                const adsRef = db.ref('admin_ads');
+                adsRef.on('value', (snap) => {
+                    if (snap.exists()) {
+                        const val = snap.val();
+                        const adsArray = Array.isArray(val) ? val : Object.values(val);
+                        setAdminAds(adsArray.filter(item => item && item.imageUrl));
+                    } else {
+                        setAdminAds([]);
+                    }
                 });
             }, []);
 
@@ -898,7 +968,9 @@
                 if (deckNum === 1) setIsCashedOut1(true);
                 else setIsCashedOut2(true);
 
-                aviatorAudio.playCashoutSuccess();
+                if (view === 'game_aviator') {
+                    aviatorAudio.playCashoutSuccess();
+                }
                 setPopupAmount(winPayout);
                 setShowResultPopup(true);
             };
@@ -936,7 +1008,8 @@
                     balance: 0.00,
                     stxId: 'STX-' + Math.floor(1000 + Math.random() * 9000),
                     referralCode: 'STX' + Math.floor(1000 + Math.random() * 9000),
-                    avatar: PRESET_AVATARS[0]
+                    avatar: PRESET_AVATARS[0],
+                    joinDate: new Date().toLocaleDateString()
                 };
 
                 db.ref('users/' + sanitized).set(newUser).then(() => {
@@ -945,16 +1018,37 @@
                 });
             };
 
-            const processDeposit = (e) => {
+            // Avatar Updating (Preset or Custom URL)
+            const handleUpdateAvatar = (url) => {
+                if (!currentUser || !url) return;
+                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                db.ref('users/' + sanitized).update({ avatar: url }).then(() => {
+                    setCurrentUser(prev => ({ ...prev, avatar: url }));
+                    setShowAvatarModal(false);
+                    setCustomAvatarUrl('');
+                    showToast('Profile picture updated!', 'success');
+                });
+            };
+
+            // Password Change
+            const handleChangePassword = (e) => {
                 e.preventDefault();
-                if (!senderNumber || !transactionId) {
-                    showToast('Please fill all details!', 'error');
+                if (!currentUser || !oldPassInput || !newPassInput) {
+                    showToast('Please fill all fields!', 'error');
                     return;
                 }
-                showToast('bKash Deposit submitted! Status: Pending verification.', 'success');
-                setSenderNumber('');
-                setTransactionId('');
-                setDepositTab('history');
+                if (currentUser.password !== oldPassInput) {
+                    showToast('Current password does not match!', 'error');
+                    return;
+                }
+                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                db.ref('users/' + sanitized).update({ password: newPassInput }).then(() => {
+                    setCurrentUser(prev => ({ ...prev, password: newPassInput }));
+                    setShowPasswordModal(false);
+                    setOldPassInput('');
+                    setNewPassInput('');
+                    showToast('Password changed successfully!', 'success');
+                });
             };
 
             const activeLiveBetsCount = aviatorLiveBets.filter(b => !b.cashedOut).length + (isBetPlaced1 && !isCashedOut1 ? 1 : 0) + (isBetPlaced2 && !isCashedOut2 ? 1 : 0);
@@ -981,7 +1075,7 @@
                     <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
                         
                         {/* ========================================================================= */}
-                        {/* VIEW 1: AUTHENTICATION (With New Logo)                                    */}
+                        {/* VIEW 1: AUTHENTICATION                                                    */}
                         {/* ========================================================================= */}
                         {view === 'auth' && (
                             <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto min-h-0">
@@ -1033,7 +1127,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 2: HOME DASHBOARD (With Dynamic Admin Ad & New Logos)                */}
+                        {/* VIEW 2: HOME DASHBOARD                                                    */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
@@ -1053,14 +1147,10 @@
                                     
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* 🌟 6. Dynamic Admin Ad / Banner (Synced from Firebase) */}
-                                            {adminBannerUrl && (
-                                                <div className="w-full rounded-3xl overflow-hidden border border-amber-500/50 shadow-2xl">
-                                                    <img src={adminBannerUrl} alt="Official Promotion" className="w-full h-36 sm:h-40 object-cover" />
-                                                </div>
-                                            )}
+                                            {/* 🌟 Dynamic Admin Ad Carousel (Synced from Firebase `admin_ads`) */}
+                                            <AdminDynamicAdCarousel ads={adminAds} />
 
-                                            {/* 1. AVIATOR CRASH (With New Thumbnail) */}
+                                            {/* 1. AVIATOR CRASH */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#29050d] via-[#5e0c1c] to-[#170307] shadow-luxury border-2 border-rose-500/70 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1128,7 +1218,7 @@
                                     {activeNav === 'activity' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-amber-400">🎁 Daily Rewards</h2>
-                                            <p className="text-xs text-slate-300">Check in every day to claim bonus rewards!</p>
+                                            <p className="text-xs text-slate-300">Check in every day to claim free balance!</p>
                                             <button onClick={() => showToast('Check-in bonus claimed!', 'success')} className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold">Claim Reward</button>
                                         </div>
                                     )}
@@ -1144,24 +1234,167 @@
                                         </div>
                                     )}
 
+                                    {/* 🌟 UPGRADED HIGH-END VIP ACCOUNT PROFILE CENTER */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4">
-                                            <div className="glass-panel p-5 rounded-3xl border border-slate-800 space-y-3 text-center">
-                                                <div className="w-16 h-16 rounded-full overflow-hidden mx-auto border-2 border-amber-400">
-                                                    <img src={currentUser?.avatar || PRESET_AVATARS[0]} alt="Avatar" className="w-full h-full object-cover" />
+                                            {/* Profile Main Card */}
+                                            <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
+                                                <div className="flex items-center justify-between z-10 relative">
+                                                    <div className="flex items-center space-x-3.5">
+                                                        {/* Avatar with Camera/Edit Button */}
+                                                        <div 
+                                                            onClick={() => setShowAvatarModal(true)} 
+                                                            className="relative w-16 h-16 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group flex-shrink-0"
+                                                        >
+                                                            <img 
+                                                                src={currentUser?.avatar || PRESET_AVATARS[0]} 
+                                                                alt="Avatar" 
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform" 
+                                                            />
+                                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[9px] font-bold text-amber-300 transition-opacity">
+                                                                <Icon name="camera" className="w-4 h-4 mb-0.5" />
+                                                                <span>Change</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <h2 className="text-base font-black text-slate-100 font-sans tracking-wide">
+                                                                    {currentUser ? currentUser.username : 'VIP Player'}
+                                                                </h2>
+                                                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-2 py-0.5 rounded-full font-black text-[9px] font-mono shadow">
+                                                                    VIP 1
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2 text-[10px] text-slate-400 mt-1 font-mono">
+                                                                <span>ID: {currentUser?.stxId || 'STX-0000'}</span>
+                                                                <button 
+                                                                    onClick={() => {
+                                                                        if (!currentUser?.stxId) return;
+                                                                        navigator.clipboard.writeText(currentUser.stxId);
+                                                                        showToast('ID copied to clipboard!', 'success');
+                                                                    }}
+                                                                    className="text-amber-400 hover:text-yellow-300"
+                                                                >
+                                                                    <Icon name="copy" className="w-3.5 h-3.5" />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <button 
+                                                        onClick={() => setShowAvatarModal(true)}
+                                                        className="px-2.5 py-1 rounded-xl bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-bold"
+                                                    >
+                                                        Edit Avatar
+                                                    </button>
                                                 </div>
-                                                <h3 className="text-base font-bold text-slate-100">{currentUser?.username || 'VIP Player'}</h3>
-                                                <span className="text-xs font-mono text-amber-400 block">ID: {currentUser?.stxId || 'STX-0000'}</span>
-                                                <span className="text-2xl font-black text-yellow-400 font-mono block">৳{formatMoney(balance)}</span>
-                                                
-                                                <div className="grid grid-cols-2 gap-2 pt-2">
-                                                    <button onClick={() => setView('deposit')} className="py-2.5 bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase rounded-xl">Deposit</button>
-                                                    <button onClick={() => setView('withdraw')} className="py-2.5 bg-emerald-600 text-white font-black text-xs uppercase rounded-xl">Withdraw</button>
+
+                                                <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
+                                                    <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
+                                                        <span>VIP Tier 1</span>
+                                                        <span>EXP: 2,450 / 5,000</span>
+                                                    </div>
+                                                    <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
+                                                        <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full rounded-full w-[49%] shadow-neon-gold"></div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <button onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} className="w-full py-3 bg-rose-950/40 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase rounded-2xl">
-                                                Sign Out
+                                            {/* Wallet Balance Card */}
+                                            <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-slate-400 font-bold uppercase font-mono">Total Wallet Balance</span>
+                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
+                                                        <Icon name="refreshCw" className="w-3.5 h-3.5" />
+                                                        <span>Sync</span>
+                                                    </button>
+                                                </div>
+
+                                                <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
+                                                    ৳{formatMoney(balance)}
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                                                    <button 
+                                                        onClick={() => { setView('deposit'); setDepositTab('new'); }} 
+                                                        className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink active:scale-95 transition-all cursor-pointer"
+                                                    >
+                                                        <Icon name="wallet" className="w-4 h-4" />
+                                                        <span>bKash Deposit</span>
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} 
+                                                        className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 transition-all cursor-pointer"
+                                                    >
+                                                        <Icon name="receipt" className="w-4 h-4" />
+                                                        <span>Cashout</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            {/* Account Menu & Settings */}
+                                            <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
+                                                <button onClick={() => setShowPasswordModal(true)} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                                                            <Icon name="lock" className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <span className="text-xs font-bold text-slate-200 block">Change Login Password</span>
+                                                            <span className="text-[9px] text-slate-400">Update your security PIN</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
+                                                            <Icon name="receipt" className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <span className="text-xs font-bold text-slate-200 block">bKash Recharge Records</span>
+                                                            <span className="text-[9px] text-slate-400">View transaction slips</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                                            <Icon name="receipt" className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <span className="text-xs font-bold text-slate-200 block">Withdrawal History</span>
+                                                            <span className="text-[9px] text-slate-400">Track cashout tickets</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                                                            <Icon name="headphones" className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <span className="text-xs font-bold text-slate-200 block">24/7 VIP Customer Support</span>
+                                                            <span className="text-[9px] text-sky-400 font-mono">Telegram: @Kaisarvai007</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
+                                                </a>
+                                            </div>
+
+                                            {/* Logout Button */}
+                                            <button 
+                                                onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
+                                                className="w-full py-3.5 bg-rose-950/40 hover:bg-rose-950/70 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 transition-all"
+                                            >
+                                                <Icon name="logOut" className="w-4 h-4" />
+                                                <span>Sign Out Account</span>
                                             </button>
                                         </div>
                                     )}
@@ -1191,7 +1424,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️ (Slow Ascent + Jet Audio Engine)                       */}
+                        {/* VIEW 3: AVIATOR ✈️ (Sound Only Plays in this Screen)                       */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1220,7 +1453,7 @@
                                     <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-slate-800/80 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
-                                        {/* Multiplier + BETS */}
+                                        {/* Multiplier + BETS HUD */}
                                         {aviatorPhase === 'flying' && (
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-20">
                                                 <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 drop-shadow-[0_4px_18px_rgba(245,158,11,0.6)]">
@@ -1446,7 +1679,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 6: bKash EXCLUSIVE DEPOSIT VIEW (With New bKash Logo)                */}
+                        {/* VIEW 6: bKash EXCLUSIVE DEPOSIT VIEW                                      */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1457,14 +1690,11 @@
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
-                                    
-                                    {/* 🌟 3. bKash Official Gateway Banner with New Logo */}
                                     <div className="p-4 rounded-3xl bg-[#0b101c] border-2 border-pink-500/80 flex flex-col items-center justify-center space-y-2 text-center shadow-neon-pink">
                                         <BkashLogo className="w-16 h-16 rounded-2xl" />
                                         <span className="text-xs font-black text-pink-400 uppercase tracking-widest block">Official bKash Gateway</span>
                                     </div>
 
-                                    {/* Gateway Receiver Number Box */}
                                     <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2">
                                         <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">
                                             Official bKash Agent Receiver:
@@ -1487,7 +1717,7 @@
                                         </div>
                                     </div>
 
-                                    <form onSubmit={processDeposit} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
+                                    <form onSubmit={(e) => { e.preventDefault(); showToast('Deposit request submitted!', 'success'); }} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
                                         <div className="grid grid-cols-4 gap-1.5 font-mono">
                                             {['200', '500', '1000', '5000'].map(val => (
                                                 <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-pink-600 text-white border-pink-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
@@ -1533,6 +1763,92 @@
                         )}
 
                     </div>
+
+                    {/* 🌟 PROFILE AVATAR PICKER / CUSTOM URL MODAL */}
+                    {showAvatarModal && (
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md animate-fade-in">
+                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <h3 className="text-sm font-black text-amber-300 font-mono">Select or Change Avatar</h3>
+                                    <button onClick={() => setShowAvatarModal(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
+                                </div>
+
+                                {/* Custom Image URL Input */}
+                                <div className="space-y-1.5">
+                                    <label className="text-[10px] text-slate-300 font-bold uppercase">Paste Custom Image URL</label>
+                                    <div className="flex space-x-1.5">
+                                        <input 
+                                            type="text" 
+                                            placeholder="https://example.com/photo.jpg" 
+                                            value={customAvatarUrl} 
+                                            onChange={e => setCustomAvatarUrl(e.target.value)}
+                                            className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-amber-400"
+                                        />
+                                        <button 
+                                            onClick={() => handleUpdateAvatar(customAvatarUrl)}
+                                            className="px-3 py-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-xl text-xs"
+                                        >
+                                            Apply
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className="border-t border-slate-800 pt-2">
+                                    <span className="text-[10px] text-slate-400 font-bold uppercase block mb-2">Or Choose VIP Avatar</span>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {PRESET_AVATARS.map((url, i) => (
+                                            <div 
+                                                key={i} 
+                                                onClick={() => handleUpdateAvatar(url)}
+                                                className={`w-14 h-14 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-105 ${currentUser?.avatar === url ? 'border-amber-400 shadow-neon-gold' : 'border-slate-800'}`}
+                                            >
+                                                <img src={url} alt={`Avatar ${i}`} className="w-full h-full object-cover" />
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 🌟 CHANGE PASSWORD MODAL */}
+                    {showPasswordModal && (
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md animate-fade-in">
+                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <h3 className="text-sm font-black text-amber-300 font-mono">Change Password</h3>
+                                    <button onClick={() => setShowPasswordModal(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
+                                </div>
+
+                                <form onSubmit={handleChangePassword} className="space-y-3">
+                                    <div>
+                                        <label className="text-[10px] text-slate-400 uppercase font-bold block mb-1">Old Password</label>
+                                        <input 
+                                            type="password" 
+                                            placeholder="Current Password" 
+                                            value={oldPassInput} 
+                                            onChange={e => setOldPassInput(e.target.value)}
+                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:ring-1 focus:ring-amber-400"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] text-slate-400 uppercase font-bold block mb-1">New Password</label>
+                                        <input 
+                                            type="password" 
+                                            placeholder="New Password" 
+                                            value={newPassInput} 
+                                            onChange={e => setNewPassInput(e.target.value)}
+                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:ring-1 focus:ring-amber-400"
+                                        />
+                                    </div>
+
+                                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold">
+                                        Update Password
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    )}
 
                     {/* CONFIRM LOTTERY BET MODAL */}
                     {isBetSheetOpen && (
