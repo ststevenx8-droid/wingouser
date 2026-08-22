@@ -85,6 +85,25 @@
             width: 0px;
             background: transparent;
         }
+        
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-ring {
+            animation: pulseRing 3s infinite ease-in-out;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+        .animate-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 13s linear infinite;
+        }
 
         .text-gradient-gold {
             background: linear-gradient(135deg, #fff7c2 0%, #fbbf24 45%, #d97706 100%);
@@ -391,8 +410,8 @@
             </svg>
         );
 
-        // --- SIMULATED MOCK GENERATORS ---
-        const generateClassicMockHistory = (basePeriod, count) => {
+        // --- 1000 ROUNDS GENERATORS ---
+        const generateClassicMockHistory = (basePeriod, count = 1000) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
                 const period = String(BigInt(basePeriod) - BigInt(i));
@@ -404,7 +423,72 @@
             return history;
         };
 
-        const generateK3MockHistory = (basePeriod, count) => {
+        const generateTrxBlockData = (period, targetDigit) => {
+            try {
+                const pBig = typeof period === 'bigint' ? period : BigInt(period || 0);
+                const baseBlockHeight = 84300000 + (Number(pBig % 100000n) * 20);
+                const hexChars = 'abcdef';
+                const suffixLength = Math.floor(Math.random() * 3); 
+                let suffix = '';
+                for (let i = 0; i < suffixLength; i++) {
+                    suffix += hexChars.charAt(Math.floor(Math.random() * hexChars.length));
+                }
+                
+                const randomPrefixChars = '0123456789abcdef';
+                let prefix = '';
+                for (let i = 0; i < 12; i++) {
+                    prefix += randomPrefixChars.charAt(Math.floor(Math.random() * randomPrefixChars.length));
+                }
+                
+                const fullHash = prefix + targetDigit + suffix;
+                const last5 = fullHash.slice(-5).toUpperCase().split('');
+                const shortHash = '**' + fullHash.slice(-4);
+                
+                const now = new Date();
+                const blockTime = now.toTimeString().split(' ')[0]; 
+                
+                return {
+                    blockHeight: baseBlockHeight,
+                    hash: fullHash,
+                    shortHash: shortHash,
+                    last5: last5,
+                    blockTime: blockTime
+                };
+            } catch (e) {
+                return {
+                    blockHeight: 84300000,
+                    hash: 'a1b2c3d4e5f6',
+                    shortHash: '**e5f6',
+                    last5: ['0', 'A', '1', 'B', '2'],
+                    blockTime: '12:00:00'
+                };
+            }
+        };
+
+        const generateTrxMockHistory = (basePeriod, count = 1000) => {
+            const history = [];
+            for (let i = 1; i <= count; i++) {
+                const period = String(BigInt(basePeriod) - BigInt(i));
+                const digit = Math.floor(Math.random() * 10);
+                const blockData = generateTrxBlockData(period, digit);
+                const size = digit >= 5 ? 'Big' : 'Small';
+                const color = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
+                history.push({
+                    period,
+                    blockHeight: blockData.blockHeight,
+                    blockTime: blockData.blockTime,
+                    hash: blockData.hash,
+                    shortHash: blockData.shortHash,
+                    last5: blockData.last5,
+                    number: digit,
+                    size,
+                    color
+                });
+            }
+            return history;
+        };
+
+        const generateK3MockHistory = (basePeriod, count = 1000) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
                 const period = String(BigInt(basePeriod) - BigInt(i));
@@ -419,7 +503,7 @@
             return history;
         };
 
-        const DiceFace = ({ value, size = "w-8 h-8 sm:w-9 sm:h-9" }) => {
+        const DiceFace = ({ value, size = "w-7 h-7 sm:w-8 sm:h-8" }) => {
             const dots = {
                 1: [[50, 50]],
                 2: [[25, 25], [75, 75]],
@@ -430,7 +514,7 @@
             }[value] || [];
 
             return (
-                <div className={`${size} bg-white rounded-xl shadow-md border border-slate-300 relative flex items-center justify-center p-1 flex-shrink-0`}>
+                <div className={`${size} bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
                     <svg viewBox="0 0 100 100" className="w-full h-full">
                         {dots.map(([cx, cy], i) => (
                             <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 9} fill={value === 1 || value === 4 ? "#ef4444" : "#1e293b"} />
@@ -445,16 +529,141 @@
             return AVIATOR_USERS.map((code, idx) => ({
                 id: 'av_' + idx,
                 username: `Mem***${code}`,
-                amount: [50, 100, 200, 500, 1000][Math.floor(Math.random() * 5)],
-                cashoutTarget: parseFloat((Math.random() * 3.5 + 1.15).toFixed(2)),
+                amount: [50, 100, 200, 500, 1000, 2000][Math.floor(Math.random() * 6)],
+                cashoutTarget: parseFloat((Math.random() * 3.8 + 1.12).toFixed(2)),
                 cashedOut: false,
                 payout: 0
             }));
         };
 
-        // =========================================================================
-        // 🌟 AVIATOR FLIGHT CANVAS TRAJECTORY & ROCKET ENGINE
-        // =========================================================================
+        // --- PROMOTIONS COMMERCIAL CAROUSEL ---
+        const PromoBannerCarousel = ({ onOpenDetail }) => {
+            const [currentSlide, setCurrentSlide] = useState(0);
+
+            const banners = [
+                {
+                    id: 'first_deposit_100',
+                    title: '100% প্রথম ডিপোজিট ক্যাশব্যাক বোনাস',
+                    subtitle: 'Double Your Wallet with bKash Instant Deposit',
+                    badge: '🔥 100% MATCH BONUS',
+                    desc: 'প্রথমবার সর্বনিম্ন ১০০ টাকা ডিপোজিটে পান ১০০% অতিরিক্ত বোনাস ক্যাশ যা যেকোনো খেলায় ব্যবহার করা যাবে।',
+                    render: () => (
+                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#17051a] via-[#3d0847] to-[#700d50] p-3.5 sm:p-4 text-white relative overflow-hidden border border-pink-500/50 flex flex-col justify-between shadow-2xl">
+                            <div className="flex justify-between items-start z-10">
+                                <span className="bg-gradient-to-r from-pink-500 to-rose-400 text-white font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md">
+                                    🔥 100% MATCH BONUS
+                                </span>
+                                <div className="text-[9px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
+                            </div>
+
+                            <div className="z-10 my-auto text-left">
+                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-amber-300 to-yellow-400 drop-shadow-md">
+                                    ১০০% ডিপোজিট বোনাস
+                                </h2>
+                                <p className="text-[10px] sm:text-[11px] font-semibold text-pink-200 mt-0.5">
+                                    ৳৫০০ ডিপোজিটে পান ৳১,০০০ ইনস্ট্যান্ট গেম ক্রেডিট!
+                                </p>
+                            </div>
+
+                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-pink-200">
+                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40 flex items-center space-x-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>bKash 0s Fast Settle</span>
+                                </span>
+                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-pink-500/40">Min ৳100</span>
+                            </div>
+
+                            <div className="absolute -right-4 -bottom-4 text-8xl opacity-35 pointer-events-none filter drop-shadow-2xl">
+                                🎁
+                            </div>
+                        </div>
+                    )
+                },
+                {
+                    id: 'vip_salary',
+                    title: 'VIP WEEKLY SALARY & DAILY REBATE',
+                    subtitle: 'প্রতি সোমবারে ফিক্সড স্যালারি ৳২০,০০০ পর্যন্ত',
+                    badge: '👑 VIP PRIVILEGE',
+                    desc: 'রেগুলার গেমপ্লে করে VIP লেভেল আনলক করুন এবং প্রতি সোমবারে ফিক্সড উইকলি স্যালারি ও ৫% আনলিমিটেড ক্যাশব্যাক উপভোগ করুন।',
+                    render: () => (
+                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#171206] via-[#332408] to-[#593d09] p-3.5 sm:p-4 text-white relative overflow-hidden border border-yellow-500/50 flex flex-col justify-between shadow-2xl">
+                            <div className="flex justify-between items-center z-10">
+                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                                    👑 VIP CLUB REWARDS
+                                </span>
+                                <div className="text-[10px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
+                            </div>
+
+                            <div className="z-10 my-auto text-left">
+                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-md">
+                                    সাপ্তাহিক VIP স্যালারি
+                                </h2>
+                                <p className="text-[10px] sm:text-[11px] font-semibold text-amber-200 mt-0.5">
+                                    প্রতি সোমবারে অটোমেটিক ক্রেডিট ও ৫% লাইভ ক্যাশব্যাক
+                                </p>
+                            </div>
+
+                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-amber-200">
+                                <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">VIP 1-7 Ready</span>
+                            </div>
+
+                            <div className="absolute -right-3 -bottom-3 text-8xl opacity-30 pointer-events-none">
+                                👑
+                            </div>
+                        </div>
+                    )
+                }
+            ];
+
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    setCurrentSlide(prev => (prev + 1) % banners.length);
+                }, 4000);
+                return () => clearInterval(interval);
+            }, [banners.length]);
+
+            return (
+                <div className="space-y-3 font-sans">
+                    <div className="relative overflow-hidden cursor-pointer" onClick={() => onOpenDetail(banners[currentSlide])}>
+                        {banners[currentSlide].render()}
+                        
+                        <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2 flex space-x-1.5 z-20">
+                            {banners.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={(e) => { e.stopPropagation(); setCurrentSlide(idx); }}
+                                    className={`h-1.5 rounded-full transition-all ${
+                                        currentSlide === idx ? 'bg-amber-400 w-7' : 'bg-white/30 w-1.5'
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="bg-[#0b101c] rounded-2xl px-3.5 py-2.5 border border-slate-800 flex items-center justify-between space-x-2 shadow-inner">
+                        <div className="text-amber-400 flex-shrink-0">
+                            <Icon name="volume-2" className="w-4 h-4 text-amber-400 animate-pulse" />
+                        </div>
+                        
+                        <div className="flex-1 overflow-hidden relative py-0.5">
+                            <span className="animate-marquee text-xs font-bold text-slate-300 font-sans tracking-wide">
+                                📢 Welcome to STEVEN WIN! Wingo, TRX Wingo, K3 Dice (1000 Rounds History) & Aviator ✈️ Crash are live with 100% instant bKash bonus!
+                            </span>
+                        </div>
+
+                        <button 
+                            onClick={() => onOpenDetail(banners[currentSlide])}
+                            className="bg-gradient-to-r from-amber-400 to-yellow-500 hover:scale-105 active:scale-95 text-slate-950 text-xs font-black px-3.5 py-1 rounded-full shadow-neon-gold flex-shrink-0 transition-transform uppercase tracking-wider"
+                        >
+                            Bonus
+                        </button>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- 100% SCREENSHOT REPLICA AVIATOR FLIGHT CANVAS ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
@@ -471,19 +680,18 @@
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
 
-                    // 1. Grid Background
+                    // Grid
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
-                    const step = 32;
-                    for (let x = step; x < width; x += step) {
+                    for (let x = 32; x < width; x += 32) {
                         ctx.beginPath();
                         ctx.setLineDash([2, 4]);
                         ctx.moveTo(x, 0);
                         ctx.lineTo(x, height);
                         ctx.stroke();
                     }
-                    for (let y = step; y < height; y += step) {
+                    for (let y = 32; y < height; y += 32) {
                         ctx.beginPath();
                         ctx.setLineDash([2, 4]);
                         ctx.moveTo(0, y);
@@ -498,14 +706,14 @@
                         const startY = height - 20;
                         const cpX = width * 0.45;
                         const cpY = height - 20;
-                        const targetX = startX + (width - 60) * Math.min(1, progress * 1.15 + 0.1);
+                        const targetX = startX + (width - 65) * Math.min(1, progress * 1.12 + 0.1);
                         const targetY = startY - (height - 50) * Math.min(0.92, Math.pow(progress, 0.85) + 0.08);
 
                         // Fill Under Curve
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.25)');
-                        fillGrad.addColorStop(0.7, 'rgba(229, 30, 56, 0.05)');
+                        fillGrad.addColorStop(0, 'rgba(245, 158, 11, 0.22)');
+                        fillGrad.addColorStop(0.6, 'rgba(245, 158, 11, 0.06)');
                         fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
                         ctx.beginPath();
@@ -518,11 +726,11 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // Draw Curve
+                        // Golden Trajectory
                         ctx.save();
-                        ctx.shadowColor = '#e51e38';
-                        ctx.shadowBlur = 14;
-                        ctx.strokeStyle = phase === 'crashed' ? '#991b1b' : '#e51e38';
+                        ctx.shadowColor = '#f59e0b';
+                        ctx.shadowBlur = 16;
+                        ctx.strokeStyle = phase === 'crashed' ? '#ef4444' : '#fbbf24';
                         ctx.lineWidth = 3.5;
                         ctx.beginPath();
                         ctx.moveTo(startX, startY);
@@ -530,17 +738,17 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Sparks Particles
+                        // Fire Particles
                         if (phase === 'flying') {
-                            if (Math.random() < 0.7) {
+                            if (Math.random() < 0.8) {
                                 particlesRef.current.push({
-                                    x: targetX - 4,
-                                    y: targetY + 4,
+                                    x: targetX - 5,
+                                    y: targetY + 5,
                                     vx: -Math.random() * 2.5 - 1.0,
                                     vy: Math.random() * 2.0 + 0.5,
-                                    size: Math.random() * 3 + 1,
+                                    size: Math.random() * 3.5 + 1.5,
                                     alpha: 1.0,
-                                    color: Math.random() > 0.4 ? '#fbbf24' : '#e51e38'
+                                    color: Math.random() > 0.4 ? '#f59e0b' : '#ef4444'
                                 });
                             }
                         }
@@ -562,13 +770,37 @@
                             ctx.restore();
                         });
 
-                        // Draw Red Plane
+                        // Draw Rocket Plane
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
-                            ctx.rotate(-Math.PI / 6);
-                            ctx.font = '24px sans-serif';
-                            ctx.fillText('✈️', -12, 8);
+                            ctx.rotate(-Math.PI / 5.2);
+
+                            const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 24);
+                            glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+                            glow.addColorStop(0.3, 'rgba(251, 191, 36, 0.7)');
+                            glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                            ctx.fillStyle = glow;
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 24, 0, Math.PI * 2);
+                            ctx.fill();
+
+                            ctx.shadowColor = '#fbbf24';
+                            ctx.shadowBlur = 14;
+                            ctx.fillStyle = '#ffffff';
+
+                            ctx.beginPath();
+                            ctx.moveTo(12, 0);
+                            ctx.quadraticCurveTo(5, -6, -7, -5);
+                            ctx.lineTo(-10, -8);
+                            ctx.lineTo(-8, -2);
+                            ctx.lineTo(-10, 2);
+                            ctx.lineTo(-8, 8);
+                            ctx.lineTo(-7, 5);
+                            ctx.quadraticCurveTo(5, 6, 12, 0);
+                            ctx.closePath();
+                            ctx.fill();
+
                             ctx.restore();
                         }
                     }
@@ -603,15 +835,16 @@
             const [historyPage, setHistoryPage] = useState(1);
             const [jackpotAmount, setJackpotAmount] = useState(1489240.50);
 
+            const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
+
             // --- AVIATOR STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
             const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05, 1.18, 3.45]);
-            const [aviatorTab, setAviatorTab] = useState('all');
             
-            // Aviator Dual Bet
+            // Dual Bet
             const [betAmount1, setBetAmount1] = useState(50);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
@@ -626,7 +859,7 @@
 
             const [aviatorLiveBets, setAviatorLiveBets] = useState(generateAviatorLiveBets());
 
-            // --- LOTTERY TIMERS & HISTORIES ---
+            // --- 1000 ROUNDS STATE HISTORIES FOR ALL GAMES ---
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
@@ -635,8 +868,18 @@
             const [period1m, setPeriod1m] = useState('20260822200031105');
             const [period2m, setPeriod2m] = useState('20260822300021105');
 
-            const [drawHistory30s, setDrawHistory30s] = useState(generateClassicMockHistory('20260822100051482', 30));
-            const [drawHistoryK3, setDrawHistoryK3] = useState(generateK3MockHistory('20260822101010572', 30));
+            // 1,000 Rounds Histories
+            const [drawHistory30s, setDrawHistory30s] = useState(() => generateClassicMockHistory('20260822100051482', 1000));
+            const [drawHistory1m, setDrawHistory1m] = useState(() => generateClassicMockHistory('20260822200031105', 1000));
+            const [drawHistory2m, setDrawHistory2m] = useState(() => generateClassicMockHistory('20260822300021105', 1000));
+
+            const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(() => generateTrxMockHistory('20260822103010419', 1000));
+            const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(() => generateTrxMockHistory('20260822203010201', 1000));
+            const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(() => generateTrxMockHistory('20260822303010101', 1000));
+
+            const [drawHistoryK330s, setDrawHistoryK330s] = useState(() => generateK3MockHistory('20260822101010572', 1000));
+            const [drawHistoryK31m, setDrawHistoryK31m] = useState(() => generateK3MockHistory('20260822201010344', 1000));
+            const [drawHistoryK32m, setDrawHistoryK32m] = useState(() => generateK3MockHistory('20260822301010111', 1000));
 
             // Betting Modal
             const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
@@ -697,7 +940,7 @@
 
                                 const roll = Math.random() * 100;
                                 let nextCrash = 1.00;
-                                if (roll < 10) nextCrash = 1.01 + Math.random() * 0.15;
+                                if (roll < 8) nextCrash = 1.01 + Math.random() * 0.12;
                                 else if (roll < 55) nextCrash = 1.20 + Math.random() * 1.8;
                                 else if (roll < 85) nextCrash = 2.40 + Math.random() * 3.5;
                                 else nextCrash = 6.00 + Math.random() * 15.0;
@@ -762,22 +1005,28 @@
                     setTimer2m(Math.max(0, 119 - ((now.getMinutes() % 2) * 60 + seconds)));
 
                     if (seconds % 30 === 0) {
-                        // Advance K3 round
+                        // 1. K3 Advance
                         const d1 = Math.floor(Math.random() * 6) + 1;
                         const d2 = Math.floor(Math.random() * 6) + 1;
                         const d3 = Math.floor(Math.random() * 6) + 1;
                         const sum = d1 + d2 + d3;
                         const size = sum >= 11 ? 'Big' : 'Small';
                         const parity = sum % 2 === 0 ? 'Even' : 'Odd';
-                        const newK3 = {
-                            period: String(BigInt(period30s) + 1n),
-                            sum,
-                            size,
-                            parity,
-                            dice: [d1, d2, d3]
-                        };
-                        setDrawHistoryK3(prev => [newK3, ...(prev || []).slice(0, 29)]);
-                        setPeriod30s(prev => String(BigInt(prev) + 1n));
+                        const nextP = String(BigInt(period30s) + 1n);
+                        
+                        setDrawHistoryK330s(prev => [{ period: nextP, sum, size, parity, dice: [d1, d2, d3] }, ...prev.slice(0, 999)]);
+                        
+                        // 2. Wingo Advance
+                        const dig = Math.floor(Math.random() * 10);
+                        const wSize = dig >= 5 ? 'Big' : 'Small';
+                        const wColor = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
+                        setDrawHistory30s(prev => [{ period: nextP, number: dig, size: wSize, color: wColor }, ...prev.slice(0, 999)]);
+                        
+                        // 3. TRX Advance
+                        const bData = generateTrxBlockData(nextP, dig);
+                        setDrawHistoryTrx30s(prev => [{ period: nextP, blockHeight: bData.blockHeight, blockTime: bData.blockTime, hash: bData.hash, shortHash: bData.shortHash, last5: bData.last5, number: dig, size: wSize, color: wColor }, ...prev.slice(0, 999)]);
+
+                        setPeriod30s(nextP);
                     }
                 }, 1000);
                 return () => clearInterval(interval);
@@ -923,6 +1172,25 @@
                 setWithdrawTab('history');
             };
 
+            const getActiveFullHistory = () => {
+                if (gameType === 'trx_wingo') {
+                    if (activeGameTab === '30sec') return drawHistoryTrx30s;
+                    if (activeGameTab === '1min') return drawHistoryTrx1m;
+                    return drawHistoryTrx2m;
+                } else if (gameType === 'k3_lottery') {
+                    if (activeGameTab === '30sec') return drawHistoryK330s;
+                    if (activeGameTab === '1min') return drawHistoryK31m;
+                    return drawHistoryK32m;
+                } else {
+                    if (activeGameTab === '30sec') return drawHistory30s;
+                    if (activeGameTab === '1min') return drawHistory1m;
+                    return drawHistory2m;
+                }
+            };
+
+            const activeFullHistory = getActiveFullHistory();
+            const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
+            const paginatedHistory = activeFullHistory.slice((historyPage - 1) * 10, historyPage * 10);
             const activeLiveBetsCount = aviatorLiveBets.filter(b => !b.cashedOut).length + (isBetPlaced1 && !isCashedOut1 ? 1 : 0) + (isBetPlaced2 && !isCashedOut2 ? 1 : 0);
 
             if (!isInitialized) {
@@ -1032,6 +1300,29 @@
                                     
                                     {activeNav === 'home' && (
                                         <>
+                                            {/* PROMOTIONAL ADS CAROUSEL */}
+                                            <PromoBannerCarousel onOpenDetail={(bannerData) => {
+                                                setPromoModal({ isOpen: true, data: bannerData });
+                                            }} />
+
+                                            {/* MEGA JACKPOT POOL */}
+                                            <div className="glass-panel-glow rounded-3xl p-3.5 flex items-center justify-between border border-amber-500/30 shadow-luxury relative overflow-hidden">
+                                                <div className="flex items-center space-x-3 z-10">
+                                                    <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950 flex items-center justify-center text-lg shadow-md">
+                                                        🏆
+                                                    </div>
+                                                    <div>
+                                                        <span className="text-[9px] uppercase font-black tracking-widest text-amber-300 block">Daily Mega Jackpot</span>
+                                                        <span className="text-base sm:text-lg font-black font-mono text-yellow-300 tracking-tight block">
+                                                            ৳{jackpotAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span className="text-[8px] bg-amber-400/20 text-amber-300 border border-amber-400/40 px-2 py-0.5 rounded-full font-black uppercase font-mono z-10">
+                                                    HOT POOL
+                                                </span>
+                                            </div>
+
                                             {/* 1. AVIATOR CRASH */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
@@ -1306,18 +1597,32 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    
+                                    {/* 30s / 1m / 2m Tabs */}
+                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+                                        {['30sec', '1min', '2min'].map(tab => (
+                                            <button 
+                                                key={tab} 
+                                                onClick={() => { setActiveGameTab(tab); setHistoryPage(1); }}
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                    </div>
+
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
                                             <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
-                                            <span className="text-sm font-bold text-amber-300">30s Draw Countdown</span>
+                                            <span className="text-sm font-bold text-amber-300">Draw Countdown</span>
                                         </div>
-                                        <span className="text-2xl font-black text-yellow-400">{timer30s}s</span>
+                                        <span className="text-2xl font-black text-yellow-400">{activeGameTab === '30sec' ? timer30s : (activeGameTab === '1min' ? timer1m : timer2m)}s</span>
                                     </div>
 
                                     <div className="grid grid-cols-3 gap-2">
-                                        <button onClick={() => { setBetValue('green'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Green (2X)</button>
-                                        <button onClick={() => { setBetValue('violet'); setIsBetSheetOpen(true); }} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Violet (4.5X)</button>
-                                        <button onClick={() => { setBetValue('red'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Red (2X)</button>
+                                        <button onClick={() => { setBetValue('green'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Green (2X)</button>
+                                        <button onClick={() => { setBetValue('violet'); setIsBetSheetOpen(true); }} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Violet (4.5X)</button>
+                                        <button onClick={() => { setBetValue('red'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Red (2X)</button>
                                     </div>
 
                                     <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 grid grid-cols-5 gap-2">
@@ -1329,17 +1634,24 @@
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 py-2.5 rounded-2xl font-black text-xs text-slate-950 uppercase">BIG (2X)</button>
-                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase">SMALL (2X)</button>
+                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 py-2.5 rounded-2xl font-black text-xs text-slate-950 uppercase shadow-neon-gold">BIG (2X)</button>
+                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase shadow-md">SMALL (2X)</button>
                                     </div>
 
-                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">Recent Draw History</div>
+                                    {/* 1,000 ROUNDS HISTORY TABLE WITH PAGINATION */}
+                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
+                                            <span>Recent History (1000 Rounds)</span>
+                                            <span className="text-[10px] text-slate-400">Page {historyPage} of {totalPages}</span>
+                                        </div>
                                         <table className="w-full text-[10px] font-mono text-left">
                                             <tbody>
-                                                {drawHistory30s.slice(0, 8).map((item, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-800/60">
-                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
+                                                {paginatedHistory.map((item, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
+                                                        <td className="py-2.5 pl-3 text-slate-400">{item.period}</td>
+                                                        {gameType === 'trx_wingo' && (
+                                                            <td className="py-2 text-center text-slate-400">{item.shortHash}</td>
+                                                        )}
                                                         <td className="py-2 text-center text-yellow-300 font-bold">{item.number}</td>
                                                         <td className="py-2 text-center text-slate-300">{item.size}</td>
                                                         <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.color}</td>
@@ -1347,13 +1659,26 @@
                                                 ))}
                                             </tbody>
                                         </table>
+
+                                        {/* Pagination Controls */}
+                                        <div className="flex items-center justify-between p-2.5 bg-slate-900 border-t border-slate-800 font-mono text-xs">
+                                            <div className="flex space-x-1">
+                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(1)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;&lt;</button>
+                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;</button>
+                                            </div>
+                                            <span className="text-amber-400 font-bold">Page {historyPage} / {totalPages}</span>
+                                            <div className="flex space-x-1">
+                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;</button>
+                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(totalPages)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;&gt;</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 5: K3 3-DICE LOTTERY GAME VIEW (FIXED HISTORIES)                    */}
+                        {/* VIEW 5: K3 3-DICE LOTTERY GAME VIEW (1000 ROUNDS HISTORY)                 */}
                         {/* ========================================================================= */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1367,40 +1692,73 @@
                                     <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
                                         <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
                                         <div className="flex space-x-3 justify-center items-center py-1">
-                                            <DiceFace value={drawHistoryK3[0]?.dice[0] || 1} />
-                                            <DiceFace value={drawHistoryK3[0]?.dice[1] || 4} />
-                                            <DiceFace value={drawHistoryK3[0]?.dice[2] || 6} />
+                                            <DiceFace value={drawHistoryK330s[0]?.dice[0] || 1} />
+                                            <DiceFace value={drawHistoryK330s[0]?.dice[1] || 4} />
+                                            <DiceFace value={drawHistoryK330s[0]?.dice[2] || 6} />
                                         </div>
                                         <div className="flex space-x-3 text-xs font-mono font-black text-yellow-300">
-                                            <span>Sum: {drawHistoryK3[0]?.sum || 11}</span>
+                                            <span>Sum: {drawHistoryK330s[0]?.sum || 11}</span>
                                             <span>•</span>
-                                            <span>{drawHistoryK3[0]?.size || 'Big'}</span>
+                                            <span>{drawHistoryK330s[0]?.size || 'Big'}</span>
                                             <span>•</span>
-                                            <span>{drawHistoryK3[0]?.parity || 'Odd'}</span>
+                                            <span>{drawHistoryK330s[0]?.parity || 'Odd'}</span>
                                         </div>
                                     </div>
 
                                     <div className="grid grid-cols-4 gap-1.5">
-                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Small 2X</button>
-                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase">Big 2X</button>
-                                        <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Even 2X</button>
-                                        <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase">Odd 2X</button>
+                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Small 2X</button>
+                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow-neon-gold">Big 2X</button>
+                                        <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Even 2X</button>
+                                        <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Odd 2X</button>
                                     </div>
 
-                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">K3 Result History (Visual Dice)</div>
+                                    {/* 1,000 ROUNDS K3 HISTORY TABLE */}
+                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
+                                            <span>K3 3-Dice History (1000 Rounds)</span>
+                                            <span className="text-[10px] text-slate-400">Page {historyPage} of {totalPages}</span>
+                                        </div>
                                         <table className="w-full text-[10px] font-mono text-left">
+                                            <thead>
+                                                <tr className="border-b border-slate-800 text-slate-400">
+                                                    <th className="py-2 pl-3">Period</th>
+                                                    <th className="py-2 text-center">Dice</th>
+                                                    <th className="py-2 text-center">Sum</th>
+                                                    <th className="py-2 pr-3 text-right">Result</th>
+                                                </tr>
+                                            </thead>
                                             <tbody>
-                                                {drawHistoryK3.slice(0, 8).map((item, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-800/60">
+                                                {paginatedHistory.map((item, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
                                                         <td className="py-2 pl-3 text-slate-400">{item.period}</td>
-                                                        <td className="py-2 text-center text-yellow-300 font-bold">[{item.dice.join(', ')}]</td>
-                                                        <td className="py-2 text-center text-slate-300">Sum: {item.sum}</td>
+                                                        <td className="py-1 text-center">
+                                                            <div className="inline-flex space-x-1 items-center justify-center">
+                                                                {(item.dice || [1, 1, 1]).map((d, dIdx) => (
+                                                                    <span key={dIdx} className="w-4 h-4 bg-white text-slate-950 font-black rounded text-[9px] flex items-center justify-center shadow-sm">
+                                                                        {d}
+                                                                    </span>
+                                                                ))}
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-2 text-center text-yellow-300 font-bold">{item.sum}</td>
                                                         <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.size} / {item.parity}</td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
+
+                                        {/* Pagination Controls */}
+                                        <div className="flex items-center justify-between p-2.5 bg-slate-900 border-t border-slate-800 font-mono text-xs">
+                                            <div className="flex space-x-1">
+                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(1)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;&lt;</button>
+                                                <button disabled={historyPage === 1} onClick={() => setHistoryPage(prev => Math.max(1, prev - 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&lt;</button>
+                                            </div>
+                                            <span className="text-amber-400 font-bold">Page {historyPage} / {totalPages}</span>
+                                            <div className="flex space-x-1">
+                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(prev => Math.min(totalPages, prev + 1))} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;</button>
+                                                <button disabled={historyPage === totalPages} onClick={() => setHistoryPage(totalPages)} className="px-2 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">&gt;&gt;</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1434,7 +1792,7 @@
                                                     navigator.clipboard.writeText('01860909272');
                                                     showToast('Agent number copied!', 'success');
                                                 }} 
-                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black"
+                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
                                             >
                                                 Copy
                                             </button>
@@ -1487,6 +1845,38 @@
                         )}
 
                     </div>
+
+                    {/* DETAIL MODAL FOR PROMO BANNERS */}
+                    {promoModal.isOpen && (
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 animate-fade-in font-sans backdrop-blur-md">
+                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl overflow-hidden space-y-3">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-2xl">🎁</span>
+                                        <h3 className="text-xs sm:text-sm font-black text-amber-300 font-mono truncate">{promoModal.data?.title || 'Promotion Details'}</h3>
+                                    </div>
+                                    <button onClick={() => setPromoModal({ isOpen: false, data: null })} className="text-slate-400 hover:text-white cursor-pointer">
+                                        <Icon name="x" className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-2 text-xs text-slate-300">
+                                    <p className="text-slate-100 font-semibold">{promoModal.data?.subtitle}</p>
+                                    <p className="text-[11px] text-slate-400 leading-relaxed">{promoModal.data?.desc}</p>
+                                </div>
+
+                                <button 
+                                    onClick={() => {
+                                        setPromoModal({ isOpen: false, data: null });
+                                        setView('deposit');
+                                    }}
+                                    className="w-full py-3 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider active:scale-95 transition-all shadow-neon-gold cursor-pointer"
+                                >
+                                    Deposit Now & Claim
+                                </button>
+                            </div>
+                        </div>
+                    )}
 
                     {/* CONFIRM LOTTERY BET MODAL */}
                     {isBetSheetOpen && (
