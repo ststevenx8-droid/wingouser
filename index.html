@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -24,15 +24,15 @@
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
                         bkashDark: '#990b49',
-                        darkBg: '#05070e',
-                        cardBg: 'rgba(15, 23, 42, 0.75)',
+                        darkBg: '#040711',
+                        cardBg: 'rgba(15, 23, 42, 0.85)',
                         cardBorder: 'rgba(255, 255, 255, 0.08)'
                     },
                     boxShadow: {
-                        'neon-gold': '0 0 25px rgba(251, 191, 36, 0.4)',
-                        'neon-green': '0 0 25px rgba(16, 185, 129, 0.4)',
-                        'neon-pink': '0 0 25px rgba(226, 19, 110, 0.4)',
-                        'luxury': '0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)'
+                        'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
+                        'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
+                        'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
+                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.65)'
                     }
                 }
             }
@@ -46,9 +46,9 @@
             font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
             background-color: #030509;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.15) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(226, 19, 110, 0.12) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.18) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.18) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(226, 19, 110, 0.15) 0px, transparent 50%);
             user-select: none;
             overflow: hidden;
             color: #f8fafc;
@@ -80,15 +80,15 @@
             -webkit-text-fill-color: transparent;
         }
         .glass-panel {
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.09);
         }
         .glass-panel-glow {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
             backdrop-filter: blur(16px);
-            border: 1px solid rgba(251, 191, 36, 0.3);
+            border: 1px solid rgba(251, 191, 36, 0.35);
         }
         .vip-card-gradient {
             background: linear-gradient(135deg, #2b1f07 0%, #4a360d 40%, #171206 100%);
@@ -270,6 +270,14 @@
             return <IconComponent className={className} {...props} />;
         };
 
+        // --- BULLETPROOF REALISTIC MONEY FORMATTER ---
+        const formatMoney = (val) => {
+            const num = Number(val);
+            if (isNaN(num) || !isFinite(num) || num < 0) return '0.00';
+            if (num > 99999999) return '99,999.00'; // Guard against corrupted numbers
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        };
+
         const PRESET_AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
@@ -414,7 +422,7 @@
                             </div>
 
                             <div className="z-10 flex items-center space-x-2 text-[9px] font-mono text-amber-200">
-                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
+                                <span className="bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
                                 <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-500/40">VIP Ready</span>
                             </div>
 
@@ -590,6 +598,30 @@
                     </svg>
                 </div>
             );
+        };
+
+        const playCountdownBeep = (isFinal = false) => {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                
+                osc.frequency.value = isFinal ? 950 : 580; 
+                osc.type = 'sine';
+                
+                gain.gain.setValueAtTime(0.08, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.12);
+                
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } catch (e) {
+                // Audio fallback
+            }
         };
 
         function App() {
@@ -1486,20 +1518,26 @@
                 .filter(w => String(w?.status || '').toLowerCase() === 'pending')
                 .reduce((sum, w) => sum + Number(w.amount || 0), 0);
 
+            // Safe bounded totals to eliminate scientific notation (e.g. 5e+237)
+            const safeAdd = (acc, val) => {
+                const n = parseFloat(val);
+                return isNaN(n) || !isFinite(n) || n > 10000000 ? acc : acc + n;
+            };
+
             const totalDeposited = (depositHistory || [])
                 .filter(d => d.status === 'Success')
-                .reduce((sum, d) => sum + Number(d.amount || 0), 0);
+                .reduce((sum, d) => safeAdd(sum, d.amount), 0);
 
             const totalWithdrawn = (withdrawHistory || [])
                 .filter(w => w.status === 'Success')
-                .reduce((sum, w) => sum + Number(w.amount || 0), 0);
+                .reduce((sum, w) => safeAdd(sum, w.amount), 0);
 
             const totalBetTurnover = (myBets || [])
-                .reduce((sum, b) => sum + Number(b.amount || 0), 0);
+                .reduce((sum, b) => safeAdd(sum, b.amount), 0);
 
             const totalWonPayout = (myBets || [])
                 .filter(b => b.status === 'won')
-                .reduce((sum, b) => sum + Number(b.payout || 0), 0);
+                .reduce((sum, b) => safeAdd(sum, b.payout), 0);
 
             const activeFullHistory = getHistoryForActiveTab();
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
@@ -1666,7 +1704,7 @@
                                         </div>
                                         <div className="flex items-center space-x-1.5">
                                             <span className="text-slate-400 text-[9px] uppercase font-bold">Wallet:</span>
-                                            <span className="text-amber-400 font-black font-mono text-sm">৳{Number(balance || 0).toFixed(2)}</span>
+                                            <span className="text-amber-400 font-black font-mono text-sm">৳{formatMoney(balance)}</span>
                                         </div>
                                     </div>
                                 )}
@@ -1902,7 +1940,9 @@
                                         </div>
                                     )}
 
-                                    {/* VIEW: VIP ACCOUNT PROFILE */}
+                                    {/* ========================================================================= */}
+                                    {/* CLEANED REALISTIC PROFILE / VIP ACCOUNT CENTER                            */}
+                                    {/* ========================================================================= */}
                                     {activeNav === 'account' && (
                                         <div className="p-4 space-y-4 font-sans">
                                             {/* VIP Card */}
@@ -1958,7 +1998,7 @@
 
                                                 <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
                                                     <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
-                                                        <span>VIP 1 Privilege</span>
+                                                        <span>VIP Level Progress</span>
                                                         <span>EXP: 2,450 / 5,000</span>
                                                     </div>
                                                     <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
@@ -1983,7 +2023,7 @@
                                                 </div>
 
                                                 <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
-                                                    {hideBalance ? '৳ ••••••' : `৳${Number(balance || 0).toFixed(2)}`}
+                                                    {hideBalance ? '৳ ••••••' : `৳${formatMoney(balance)}`}
                                                 </div>
 
                                                 <div className="grid grid-cols-2 gap-2.5 pt-1">
@@ -2004,7 +2044,7 @@
                                                 </div>
                                             </div>
 
-                                            {/* Financial Metrics */}
+                                            {/* Financial Metrics - Cleaned & Real */}
                                             <div className="grid grid-cols-2 gap-2.5">
                                                 <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
                                                     <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
@@ -2012,7 +2052,7 @@
                                                         <span>Total Recharged</span>
                                                     </div>
                                                     <div className="text-sm font-black font-mono text-slate-100">
-                                                        ৳{totalDeposited.toFixed(2)}
+                                                        ৳{formatMoney(totalDeposited)}
                                                     </div>
                                                 </div>
 
@@ -2022,7 +2062,7 @@
                                                         <span>Total Cashed Out</span>
                                                     </div>
                                                     <div className="text-sm font-black font-mono text-slate-100">
-                                                        ৳{totalWithdrawn.toFixed(2)}
+                                                        ৳{formatMoney(totalWithdrawn)}
                                                     </div>
                                                 </div>
 
@@ -2032,7 +2072,7 @@
                                                         <span>Total Turnover</span>
                                                     </div>
                                                     <div className="text-sm font-black font-mono text-amber-300">
-                                                        ৳{totalBetTurnover.toFixed(2)}
+                                                        ৳{formatMoney(totalBetTurnover)}
                                                     </div>
                                                 </div>
 
@@ -2042,7 +2082,7 @@
                                                         <span>Total Won Payout</span>
                                                     </div>
                                                     <div className="text-sm font-black font-mono text-emerald-400">
-                                                        +৳{totalWonPayout.toFixed(2)}
+                                                        +৳{formatMoney(totalWonPayout)}
                                                     </div>
                                                 </div>
                                             </div>
@@ -2116,7 +2156,7 @@
                                                     <span>Available Balance</span>
                                                 </div>
                                                 <div className="text-3xl font-black mt-1 tracking-tight font-mono text-yellow-300">
-                                                    ৳{Number(balance || 0).toFixed(2)}
+                                                    ৳{formatMoney(balance)}
                                                 </div>
                                             </div>
                                         </div>
@@ -2257,7 +2297,7 @@
                                             (depositHistory || []).map(item => (
                                                 <div key={item.id} className="glass-panel p-3.5 rounded-2xl border border-slate-800 shadow-md flex flex-col space-y-2">
                                                     <div className="flex justify-between items-center">
-                                                        <span className="text-sm font-black text-pink-400 font-mono">৳{Number(item.amount || 0).toFixed(2)}</span>
+                                                        <span className="text-sm font-black text-pink-400 font-mono">৳{formatMoney(item.amount)}</span>
                                                         <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase ${
                                                             item.status === 'Success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' :
                                                             item.status === 'Rejected' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -2300,7 +2340,7 @@
                                                 </div>
                                                 <div className="flex justify-between text-xs pt-1">
                                                     <span className="text-slate-400 font-bold">Withdrawable Balance:</span>
-                                                    <span className="font-black text-emerald-400 font-mono text-sm">৳{Number(balance || 0).toFixed(2)}</span>
+                                                    <span className="font-black text-emerald-400 font-mono text-sm">৳{formatMoney(balance)}</span>
                                                 </div>
                                             </div>
 
@@ -2368,7 +2408,7 @@
                                                 (withdrawHistory || []).map(item => (
                                                     <div key={item.id} className="glass-panel p-3.5 rounded-2xl border border-slate-800 shadow-md flex flex-col space-y-2">
                                                         <div className="flex justify-between items-center">
-                                                            <span className="text-sm font-black text-emerald-400 font-mono">৳{Number(item.amount || 0).toFixed(2)}</span>
+                                                            <span className="text-sm font-black text-emerald-400 font-mono">৳{formatMoney(item.amount)}</span>
                                                             <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase ${
                                                                 item.status === 'Success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' :
                                                                 item.status === 'Rejected' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
@@ -2431,7 +2471,7 @@
                                     <div className="glass-panel rounded-3xl p-4 shadow-luxury flex justify-between items-center border border-slate-800">
                                         <div>
                                             <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-mono">Wallet Balance</span>
-                                            <span className="text-2xl font-black text-yellow-400 font-mono">৳{Number(balance || 0).toFixed(2)}</span>
+                                            <span className="text-2xl font-black text-yellow-400 font-mono">৳{formatMoney(balance)}</span>
                                         </div>
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-black uppercase shadow-neon-gold active:scale-95 transition-all cursor-pointer">Deposit</button>
                                     </div>
@@ -2539,7 +2579,7 @@
                                                                     <span className="block text-[9px] text-slate-500">{bet.timestamp}</span>
                                                                 </div>
                                                                 <div className="text-right">
-                                                                    <span className="block font-black text-slate-200 font-mono">৳{bet.amount}</span>
+                                                                    <span className="block font-black text-slate-200 font-mono">৳{formatMoney(bet.amount)}</span>
                                                                     <span className={`text-[9px] font-black uppercase ${
                                                                         bet.status === 'won' ? 'text-emerald-400' : bet.status === 'lost' ? 'text-rose-500' : 'text-amber-400'
                                                                     }`}>{bet.status}</span>
@@ -2614,7 +2654,7 @@
                                     <div className="glass-panel rounded-3xl p-4 shadow-luxury flex justify-between items-center border border-slate-800">
                                         <div>
                                             <span className="text-[10px] text-slate-400 uppercase tracking-widest block font-mono">Wallet Balance</span>
-                                            <span className="text-2xl font-black text-yellow-400 font-mono">৳{Number(balance || 0).toFixed(2)}</span>
+                                            <span className="text-2xl font-black text-yellow-400 font-mono">৳{formatMoney(balance)}</span>
                                         </div>
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-4 py-2 rounded-xl text-xs font-black uppercase shadow-neon-gold active:scale-95 transition-all cursor-pointer">Deposit</button>
                                     </div>
@@ -2763,7 +2803,7 @@
                                 <div className="flex justify-between items-center pt-3 border-t border-slate-800">
                                     <div>
                                         <span className="text-[10px] text-slate-400 block font-mono">Total Stake:</span>
-                                        <span className="text-2xl font-black text-emerald-400 font-mono">৳{(Number(selectedUnit) * Number(multiplier)).toFixed(2)}</span>
+                                        <span className="text-2xl font-black text-emerald-400 font-mono">৳{formatMoney(Number(selectedUnit) * Number(multiplier))}</span>
                                     </div>
                                     <button onClick={confirmBetPlacement} className="px-7 py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green active:scale-95 transition-all cursor-pointer">Confirm Bet</button>
                                 </div>
@@ -2777,7 +2817,7 @@
                             <div className="relative w-full max-w-sm glass-panel border border-amber-500/60 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
                                 <div className="text-5xl mb-2">{popupType === 'win' ? '🎉' : '💔'}</div>
                                 <h2 className="text-3xl font-black text-amber-400 tracking-wider font-mono">{popupType === 'win' ? 'YOU WON!' : 'TRY AGAIN!'}</h2>
-                                <span className="text-3xl font-black text-yellow-300 tracking-tight block mt-3 font-mono">৳{Number(popupAmount).toFixed(2)}</span>
+                                <span className="text-3xl font-black text-yellow-300 tracking-tight block mt-3 font-mono">৳{formatMoney(popupAmount)}</span>
                                 <button onClick={() => setShowResultPopup(false)} className="mt-6 w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold cursor-pointer">
                                     Continue
                                 </button>
