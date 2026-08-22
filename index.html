@@ -1043,7 +1043,6 @@
                 setSlotSpinning(true);
                 playCountdownBeep(false);
 
-                // Slot symbols palette
                 const symbols = activeJiliGame?.id === 'fortune_gems' 
                     ? ['🗿', '💎', '👑', '7️⃣', '🔔']
                     : (activeJiliGame?.id === 'money_coming' ? ['💵', '💰', '7️⃣', '⭐', '🪙'] : ['👑', '🃏', '💎', '♠️', '7️⃣']);
@@ -1057,9 +1056,9 @@
 
                     let winMultiplier = 0;
                     if (r1 === r2 && r2 === r3) {
-                        winMultiplier = 10; // 3 of a kind: 10X
+                        winMultiplier = 10;
                     } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                        winMultiplier = 2; // 2 of a kind: 2X
+                        winMultiplier = 2;
                     }
 
                     if (winMultiplier > 0) {
@@ -1812,7 +1811,7 @@
             };
 
             const processDeposit = (e) => {
-                e.preventDefault();
+                if (e) e.preventDefault();
                 if (!currentUser) {
                     showToast('Please log in first', 'error');
                     return;
@@ -1827,7 +1826,7 @@
                     return;
                 }
                 if (!transactionId || transactionId.length < 8) {
-                    showToast('Provide valid Transaction ID', 'error');
+                    showToast('Provide valid Transaction ID (TxID)', 'error');
                     return;
                 }
 
@@ -1837,7 +1836,7 @@
                     id: depositId,
                     amount: amt,
                     sender: senderNumber,
-                    txid: transactionId.toUpperCase(),
+                    txid: transactionId.toUpperCase().trim(),
                     status: 'Pending', 
                     timestamp: new Date().toLocaleString(),
                     userPhone: currentUser.phone,
@@ -1853,7 +1852,7 @@
                     db.ref(globalPath).set(newDepositItem)
                 ]).then(() => {
                     setIsDepositing(false);
-                    showToast('Deposit request submitted! Status is Pending.', 'success');
+                    showToast('Deposit submitted! Status is Pending verification.', 'success');
                     setSenderNumber('');
                     setTransactionId('');
                     setDepositTab('history');
@@ -2219,13 +2218,10 @@
                                 <div className="flex-1 overflow-y-auto pb-10">
                                     {activeNav === 'home' && (
                                         <div className="p-4 space-y-4">
-                                            
-                                            {/* 1. TOP PROMOTIONAL REAL ADS CAROUSEL */}
                                             <PromoBannerCarousel onOpenDetail={(bannerData) => {
                                                 setPromoModal({ isOpen: true, data: bannerData });
                                             }} />
 
-                                            {/* 2. REALISTIC GAME CATEGORY TABS */}
                                             <div className="flex space-x-2 overflow-x-auto py-1 font-sans">
                                                 {[
                                                     { id: 'all', label: '🔥 All Games' },
@@ -2247,7 +2243,6 @@
                                                 ))}
                                             </div>
 
-                                            {/* 3. JILI SLOTS & POPULAR GAMES 6-GRID */}
                                             {(homeCategory === 'all' || homeCategory === 'jili' || homeCategory === 'crash') && (
                                                 <div className="space-y-2">
                                                     <div className="flex justify-between items-center px-1">
@@ -2270,17 +2265,14 @@
                                                                 }}
                                                                 className={`relative rounded-2xl bg-gradient-to-b ${game.bgGradient} p-2 flex flex-col justify-between items-center h-36 border border-white/10 shadow-md cursor-pointer transform active:scale-95 transition-all overflow-hidden`}
                                                             >
-                                                                {/* Golden JILI Logo in top right */}
                                                                 <div className="absolute top-1.5 right-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[7.5px] px-1.5 py-0.2 rounded font-mono shadow">
                                                                     JILI
                                                                 </div>
 
-                                                                {/* Tag badge top left */}
                                                                 <div className="self-start text-[6.5px] font-black uppercase tracking-wider text-white/80 bg-black/40 px-1.5 py-0.5 rounded-full">
                                                                     {game.tag}
                                                                 </div>
 
-                                                                {/* Center 3D Themed Mascot/Icon */}
                                                                 <div className="my-auto relative flex items-center justify-center">
                                                                     <span className="text-3xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] animate-pulse">
                                                                         {game.icon}
@@ -2290,7 +2282,6 @@
                                                                     </span>
                                                                 </div>
 
-                                                                {/* Bottom Title Frame */}
                                                                 <div className="w-full text-center bg-black/50 backdrop-blur-xs py-1 rounded-xl border border-white/10">
                                                                     <span className="text-[9px] font-black text-white uppercase tracking-tight block truncate px-1">
                                                                         {game.subtitle}
@@ -2302,7 +2293,6 @@
                                                 </div>
                                             )}
 
-                                            {/* 4. LOTTERY & CLASSIC GAME CARDS */}
                                             {(homeCategory === 'all' || homeCategory === 'lottery') && (
                                                 <div className="space-y-3 pt-1">
                                                     <div className="flex items-center space-x-1.5 px-1">
@@ -2310,7 +2300,6 @@
                                                         <span className="text-xs font-black text-slate-800 tracking-wide">Lottery & Color Games</span>
                                                     </div>
 
-                                                    {/* Game 1: Wingo */}
                                                     <div onClick={() => { setGameType('wingo'); setView('game'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                         <div className="flex justify-between items-start z-10">
                                                             <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Classic Live</span>
@@ -2323,7 +2312,6 @@
                                                         </div>
                                                     </div>
 
-                                                    {/* Game 2: TRX Wingo */}
                                                     <div onClick={() => { setGameType('trx_wingo'); setView('game'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#1b8a43] to-[#0c5926] shadow-md border border-emerald-800 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                         <div className="flex justify-between items-start z-10">
                                                             <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">TRX Hash Live</span>
@@ -2336,7 +2324,6 @@
                                                         </div>
                                                     </div>
 
-                                                    {/* Game 3: K3 Lottery */}
                                                     <div onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-[#12a14b] to-[#0a6125] shadow-md border border-emerald-700 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                         <div className="flex justify-between items-start z-10">
                                                             <span className="text-[10px] bg-emerald-900/60 border border-emerald-700 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">K3 Dice Live</span>
@@ -2349,7 +2336,6 @@
                                                         </div>
                                                     </div>
 
-                                                    {/* Game 4: Chicken Road 2 */}
                                                     <div onClick={() => { setGameType('chicken_road_2'); setView('game_chicken'); setChickenActive(false); setChickenStep(-1); setChickenCrash(false); }} className="relative h-40 rounded-2xl bg-gradient-to-br from-emerald-800 to-teal-950 shadow-md border border-emerald-950 cursor-pointer overflow-hidden active:scale-95 transition-all flex flex-col justify-between p-4">
                                                         <div className="flex justify-between items-start z-10">
                                                             <span className="text-[10px] bg-emerald-700/60 border border-emerald-600 text-emerald-200 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">Traffic Crossing</span>
@@ -2364,7 +2350,6 @@
                                                 </div>
                                             )}
 
-                                            {/* 5. REAL LIVE WINNING INFORMATION FEED */}
                                             <WinningInfoComponent />
                                         </div>
                                     )}
@@ -2520,7 +2505,6 @@
                                 </div>
 
                                 <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
-                                    {/* 3-Reel Slot Machine Frame */}
                                     <div className="w-full max-w-sm bg-gradient-to-b from-amber-600 via-yellow-500 to-amber-700 p-4 rounded-3xl shadow-2xl border-4 border-amber-300/60">
                                         <div className="bg-[#0b0f19] p-4 rounded-2xl border-2 border-slate-900 flex justify-around items-center min-h-[140px] shadow-inner">
                                             {slotReels.map((sym, idx) => (
@@ -2531,7 +2515,6 @@
                                         </div>
                                     </div>
 
-                                    {/* Bet Adjustment Row */}
                                     <div className="w-full max-w-sm bg-[#171d2b] p-3 rounded-2xl border border-slate-800 flex justify-between items-center font-sans">
                                         <span className="text-xs font-bold text-slate-400">Bet Amount:</span>
                                         <div className="flex space-x-1.5 font-mono">
@@ -2548,7 +2531,6 @@
                                         </div>
                                     </div>
 
-                                    {/* Big Spin Button */}
                                     <button
                                         onClick={spinSlotMachine}
                                         disabled={slotSpinning}
@@ -2576,13 +2558,11 @@
                                 </div>
 
                                 <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
-                                    {/* Glass Dome with 2 Dice */}
                                     <div className="w-48 h-48 rounded-full bg-gradient-to-b from-sky-400/20 to-blue-900/40 border-4 border-sky-400/50 flex items-center justify-center space-x-4 shadow-2xl">
                                         <DiceFace value={diceValues[0]} size="w-16 h-16" />
                                         <DiceFace value={diceValues[1]} size="w-16 h-16" />
                                     </div>
 
-                                    {/* 3 Bet Sections */}
                                     <div className="w-full grid grid-cols-3 gap-2">
                                         <button
                                             onClick={() => setDiceSelection('down')}
@@ -2630,7 +2610,6 @@
                                 </div>
 
                                 <div className="flex-1 p-4 flex flex-col justify-center items-center space-y-6">
-                                    {/* Space Screen with Multiplier & Rocket */}
                                     <div className="w-full h-56 bg-gradient-to-b from-[#0a0f1d] to-[#121c33] rounded-3xl border border-slate-800 relative flex flex-col items-center justify-center overflow-hidden">
                                         <div className="text-5xl font-black font-mono text-amber-400 tracking-tight drop-shadow-md">
                                             {rocketMultiplier.toFixed(2)}x
@@ -2684,7 +2663,7 @@
                                 </div>
 
                                 {depositTab === 'new' ? (
-                                    <div className="flex-1 overflow-y-auto pb-24">
+                                    <div className="flex-1 overflow-y-auto pb-28">
                                         <div className="p-4">
                                             <div className="bg-gradient-to-br from-amber-400 to-yellow-500 rounded-2xl p-5 shadow-sm text-slate-950 relative overflow-hidden">
                                                 <div className="flex items-center space-x-1.5 opacity-80 text-xs font-semibold">
@@ -2785,8 +2764,9 @@
                                             </div>
                                         </div>
 
+                                        {/* SENDER DETAILS FORM WITH DIRECT SUBMIT BUTTON */}
                                         <div className="px-4 pb-4 font-sans">
-                                            <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
+                                            <form onSubmit={processDeposit} className="bg-white p-4 rounded-2xl shadow-sm border border-slate-100 space-y-3">
                                                 <div className="flex items-center space-x-1.5 text-slate-700 font-bold text-sm">
                                                     <Icon name="shield-check" className="w-4 h-4 text-indigo-500" />
                                                     <span>Sender details</span>
@@ -2794,20 +2774,31 @@
                                                 <div className="space-y-2">
                                                     <input 
                                                         type="tel" 
-                                                        placeholder="Sender Account/Phone Number"
+                                                        placeholder="Sender Account/Phone Number (যেমন: 017XXXXXXXX)"
                                                         value={senderNumber} 
                                                         onChange={e => setSenderNumber(e.target.value)} 
                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono"
                                                     />
                                                     <input 
                                                         type="text" 
-                                                        placeholder="Enter Transaction ID (TxID)" 
+                                                        placeholder="Enter Transaction ID (যেমন: 8N7A6XX5)" 
                                                         value={transactionId} 
                                                         onChange={e => setTransactionId(e.target.value)} 
                                                         className="w-full bg-slate-50 border border-slate-200 rounded-xl py-3 px-4 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-[#8a2be2] font-mono uppercase"
                                                     />
                                                 </div>
-                                            </div>
+
+                                                {/* IN-CARD PROMINENT SUBMIT BUTTON */}
+                                                <button 
+                                                    type="submit"
+                                                    disabled={isDepositing}
+                                                    className={`w-full mt-2 py-3.5 rounded-xl text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all ${
+                                                        isDepositing ? 'bg-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-[#e2136e] to-[#bc1055] hover:opacity-95 active:scale-98'
+                                                    }`}
+                                                >
+                                                    {isDepositing ? 'Processing Deposit...' : 'Submit Deposit (৳' + (depositAmount || '0') + ')'}
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 ) : (
@@ -2855,7 +2846,7 @@
                                                 isDepositing ? 'bg-slate-400 cursor-not-allowed' : 'bg-[#e2136e] hover:bg-rose-700 active:scale-95'
                                             }`}
                                         >
-                                            {isDepositing ? 'Processing...' : 'Deposit'}
+                                            {isDepositing ? 'Processing...' : 'Submit Deposit'}
                                         </button>
                                     </div>
                                 )}
@@ -3075,7 +3066,6 @@
                                         <button onClick={() => openBetConfirmation('small')} className="bg-[#1e88e5] hover:opacity-90 py-2.5 text-white rounded-xl font-black text-xs shadow-md transition-opacity">SMALL</button>
                                     </div>
 
-                                    {/* Timer & History components */}
                                     <div className="bg-gradient-to-r from-amber-400 to-[#fccd11] text-slate-950 p-4 rounded-2xl border border-amber-300 relative overflow-hidden shadow-sm font-sans">
                                         <div className="flex justify-between items-center pb-2.5 border-b border-amber-500/20">
                                             <span className="bg-amber-500/20 border border-amber-500/30 px-3 py-1 rounded-full text-[10px] font-bold">Ruleset active</span>
