@@ -33,7 +33,7 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
-                        'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.55)',
+                        'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.75)',
                         'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.65)'
                     }
                 }
@@ -138,7 +138,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- NEW FIREBASE CONFIGURATION (stxwin-82a48) ---
+        // --- FIREBASE CONFIGURATION (stxwin-82a48) ---
         const firebaseConfig = {
             apiKey: "AIzaSyAQOxmY1NL-2-NQmtUKgVWgFZ8SaNxlIN4",
             authDomain: "stxwin-82a48.firebaseapp.com",
@@ -340,7 +340,6 @@
             </div>
         );
 
-        // --- HISTORY GENERATORS FOR DIFFERENT PERIODS ---
         const generateClassicMockHistory = (basePeriod, count = 100) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
@@ -402,7 +401,6 @@
             );
         };
 
-        // --- BD PLAYERS LIVE FEED ---
         const BD_PLAYER_NAMES = [
             "Shakib_***75", "Tamim_***28", "Tanvir_***BD", "Rahim_***99", "Sabbir_***07", 
             "Kaisar_***VIP", "Nayeem_***12", "Fahim_***BD", "Ashiq_***77", "Shohel_***55"
@@ -419,7 +417,7 @@
             }));
         };
 
-        // --- WEB AUDIO SOUND ENGINE FOR AVIATOR ---
+        // --- WEB AUDIO ENGINE ---
         const aviatorAudio = {
             ctx: null,
             flightOsc: null,
@@ -490,9 +488,12 @@
             }
         };
 
-        // --- AVIATOR CANVAS ENGINE ---
+        // =========================================================================
+        // 🌟 100% REAL AVIATOR RED TRAJECTORY CANVAS (Replaced Yellow with Red)
+        // =========================================================================
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
+            const particlesRef = useRef([]);
 
             useEffect(() => {
                 const canvas = canvasRef.current;
@@ -506,7 +507,7 @@
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
 
-                    // Grid
+                    // 1. Subtle Tech Grid
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
@@ -526,6 +527,16 @@
                     }
                     ctx.restore();
 
+                    // 2. Horizon Glow (Dark Crimson Atmosphere)
+                    const planetGrad = ctx.createRadialGradient(0, height * 1.2, 10, 0, height * 1.2, width * 0.9);
+                    planetGrad.addColorStop(0, 'rgba(229, 30, 56, 0.12)');
+                    planetGrad.addColorStop(0.5, 'rgba(30, 41, 59, 0.25)');
+                    planetGrad.addColorStop(1, 'transparent');
+                    ctx.fillStyle = planetGrad;
+                    ctx.beginPath();
+                    ctx.arc(0, height * 1.2, width * 0.9, 0, Math.PI * 2);
+                    ctx.fill();
+
                     if (phase === 'flying' || phase === 'crashed') {
                         const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
                         const startX = 20;
@@ -535,11 +546,11 @@
                         const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
                         const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
 
-                        // Fill Under Curve
+                        // 🌟 A. Fill Under Curve with Real Aviator Red Gradient
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                        fillGrad.addColorStop(0, 'rgba(245, 158, 11, 0.22)');
-                        fillGrad.addColorStop(0.6, 'rgba(245, 158, 11, 0.06)');
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.32)');
+                        fillGrad.addColorStop(0.6, 'rgba(229, 30, 56, 0.08)');
                         fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
                         ctx.beginPath();
@@ -552,11 +563,11 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // Golden Path
+                        // 🌟 B. Draw Glowing Crimson Red Trajectory Path (Replaced Yellow)
                         ctx.save();
-                        ctx.shadowColor = '#f59e0b';
-                        ctx.shadowBlur = 16;
-                        ctx.strokeStyle = phase === 'crashed' ? '#ef4444' : '#fbbf24';
+                        ctx.shadowColor = '#e51e38';
+                        ctx.shadowBlur = 18;
+                        ctx.strokeStyle = '#e51e38';
                         ctx.lineWidth = 3.5;
                         ctx.beginPath();
                         ctx.moveTo(startX, startY);
@@ -564,13 +575,58 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Fighter Jet
+                        // 🌟 C. Red Jet Exhaust Fire Particles
+                        if (phase === 'flying') {
+                            if (Math.random() < 0.8) {
+                                particlesRef.current.push({
+                                    x: targetX - 5,
+                                    y: targetY + 5,
+                                    vx: -Math.random() * 2.2 - 0.8,
+                                    vy: Math.random() * 1.8 + 0.4,
+                                    size: Math.random() * 3 + 1.5,
+                                    alpha: 1.0,
+                                    color: Math.random() > 0.4 ? '#e51e38' : '#ff2a44'
+                                });
+                            }
+                        }
+
+                        particlesRef.current.forEach((p, idx) => {
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            p.alpha -= 0.04;
+                            if (p.alpha <= 0) {
+                                particlesRef.current.splice(idx, 1);
+                                return;
+                            }
+                            ctx.save();
+                            ctx.fillStyle = p.color;
+                            ctx.globalAlpha = p.alpha;
+                            ctx.shadowColor = '#e51e38';
+                            ctx.shadowBlur = 6;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
+                        });
+
+                        // 🌟 D. Draw Red Glowing Fighter Jet Plane
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
                             ctx.rotate(-Math.PI / 6.5);
 
-                            ctx.shadowColor = '#fbbf24';
+                            // Intense Red Radial Glow
+                            const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
+                            glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+                            glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.8)');
+                            glow.addColorStop(0.7, 'rgba(229, 30, 56, 0.25)');
+                            glow.addColorStop(1, 'rgba(229, 30, 56, 0)');
+                            ctx.fillStyle = glow;
+                            ctx.beginPath();
+                            ctx.arc(0, 0, 26, 0, Math.PI * 2);
+                            ctx.fill();
+
+                            ctx.shadowColor = '#e51e38';
                             ctx.shadowBlur = 14;
                             ctx.fillStyle = '#ffffff';
 
@@ -619,7 +675,7 @@
             const activeAd = ads[currentIdx];
 
             return (
-                <div className="w-full relative rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 bg-slate-900">
+                <div className="w-full relative rounded-3xl overflow-hidden shadow-2xl border border-rose-500/40 bg-slate-900">
                     <a href={activeAd.targetUrl || '#'} target="_blank" rel="noopener noreferrer" className="block relative w-full h-36 sm:h-40 overflow-hidden">
                         <img src={activeAd.imageUrl} alt={activeAd.title || 'Special Promotion'} className="w-full h-full object-cover" />
                     </a>
@@ -638,7 +694,6 @@
 
             const [adminAds, setAdminAds] = useState([]);
             const [showAvatarModal, setShowAvatarModal] = useState(false);
-            const [customAvatarUrl, setCustomAvatarUrl] = useState('');
 
             // Games State
             const [gameType, setGameType] = useState('wingo'); 
@@ -661,17 +716,17 @@
 
             const [aviatorLiveBets, setAviatorLiveBets] = useState(generateAviatorLiveBets());
 
-            // 🌟 WALL-CLOCK TIMERS (Never stop / accurately synced)
+            // --- TIMERS ---
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
 
-            // 🌟 DISTINCT INDEPENDENT PERIODS FOR 30s, 1m, and 2m
+            // --- INDEPENDENT PERIODS ---
             const [period30s, setPeriod30s] = useState('20260822100051482');
             const [period1m, setPeriod1m] = useState('20260822200031105');
             const [period2m, setPeriod2m] = useState('20260822300021105');
 
-            // 🌟 DISTINCT HISTORIES FOR ALL MODES
+            // --- HISTORIES ---
             const [drawHistory30s, setDrawHistory30s] = useState(() => generateClassicMockHistory('20260822100051482', 50));
             const [drawHistory1m, setDrawHistory1m] = useState(() => generateClassicMockHistory('20260822200031105', 50));
             const [drawHistory2m, setDrawHistory2m] = useState(() => generateClassicMockHistory('20260822300021105', 50));
@@ -688,7 +743,6 @@
             const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
             const [betValue, setBetValue] = useState(null);
             const [selectedUnit, setSelectedUnit] = useState(10);
-            const [multiplier, setMultiplier] = useState(1);
 
             // bKash Exclusive Deposit & Withdrawal State
             const [depositAmount, setDepositAmount] = useState('500');
@@ -700,7 +754,6 @@
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
             const [withdrawTab, setWithdrawTab] = useState('new');
-            const [withdrawHistory, setWithdrawHistory] = useState([]);
 
             // Auth State
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
@@ -733,9 +786,7 @@
                 }
             }, [view]);
 
-            // =========================================================================
-            // 🌟 WALL-CLOCK COUNTDOWN TIMER & PERIOD INCREMENT ENGINE
-            // =========================================================================
+            // Timer Loop
             useEffect(() => {
                 let lastSeconds = -1;
                 const clockInterval = setInterval(() => {
@@ -853,7 +904,6 @@
 
                         if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
 
-                        // BD Live Players Cashout
                         setAviatorLiveBets(prev => prev.map(ob => {
                             if (!ob.cashedOut && currentMult >= ob.cashoutTarget) {
                                 return { ...ob, cashedOut: true, payout: parseFloat((ob.amount * currentMult).toFixed(2)) };
@@ -896,7 +946,7 @@
                 });
             }, []);
 
-            // Firebase User Real-time Sync & Deposit Status Verification
+            // Firebase User Sync
             useEffect(() => {
                 if (!sessionPhone) {
                     setCurrentUser(null);
@@ -915,20 +965,11 @@
                         setCurrentUser(userData);
                         setBalance(Number(userData.balance || 0));
 
-                        // 🌟 Realtime Deposit Records Sync (Only Approved increases balance)
                         if (userData.deposits) {
                             const depList = Array.isArray(userData.deposits) ? userData.deposits : Object.values(userData.deposits);
                             setDepositHistory(depList);
                         } else {
                             setDepositHistory([]);
-                        }
-
-                        // 🌟 Realtime Withdrawals Records Sync
-                        if (userData.withdrawals) {
-                            const wList = Array.isArray(userData.withdrawals) ? userData.withdrawals : Object.values(userData.withdrawals);
-                            setWithdrawHistory(wList);
-                        } else {
-                            setWithdrawHistory([]);
                         }
 
                         setView(prev => prev === 'auth' ? 'home' : prev);
@@ -1012,7 +1053,6 @@
                 });
             };
 
-            // 🌟 bKash Manual Deposit System (Pending -> Admin Acceptance)
             const processDeposit = (e) => {
                 e.preventDefault();
                 if (!currentUser) return;
@@ -1033,7 +1073,7 @@
                     amount: amt,
                     sender: senderNumber,
                     txid: transactionId.toUpperCase().trim(),
-                    status: 'Pending', // Pending until admin accepts
+                    status: 'Pending',
                     timestamp: new Date().toLocaleString(),
                     username: currentUser.username,
                     userPhone: currentUser.phone
@@ -1052,7 +1092,6 @@
                 });
             };
 
-            // 🌟 Active Game Mode Details Extractor
             const getActivePeriod = () => {
                 if (activeGameTab === '30sec') return period30s;
                 if (activeGameTab === '1min') return period1m;
@@ -1158,7 +1197,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 2: HOME DASHBOARD & UPGRADED PROFILE                                 */}
+                        {/* VIEW 2: HOME DASHBOARD                                                    */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
@@ -1178,7 +1217,6 @@
                                     
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* Dynamic Admin Ads Slider */}
                                             <AdminDynamicAdCarousel ads={adminAds} />
 
                                             {/* 1. AVIATOR CRASH */}
@@ -1194,7 +1232,7 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Flight & Real Dual Cashout</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Red Flight & Real Dual Cashout</span>
                                                 </div>
                                                 <AviatorLogo />
                                             </div>
@@ -1265,7 +1303,6 @@
                                         </div>
                                     )}
 
-                                    {/* 🌟 PROFESSIONAL VIP PROFILE CENTER */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4">
                                             <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
@@ -1318,28 +1355,10 @@
                                                         Edit Avatar
                                                     </button>
                                                 </div>
-
-                                                <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
-                                                    <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
-                                                        <span>VIP Tier 1</span>
-                                                        <span>EXP: 2,450 / 5,000</span>
-                                                    </div>
-                                                    <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
-                                                        <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full rounded-full w-[49%] shadow-neon-gold"></div>
-                                                    </div>
-                                                </div>
                                             </div>
 
-                                            {/* Wallet Balance Card */}
                                             <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
-                                                <div className="flex justify-between items-center">
-                                                    <span className="text-xs text-slate-400 font-bold uppercase font-mono">Total Wallet Balance</span>
-                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
-                                                        <Icon name="refreshCw" className="w-3.5 h-3.5" />
-                                                        <span>Sync</span>
-                                                    </button>
-                                                </div>
-
+                                                <span className="text-xs text-slate-400 font-bold uppercase font-mono">Total Wallet Balance</span>
                                                 <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
                                                     ৳{formatMoney(balance)}
                                                 </div>
@@ -1362,7 +1381,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* Navigation Records & 🌟 REPLACED TELEGRAM SUPPORT: @Ststevenx36 */}
                                             <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
                                                 <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
                                                     <div className="flex items-center space-x-3">
@@ -1377,20 +1395,6 @@
                                                     <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </button>
 
-                                                <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                                                            <Icon name="receipt" className="w-4 h-4" />
-                                                        </div>
-                                                        <div className="text-left">
-                                                            <span className="text-xs font-bold text-slate-200 block">Withdrawal History</span>
-                                                            <span className="text-[9px] text-slate-400">Track cashout tickets</span>
-                                                        </div>
-                                                    </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
-                                                </button>
-
-                                                {/* 🌟 24/7 VIP Customer Support updated to @Ststevenx36 */}
                                                 <a href="https://t.me/Ststevenx36" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
@@ -1405,7 +1409,6 @@
                                                 </a>
                                             </div>
 
-                                            {/* Logout Button */}
                                             <button 
                                                 onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
                                                 className="w-full py-3.5 bg-rose-950/40 hover:bg-rose-950/70 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 transition-all"
@@ -1441,7 +1444,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️                                                         */}
+                        {/* VIEW 3: AVIATOR ✈️ (With Real Red Trajectory & Jet Line)                  */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1458,22 +1461,23 @@
 
                                 <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                     {aviatorHistory.map((mult, i) => (
-                                        <span key={i} className="text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full bg-blue-600/20 text-blue-300 border border-blue-500/30 flex-shrink-0">
+                                        <span key={i} className="text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full bg-red-600/20 text-red-400 border border-red-500/30 flex-shrink-0">
                                             {Number(mult).toFixed(2)}x
                                         </span>
                                     ))}
                                 </div>
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
-                                    <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-slate-800/80 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
+                                    {/* 🌟 Red Trajectory Flight Stage */}
+                                    <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-red-900/50 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
                                         {aviatorPhase === 'flying' && (
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-20">
-                                                <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 drop-shadow-[0_4px_18px_rgba(245,158,11,0.6)]">
+                                                <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-white drop-shadow-[0_4px_18px_rgba(229,30,56,0.8)]">
                                                     {aviatorMult.toFixed(2)}x
                                                 </span>
-                                                <div className="w-24 sm:w-28 h-0.5 bg-white/80 my-1 rounded-full"></div>
+                                                <div className="w-24 sm:w-28 h-0.5 bg-red-500/80 my-1 rounded-full shadow"></div>
                                                 <div className="flex items-center space-x-1.5 text-slate-300 font-mono">
                                                     <span className="text-[10px] text-slate-400 font-bold">BETS</span>
                                                     <span className="text-base sm:text-lg font-black text-white">{activeLiveBetsCount}</span>
@@ -1483,7 +1487,7 @@
 
                                         {aviatorPhase === 'waiting' && (
                                             <div className="flex flex-col items-center space-y-2 z-20">
-                                                <div className="w-10 h-10 rounded-full bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-amber-400 animate-pulse text-lg">🚀</div>
+                                                <div className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-400 animate-pulse text-lg">✈️</div>
                                                 <span className="text-xs font-black uppercase tracking-widest text-slate-300 font-mono">STARTING IN {aviatorCountdown}s</span>
                                             </div>
                                         )}
@@ -1502,13 +1506,13 @@
                                             <span className="text-[10px] font-mono text-slate-400 block">BET DECK 1</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[10, 20, 50, 100].map(amt => (
-                                                    <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
                                             {!isBetPlaced1 ? (
                                                 <button onClick={() => handleAviatorBet(1)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount1}</button>
                                             ) : aviatorPhase === 'flying' && !isCashedOut1 ? (
-                                                <button onClick={() => triggerAviatorCashout(1, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}</button>
+                                                <button onClick={() => triggerAviatorCashout(1, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}</button>
                                             ) : (
                                                 <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
                                             )}
@@ -1518,13 +1522,13 @@
                                             <span className="text-[10px] font-mono text-slate-400 block">BET DECK 2</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[50, 100, 200, 500].map(amt => (
-                                                    <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
                                             {!isBetPlaced2 ? (
                                                 <button onClick={() => handleAviatorBet(2)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount2}</button>
                                             ) : aviatorPhase === 'flying' && !isCashedOut2 ? (
-                                                <button onClick={() => triggerAviatorCashout(2, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}</button>
+                                                <button onClick={() => triggerAviatorCashout(2, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}</button>
                                             ) : (
                                                 <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
                                             )}
@@ -1535,7 +1539,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 4: WINGO & TRX WINGO (With Distinct 30s/1m/2m Timers & Periods)      */}
+                        {/* VIEW 4: WINGO & TRX WINGO                                                 */}
                         {/* ========================================================================= */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1548,29 +1552,22 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
-                                    
-                                    {/* 30s / 1m / 2m Tabs */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {[
-                                            { id: '30sec', label: '30 Sec' },
-                                            { id: '1min', label: '1 Min (60s)' },
-                                            { id: '2min', label: '2 Min' }
-                                        ].map(tab => (
+                                        {['30sec', '1min', '2min'].map(tab => (
                                             <button 
-                                                key={tab.id} 
-                                                onClick={() => setActiveGameTab(tab.id)} 
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                                key={tab} 
+                                                onClick={() => setActiveGameTab(tab)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
                                             >
-                                                {tab.label}
+                                                {tab}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {/* Distinct Period & Independent Wall-Clock Timer Box */}
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
                                             <span className="text-[10px] text-slate-400 block uppercase">Period: {getActivePeriod()}</span>
-                                            <span className="text-sm font-bold text-amber-300">{activeGameTab.toUpperCase()} Draw Countdown</span>
+                                            <span className="text-sm font-bold text-amber-300">{activeGameTab.toUpperCase()} Countdown</span>
                                         </div>
                                         <span className="text-2xl font-black text-yellow-400">{getActiveTimer()}s</span>
                                     </div>
@@ -1594,7 +1591,6 @@
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase shadow-md">SMALL (2X)</button>
                                     </div>
 
-                                    {/* History Table for Selected Distinct Tab */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
                                         <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">
                                             {activeGameTab.toUpperCase()} History
@@ -1663,7 +1659,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 6: bKash PENDING DEPOSIT SYSTEM (Admin Manual Acceptance)            */}
+                        {/* VIEW 6: bKash DEPOSIT VIEW                                                */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
