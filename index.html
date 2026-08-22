@@ -25,16 +25,16 @@
                         bkashPink: '#e2136e',
                         bkashDark: '#990b49',
                         aviatorRed: '#e51e38',
-                        darkBg: '#020408',
+                        darkBg: '#05070e',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
                         cardBorder: 'rgba(255, 255, 255, 0.08)'
                     },
                     boxShadow: {
-                        'neon-gold': '0 0 20px rgba(251, 191, 36, 0.45)',
-                        'neon-green': '0 0 20px rgba(16, 185, 129, 0.45)',
-                        'neon-pink': '0 0 20px rgba(226, 19, 110, 0.5)',
+                        'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
+                        'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
+                        'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
                         'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.75)',
-                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
+                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.65)'
                     }
                 }
             }
@@ -42,7 +42,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -51,7 +51,7 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #020408;
+            background-color: #030509;
             overscroll-behavior: none;
             -webkit-tap-highlight-color: transparent;
             font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
@@ -70,7 +70,7 @@
             flex-direction: column;
             overflow: hidden;
             background-color: #05070e;
-            box-shadow: 0 0 65px rgba(0, 0, 0, 0.95);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
         }
 
         #root {
@@ -93,27 +93,21 @@
         }
 
         .glass-panel {
-            background: rgba(13, 19, 36, 0.82);
+            background: rgba(15, 23, 42, 0.75);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .glass-panel-glow {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%);
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(251, 191, 36, 0.35);
         }
 
         .vip-card-gradient {
-            background: radial-gradient(circle at top right, #382405, #171002 60%, #070501 100%);
-            border: 1px solid rgba(251, 191, 36, 0.45);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 10px 25px rgba(0, 0, 0, 0.8);
-        }
-
-        .bkash-card-master {
-            background: linear-gradient(135deg, #66052f 0%, #b80d57 50%, #e2136e 100%);
-            box-shadow: 0 10px 25px rgba(226, 19, 110, 0.4);
+            background: linear-gradient(135deg, #2b1f07 0%, #4a360d 40%, #171206 100%);
+            border: 1px solid rgba(251, 191, 36, 0.4);
         }
 
         .safe-bottom {
@@ -179,7 +173,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" /></svg>
             ),
             receipt: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
             ),
             headphones: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
@@ -217,17 +211,17 @@
         };
 
         const PRESET_AVATARS = [
-            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
         ];
 
         const BackButton = ({ onClick, label = "Back" }) => (
             <button 
                 type="button" 
                 onClick={onClick} 
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 active:scale-95 transition-all shadow-md group cursor-pointer"
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700/80 active:scale-95 transition-all shadow-md group cursor-pointer"
             >
                 <Icon name="chevronLeft" className="w-4 h-4 text-amber-400 group-hover:-translate-x-0.5 transition-transform" />
                 <span className="text-xs font-black font-mono tracking-wide">{label}</span>
@@ -235,14 +229,13 @@
         );
 
         const AppLogo = ({ className = "w-8 h-8" }) => (
-            <img src="https://i.ibb.co/W43Hdvm3/10736.png" alt="STEVEN WIN" className={`${className} object-contain`} />
+            <img src="https://i.ibb.co/W43Hdvm3/10736.png" alt="STEVEN WIN Logo" className={`${className} object-contain`} />
         );
 
         const BkashLogo = ({ className = "w-14 h-14 rounded-2xl" }) => (
             <img src="https://i.ibb.co/xTgMb9X/11623.jpg" alt="bKash" className={`${className} object-cover shadow-neon-pink border border-pink-500/50`} />
         );
 
-        // --- 3D ICONS FOR GAMES ---
         const AviatorLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
                 <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
@@ -308,8 +301,29 @@
             return list;
         };
 
-        // --- WEB AUDIO SYNTHESIZER ---
-        const soundEngine = {
+        const DiceFace = ({ value, size = "w-8 h-8 sm:w-9 sm:h-9" }) => {
+            const dots = {
+                1: [[50, 50]],
+                2: [[25, 25], [75, 75]],
+                3: [[25, 25], [50, 50], [75, 75]],
+                4: [[25, 25], [25, 75], [75, 25], [75, 75]],
+                5: [[25, 25], [25, 75], [50, 50], [75, 25], [75, 75]],
+                6: [[25, 25], [25, 50], [25, 75], [75, 25], [75, 50], [75, 75]]
+            }[value] || [];
+
+            return (
+                <div className={`${size} bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
+                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                        {dots.map(([cx, cy], i) => (
+                            <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 9} fill={value === 1 || value === 4 ? "#ef4444" : "#1e293b"} />
+                        ))}
+                    </svg>
+                </div>
+            );
+        };
+
+        // --- WEB AUDIO ENGINE ---
+        const aviatorAudio = {
             ctx: null,
             flightOsc: null,
             flightGain: null,
@@ -321,32 +335,35 @@
                     } catch (e) {}
                 }
             },
-            startJetSound() {
+            startEngineSound() {
                 this.init();
                 if (!this.ctx) return;
                 try {
-                    this.stopJetSound();
+                    this.stopEngineSound();
                     const ctx = this.ctx;
                     this.flightOsc = ctx.createOscillator();
                     this.flightGain = ctx.createGain();
+                    
                     this.flightOsc.type = 'sawtooth';
                     this.flightOsc.frequency.setValueAtTime(80, ctx.currentTime);
+                    
                     this.flightGain.gain.setValueAtTime(0.01, ctx.currentTime);
-                    this.flightGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 0.8);
+                    this.flightGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1);
+
                     this.flightOsc.connect(this.flightGain);
                     this.flightGain.connect(ctx.destination);
                     this.flightOsc.start();
                 } catch(e) {}
             },
-            updateJetPitch(mult) {
+            updateEnginePitch(mult) {
                 if (this.flightOsc && this.ctx) {
                     try {
-                        const targetFreq = Math.min(480, 80 + (mult - 1) * 38);
+                        const targetFreq = Math.min(420, 80 + (mult - 1) * 35);
                         this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
                     } catch(e) {}
                 }
             },
-            stopJetSound() {
+            stopEngineSound() {
                 if (this.flightOsc) {
                     try {
                         this.flightOsc.stop();
@@ -355,8 +372,8 @@
                     this.flightOsc = null;
                 }
             },
-            playCrash() {
-                this.stopJetSound();
+            playCrashSound() {
+                this.stopEngineSound();
                 this.init();
                 if (!this.ctx) return;
                 try {
@@ -368,46 +385,18 @@
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(260, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.45);
-                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+                    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.48);
                     osc.start();
-                    osc.stop(ctx.currentTime + 0.48);
-                } catch(e) {}
-            },
-            playWin() {
-                this.init();
-                if (!this.ctx) return;
-                try {
-                    const osc = this.ctx.createOscillator();
-                    const gain = this.ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(this.ctx.destination);
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-                    osc.frequency.linearRampToValueAtTime(880, this.ctx.currentTime + 0.2);
-                    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
-                    osc.start();
-                    osc.stop(this.ctx.currentTime + 0.35);
+                    osc.stop(ctx.currentTime + 0.5);
                 } catch(e) {}
             }
         };
 
-        // --- ✈️ AUTHENTIC SPRIBE AVIATOR RED FLIGHT CANVAS ---
-        const AviatorFlightCanvas = memo(({ phase, multiplier }) => {
+        // --- ✈️ ORIGINAL WORKING AVIATOR RED FLIGHT CANVAS ---
+        const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
-            const phaseRef = useRef(phase);
-            const multRef = useRef(multiplier);
-            const crashProgressRef = useRef(0);
-
-            useEffect(() => {
-                phaseRef.current = phase;
-                multRef.current = multiplier;
-                if (phase === 'waiting') {
-                    crashProgressRef.current = 0;
-                }
-            }, [phase, multiplier]);
 
             useEffect(() => {
                 const canvas = canvasRef.current;
@@ -415,104 +404,114 @@
                 const ctx = canvas.getContext('2d');
                 let animId;
 
-                const updateSize = () => {
-                    if (canvas && canvas.parentElement) {
-                        canvas.width = canvas.parentElement.clientWidth;
-                        canvas.height = canvas.parentElement.clientHeight;
-                    }
-                };
-                updateSize();
-                window.addEventListener('resize', updateSize);
+                const width = (canvas.width = canvas.parentElement.clientWidth);
+                const height = (canvas.height = canvas.parentElement.clientHeight);
 
                 const render = () => {
-                    const width = canvas.width || 350;
-                    const height = canvas.height || 220;
-                    const curPhase = phaseRef.current;
-                    const curMult = multRef.current;
-
                     ctx.clearRect(0, 0, width, height);
 
-                    // Grid lines
+                    // Grid
                     ctx.save();
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
-                    for (let x = 30; x < width; x += 35) {
-                        ctx.beginPath(); ctx.setLineDash([2, 4]); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+                    for (let x = 32; x < width; x += 32) {
+                        ctx.beginPath();
+                        ctx.setLineDash([2, 4]);
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, height);
+                        ctx.stroke();
                     }
-                    for (let y = 30; y < height; y += 35) {
-                        ctx.beginPath(); ctx.setLineDash([2, 4]); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+                    for (let y = 32; y < height; y += 32) {
+                        ctx.beginPath();
+                        ctx.setLineDash([2, 4]);
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(width, y);
+                        ctx.stroke();
                     }
                     ctx.restore();
 
-                    if (curPhase === 'flying' || curPhase === 'crashed') {
-                        const progress = Math.min(1, Math.max(0, (curMult - 1.0) / 6.0));
+                    if (phase === 'flying' || phase === 'crashed') {
+                        const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
                         const startX = 20;
                         const startY = height - 20;
-                        const cpX = width * 0.45;
-                        const cpY = height - 15;
-                        
-                        let targetX = startX + (width - 75) * Math.min(1, progress * 1.05 + 0.1);
-                        let targetY = startY - (height - 65) * Math.min(0.92, Math.pow(progress, 0.85) + 0.08);
+                        const cpX = width * 0.42;
+                        const cpY = height - 20;
+                        const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
+                        const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
 
-                        if (curPhase === 'crashed') {
-                            crashProgressRef.current += 7;
-                            targetX += crashProgressRef.current * 1.5;
-                            targetY -= crashProgressRef.current * 1.2;
-                        }
+                        // Red Gradient Fill
+                        ctx.save();
+                        const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.32)');
+                        fillGrad.addColorStop(0.6, 'rgba(229, 30, 56, 0.08)');
+                        fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-                        if (curPhase === 'flying' || targetX <= width) {
-                            ctx.save();
-                            const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                            fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.38)');
-                            fillGrad.addColorStop(0.7, 'rgba(229, 30, 56, 0.06)');
-                            fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                            ctx.beginPath();
-                            ctx.moveTo(startX, startY);
-                            ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
-                            ctx.lineTo(targetX, height);
-                            ctx.lineTo(startX, height);
-                            ctx.closePath();
-                            ctx.fillStyle = fillGrad;
-                            ctx.fill();
-                            ctx.restore();
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
+                        ctx.lineTo(targetX, height);
+                        ctx.lineTo(startX, height);
+                        ctx.closePath();
+                        ctx.fillStyle = fillGrad;
+                        ctx.fill();
+                        ctx.restore();
 
-                            ctx.save();
-                            ctx.shadowColor = '#e51e38';
-                            ctx.shadowBlur = 16;
-                            ctx.strokeStyle = '#e51e38';
-                            ctx.lineWidth = 3.8;
-                            ctx.beginPath();
-                            ctx.moveTo(startX, startY);
-                            ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
-                            ctx.stroke();
-                            ctx.restore();
-                        }
+                        // Glowing Crimson Red Line
+                        ctx.save();
+                        ctx.shadowColor = '#e51e38';
+                        ctx.shadowBlur = 18;
+                        ctx.strokeStyle = '#e51e38';
+                        ctx.lineWidth = 3.5;
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
+                        ctx.stroke();
+                        ctx.restore();
 
-                        if (curPhase === 'flying') {
-                            if (Math.random() < 0.75) {
+                        // Red Sparks
+                        if (phase === 'flying') {
+                            if (Math.random() < 0.8) {
                                 particlesRef.current.push({
-                                    x: targetX - 8, y: targetY + 8,
-                                    vx: -Math.random() * 2.8 - 1.0, vy: Math.random() * 2.2 + 0.2,
-                                    size: Math.random() * 3 + 1.5, alpha: 1.0, color: '#e51e38'
+                                    x: targetX - 5,
+                                    y: targetY + 5,
+                                    vx: -Math.random() * 2.2 - 0.8,
+                                    vy: Math.random() * 1.8 + 0.4,
+                                    size: Math.random() * 3 + 1.5,
+                                    alpha: 1.0,
+                                    color: Math.random() > 0.4 ? '#e51e38' : '#ff2a44'
                                 });
                             }
                         }
 
                         particlesRef.current.forEach((p, idx) => {
-                            p.x += p.vx; p.y += p.vy; p.alpha -= 0.04;
-                            if (p.alpha <= 0) { particlesRef.current.splice(idx, 1); return; }
-                            ctx.save(); ctx.fillStyle = p.color; ctx.globalAlpha = p.alpha;
-                            ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+                            p.x += p.vx;
+                            p.y += p.vy;
+                            p.alpha -= 0.04;
+                            if (p.alpha <= 0) {
+                                particlesRef.current.splice(idx, 1);
+                                return;
+                            }
+                            ctx.save();
+                            ctx.fillStyle = p.color;
+                            ctx.globalAlpha = p.alpha;
+                            ctx.shadowColor = '#e51e38';
+                            ctx.shadowBlur = 6;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
                         });
 
-                        if (targetX < width + 60 && targetY > -60) {
+                        // Fighter Jet
+                        if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
-                            ctx.rotate(-Math.PI / 7);
+                            ctx.rotate(-Math.PI / 6.5);
 
                             const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 26);
                             glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-                            glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.85)');
+                            glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.8)');
+                            glow.addColorStop(0.7, 'rgba(229, 30, 56, 0.25)');
                             glow.addColorStop(1, 'rgba(229, 30, 56, 0)');
                             ctx.fillStyle = glow;
                             ctx.beginPath();
@@ -520,17 +519,18 @@
                             ctx.fill();
 
                             ctx.shadowColor = '#e51e38';
-                            ctx.shadowBlur = 12;
+                            ctx.shadowBlur = 14;
                             ctx.fillStyle = '#ffffff';
+
                             ctx.beginPath();
-                            ctx.moveTo(15, 0);
-                            ctx.quadraticCurveTo(6, -6, -8, -5);
-                            ctx.lineTo(-12, -8);
-                            ctx.lineTo(-10, -2);
-                            ctx.lineTo(-12, 2);
-                            ctx.lineTo(-10, 8);
-                            ctx.lineTo(-8, 5);
-                            ctx.quadraticCurveTo(6, 6, 15, 0);
+                            ctx.moveTo(13, 0);
+                            ctx.quadraticCurveTo(5, -6, -7, -5);
+                            ctx.lineTo(-10, -8);
+                            ctx.lineTo(-8, -2);
+                            ctx.lineTo(-10, 2);
+                            ctx.lineTo(-8, 8);
+                            ctx.lineTo(-7, 5);
+                            ctx.quadraticCurveTo(5, 6, 13, 0);
                             ctx.closePath();
                             ctx.fill();
 
@@ -541,32 +541,12 @@
                     animId = requestAnimationFrame(render);
                 };
 
-                animId = requestAnimationFrame(render);
-                return () => { cancelAnimationFrame(animId); window.removeEventListener('resize', updateSize); };
-            }, []);
-
-            return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />;
-        });
-
-        // --- SVG 3D DICE FACE ---
-        const DiceFace = ({ value, size = "w-9 h-9" }) => {
-            const dots = {
-                1: [[50, 50]],
-                2: [[25, 25], [75, 75]],
-                3: [[25, 25], [50, 50], [75, 75]],
-                4: [[25, 25], [25, 75], [75, 25], [75, 75]],
-                5: [[25, 25], [25, 75], [50, 50], [75, 25], [75, 75]],
-                6: [[25, 25], [25, 50], [25, 75], [75, 25], [75, 50], [75, 75]]
-            }[value] || [];
+                render();
+                return () => cancelAnimationFrame(animId);
+            }, [phase, multiplier]);
 
             return (
-                <div className={`${size} bg-white rounded-xl shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                        {dots.map(([cx, cy], i) => (
-                            <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 10} fill={value === 1 || value === 4 ? "#e11d48" : "#0f172a"} />
-                        ))}
-                    </svg>
-                </div>
+                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />
             );
         };
 
@@ -686,28 +666,27 @@
             const [adminAdsList, setAdminAdsList] = useState([]);
             const fileInputRef = useRef(null);
 
-            // --- AVIATOR STATE ---
+            // Games State
+            const [gameType, setGameType] = useState('wingo'); 
+            const [activeGameTab, setActiveGameTab] = useState('30sec');
+
+            // --- ✈️ ORIGINAL 100% RELIABLE AVIATOR ENGINE STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
-            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.20);
-            const [adminTargetCrash, setAdminTargetCrash] = useState(null);
-            const [aviatorHistory, setAviatorHistory] = useState([2.15, 1.45, 8.20, 1.10, 3.42, 12.05, 1.88, 1.05]);
+            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
+            const [adminNextCrash, setAdminNextCrash] = useState(null);
+            const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05]);
+            
+            const [betAmount1, setBetAmount1] = useState(10);
+            const [isBetPlaced1, setIsBetPlaced1] = useState(false);
+            const [isCashedOut1, setIsCashedOut1] = useState(false);
 
-            // Deck 1 & 2
-            const [bet1Amount, setBet1Amount] = useState(10);
-            const [bet1Status, setBet1Status] = useState('idle');
-            const [auto1Enabled, setAuto1Enabled] = useState(false);
-            const [auto1Target, setAuto1Target] = useState('2.00');
-
-            const [bet2Amount, setBet2Amount] = useState(50);
-            const [bet2Status, setBet2Status] = useState('idle');
-            const [auto2Enabled, setAuto2Enabled] = useState(false);
-            const [auto2Target, setAuto2Target] = useState('3.00');
+            const [betAmount2, setBetAmount2] = useState(20);
+            const [isBetPlaced2, setIsBetPlaced2] = useState(false);
+            const [isCashedOut2, setIsCashedOut2] = useState(false);
 
             // --- LOTTERY WINGO / TRX / K3 (WITH 1,000 ROUNDS HISTORY) ---
-            const [gameType, setGameType] = useState('wingo');
-            const [activeGameTab, setActiveGameTab] = useState('30sec');
             const [timer30s, setTimer30s] = useState(30);
             const [period30s, setPeriod30s] = useState('20260822100051482');
 
@@ -736,7 +715,6 @@
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
             const [withdrawTab, setWithdrawTab] = useState('new');
-            const [withdrawHistory, setWithdrawHistory] = useState([]);
 
             // --- AUTH STATE ---
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
@@ -784,10 +762,6 @@
                             const dList = Array.isArray(userData.deposits) ? userData.deposits : Object.values(userData.deposits);
                             setDepositHistory(dList.reverse());
                         }
-                        if (userData.withdrawals) {
-                            const wList = Array.isArray(userData.withdrawals) ? userData.withdrawals : Object.values(userData.withdrawals);
-                            setWithdrawHistory(wList.reverse());
-                        }
 
                         setView(prev => prev === 'auth' ? 'home' : prev);
                     } else {
@@ -817,101 +791,81 @@
                 targetRef.on('value', (snap) => {
                     if (snap.exists() && snap.val() !== null) {
                         const val = parseFloat(snap.val());
-                        setAdminTargetCrash(!isNaN(val) && val > 1.0 ? val : null);
+                        setAdminNextCrash(!isNaN(val) && val > 1.0 ? val : null);
+                    } else {
+                        setAdminNextCrash(null);
                     }
                 });
             }, []);
 
-            // 🌐 GLOBAL SYNCHRONIZED AVIATOR LOOP
+            // Sound Isolation
             useEffect(() => {
-                const aviatorStateRef = db.ref('global_aviator_sync');
-
-                const syncHeartbeat = setInterval(() => {
-                    aviatorStateRef.transaction((current) => {
-                        const now = Date.now();
-                        if (!current || now - (current.lastHeartbeat || 0) > 12000) {
-                            return {
-                                phase: 'waiting',
-                                nextFlightTime: now + 5000,
-                                crashPoint: adminTargetCrash || parseFloat((1.15 + Math.random() * 2.8).toFixed(2)),
-                                lastHeartbeat: now,
-                                history: [2.15, 1.45, 8.20, 1.10, 3.42, 12.05, 1.88, 1.05]
-                            };
-                        }
-                        return current;
-                    });
-                }, 4000);
-
-                const listener = aviatorStateRef.on('value', (snap) => {
-                    if (!snap.exists()) return;
-                    const data = snap.val();
-                    const now = Date.now();
-
-                    if (data.history) {
-                        setAviatorHistory(data.history.slice(0, 8));
-                    }
-
-                    if (now < data.nextFlightTime) {
-                        const remSec = Math.max(1, Math.ceil((data.nextFlightTime - now) / 1000));
-                        setAviatorPhase('waiting');
-                        setAviatorCountdown(remSec);
-                        setAviatorMult(1.00);
-                        setAviatorCrashPoint(data.crashPoint || 2.20);
-                    } else {
-                        const elapsed = (now - data.nextFlightTime) / 1000;
-                        const currentMult = parseFloat((1.00 + elapsed * 0.08 + Math.pow(elapsed * 0.06, 1.45)).toFixed(2));
-                        const crashPt = data.crashPoint || 2.20;
-
-                        if (currentMult < crashPt) {
-                            setAviatorPhase('flying');
-                            setAviatorMult(currentMult);
-                            setBet1Status(prev => prev === 'queued' ? 'active' : prev);
-                            setBet2Status(prev => prev === 'queued' ? 'active' : prev);
-                            if (view === 'game_aviator') {
-                                soundEngine.startJetSound();
-                                soundEngine.updateJetPitch(currentMult);
-                            }
-                        } else {
-                            setAviatorPhase('crashed');
-                            setAviatorMult(crashPt);
-                            if (view === 'game_aviator') soundEngine.playCrash();
-
-                            setBet1Status(prev => prev === 'active' ? 'idle' : prev);
-                            setBet2Status(prev => prev === 'active' ? 'idle' : prev);
-
-                            if (now - (data.lastHeartbeat || 0) < 6000) {
-                                const nextCrashRoll = Math.random() < 0.65 ? parseFloat((1.05 + Math.random() * 0.4).toFixed(2)) : parseFloat((1.60 + Math.random() * 4.5).toFixed(2));
-                                aviatorStateRef.update({
-                                    phase: 'waiting',
-                                    nextFlightTime: now + 8000,
-                                    crashPoint: adminTargetCrash || nextCrashRoll,
-                                    lastHeartbeat: now,
-                                    history: [crashPt, ...(data.history || [])].slice(0, 8)
-                                });
-                            }
-                        }
-                    }
-                });
-
-                return () => {
-                    clearInterval(syncHeartbeat);
-                    aviatorStateRef.off('value', listener);
-                };
-            }, [adminTargetCrash, view]);
-
-            // Auto-Cashout Watcher
-            useEffect(() => {
-                if (aviatorPhase === 'flying') {
-                    if (bet1Status === 'active' && auto1Enabled && parseFloat(auto1Target) <= aviatorMult) {
-                        executeCashout(1, aviatorMult);
-                    }
-                    if (bet2Status === 'active' && auto2Enabled && parseFloat(auto2Target) <= aviatorMult) {
-                        executeCashout(2, aviatorMult);
-                    }
+                if (view !== 'game_aviator') {
+                    aviatorAudio.stopEngineSound();
                 }
-            }, [aviatorMult, aviatorPhase, bet1Status, bet2Status, auto1Enabled, auto2Enabled, auto1Target, auto2Target]);
+            }, [view]);
 
-            // Wingo Timers Loop
+            // ✈️ ORIGINAL 100% RELIABLE AVIATOR FLIGHT LOOP
+            useEffect(() => {
+                let aviatorInterval;
+                if (aviatorPhase === 'waiting') {
+                    aviatorInterval = setInterval(() => {
+                        setAviatorCountdown(prev => {
+                            if (prev <= 1) {
+                                setAviatorPhase('flying');
+                                setAviatorMult(1.00);
+
+                                let nextCrash = 1.00;
+                                if (adminNextCrash !== null && adminNextCrash > 1.0) {
+                                    nextCrash = adminNextCrash;
+                                } else {
+                                    const hasUserBet = isBetPlaced1 || isBetPlaced2;
+                                    const roll = Math.random() * 100;
+                                    if (hasUserBet || roll < 70) {
+                                        nextCrash = Math.random() < 0.4 ? (1.02 + Math.random() * 0.15) : (1.18 + Math.random() * 0.42);
+                                    } else {
+                                        nextCrash = roll < 90 ? (2.20 + Math.random() * 3.5) : (6.00 + Math.random() * 15.0);
+                                    }
+                                }
+
+                                setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
+                                if (view === 'game_aviator') aviatorAudio.startEngineSound();
+                                return 5;
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                } else if (aviatorPhase === 'flying') {
+                    const startTime = Date.now();
+                    aviatorInterval = setInterval(() => {
+                        const elapsed = (Date.now() - startTime) / 1000;
+                        const currentMult = parseFloat((1.00 + elapsed * 0.065 + Math.pow(elapsed * 0.045, 1.35)).toFixed(2));
+                        setAviatorMult(currentMult);
+
+                        if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
+
+                        if (currentMult >= aviatorCrashPoint) {
+                            clearInterval(aviatorInterval);
+                            setAviatorPhase('crashed');
+                            if (view === 'game_aviator') aviatorAudio.playCrashSound();
+                            setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 10));
+
+                            setTimeout(() => {
+                                setIsBetPlaced1(false);
+                                setIsCashedOut1(false);
+                                setIsBetPlaced2(false);
+                                setIsCashedOut2(false);
+                                setAviatorPhase('waiting');
+                                setAviatorCountdown(5);
+                            }, 3800);
+                        }
+                    }, 50);
+                }
+
+                return () => clearInterval(aviatorInterval);
+            }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, view]);
+
+            // Wingo Timers Loop & 1,000 History Prepend
             useEffect(() => {
                 const interval = setInterval(() => {
                     const sec = new Date().getSeconds();
@@ -944,58 +898,35 @@
                 return () => clearInterval(interval);
             }, [period30s]);
 
-            // Aviator Handlers
-            const handleAviatorBetClick = (deck) => {
-                const amt = deck === 1 ? bet1Amount : bet2Amount;
-                const status = deck === 1 ? bet1Status : bet2Status;
-
-                if (status === 'idle') {
-                    if (balance < amt) {
-                        showToast('পর্যাপ্ত ব্যালেন্স নেই!', 'error');
-                        return;
-                    }
-                    const newBal = balance - amt;
-                    setBalance(newBal);
-                    if (currentUser) {
-                        const san = currentUser.phone.replace(/[^0-9]/g, "");
-                        db.ref('users/' + san).update({ balance: newBal });
-                    }
-
-                    if (deck === 1) setBet1Status('queued');
-                    else setBet2Status('queued');
-                    showToast(`৳${amt} বেট সেট হয়েছে!`, 'success');
-                } else if (status === 'queued') {
-                    const refundBal = balance + amt;
-                    setBalance(refundBal);
-                    if (currentUser) {
-                        const san = currentUser.phone.replace(/[^0-9]/g, "");
-                        db.ref('users/' + san).update({ balance: refundBal });
-                    }
-                    if (deck === 1) setBet1Status('idle');
-                    else setBet2Status('idle');
-                    showToast('বেট ক্যানসেল করা হয়েছে!', 'success');
-                } else if (status === 'active' && aviatorPhase === 'flying') {
-                    executeCashout(deck, aviatorMult);
+            // Aviator Actions
+            const handleAviatorBet = (deckNum) => {
+                const amt = deckNum === 1 ? betAmount1 : betAmount2;
+                if (balance < amt) {
+                    showToast('Insufficient balance!', 'error');
+                    return;
                 }
+                const nextBal = balance - amt;
+                setBalance(nextBal);
+                if (deckNum === 1) setIsBetPlaced1(true);
+                else setIsBetPlaced2(true);
+                showToast(`Bet of ৳${amt} placed!`, 'success');
             };
 
-            const executeCashout = (deck, mult) => {
-                const amt = deck === 1 ? bet1Amount : bet2Amount;
-                const profitAmount = parseFloat((amt * (mult - 1.0)).toFixed(2));
-                const winAmount = parseFloat((amt + profitAmount).toFixed(2));
-                const newBal = balance + winAmount;
+            const triggerAviatorCashout = (deckNum, currentMult) => {
+                const amt = deckNum === 1 ? betAmount1 : betAmount2;
+                const winPayout = parseFloat((amt * currentMult).toFixed(2));
+                const nextBal = balance + winPayout;
+                setBalance(nextBal);
 
-                setBalance(newBal);
-                if (deck === 1) setBet1Status('cashed');
-                else setBet2Status('cashed');
+                if (deckNum === 1) setIsCashedOut1(true);
+                else setIsCashedOut2(true);
 
                 if (currentUser) {
-                    const san = currentUser.phone.replace(/[^0-9]/g, "");
-                    db.ref('users/' + san).update({ balance: newBal });
+                    const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                    db.ref('users/' + sanitized).update({ balance: nextBal });
                 }
 
-                soundEngine.playWin();
-                setPopupAmount(winAmount);
+                setPopupAmount(winPayout);
                 setShowResultPopup(true);
             };
 
@@ -1230,7 +1161,7 @@
                         {/* 2. HOME DASHBOARD                                                         */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
-                            <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
+                            <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
                                 
                                 <div className="px-4 py-3 bg-[#080d1a] border-b border-slate-800 flex justify-between items-center shadow-lg flex-shrink-0">
                                     <div className="flex items-center space-x-2">
@@ -1254,13 +1185,13 @@
                                     {/* 2.1 HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* DYNAMIC ADMIN ADS BANNER WITH ARROWS */}
+                                            {/* DYNAMIC ADMIN ADS SLIDER */}
                                             <DynamicAdminAdSlider 
                                                 adminAds={adminAdsList} 
                                                 onNavigate={(target) => setView(target)} 
                                             />
 
-                                            {/* 1. AVIATOR SPRIBE */}
+                                            {/* 1. AVIATOR SPRIBE (CRASH 1000X) */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#29030c] via-[#5e0c1c] to-[#140206] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1346,7 +1277,7 @@
                                         </div>
                                     )}
 
-                                    {/* 2.4 ✨ VIP PROFILE */}
+                                    {/* 2.4 ✨ VIP PROFILE (WITH MOBILE PHOTO UPLOADER) */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4 font-sans">
                                             <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
@@ -1390,10 +1321,10 @@
 
                                                     <button 
                                                         onClick={() => setShowAvatarModal(true)}
-                                                        className="px-2.5 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-bold flex items-center space-x-1"
+                                                        className="px-2.5 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-bold flex items-center space-x-1 cursor-pointer"
                                                     >
                                                         <Icon name="upload" className="w-3.5 h-3.5" />
-                                                        <span>ছবি আপলোড</span>
+                                                        <span>ছবি বদলান</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -1462,7 +1393,7 @@
 
                                 </div>
 
-                                {/* 🌟 4 RESTORED ORIGINAL BOTTOM NAVIGATION TABS (HOME, ACTIVITY, PROMO, VIP) */}
+                                {/* 🌟 ORIGINAL 4 BOTTOM NAVIGATION TABS */}
                                 <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-4 flex justify-between items-center relative z-20 shadow-2xl flex-shrink-0 font-sans">
                                     <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'home' ? 'text-amber-400' : 'text-slate-400'}`}>
                                         <Icon name="home" className="w-4.5 h-4.5" />
@@ -1485,14 +1416,14 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* 3. ✈️ AVIATOR SPRIBE CRASH (FIXED & SOLID)                                */}
+                        {/* 3. ✈️ ORIGINAL 100% RELIABLE AVIATOR SPRIBE (NEVER STUCK)                */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
                                 <div className="px-3.5 py-2.5 bg-[#0e111a] border-b border-slate-800 flex items-center justify-between flex-shrink-0 shadow-md">
                                     <div className="flex items-center space-x-2">
-                                        <BackButton onClick={() => { soundEngine.stopJetSound(); setView('home'); }} label="Back" />
+                                        <BackButton onClick={() => { aviatorAudio.stopEngineSound(); setView('home'); }} label="Back" />
                                         <span className="text-red-500 font-black text-sm tracking-wider font-mono">AVIATOR</span>
                                     </div>
                                     <span className="text-xs font-black text-amber-400 bg-black/60 px-2.5 py-1 rounded-xl border border-amber-500/30 font-mono">
@@ -1538,57 +1469,33 @@
                                     {/* Dual Bet Decks */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <div className="flex justify-between items-center text-[10px] font-mono">
-                                                <span className="text-slate-400">BET DECK 1</span>
-                                                <div className="flex items-center space-x-1">
-                                                    <span className="text-slate-400">Auto:</span>
-                                                    <input type="number" step="0.1" value={auto1Target} onChange={e => setAuto1Target(e.target.value)} className="w-11 bg-slate-900 border border-slate-700 px-1 py-0.5 rounded text-center text-white text-[10px]" />
-                                                    <button type="button" onClick={() => setAuto1Enabled(!auto1Enabled)} className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${auto1Enabled ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>{auto1Enabled ? 'ON' : 'OFF'}</button>
-                                                </div>
-                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 1</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[10, 20, 50, 100].map(amt => (
-                                                    <button key={amt} disabled={bet1Status !== 'idle'} onClick={(e) => { e.preventDefault(); setBet1Amount(amt); }} className={`py-1 text-[10px] rounded-lg border ${bet1Amount === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
-                                            {bet1Status === 'idle' && (
-                                                <button onClick={() => handleAviatorBetClick(1)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{bet1Amount}</button>
-                                            )}
-                                            {bet1Status === 'queued' && (
-                                                <button onClick={() => handleAviatorBetClick(1)} className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs uppercase rounded-xl font-mono animate-pulse">CANCEL ৳{bet1Amount}</button>
-                                            )}
-                                            {bet1Status === 'active' && (
-                                                <button onClick={() => handleAviatorBetClick(1)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(bet1Amount + (bet1Amount * (aviatorMult - 1.0)))}</button>
-                                            )}
-                                            {bet1Status === 'cashed' && (
+                                            {!isBetPlaced1 ? (
+                                                <button onClick={() => handleAviatorBet(1)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount1}</button>
+                                            ) : aviatorPhase === 'flying' && !isCashedOut1 ? (
+                                                <button onClick={() => triggerAviatorCashout(1, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}</button>
+                                            ) : (
                                                 <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
                                             )}
                                         </div>
 
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <div className="flex justify-between items-center text-[10px] font-mono">
-                                                <span className="text-slate-400">BET DECK 2</span>
-                                                <div className="flex items-center space-x-1">
-                                                    <span className="text-slate-400">Auto:</span>
-                                                    <input type="number" step="0.1" value={auto2Target} onChange={e => setAuto2Target(e.target.value)} className="w-11 bg-slate-900 border border-slate-700 px-1 py-0.5 rounded text-center text-white text-[10px]" />
-                                                    <button type="button" onClick={() => setAuto2Enabled(!auto2Enabled)} className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${auto2Enabled ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-400'}`}>{auto2Enabled ? 'ON' : 'OFF'}</button>
-                                                </div>
-                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 2</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[50, 100, 200, 500].map(amt => (
-                                                    <button key={amt} disabled={bet2Status !== 'idle'} onClick={(e) => { e.preventDefault(); setBet2Amount(amt); }} className={`py-1 text-[10px] rounded-lg border ${bet2Amount === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
                                                 ))}
                                             </div>
-                                            {bet2Status === 'idle' && (
-                                                <button onClick={() => handleAviatorBetClick(2)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{bet2Amount}</button>
-                                            )}
-                                            {bet2Status === 'queued' && (
-                                                <button onClick={() => handleAviatorBetClick(2)} className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-black text-xs uppercase rounded-xl font-mono animate-pulse">CANCEL ৳{bet2Amount}</button>
-                                            )}
-                                            {bet2Status === 'active' && (
-                                                <button onClick={() => handleAviatorBetClick(2)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(bet2Amount + (bet2Amount * (aviatorMult - 1.0)))}</button>
-                                            )}
-                                            {bet2Status === 'cashed' && (
+                                            {!isBetPlaced2 ? (
+                                                <button onClick={() => handleAviatorBet(2)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount2}</button>
+                                            ) : aviatorPhase === 'flying' && !isCashedOut2 ? (
+                                                <button onClick={() => triggerAviatorCashout(2, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}</button>
+                                            ) : (
                                                 <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
                                             )}
                                         </div>
@@ -1611,6 +1518,18 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+                                        {['30sec', '1min', '2min'].map(tab => (
+                                            <button 
+                                                key={tab} 
+                                                onClick={() => setActiveGameTab(tab)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                    </div>
+
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
                                             <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
@@ -1681,6 +1600,22 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+                                        {[
+                                            { id: '30sec', label: 'K3 30s' },
+                                            { id: '1min', label: 'K3 1 Min' },
+                                            { id: '2min', label: 'K3 2 Min' }
+                                        ].map(tab => (
+                                            <button 
+                                                key={tab.id} 
+                                                onClick={() => setActiveGameTab(tab.id)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer transition-all ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                            >
+                                                {tab.label}
+                                            </button>
+                                        ))}
+                                    </div>
+
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono shadow-luxury">
                                         <div>
                                             <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
@@ -1820,7 +1755,7 @@
                                     ) : (
                                         <div className="space-y-2">
                                             {depositHistory.map((item, idx) => (
-                                                <div key={item.id || idx} className="p-3 bg-slate-900 rounded-2xl border border-slate-800 space-y-1 text-xs font-mono">
+                                                <div key={idx} className="p-3 bg-slate-900 rounded-2xl border border-slate-800 space-y-1 text-xs font-mono">
                                                     <div className="flex justify-between items-center">
                                                         <span className="font-black text-pink-400">৳{formatMoney(item.amount)}</span>
                                                         <span className={`px-2 py-0.5 rounded-full text-[9.5px] font-bold ${
@@ -1933,7 +1868,7 @@
                                 </div>
                                 <div className="grid grid-cols-4 gap-1.5 font-mono">
                                     {[10, 50, 100, 500].map(amt => (
-                                        <button key={amt} onClick={() => setSelectedUnit(amt)} className={`py-2 rounded-xl text-xs font-bold border ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-900 border-slate-800'}`}>৳{amt}</button>
+                                        <button key={amt} onClick={() => setSelectedUnit(amt)} className={`py-1.5 rounded-xl text-xs font-bold border ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-900 border-slate-800'}`}>৳{amt}</button>
                                     ))}
                                 </div>
                                 <button onClick={() => { setBalance(prev => prev - selectedUnit); showToast(`Bet of ৳${selectedUnit} placed!`, 'success'); setIsBetSheetOpen(false); }} className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
