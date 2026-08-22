@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Elite Mobile Gaming</title>
+    <title>STEVEN WIN - Elite Gaming & Aviator Platform</title>
     
     <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -24,6 +24,8 @@
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
                         bkashDark: '#990b49',
+                        aviatorRed: '#e51e38',
+                        aviatorDark: '#0e131d',
                         darkBg: '#05070e',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
                         cardBorder: 'rgba(255, 255, 255, 0.08)'
@@ -32,6 +34,7 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
+                        'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.55)',
                         'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.65)'
                     }
                 }
@@ -125,6 +128,14 @@
         .vip-card-gradient {
             background: linear-gradient(135deg, #2b1f07 0%, #4a360d 40%, #171206 100%);
             border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        @keyframes planeFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(2deg); }
+        }
+        .plane-anim {
+            animation: planeFloat 1.8s infinite ease-in-out;
         }
 
         .safe-bottom {
@@ -331,6 +342,19 @@
             </button>
         );
 
+        // --- 3D LUXURY LOGOS ---
+        const AviatorLogo = () => (
+            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#e51e38] via-[#9e0c20] to-[#3a040b] p-1.5 flex flex-col items-center justify-between shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
+                <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-25"></div>
+                <div className="z-10 pt-1 text-white text-2xl filter drop-shadow-[0_4px_8px_rgba(0,0,0,0.8)] plane-anim">
+                    ✈️
+                </div>
+                <div className="z-10 w-full bg-black/75 py-0.5 rounded-lg border border-rose-400/40 text-center">
+                    <span className="text-[9.5px] font-black text-rose-300 font-mono tracking-widest block">AVIATOR</span>
+                </div>
+            </div>
+        );
+
         const Wingo3DLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#047857] to-[#022c22] p-1.5 flex flex-col items-center justify-between shadow-neon-green border border-emerald-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
                 <div className="absolute inset-0 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:6px_6px] opacity-20"></div>
@@ -389,10 +413,61 @@
             </svg>
         );
 
+        // --- SIMULATED REAL LIVE AVIATOR BETS GENERATOR ---
+        const AVIATOR_USERS = ["GML", "ZUQ", "PSY", "XSI", "ORN", "KLA", "MOP", "TRX", "VBD", "ZXW", "QWE", "BRT", "JHK", "PLO", "MNB", "KSA"];
+        const generateAviatorLiveBets = () => {
+            return AVIATOR_USERS.map((code, idx) => ({
+                id: 'av_user_' + idx,
+                username: `Mem***${code}`,
+                amount: [20, 50, 100, 200, 500, 1000, 2000][Math.floor(Math.random() * 7)],
+                cashoutTarget: (Math.random() * 3.5 + 1.1).toFixed(2),
+                cashedOut: false,
+                payout: 0
+            }));
+        };
+
         const PromoBannerCarousel = ({ onOpenDetail }) => {
             const [currentSlide, setCurrentSlide] = useState(0);
 
             const banners = [
+                {
+                    id: 'aviator_banner',
+                    title: 'AVIATOR - FLIGHT TO RICHES',
+                    subtitle: 'Cash out before the plane flies away and multiply up to 1000X!',
+                    badge: '✈️ HOT GAME',
+                    desc: 'জনপ্রিয় এভিয়েটর ক্র্যাশ গেম লাইভ! বিমান উড়ে যাওয়ার পূর্বেই ক্যাশআউট করে ইনস্ট্যান্ট বড় প্রফিট লুফে নিন।',
+                    render: () => (
+                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#210408] via-[#450711] to-[#780d1e] p-3.5 sm:p-4 text-white relative overflow-hidden border border-rose-500/50 flex flex-col justify-between shadow-2xl">
+                            <div className="flex justify-between items-start z-10">
+                                <span className="bg-gradient-to-r from-rose-500 to-red-600 text-white font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md">
+                                    ✈️ OFFICIAL AVIATOR
+                                </span>
+                                <div className="text-[9px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
+                            </div>
+
+                            <div className="z-10 my-auto text-left">
+                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-rose-300 to-yellow-400 drop-shadow-md">
+                                    এভিয়েটর ফ্লাইট লাইভ
+                                </h2>
+                                <p className="text-[10px] sm:text-[11px] font-semibold text-rose-200 mt-0.5">
+                                    সর্বোচ্চ ১০০০ গুণ পর্যন্ত ক্যাশআউট মাল্টিপ্লায়ার!
+                                </p>
+                            </div>
+
+                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-rose-200">
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-rose-500/40 flex items-center space-x-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                    <span>Live Multiplayer</span>
+                                </span>
+                                <span className="bg-black/60 px-2.5 py-0.5 rounded-full border border-rose-500/40">Real Cashout</span>
+                            </div>
+
+                            <div className="absolute -right-3 -bottom-3 text-7xl sm:text-8xl opacity-30 pointer-events-none transform -rotate-12">
+                                ✈️
+                            </div>
+                        </div>
+                    )
+                },
                 {
                     id: 'first_deposit_100',
                     title: '100% প্রথম ডিপোজিট ক্যাশব্যাক বোনাস',
@@ -427,41 +502,6 @@
 
                             <div className="absolute -right-3 -bottom-3 text-7xl sm:text-8xl opacity-35 pointer-events-none">
                                 🎁
-                            </div>
-                        </div>
-                    )
-                },
-                {
-                    id: 'vip_salary',
-                    title: 'VIP WEEKLY SALARY & DAILY REBATE',
-                    subtitle: 'প্রতি সোমবারে ফিক্সড স্যালারি ৳২০,০০০ পর্যন্ত',
-                    badge: '👑 VIP PRIVILEGE',
-                    desc: 'রেগুলার গেমপ্লে করে VIP লেভেল আনলক করুন এবং প্রতি সোমবারে ফিক্সড উইকলি স্যালারি ও ৫% আনলিমিটেড ক্যাশব্যাক উপভোগ করুন।',
-                    render: () => (
-                        <div className="w-full h-40 sm:h-44 rounded-3xl bg-gradient-to-r from-[#171206] via-[#332408] to-[#593d09] p-3.5 sm:p-4 text-white relative overflow-hidden border border-yellow-500/50 flex flex-col justify-between shadow-2xl">
-                            <div className="flex justify-between items-center z-10">
-                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-[9px] px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-md">
-                                    👑 VIP CLUB REWARDS
-                                </span>
-                                <div className="text-[9px] font-black font-mono text-yellow-300 bg-black/50 px-2 py-0.5 rounded border border-white/10">STEVEN WIN</div>
-                            </div>
-
-                            <div className="z-10 my-auto text-left">
-                                <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 drop-shadow-md">
-                                    সাপ্তাহিক VIP স্যালারি
-                                </h2>
-                                <p className="text-[10px] sm:text-[11px] font-semibold text-amber-200 mt-0.5">
-                                    প্রতি সোমবারে অটোমেটিক ক্রেডিট ও ৫% লাইভ ক্যাশব্যাক
-                                </p>
-                            </div>
-
-                            <div className="z-10 flex items-center space-x-2 text-[8.5px] font-mono text-amber-200">
-                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-amber-500/40">Pool: ৳1,000,000</span>
-                                <span className="bg-black/60 px-2 py-0.5 rounded-full border border-amber-500/40">VIP Ready</span>
-                            </div>
-
-                            <div className="absolute -right-3 -bottom-3 text-7xl sm:text-8xl opacity-30 pointer-events-none">
-                                👑
                             </div>
                         </div>
                     )
@@ -500,7 +540,7 @@
                         
                         <div className="flex-1 overflow-hidden relative py-0.5">
                             <span className="animate-marquee text-[11px] font-bold text-slate-300 tracking-wide">
-                                📢 Welcome to STEVEN WIN! Wingo 30s/1m/2m, TRX Hash Wingo & K3 Dice Lottery are active with instant bKash bonus & 24/7 instant cashout!
+                                ✈️ Official Spribe AVIATOR is LIVE with 1000X Multiplier! Wingo 30s/1m/2m, TRX Hash & K3 Dice active with instant bKash cashout!
                             </span>
                         </div>
 
@@ -671,6 +711,26 @@
             const [historyPage, setHistoryPage] = useState(1);
             const [jackpotAmount, setJackpotAmount] = useState(1489240.50);
 
+            // --- AVIATOR REAL STATE ENGINE ---
+            const [aviatorPhase, setAviatorPhase] = useState('waiting'); // 'waiting', 'flying', 'crashed'
+            const [aviatorCountdown, setAviatorCountdown] = useState(5);
+            const [aviatorMult, setAviatorMult] = useState(1.00);
+            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.20);
+            const [aviatorHistory, setAviatorHistory] = useState([
+                { id: '1', mult: '1.45', color: 'text-blue-400 border-blue-500/30' },
+                { id: '2', mult: '2.80', color: 'text-purple-400 border-purple-500/30' },
+                { id: '3', mult: '1.12', color: 'text-blue-400 border-blue-500/30' },
+                { id: '4', mult: '14.50', color: 'text-pink-400 border-pink-500/30' },
+                { id: '5', mult: '3.62', color: 'text-purple-400 border-purple-500/30' },
+                { id: '6', mult: '1.02', color: 'text-blue-400 border-blue-500/30' },
+                { id: '7', mult: '5.18', color: 'text-purple-400 border-purple-500/30' }
+            ]);
+            const [aviatorBetAmount, setAviatorBetAmount] = useState(100);
+            const [aviatorUserBet, setAviatorUserBet] = useState(null); // { amount, cashedOut, payout }
+            const [aviatorNextRoundQueued, setAviatorNextRoundQueued] = useState(false);
+            const [aviatorOtherBets, setAviatorOtherBets] = useState(generateAviatorLiveBets());
+            const [aviatorTab, setAviatorTab] = useState('all'); // 'all', 'my'
+
             const [promoModal, setPromoModal] = useState({ isOpen: false, data: null });
             const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
             const [showCountryDrop, setShowCountryDrop] = useState(false);
@@ -729,6 +789,7 @@
             const [drawHistoryK31m, setDrawHistoryK31m] = useState(generateK3MockHistory('20260822201010344', 50));
             const [drawHistoryK32m, setDrawHistoryK32m] = useState(generateK3MockHistory('20260822301010111', 50));
 
+            // Bet sheet custom states
             const [betValue, setBetValue] = useState(null);
             const [multiplier, setMultiplier] = useState(1);
             const [selectedUnit, setSelectedUnit] = useState(10);
@@ -769,16 +830,171 @@
             useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
             useEffect(() => { balanceRef.current = balance; }, [balance]);
 
+            // =========================================================================
+            // AVIATOR REAL-TIME FLIGHT LOOP ENGINE
+            // =========================================================================
             useEffect(() => {
-                const jInterval = setInterval(() => {
-                    setJackpotAmount(prev => prev + (Math.random() * 2.8));
-                }, 1400);
-                return () => clearInterval(jInterval);
-            }, []);
+                let aviatorInterval;
+                if (aviatorPhase === 'waiting') {
+                    aviatorInterval = setInterval(() => {
+                        setAviatorCountdown(prev => {
+                            if (prev <= 1) {
+                                // Transition to Flying Phase
+                                setAviatorPhase('flying');
+                                setAviatorMult(1.00);
+                                const roll = Math.random() * 100;
+                                let nextCrash = 1.00;
+                                if (roll < 10) nextCrash = 1.02 + Math.random() * 0.15;
+                                else if (roll < 60) nextCrash = 1.20 + Math.random() * 1.8;
+                                else if (roll < 88) nextCrash = 3.00 + Math.random() * 4.5;
+                                else nextCrash = 7.50 + Math.random() * 25.0;
 
-            useEffect(() => {
-                setHistoryPage(1);
-            }, [gameType, activeGameTab, gameSubTab]);
+                                setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
+                                setAviatorOtherBets(generateAviatorLiveBets());
+
+                                // Check if user queued bet
+                                if (aviatorNextRoundQueued) {
+                                    setAviatorUserBet({
+                                        amount: aviatorBetAmount,
+                                        cashedOut: false,
+                                        payout: 0
+                                    });
+                                    setAviatorNextRoundQueued(false);
+                                }
+                                return 5;
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                } else if (aviatorPhase === 'flying') {
+                    let startTime = Date.now();
+                    aviatorInterval = setInterval(() => {
+                        const elapsed = (Date.now() - startTime) / 1000;
+                        const currentMult = parseFloat((1.00 + Math.pow(elapsed * 0.48, 1.85)).toFixed(2));
+                        setAviatorMult(currentMult);
+
+                        // Simulate other players cashing out
+                        setAviatorOtherBets(prev => prev.map(ob => {
+                            if (!ob.cashedOut && currentMult >= parseFloat(ob.cashoutTarget)) {
+                                return {
+                                    ...ob,
+                                    cashedOut: true,
+                                    payout: parseFloat((ob.amount * currentMult).toFixed(2))
+                                };
+                            }
+                            return ob;
+                        }));
+
+                        if (currentMult >= aviatorCrashPoint) {
+                            clearInterval(aviatorInterval);
+                            setAviatorPhase('crashed');
+                            try { playCountdownBeep(true); } catch(e) {}
+
+                            // If user had active bet and did not cashout -> lost
+                            if (aviatorUserBet && !aviatorUserBet.cashedOut) {
+                                const newLostBet = {
+                                    id: Date.now(),
+                                    period: 'AV-' + Date.now().toString().slice(-6),
+                                    mode: 'Aviator',
+                                    gameType: 'aviator',
+                                    selection: 'Crash @' + aviatorCrashPoint + 'x',
+                                    amount: aviatorUserBet.amount,
+                                    status: 'lost',
+                                    timestamp: new Date().toLocaleTimeString()
+                                };
+                                setMyBets(prev => [newLostBet, ...(prev || [])]);
+                                setAviatorUserBet(null);
+                            }
+
+                            // Update history bar
+                            const histColor = aviatorCrashPoint >= 10 ? 'text-pink-400 border-pink-500/30' : (aviatorCrashPoint >= 2 ? 'text-purple-400 border-purple-500/30' : 'text-blue-400 border-blue-500/30');
+                            setAviatorHistory(prev => [{
+                                id: Date.now().toString(),
+                                mult: aviatorCrashPoint.toFixed(2) + 'x',
+                                color: histColor
+                            }, ...(prev || []).slice(0, 10)]);
+
+                            // Wait 3.5s before next round
+                            setTimeout(() => {
+                                setAviatorPhase('waiting');
+                                setAviatorCountdown(5);
+                                setAviatorUserBet(null);
+                            }, 3500);
+                        }
+                    }, 65);
+                }
+
+                return () => clearInterval(aviatorInterval);
+            }, [aviatorPhase, aviatorCrashPoint, aviatorNextRoundQueued, aviatorUserBet, aviatorBetAmount]);
+
+            const handleAviatorPlaceBet = () => {
+                if (!currentUser) {
+                    showToast('Please log in first to place bets!', 'error');
+                    return;
+                }
+                if (balance < aviatorBetAmount) {
+                    showToast('Insufficient wallet balance!', 'error');
+                    return;
+                }
+
+                const nextBal = balance - aviatorBetAmount;
+                setBalance(nextBal);
+
+                if (currentUser) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                    db.ref(dbPath).update({ balance: nextBal });
+                }
+
+                if (aviatorPhase === 'waiting') {
+                    setAviatorUserBet({
+                        amount: aviatorBetAmount,
+                        cashedOut: false,
+                        payout: 0
+                    });
+                    showToast(`Bet of ৳${aviatorBetAmount} placed for this flight!`, 'success');
+                } else {
+                    setAviatorNextRoundQueued(true);
+                    showToast(`Bet of ৳${aviatorBetAmount} queued for next flight!`, 'success');
+                }
+            };
+
+            const handleAviatorCashout = () => {
+                if (!aviatorUserBet || aviatorUserBet.cashedOut || aviatorPhase !== 'flying') return;
+
+                const winPayout = parseFloat((aviatorUserBet.amount * aviatorMult).toFixed(2));
+                const nextBal = balance + winPayout;
+                setBalance(nextBal);
+
+                setAviatorUserBet(prev => ({
+                    ...prev,
+                    cashedOut: true,
+                    payout: winPayout
+                }));
+
+                const newWinBet = {
+                    id: Date.now(),
+                    period: 'AV-' + Date.now().toString().slice(-6),
+                    mode: 'Aviator',
+                    gameType: 'aviator',
+                    selection: 'Cashed out @' + aviatorMult + 'x',
+                    amount: aviatorUserBet.amount,
+                    status: 'won',
+                    payout: winPayout,
+                    timestamp: new Date().toLocaleTimeString()
+                };
+
+                const nextBets = [newWinBet, ...(myBets || [])];
+                setMyBets(nextBets);
+
+                if (currentUser) {
+                    const dbPath = 'users/' + getSanitizedPath(currentUser.phone);
+                    db.ref(dbPath).update({ balance: nextBal, bets: nextBets });
+                }
+
+                setPopupAmount(winPayout);
+                setPopupType('win');
+                setShowResultPopup(true);
+            };
 
             const getSanitizedPath = (fullPhone) => fullPhone ? fullPhone.replace(/[^0-9]/g, "") : "";
 
@@ -1703,7 +1919,7 @@
                                                 <h1 className="text-base font-black tracking-wider text-gradient-gold font-mono leading-none">STEVEN WIN</h1>
                                                 <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-widest flex items-center space-x-1 mt-0.5">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                                                    <span>18,520 Active Online</span>
+                                                    <span>24,820 Active Online</span>
                                                 </span>
                                             </div>
                                         </div>
@@ -1783,23 +1999,54 @@
                                                 </span>
                                             </div>
 
+                                            {/* 4 CORE GAMES INCLUDING AVIATOR ✈️ */}
                                             <div className="space-y-2.5 pt-1">
                                                 <div className="flex justify-between items-center px-1">
                                                     <div className="flex items-center space-x-1.5">
                                                         <span className="text-amber-400 font-black text-sm">🔥</span>
-                                                        <span className="text-xs font-black text-slate-200 tracking-wide uppercase font-mono">Official Live Games</span>
+                                                        <span className="text-xs font-black text-slate-200 tracking-wide uppercase font-mono">Official Certified Games</span>
                                                     </div>
-                                                    <span className="text-[10px] font-black text-emerald-400 font-mono">100% CERTIFIED</span>
+                                                    <span className="text-[10px] font-black text-emerald-400 font-mono">100% FAIR</span>
                                                 </div>
 
-                                                {/* Wingo */}
+                                                {/* GAME 1: AVIATOR (NEW & PROMINENT) */}
+                                                <div 
+                                                    onClick={() => setView('game_aviator')} 
+                                                    className="relative rounded-3xl bg-gradient-to-r from-[#29050d] via-[#5e0c1c] to-[#170307] shadow-luxury border-2 border-rose-500/60 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-3.5 sm:p-4"
+                                                >
+                                                    <div className="z-10 flex flex-col justify-between h-full space-y-1.5">
+                                                        <div className="flex items-center space-x-2">
+                                                            <span className="text-[8.5px] bg-rose-600 border border-rose-400 text-white px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider animate-pulse flex items-center space-x-1">
+                                                                <span>⚡ SPRIBE AVIATOR</span>
+                                                            </span>
+                                                            <span className="text-[9.5px] font-black text-yellow-300 font-mono">UP TO 1000X</span>
+                                                        </div>
+
+                                                        <div>
+                                                            <h2 className="text-xl sm:text-2xl font-black text-white tracking-wider font-mono uppercase flex items-center space-x-1.5">
+                                                                <span>Aviator</span>
+                                                                <span className="text-sm">✈️</span>
+                                                            </h2>
+                                                            <span className="text-[10px] text-rose-200 block font-semibold">Live Crash Multiplayer & Dual Bets</span>
+                                                        </div>
+
+                                                        <div className="flex space-x-1.5 text-[8.5px] font-mono font-bold text-yellow-300">
+                                                            <span className="bg-black/50 px-2 py-0.5 rounded border border-rose-500/30">Auto Cashout</span>
+                                                            <span className="bg-black/50 px-2 py-0.5 rounded border border-rose-500/30">Live Bets Feed</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <AviatorLogo />
+                                                </div>
+
+                                                {/* GAME 2: WINGO */}
                                                 <div 
                                                     onClick={() => { setGameType('wingo'); setView('game'); }} 
                                                     className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-3.5 sm:p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-1.5">
                                                         <div className="flex items-center space-x-2">
-                                                            <span className="text-[8px] bg-emerald-950/90 border border-emerald-400/60 text-emerald-300 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                                                            <span className="text-[8px] bg-emerald-950/90 border border-emerald-400/60 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
                                                                 MOST POPULAR
                                                             </span>
                                                             <span className="text-[9.5px] font-black text-yellow-300 font-mono">30s / 1m / 2m</span>
@@ -1820,14 +2067,14 @@
                                                     <Wingo3DLogo />
                                                 </div>
 
-                                                {/* TRX Wingo */}
+                                                {/* GAME 3: TRX WINGO */}
                                                 <div 
                                                     onClick={() => { setGameType('trx_wingo'); setView('game'); }} 
                                                     className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-3.5 sm:p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-1.5">
                                                         <div className="flex items-center space-x-2">
-                                                            <span className="text-[8px] bg-rose-950/90 border border-rose-400/60 text-rose-300 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                                                            <span className="text-[8px] bg-rose-950/90 border border-rose-400/60 text-rose-300 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
                                                                 BLOCKCHAIN LIVE
                                                             </span>
                                                             <span className="text-[9.5px] font-black text-yellow-300 font-mono">TRON HASH</span>
@@ -1847,14 +2094,14 @@
                                                     <Trx3DLogo />
                                                 </div>
 
-                                                {/* K3 Lottery */}
+                                                {/* GAME 4: K3 LOTTERY */}
                                                 <div 
                                                     onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }} 
                                                     className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden active:scale-98 transition-all flex items-center justify-between p-3.5 sm:p-4"
                                                 >
                                                     <div className="z-10 flex flex-col justify-between h-full space-y-1.5">
                                                         <div className="flex items-center space-x-2">
-                                                            <span className="text-[8px] bg-amber-950/90 border border-amber-400/60 text-amber-300 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                                                            <span className="text-[8px] bg-amber-950/90 border border-amber-400/60 text-amber-300 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider">
                                                                 DICE LOTTO
                                                             </span>
                                                             <span className="text-[9.5px] font-black text-yellow-300 font-mono">UP TO 207X</span>
@@ -1890,8 +2137,8 @@
 
                                                 <div className="space-y-2">
                                                     {[
-                                                        { id: 1, name: 'Mem***GML', amount: '288.50', game: 'WINGO 30S', color: 'bg-emerald-600/30 border-emerald-400 text-emerald-300' },
-                                                        { id: 2, name: 'Mem***ZUQ', amount: '450.00', game: 'TRX WINGO', color: 'bg-rose-600/30 border-rose-400 text-rose-300' },
+                                                        { id: 1, name: 'Mem***GML', amount: '850.00', game: 'AVIATOR 8.5X', color: 'bg-rose-600/30 border-rose-400 text-rose-300' },
+                                                        { id: 2, name: 'Mem***ZUQ', amount: '450.00', game: 'TRX WINGO', color: 'bg-purple-600/30 border-purple-400 text-purple-300' },
                                                         { id: 3, name: 'Mem***PSY', amount: '360.20', game: 'K3 LOTTO', color: 'bg-amber-600/30 border-amber-400 text-amber-300' }
                                                     ].map((item) => (
                                                         <div key={item.id} className="p-2.5 bg-slate-900/90 rounded-2xl flex items-center justify-between border border-slate-800 text-xs">
@@ -2151,6 +2398,175 @@
                             </div>
                         )}
 
+                        {/* ========================================================================= */}
+                        {/* VIEW: AVIATOR ✈️ (CRASH FLIGHT GAME VIEW)                                */}
+                        {/* ========================================================================= */}
+                        {view === 'game_aviator' && (
+                            <div className="flex-1 flex flex-col bg-[#0f0204] justify-between overflow-hidden min-h-0 font-sans">
+                                
+                                {/* Aviator Top Bar */}
+                                <div className="px-4 py-2.5 bg-[#170307] border-b border-red-950/80 flex items-center justify-between flex-shrink-0 shadow-md">
+                                    <div className="flex items-center space-x-2">
+                                        <BackButton onClick={() => setView('home')} label="Back" />
+                                        <div className="flex items-center space-x-1">
+                                            <span className="text-red-500 font-black text-sm tracking-widest font-mono">AVIATOR</span>
+                                            <span className="text-xs">✈️</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center space-x-2 font-mono">
+                                        <span className="text-xs font-black text-amber-400 bg-black/60 px-2.5 py-1 rounded-xl border border-red-500/30">
+                                            ৳{formatMoney(balance)}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Multiplier History Ribbon */}
+                                <div className="px-3 py-1.5 bg-[#120205] border-b border-red-950/50 flex space-x-1.5 overflow-x-auto flex-shrink-0">
+                                    {aviatorHistory.map((mult, i) => (
+                                        <span 
+                                            key={i} 
+                                            className={`text-[9px] font-black font-mono px-2 py-0.5 rounded-full flex-shrink-0 ${
+                                                mult >= 10 ? 'bg-pink-600/30 text-pink-400 border border-pink-500/50' : 
+                                                (mult >= 2 ? 'bg-purple-600/30 text-purple-300 border border-purple-500/50' : 'bg-blue-600/20 text-blue-300 border border-blue-500/30')
+                                            }`}
+                                        >
+                                            {mult.toFixed(2)}x
+                                        </span>
+                                    ))}
+                                </div>
+
+                                <div className="flex-1 flex flex-col p-3 space-y-3 overflow-y-auto min-h-0">
+                                    
+                                    {/* Main Flight Stage Screen */}
+                                    <div className="w-full h-48 sm:h-52 bg-gradient-to-b from-[#1c0408] to-[#0a0103] rounded-3xl border-2 border-red-900/60 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
+                                        <div className="absolute inset-0 bg-[radial-gradient(#e50914_1px,transparent_1px)] [background-size:16px_16px] opacity-15 pointer-events-none"></div>
+
+                                        {/* Multiplier / Status Big Text */}
+                                        {aviatorStage === 'waiting' ? (
+                                            <div className="flex flex-col items-center space-y-2 z-20">
+                                                <div className="w-10 h-10 rounded-full bg-red-600/20 border border-red-500/50 flex items-center justify-center text-red-400 animate-pulse text-lg">
+                                                    ✈️
+                                                </div>
+                                                <span className="text-xs font-black uppercase tracking-widest text-slate-300 font-mono">
+                                                    NEXT ROUND IN {aviatorCountdown}s
+                                                </span>
+                                                <div className="w-32 bg-slate-900 h-1.5 rounded-full overflow-hidden border border-red-500/30">
+                                                    <div className="bg-red-500 h-full transition-all duration-1000" style={{ width: `${(aviatorCountdown / 5) * 100}%` }}></div>
+                                                </div>
+                                            </div>
+                                        ) : aviatorStage === 'flying' ? (
+                                            <div className="flex flex-col items-center justify-center z-20 space-y-1">
+                                                <span className="text-4xl sm:text-5xl font-black font-mono text-white tracking-tighter drop-shadow-[0_4px_15px_rgba(255,255,255,0.4)]">
+                                                    {aviatorMultiplier.toFixed(2)}x
+                                                </span>
+                                                <div className="text-4xl plane-anim">
+                                                    ✈️
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-col items-center justify-center z-20 space-y-1">
+                                                <span className="text-xs font-black uppercase tracking-widest text-red-500 animate-pulse">
+                                                    FLEW AWAY!
+                                                </span>
+                                                <span className="text-4xl sm:text-5xl font-black font-mono text-red-500 tracking-tighter drop-shadow-[0_4px_20px_rgba(229,9,20,0.8)]">
+                                                    {aviatorMultiplier.toFixed(2)}x
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Bottom Horizon Grid Line */}
+                                        <div className="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-transparent via-red-500/40 to-transparent"></div>
+                                    </div>
+
+                                    {/* User Bet Controls Panel */}
+                                    <div className="glass-panel p-3.5 rounded-3xl border border-red-950/80 space-y-2.5">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-[10px] text-slate-400 uppercase font-mono font-bold">Bet Amount</span>
+                                            <div className="grid grid-cols-4 gap-1 font-mono">
+                                                {[50, 100, 500, 1000].map(amt => (
+                                                    <button
+                                                        key={amt}
+                                                        disabled={userAviatorBetActive}
+                                                        onClick={() => setUserAviatorBet(amt)}
+                                                        className={`px-2 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${userAviatorBet === amt ? 'bg-red-600 text-white border-red-400' : 'bg-slate-900 border-slate-800 text-slate-300'}`}
+                                                    >
+                                                        ৳{amt}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Main Action Button */}
+                                        {!userAviatorBetActive ? (
+                                            <button
+                                                onClick={handlePlaceAviatorBet}
+                                                disabled={aviatorStage === 'flying' && userAviatorCashedOut}
+                                                className="w-full py-3.5 bg-gradient-to-r from-emerald-500 via-green-500 to-emerald-600 text-slate-950 font-black text-sm uppercase rounded-2xl shadow-neon-green active:scale-98 transition-all cursor-pointer font-mono tracking-wider"
+                                            >
+                                                BET ৳{userAviatorBet} {aviatorStage === 'flying' ? '(NEXT ROUND)' : ''}
+                                            </button>
+                                        ) : aviatorStage === 'flying' ? (
+                                            <button
+                                                onClick={handleAviatorCashout}
+                                                className="w-full py-3.5 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-sm uppercase rounded-2xl shadow-neon-gold active:scale-98 transition-all cursor-pointer font-mono tracking-wider animate-pulse"
+                                            >
+                                                CASHOUT ৳{formatMoney(userAviatorBet * aviatorMultiplier)}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                disabled
+                                                className="w-full py-3.5 bg-slate-800 text-slate-400 font-black text-sm uppercase rounded-2xl font-mono tracking-wider cursor-not-allowed"
+                                            >
+                                                WAITING FOR ROUND...
+                                            </button>
+                                        )}
+                                    </div>
+
+                                    {/* LIVE ALL PLAYERS BET LIST (কে কত টাকা বাজি ধরছে ও জিতছে) */}
+                                    <div className="glass-panel rounded-3xl border border-red-950/80 p-3 space-y-2 flex-1 min-h-[160px]">
+                                        <div className="flex justify-between items-center border-b border-red-950/60 pb-2">
+                                            <div className="flex items-center space-x-1.5">
+                                                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                                                <span className="text-[11px] font-black text-slate-200 uppercase font-mono">
+                                                    Live Bets (348 Players)
+                                                </span>
+                                            </div>
+                                            <span className="text-[9px] text-slate-400 font-mono">Auto Sync</span>
+                                        </div>
+
+                                        <div className="space-y-1.5 max-h-48 overflow-y-auto">
+                                            {/* User's own bet indicator if active */}
+                                            {userAviatorBetActive && (
+                                                <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-400/50 flex justify-between items-center text-xs font-mono">
+                                                    <span className="font-bold text-amber-300">YOU (VIP)</span>
+                                                    <span>৳{userAviatorBet}</span>
+                                                    <span className="text-emerald-400 font-black">
+                                                        {userAviatorCashedOut ? `+৳${userAviatorWin.toFixed(2)}` : 'In Flight...'}
+                                                    </span>
+                                                </div>
+                                            )}
+
+                                            {/* Live Players Stream */}
+                                            {aviatorLiveBets.map(player => (
+                                                <div key={player.id} className="p-2 rounded-xl bg-slate-900/60 border border-slate-800/80 flex justify-between items-center text-[10.5px] font-mono">
+                                                    <span className="text-slate-300 font-medium">{player.name}</span>
+                                                    <span className="text-slate-400">৳{player.bet}</span>
+                                                    {player.cashedOut ? (
+                                                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-bold text-[9px]">
+                                                            {player.targetMult.toFixed(2)}x (+৳{player.winAmount.toFixed(2)})
+                                                        </span>
+                                                    ) : (
+                                                        <span className="text-slate-500 text-[9.5px]">Waiting...</span>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        )}
+
                         {/* VIEW: DEPOSIT */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] h-full justify-between overflow-hidden min-h-0">
@@ -2300,7 +2716,7 @@
                                                 <div key={item.id} className="glass-panel p-3 rounded-2xl border border-slate-800 shadow-md flex flex-col space-y-1.5">
                                                     <div className="flex justify-between items-center">
                                                         <span className="text-sm font-black text-pink-400 font-mono">৳{formatMoney(item.amount)}</span>
-                                                        <span className={`text-[9px] font-black px-2 py-0.5 rounded-full uppercase ${
+                                                        <span className={`text-[9px] font-black px-2.5 py-0.5 rounded-full uppercase ${
                                                             item.status === 'Success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' :
                                                             item.status === 'Rejected' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                                                         }`}>
@@ -2338,7 +2754,7 @@
                                             <div className="glass-panel p-4 rounded-3xl border border-slate-800 shadow-luxury space-y-2">
                                                 <div className="flex justify-between items-center pb-2 border-b border-slate-800">
                                                     <span className="font-mono text-xs font-black text-pink-400">bKash Instant Cashout</span>
-                                                    <span className="text-[9px] font-black bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full uppercase border border-emerald-500/40">Verified</span>
+                                                    <span className="text-[9px] font-black bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded-full uppercase border border-emerald-500/40">Verified</span>
                                                 </div>
                                                 <div className="flex justify-between text-xs pt-1">
                                                     <span className="text-slate-400 font-bold">Withdrawable:</span>
@@ -2411,7 +2827,7 @@
                                                     <div key={item.id} className="glass-panel p-3 rounded-2xl border border-slate-800 shadow-md flex flex-col space-y-1.5">
                                                         <div className="flex justify-between items-center">
                                                             <span className="text-sm font-black text-emerald-400 font-mono">৳{formatMoney(item.amount)}</span>
-                                                            <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                                                            <span className={`text-[9px] font-bold px-2.5 py-0.5 rounded-full uppercase ${
                                                                 item.status === 'Success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' :
                                                                 item.status === 'Rejected' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                                                             }`}>
@@ -2514,6 +2930,7 @@
                                         <button onClick={() => openBetConfirmation('small')} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs shadow-md transition-all uppercase tracking-wider cursor-pointer">SMALL (2X)</button>
                                     </div>
 
+                                    {/* Timer */}
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 relative overflow-hidden shadow-luxury">
                                         <div className="flex justify-between items-center pb-2 border-b border-white/10">
                                             <span className="bg-amber-400/20 border border-amber-400/40 text-amber-300 px-2.5 py-0.5 rounded-full text-[9.5px] font-black uppercase font-mono">
@@ -2522,7 +2939,7 @@
                                             <span className="text-[10px] font-black uppercase text-slate-300">Live Timer</span>
                                         </div>
                                         <div className="flex justify-between items-center pt-2.5">
-                                            <span className="text-xs font-black text-slate-300 uppercase">Countdown</span>
+                                            <span className="text-xs font-black text-slate-300 uppercase">Draw Countdown</span>
                                             <div className="flex space-x-1 font-mono">
                                                 {formatTimeToSplit(getTimerForActiveTab()).map((char, index) => (
                                                     <span key={index} className={`px-2 py-0.5 text-sm font-black rounded-lg ${char === ':' ? 'text-amber-400 bg-transparent px-0' : 'bg-slate-950 text-yellow-300 border border-amber-500/30'}`}>
@@ -2660,6 +3077,7 @@
                                         <button onClick={() => { setView('deposit'); setDepositTab('new'); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-3.5 py-1.5 rounded-xl text-xs font-black uppercase shadow-neon-gold active:scale-95 transition-all cursor-pointer">Deposit</button>
                                     </div>
 
+                                    {/* 3D Dice Showcase Frame */}
                                     <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2.5">
                                         <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
                                         <div className="flex space-x-3 justify-center items-center py-1">
@@ -2681,6 +3099,50 @@
                                         <button onClick={() => openBetConfirmation('big')} className="bg-gradient-to-b from-amber-400 to-yellow-600 text-slate-950 hover:opacity-95 py-3 rounded-2xl font-black text-xs shadow-neon-gold transition-all cursor-pointer">Big 2X</button>
                                         <button onClick={() => openBetConfirmation('even')} className="bg-gradient-to-b from-emerald-500 to-green-700 text-white hover:opacity-95 py-3 rounded-2xl font-black text-xs shadow-neon-green transition-all cursor-pointer">Even 2X</button>
                                         <button onClick={() => openBetConfirmation('odd')} className="bg-gradient-to-b from-rose-500 to-red-700 text-white hover:opacity-95 py-3 rounded-2xl font-black text-xs shadow-neon-pink transition-all cursor-pointer">Odd 2X</button>
+                                    </div>
+
+                                    {/* K3 Real History Table */}
+                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury mt-2">
+                                        <div className="p-2.5 bg-slate-900/90 border-b border-slate-800 flex justify-between items-center text-xs font-bold font-mono">
+                                            <span className="text-amber-400">K3 Recent Results</span>
+                                            <span className="text-[10px] text-slate-400">3 Dice Combinations</span>
+                                        </div>
+                                        <div className="p-1">
+                                            <div className="overflow-x-auto">
+                                                <table className="w-full text-[10px] text-left border-collapse font-mono">
+                                                    <thead>
+                                                        <tr className="border-b border-slate-800 text-slate-500">
+                                                            <th className="py-2 pl-2.5 font-semibold">Period</th>
+                                                            <th className="py-2 text-center font-semibold">Dice</th>
+                                                            <th className="py-2 text-center font-semibold">Sum</th>
+                                                            <th className="py-2 pr-2 text-right font-semibold">Type</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {paginatedHistory.map((item, idx) => (
+                                                            <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40 transition-colors">
+                                                                <td className="py-2 pl-2.5 font-medium text-slate-400">{item.period}</td>
+                                                                <td className="py-1.5 text-center">
+                                                                    <div className="inline-flex space-x-1 items-center justify-center">
+                                                                        {(item.dice || [1, 1, 1]).map((d, dIdx) => (
+                                                                            <span key={dIdx} className="w-4 h-4 bg-white text-red-600 rounded text-[9px] font-black flex items-center justify-center shadow-sm">
+                                                                                {d}
+                                                                            </span>
+                                                                        ))}
+                                                                    </div>
+                                                                </td>
+                                                                <td className="py-2 text-center font-black text-yellow-300">{item.sum}</td>
+                                                                <td className="py-2 pr-2 text-right font-bold">
+                                                                    <span className={`px-1.5 py-0.5 rounded text-[8.5px] ${item.size === 'Big' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}`}>
+                                                                        {item.size} / {item.parity}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -2769,7 +3231,7 @@
                                 {/* Unit Amounts Selection */}
                                 <div>
                                     <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1.5 block">Select Base Amount</span>
-                                    <div className="grid grid-cols-3 gap-1.5 font-mono">
+                                    <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 font-mono">
                                         {[10, 50, 100, 500, 1000, 5000].map(amt => (
                                             <button
                                                 key={amt}
