@@ -1172,6 +1172,16 @@
                 setWithdrawTab('history');
             };
 
+            const updateUserAvatar = (newAvatarUrl) => {
+                if (!currentUser) return;
+                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                db.ref('users/' + sanitized).update({ avatar: newAvatarUrl }).then(() => {
+                    setCurrentUser(prev => ({ ...prev, avatar: newAvatarUrl }));
+                    setShowAvatarModal(false);
+                    showToast('Avatar updated successfully!', 'success');
+                });
+            };
+
             const getActiveFullHistory = () => {
                 if (gameType === 'trx_wingo') {
                     if (activeGameTab === '30sec') return drawHistoryTrx30s;
@@ -1187,6 +1197,27 @@
                     return drawHistory2m;
                 }
             };
+
+            // Safe bounded metrics calculations
+            const safeAdd = (acc, val) => {
+                const n = parseFloat(val);
+                return isNaN(n) || !isFinite(n) || n > 10000000 ? acc : acc + n;
+            };
+
+            const totalDeposited = (depositHistory || [])
+                .filter(d => d.status === 'Success')
+                .reduce((sum, d) => safeAdd(sum, d.amount), 0);
+
+            const totalWithdrawn = (withdrawHistory || [])
+                .filter(w => w.status === 'Success')
+                .reduce((sum, w) => safeAdd(sum, w.amount), 0);
+
+            const totalBetTurnover = (myBets || [])
+                .reduce((sum, b) => safeAdd(sum, b.amount), 0);
+
+            const totalWonPayout = (myBets || [])
+                .filter(b => b.status === 'won')
+                .reduce((sum, b) => safeAdd(sum, b.payout), 0);
 
             const activeFullHistory = getActiveFullHistory();
             const totalPages = Math.max(1, Math.ceil(activeFullHistory.length / 10));
@@ -1267,7 +1298,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 2: HOME DASHBOARD                                                    */}
+                        {/* VIEW 2: HOME DASHBOARD & VIEWS                                            */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
@@ -1276,10 +1307,16 @@
                                         <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-yellow-400 flex items-center justify-center shadow-md">
                                             <span className="text-sm font-black text-slate-950 font-mono">SX</span>
                                         </div>
-                                        <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
+                                        <div>
+                                            <span className="text-base font-black tracking-wider text-gradient-gold font-mono leading-none block">STEVEN WIN</span>
+                                            <span className="text-[8px] text-emerald-400 font-bold uppercase tracking-widest flex items-center space-x-1 mt-0.5">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                                <span>24,820 Active Online</span>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className="flex items-center space-x-2">
-                                        <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                                        <span className="text-xs font-black text-amber-400 font-mono bg-slate-900 px-2.5 py-1 rounded-xl border border-amber-500/30">৳{formatMoney(balance)}</span>
                                     </div>
                                 </div>
 
@@ -1296,16 +1333,16 @@
                                     </div>
                                 )}
 
-                                <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
+                                <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 min-h-0 pb-16">
                                     
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* PROMOTIONAL ADS CAROUSEL */}
+                                            {/* PROMOTIONS COMMERCIAL CAROUSEL */}
                                             <PromoBannerCarousel onOpenDetail={(bannerData) => {
                                                 setPromoModal({ isOpen: true, data: bannerData });
                                             }} />
 
-                                            {/* MEGA JACKPOT POOL */}
+                                            {/* LIVE MEGA JACKPOT POOL */}
                                             <div className="glass-panel-glow rounded-3xl p-3.5 flex items-center justify-between border border-amber-500/30 shadow-luxury relative overflow-hidden">
                                                 <div className="flex items-center space-x-3 z-10">
                                                     <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-500 text-slate-950 flex items-center justify-center text-lg shadow-md">
@@ -1407,22 +1444,199 @@
                                         </div>
                                     )}
 
+                                    {/* ========================================================================= */}
+                                    {/* ULTRA-PREMIUM LUXURY VIP ACCOUNT / PROFILE CENTER                         */}
+                                    {/* ========================================================================= */}
                                     {activeNav === 'account' && (
-                                        <div className="glass-panel p-5 rounded-3xl space-y-4">
-                                            <div className="flex items-center space-x-3">
-                                                <div className="w-14 h-14 rounded-2xl border-2 border-amber-400 overflow-hidden bg-slate-800">
-                                                    <img src={PRESET_AVATARS[0]} className="w-full h-full object-cover" />
+                                        <div className="space-y-4">
+                                            {/* VIP Profile Card */}
+                                            <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
+                                                <div className="flex items-center justify-between z-10 relative">
+                                                    <div className="flex items-center space-x-3.5">
+                                                        <div 
+                                                            onClick={() => setShowAvatarModal(true)} 
+                                                            className="relative w-14 h-14 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group"
+                                                        >
+                                                            <img 
+                                                                src={currentUser?.avatar || PRESET_AVATARS[0]} 
+                                                                alt="Avatar" 
+                                                                className="w-full h-full object-cover group-hover:scale-110 transition-transform" 
+                                                            />
+                                                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-[8px] font-bold text-amber-300 transition-opacity">
+                                                                Edit
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <div className="flex items-center space-x-2">
+                                                                <h2 className="text-base font-black text-slate-100 font-sans tracking-wide">
+                                                                    {currentUser ? currentUser.username : 'VIP Player'}
+                                                                </h2>
+                                                                <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-2 py-0.5 rounded-full font-black text-[9px] font-mono shadow">
+                                                                    VIP 1
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center space-x-2 text-[10px] text-slate-400 mt-1 font-mono">
+                                                                <span>ID: {currentUser?.stxId || 'STX-0000'}</span>
+                                                                <button 
+                                                                    onClick={() => {
+                                                                        if (!currentUser?.stxId) return;
+                                                                        navigator.clipboard.writeText(currentUser.stxId);
+                                                                        showToast('ID copied to clipboard!', 'success');
+                                                                    }}
+                                                                    className="text-amber-400 hover:text-yellow-300"
+                                                                >
+                                                                    <Icon name="copy" className="w-3.5 h-3.5" />
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <span className="text-[9px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2.5 py-1 rounded-full font-bold uppercase tracking-wider flex items-center space-x-1">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                                        <span>Active</span>
+                                                    </span>
                                                 </div>
-                                                <div>
-                                                    <h2 className="text-base font-black text-white">{currentUser?.username || 'VIP Member'}</h2>
-                                                    <span className="text-xs text-amber-400 font-mono">{currentUser?.stxId}</span>
+
+                                                <div className="mt-4 pt-3 border-t border-amber-500/20 z-10 relative">
+                                                    <div className="flex justify-between text-[10px] font-mono text-amber-300 font-bold mb-1">
+                                                        <span>VIP 1 Privilege</span>
+                                                        <span>EXP: 2,450 / 5,000</span>
+                                                    </div>
+                                                    <div className="w-full bg-slate-950/80 h-2 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
+                                                        <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full rounded-full w-[49%] shadow-neon-gold"></div>
+                                                    </div>
+                                                    <div className="flex justify-between text-[8.5px] text-slate-400 mt-1.5 font-sans">
+                                                        <span>Next: VIP 2 (Weekly Bonus +৳500)</span>
+                                                        <span className="text-amber-400 font-semibold cursor-pointer" onClick={() => showToast('Play games to increase VIP level!', 'success')}>Details &gt;</span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="grid grid-cols-2 gap-2 pt-2">
-                                                <button onClick={() => setView('deposit')} className="py-3 rounded-2xl bg-pink-600 text-white font-bold text-xs uppercase">Deposit</button>
-                                                <button onClick={() => setView('withdraw')} className="py-3 rounded-2xl bg-emerald-600 text-white font-bold text-xs uppercase">Withdraw</button>
+
+                                            {/* Wallet Card */}
+                                            <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3.5 shadow-xl">
+                                                <div className="flex justify-between items-center">
+                                                    <div className="flex items-center space-x-2">
+                                                        <span className="text-xs text-slate-400 font-bold uppercase font-mono tracking-wider">Total Wallet Balance</span>
+                                                        <button onClick={() => setHideBalance(!hideBalance)} className="text-slate-400 hover:text-amber-400">
+                                                            <Icon name={hideBalance ? "eye-off" : "eye"} className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                    <button onClick={() => window.location.reload()} className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 font-mono">
+                                                        <Icon name="refresh-cw" className="w-3.5 h-3.5" />
+                                                        <span>Sync</span>
+                                                    </button>
+                                                </div>
+
+                                                <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
+                                                    {hideBalance ? '৳ ••••••' : `৳${formatMoney(balance)}`}
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                                                    <button 
+                                                        onClick={() => { setView('deposit'); setDepositTab('new'); }} 
+                                                        className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink active:scale-95 transition-all cursor-pointer"
+                                                    >
+                                                        <Icon name="wallet" className="w-4 h-4" />
+                                                        <span>Deposit</span>
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} 
+                                                        className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 transition-all cursor-pointer"
+                                                    >
+                                                        <Icon name="receipt" className="w-4 h-4" />
+                                                        <span>Withdraw</span>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <button onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} className="w-full py-3 rounded-2xl bg-rose-950 text-rose-300 border border-rose-800 font-bold text-xs uppercase">Sign Out</button>
+
+                                            {/* Financial Metrics (Clean Safe Data) */}
+                                            <div className="grid grid-cols-2 gap-2.5">
+                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
+                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
+                                                        <span className="text-rose-400">📥</span>
+                                                        <span>Total Recharged</span>
+                                                    </div>
+                                                    <div className="text-sm font-black font-mono text-slate-100">
+                                                        ৳{formatMoney(totalDeposited)}
+                                                    </div>
+                                                </div>
+
+                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
+                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
+                                                        <span className="text-emerald-400">📤</span>
+                                                        <span>Total Cashed Out</span>
+                                                    </div>
+                                                    <div className="text-sm font-black font-mono text-slate-100">
+                                                        ৳{formatMoney(totalWithdrawn)}
+                                                    </div>
+                                                </div>
+
+                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
+                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
+                                                        <span className="text-amber-400">🎲</span>
+                                                        <span>Total Turnover</span>
+                                                    </div>
+                                                    <div className="text-sm font-black font-mono text-amber-300">
+                                                        ৳{formatMoney(totalBetTurnover)}
+                                                    </div>
+                                                </div>
+
+                                                <div className="glass-panel p-3.5 rounded-2xl border border-slate-800 space-y-1">
+                                                    <div className="flex items-center space-x-1.5 text-[10px] font-bold text-slate-400">
+                                                        <span className="text-yellow-400">🏆</span>
+                                                        <span>Total Won Payout</span>
+                                                    </div>
+                                                    <div className="text-sm font-black font-mono text-emerald-400">
+                                                        +৳{formatMoney(totalWonPayout)}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Navigation Records */}
+                                            <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
+                                                <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
+                                                            <Icon name="receipt" className="w-4 h-4" />
+                                                        </div>
+                                                        <span className="text-xs font-bold text-slate-200">bKash Deposit Records</span>
+                                                    </div>
+                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <button onClick={() => { setView('withdraw'); setWithdrawTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                                                            <Icon name="receipt" className="w-4 h-4" />
+                                                        </div>
+                                                        <span className="text-xs font-bold text-slate-200">bKash Withdrawal History</span>
+                                                    </div>
+                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors cursor-pointer">
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                                                            <Icon name="headphones" className="w-4 h-4" />
+                                                        </div>
+                                                        <div>
+                                                            <span className="text-xs font-bold text-slate-200 block">24/7 VIP Customer Support</span>
+                                                            <span className="text-[9px] text-sky-400 font-mono">Telegram: @Kaisarvai007</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevron-right" className="w-4 h-4 text-slate-500" />
+                                                </a>
+                                            </div>
+
+                                            {/* Sign Out */}
+                                            <button 
+                                                onClick={() => { localStorage.removeItem('steven_win_current_phone'); setSessionPhone(''); setView('auth'); }} 
+                                                className="w-full py-3.5 bg-rose-950/30 hover:bg-rose-950/60 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl border border-rose-800/40 flex items-center justify-center space-x-2 transition-all cursor-pointer"
+                                            >
+                                                <Icon name="log-out" className="w-4 h-4" />
+                                                <span>Sign Out Account</span>
+                                            </button>
                                         </div>
                                     )}
 
@@ -1792,7 +2006,7 @@
                                                     navigator.clipboard.writeText('01860909272');
                                                     showToast('Agent number copied!', 'success');
                                                 }} 
-                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
+                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black"
                                             >
                                                 Copy
                                             </button>
@@ -1845,6 +2059,35 @@
                         )}
 
                     </div>
+
+                    {/* AVATAR SELECTOR MODAL */}
+                    {showAvatarModal && (
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-5 animate-fade-in font-sans backdrop-blur-md">
+                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                                    <h3 className="text-sm font-black text-amber-300 font-mono">Choose Profile Avatar</h3>
+                                    <button onClick={() => setShowAvatarModal(false)} className="text-slate-400 hover:text-white cursor-pointer">
+                                        <Icon name="x" className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-2.5 py-1">
+                                    {PRESET_AVATARS.map((avUrl, idx) => (
+                                        <div 
+                                            key={idx} 
+                                            onClick={() => updateUserAvatar(avUrl)}
+                                            className={`relative w-18 h-18 mx-auto rounded-2xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-105 active:scale-95 ${currentUser?.avatar === avUrl ? 'border-amber-400 shadow-neon-gold' : 'border-slate-700 opacity-70 hover:opacity-100'}`}
+                                        >
+                                            <img src={avUrl} alt={`Avatar ${idx}`} className="w-full h-full object-cover" />
+                                            {currentUser?.avatar === avUrl && (
+                                                <div className="absolute top-1 right-1 bg-amber-400 text-slate-950 p-0.5 rounded-full text-[8px] font-black">✓</div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                     {/* DETAIL MODAL FOR PROMO BANNERS */}
                     {promoModal.isOpen && (
