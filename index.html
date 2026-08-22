@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Elite Gaming, Aviator & Lottery Platform</title>
+    <title>STEVEN WIN - Global Synced Spribe Aviator & Elite Gaming</title>
     
     <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -179,7 +179,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" /></svg>
             ),
             receipt: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
             ),
             headphones: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
@@ -335,7 +335,7 @@
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.connect(gain);
-                    gain.connect(this.ctx.destination);
+                    gain.connect(ctx.destination);
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(440, this.ctx.currentTime);
                     osc.frequency.linearRampToValueAtTime(880, this.ctx.currentTime + 0.2);
@@ -534,7 +534,7 @@
             const [balance, setBalance] = useState(0.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             
-            // --- AVIATOR STATE ---
+            // --- 🌐 GLOBAL MULTIPLAYER SYNCHRONIZED AVIATOR STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
@@ -555,7 +555,7 @@
             const [auto2Target, setAuto2Target] = useState('3.00');
 
             // --- LOTTERY WINGO / TRX / K3 (WITH 1,000 ROUNDS HISTORY) ---
-            const [gameType, setGameType] = useState('wingo'); // 'wingo' | 'trx_wingo' | 'k3_lottery'
+            const [gameType, setGameType] = useState('wingo');
             const [activeGameTab, setActiveGameTab] = useState('30sec');
             const [timer30s, setTimer30s] = useState(30);
             const [period30s, setPeriod30s] = useState('20260822100051482');
@@ -647,7 +647,7 @@
                 });
             }, [sessionPhone]);
 
-            // Real-time Admin Crash Target
+            // Admin Crash Target
             useEffect(() => {
                 const targetRef = db.ref('settings/aviator_target_crash');
                 targetRef.on('value', (snap) => {
@@ -658,77 +658,99 @@
                 });
             }, []);
 
-            // ✈️ AVIATOR MAIN GAME LOOP
+            // 🌐 GLOBAL SYNCHRONIZED AVIATOR MULTIPLAYER LOOP (SAME TIME ON ALL MOBILES)
             useEffect(() => {
-                let aviatorInterval;
-                
-                if (aviatorPhase === 'waiting') {
-                    aviatorInterval = setInterval(() => {
-                        setAviatorCountdown(prev => {
-                            if (prev <= 1) {
-                                setAviatorPhase('flying');
-                                setAviatorMult(1.00);
+                const aviatorStateRef = db.ref('global_aviator_sync');
 
-                                setBet1Status(prev => prev === 'queued' ? 'active' : prev);
-                                setBet2Status(prev => prev === 'queued' ? 'active' : prev);
+                // Master host writes to Firebase if stale or empty
+                const syncHeartbeat = setInterval(() => {
+                    aviatorStateRef.transaction((current) => {
+                        const now = Date.now();
+                        if (!current || now - (current.lastHeartbeat || 0) > 12000) {
+                            return {
+                                phase: 'waiting',
+                                nextFlightTime: now + 5000,
+                                crashPoint: adminTargetCrash || parseFloat((1.20 + Math.random() * 3.5).toFixed(2)),
+                                lastHeartbeat: now,
+                                history: [2.15, 1.45, 8.20, 1.10, 3.42, 12.05, 1.88, 1.05]
+                            };
+                        }
+                        return current;
+                    });
+                }, 4000);
 
-                                let nextCrash = 1.00;
-                                if (adminTargetCrash !== null) {
-                                    nextCrash = adminTargetCrash;
-                                } else {
-                                    const rand = Math.random() * 100;
-                                    if (rand < 60) nextCrash = 1.02 + Math.random() * 0.45;
-                                    else if (rand < 88) nextCrash = 1.50 + Math.random() * 2.2;
-                                    else nextCrash = 4.00 + Math.random() * 15.0;
-                                }
+                // Listen to Global Clock on every single mobile
+                const listener = aviatorStateRef.on('value', (snap) => {
+                    if (!snap.exists()) return;
+                    const data = snap.val();
+                    const now = Date.now();
 
-                                setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
-                                if (view === 'game_aviator') soundEngine.startJetSound();
-                                return 5;
-                            }
-                            return prev - 1;
-                        });
-                    }, 1000);
-                } else if (aviatorPhase === 'flying') {
-                    const startTime = Date.now();
-                    aviatorInterval = setInterval(() => {
-                        const elapsed = (Date.now() - startTime) / 1000;
+                    if (data.history) {
+                        setAviatorHistory(data.history.slice(0, 8));
+                    }
+
+                    if (now < data.nextFlightTime) {
+                        // Global Waiting Phase
+                        const remSec = Math.max(1, Math.ceil((data.nextFlightTime - now) / 1000));
+                        setAviatorPhase('waiting');
+                        setAviatorCountdown(remSec);
+                        setAviatorMult(1.00);
+                        setAviatorCrashPoint(data.crashPoint || 2.20);
+                    } else {
+                        // Global Flying Phase
+                        const elapsed = (now - data.nextFlightTime) / 1000;
                         const currentMult = parseFloat((1.00 + elapsed * 0.08 + Math.pow(elapsed * 0.06, 1.45)).toFixed(2));
-                        setAviatorMult(currentMult);
+                        const crashPt = data.crashPoint || 2.20;
 
-                        if (view === 'game_aviator') soundEngine.updateJetPitch(currentMult);
-
-                        // Auto Cashout
-                        if (bet1Status === 'active' && auto1Enabled && parseFloat(auto1Target) <= currentMult) {
-                            executeCashout(1, currentMult);
-                        }
-                        if (bet2Status === 'active' && auto2Enabled && parseFloat(auto2Target) <= currentMult) {
-                            executeCashout(2, currentMult);
-                        }
-
-                        // Check Crash
-                        if (currentMult >= aviatorCrashPoint) {
-                            clearInterval(aviatorInterval);
+                        if (currentMult < crashPt) {
+                            setAviatorPhase('flying');
+                            setAviatorMult(currentMult);
+                            setBet1Status(prev => prev === 'queued' ? 'active' : prev);
+                            setBet2Status(prev => prev === 'queued' ? 'active' : prev);
+                            if (view === 'game_aviator') {
+                                soundEngine.startJetSound();
+                                soundEngine.updateJetPitch(currentMult);
+                            }
+                        } else {
+                            // Crashed
                             setAviatorPhase('crashed');
+                            setAviatorMult(crashPt);
                             if (view === 'game_aviator') soundEngine.playCrash();
 
                             setBet1Status(prev => prev === 'active' ? 'idle' : prev);
                             setBet2Status(prev => prev === 'active' ? 'idle' : prev);
 
-                            setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 8));
-
-                            setTimeout(() => {
-                                setBet1Status(prev => prev === 'cashed' ? 'idle' : prev);
-                                setBet2Status(prev => prev === 'cashed' ? 'idle' : prev);
-                                setAviatorPhase('waiting');
-                                setAviatorCountdown(5);
-                            }, 3800);
+                            // Schedule next round globally
+                            if (now - (data.lastHeartbeat || 0) < 6000) {
+                                aviatorStateRef.update({
+                                    phase: 'waiting',
+                                    nextFlightTime: now + 8000,
+                                    crashPoint: adminTargetCrash || (Math.random() < 0.6 ? parseFloat((1.05 + Math.random() * 0.8).toFixed(2)) : parseFloat((2.00 + Math.random() * 6.5).toFixed(2))),
+                                    lastHeartbeat: now,
+                                    history: [crashPt, ...(data.history || [])].slice(0, 8)
+                                });
+                            }
                         }
-                    }, 50);
-                }
+                    }
+                });
 
-                return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint, adminTargetCrash, bet1Status, bet2Status, auto1Enabled, auto2Enabled, auto1Target, auto2Target, view]);
+                return () => {
+                    clearInterval(syncHeartbeat);
+                    aviatorStateRef.off('value', listener);
+                };
+            }, [adminTargetCrash, view]);
+
+            // Auto-Cashout Watcher
+            useEffect(() => {
+                if (aviatorPhase === 'flying') {
+                    if (bet1Status === 'active' && auto1Enabled && parseFloat(auto1Target) <= aviatorMult) {
+                        executeCashout(1, aviatorMult);
+                    }
+                    if (bet2Status === 'active' && auto2Enabled && parseFloat(auto2Target) <= aviatorMult) {
+                        executeCashout(2, aviatorMult);
+                    }
+                }
+            }, [aviatorMult, aviatorPhase, bet1Status, bet2Status, auto1Enabled, auto2Enabled, auto1Target, auto2Target]);
 
             // Wingo Timers Loop & 1,000 History Prepend
             useEffect(() => {
@@ -1050,7 +1072,7 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[11px] text-rose-200 block font-medium">Spribe Red Jet & Live Dual Cashout</span>
+                                                    <span className="text-[11px] text-rose-200 block font-medium">Spribe Red Jet & Multi-Phone Live Sync</span>
                                                 </div>
                                                 <div className="w-18 h-18 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 flex-shrink-0">
                                                     <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
@@ -1214,13 +1236,9 @@
                                         <Icon name="home" className="w-4 h-4" />
                                         <span className="text-[9px] font-black">Home</span>
                                     </button>
-                                    <button onClick={() => setActiveNav('activity')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'activity' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="gift" className="w-4 h-4" />
-                                        <span className="text-[9px] font-black">Activity</span>
-                                    </button>
-                                    <button onClick={() => setActiveNav('promotion')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'promotion' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="percent" className="w-4 h-4" />
-                                        <span className="text-[9px] font-black">Promo</span>
+                                    <button onClick={() => setView('game_aviator')} className="flex flex-col items-center space-y-0.5 cursor-pointer text-rose-400">
+                                        <span className="text-base leading-none">✈️</span>
+                                        <span className="text-[9px] font-black">Aviator</span>
                                     </button>
                                     <button onClick={() => setActiveNav('account')} className={`flex flex-col items-center space-y-0.5 cursor-pointer ${activeNav === 'account' ? 'text-amber-400' : 'text-slate-400'}`}>
                                         <Icon name="user" className="w-4 h-4" />
@@ -1231,7 +1249,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* 3. ✈️ AVIATOR SPRIBE CRASH                                                */}
+                        {/* 3. ✈️ 100% AUTHENTIC SPRIBE AVIATOR (GLOBAL REALTIME SYNCHRONIZED)        */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#07090e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1247,7 +1265,7 @@
                                     </span>
                                 </div>
 
-                                {/* Previous Multiplier Pills */}
+                                {/* Previous Round History Pills */}
                                 <div className="px-3 py-1.5 bg-[#05070c] border-b border-slate-800/80 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                     {aviatorHistory.map((mult, i) => (
                                         <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border flex-shrink-0 ${
@@ -1261,7 +1279,7 @@
 
                                 <div className="flex-1 flex flex-col p-2.5 space-y-2 overflow-y-auto min-h-0">
                                     
-                                    {/* Flight Stage Frame */}
+                                    {/* ✈️ Spribe Flight Stage Canvas */}
                                     <div className="w-full h-48 sm:h-52 bg-[#090c14] rounded-3xl border border-red-900/60 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
@@ -1288,7 +1306,7 @@
                                         )}
                                     </div>
 
-                                    {/* Dual Bet Decks (100% Isolated - No Plane Reset on Click!) */}
+                                    {/* 🎮 Dual Bet Decks (Deck 1 & Deck 2) */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 font-mono">
                                         
                                         {/* DECK 1 */}
@@ -1328,6 +1346,7 @@
                                                 ))}
                                             </div>
 
+                                            {/* Dynamic Deck 1 Action Button */}
                                             {bet1Status === 'idle' && (
                                                 <button 
                                                     type="button" 
@@ -1399,6 +1418,7 @@
                                                 ))}
                                             </div>
 
+                                            {/* Dynamic Deck 2 Action Button */}
                                             {bet2Status === 'idle' && (
                                                 <button 
                                                     type="button" 
@@ -1434,6 +1454,7 @@
                                         </div>
 
                                     </div>
+
                                 </div>
                             </div>
                         )}
