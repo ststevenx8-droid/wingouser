@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Elite VIP Gaming, Aviator & bKash Gateway</title>
+    <title>STEVEN WIN - Elite VIP Gaming & Aviator Platform</title>
     
     <!-- Firebase SDK (Compat Version) -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -19,14 +19,16 @@
                         primary: '#10b981',
                         gold: '#fbbf24',
                         goldHover: '#f59e0b',
+                        goldLight: '#fef08a',
                         gameGreen: '#059669',
                         gameRed: '#e11d48',
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
                         bkashDark: '#990b49',
+                        bkashLight: '#ff3388',
                         aviatorRed: '#e51e38',
                         chickenGold: '#f59e0b',
-                        darkBg: '#030509',
+                        darkBg: '#020408',
                         cardBg: 'rgba(15, 23, 42, 0.85)',
                         cardBorder: 'rgba(255, 255, 255, 0.08)'
                     },
@@ -36,7 +38,7 @@
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.55)',
                         'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.75)',
                         'neon-chicken': '0 0 25px rgba(245, 158, 11, 0.65)',
-                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
+                        'luxury': '0 18px 40px -5px rgba(0, 0, 0, 0.9)'
                     }
                 }
             }
@@ -72,7 +74,7 @@
             flex-direction: column;
             overflow: hidden;
             background-color: #05070e;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 0.95);
+            box-shadow: 0 0 65px rgba(0, 0, 0, 0.95);
         }
 
         #root {
@@ -94,40 +96,46 @@
             -webkit-text-fill-color: transparent;
         }
 
+        .text-gradient-bkash {
+            background: linear-gradient(135deg, #ff80b3 0%, #e2136e 50%, #990b49 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
         .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(13, 19, 36, 0.78);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .glass-panel-glow {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(251, 191, 36, 0.35);
+        .glass-panel-gold {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.88) 100%);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(251, 191, 36, 0.4);
         }
 
-        .vip-card-master {
-            background: radial-gradient(circle at top right, #3d2907, #1c1303 60%, #080601 100%);
-            border: 1px solid rgba(251, 191, 36, 0.5);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 12px 35px rgba(0, 0, 0, 0.85);
+        .vip-gold-master {
+            background: radial-gradient(circle at top right, #3d2907, #1c1303 55%, #080601 100%);
+            border: 1.5px solid rgba(251, 191, 36, 0.55);
+            box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 14px 35px rgba(0, 0, 0, 0.9);
         }
 
         .bkash-card-master {
             background: linear-gradient(135deg, #66052f 0%, #b80d57 50%, #e2136e 100%);
-            box-shadow: 0 12px 30px rgba(226, 19, 110, 0.4);
+            box-shadow: 0 12px 30px rgba(226, 19, 110, 0.45);
         }
 
         .safe-bottom {
             padding-bottom: env(safe-area-inset-bottom, 12px);
         }
 
-        @keyframes bounceSlow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); }
         }
-        .animate-bounce-slow {
-            animation: bounceSlow 2.5s infinite ease-in-out;
+        .pulse-glow {
+            animation: pulseGlow 2.8s infinite ease-in-out;
         }
     </style>
 </head>
@@ -191,6 +199,9 @@
             receipt: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
             ),
+            shield: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            ),
             headphones: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
             ),
@@ -211,6 +222,9 @@
             ),
             logOut: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+            ),
+            key: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></svg>
             )
         };
 
@@ -356,47 +370,65 @@
             }
         };
 
-        // --- BANNER ADS CAROUSEL COMPONENT ---
-        const LUXURY_ADS = [
+        // --- 100% REAL ADS DATA & DYNAMIC CAROUSEL ---
+        const REAL_PROMO_ADS = [
             {
-                id: 1,
-                tag: 'EXCLUSIVE OFFER',
+                id: 'ad_1',
+                tag: 'VIP EXCLUSIVE 200%',
                 title: '⚡ 200% FIRST DEPOSIT BONUS',
-                subtitle: 'Recharge via bKash & Get Instant 2X Credit + VIP Access',
-                btnText: 'Claim 200%',
-                bgGradient: 'from-amber-600 via-yellow-600 to-amber-900',
-                borderCol: 'border-amber-400/60',
+                subtitle: 'Recharge ৳500+ via bKash & Get ৳1,000 Extra Cash + VIP 1 Card!',
+                btnText: 'Claim 200% Bonus',
+                target: 'deposit',
+                bgGradient: 'from-amber-600 via-yellow-600 to-amber-950',
+                borderCol: 'border-amber-400/80',
+                badgeText: '🔥 HOT PROMO',
                 icon: '👑'
             },
             {
-                id: 2,
-                tag: 'HOT MULTIPLIER',
-                title: '✈️ AVIATOR 1000X TOURNAMENT',
-                subtitle: 'Dual Bet Cashout & Win ৳50,000 Weekly Leaderboard Rewards!',
+                id: 'ad_2',
+                tag: 'WEEKLY TOURNAMENT',
+                title: '✈️ AVIATOR ৳50,000 LEADERBOARD',
+                subtitle: 'Dual Bet Cashout with 1000X Multiplier & Win Grand Cash Prize!',
                 btnText: 'Fly & Win',
+                target: 'game_aviator',
                 bgGradient: 'from-rose-700 via-red-800 to-slate-950',
-                borderCol: 'border-rose-500/60',
+                borderCol: 'border-rose-500/80',
+                badgeText: '⚡ 1000X MAX',
                 icon: '🚀'
             },
             {
-                id: 3,
-                tag: 'NEW MINI-GAME',
-                title: '🐔 CHICKEN ROAD JACKPOT',
-                subtitle: 'Cross the road, avoid bombs & win up to 250X Instant Multiplier!',
+                id: 'ad_3',
+                tag: 'NEW 250X JACKPOT',
+                title: '🐔 CHICKEN ROAD ROYALE',
+                subtitle: 'Step through 10 Golden Lanes, dodge roasted traps & multiply balance!',
                 btnText: 'Play Chicken',
+                target: 'game_chicken',
                 bgGradient: 'from-amber-500 via-orange-600 to-yellow-950',
-                borderCol: 'border-amber-400/80',
+                borderCol: 'border-amber-400/90',
+                badgeText: '🍗 250X WIN',
                 icon: '🍗'
+            },
+            {
+                id: 'ad_4',
+                tag: 'BKASH INSTANT 5%',
+                title: '📱 5% EXTRA ON EVERY RECHARGE',
+                subtitle: 'Official bKash 24/7 Agent Gateway with 0% Fee on Cashout!',
+                btnText: 'Recharge bKash',
+                target: 'deposit',
+                bgGradient: 'from-[#6b0933] via-[#b30f57] to-[#e2136e]',
+                borderCol: 'border-pink-400/80',
+                badgeText: '⚡ 0% WITHDRAW FEE',
+                icon: '💳'
             }
         ];
 
-        const LuxuryAdsCarousel = ({ ads = LUXURY_ADS, onAction }) => {
+        const RealAdsCarousel = ({ ads = REAL_PROMO_ADS, onSelect }) => {
             const [current, setCurrent] = useState(0);
 
             useEffect(() => {
                 const timer = setInterval(() => {
                     setCurrent(prev => (prev + 1) % ads.length);
-                }, 4500);
+                }, 3800);
                 return () => clearInterval(timer);
             }, [ads.length]);
 
@@ -404,11 +436,13 @@
 
             return (
                 <div className={`w-full relative rounded-3xl p-4.5 bg-gradient-to-r ${item.bgGradient} border-2 ${item.borderCol} shadow-luxury overflow-hidden transition-all duration-500`}>
+                    <div className="absolute top-0 right-0 transform translate-x-3 -translate-y-3 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+
                     <div className="flex justify-between items-start z-10 relative">
-                        <span className="text-[9.5px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-black/40 text-yellow-300 border border-yellow-300/30 font-mono">
+                        <span className="text-[9.5px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full bg-black/50 text-yellow-300 border border-yellow-300/40 font-mono">
                             {item.tag}
                         </span>
-                        <span className="text-2xl">{item.icon}</span>
+                        <span className="text-2xl animate-bounce-slow">{item.icon}</span>
                     </div>
 
                     <div className="mt-2 space-y-1 z-10 relative">
@@ -422,17 +456,18 @@
 
                     <div className="mt-3 flex items-center justify-between z-10 relative">
                         <button 
-                            onClick={() => onAction && onAction(item)}
-                            className="px-3.5 py-1.5 rounded-xl bg-slate-950 text-amber-300 border border-amber-400/50 text-xs font-black uppercase font-mono shadow-md hover:bg-slate-900 active:scale-95 transition-all cursor-pointer"
+                            onClick={() => onSelect && onSelect(item.target)}
+                            className="px-3.5 py-1.5 rounded-xl bg-slate-950 text-amber-300 border border-amber-400/60 text-xs font-black uppercase font-mono shadow-md hover:bg-slate-900 active:scale-95 transition-all cursor-pointer flex items-center space-x-1"
                         >
-                            {item.btnText} →
+                            <span>{item.btnText}</span>
+                            <span>→</span>
                         </button>
                         <div className="flex space-x-1.5">
                             {ads.map((_, i) => (
                                 <button 
                                     key={i} 
                                     onClick={() => setCurrent(i)}
-                                    className={`h-1.5 rounded-full transition-all ${current === i ? 'w-5 bg-yellow-300' : 'w-1.5 bg-white/40'}`}
+                                    className={`h-1.5 rounded-full transition-all cursor-pointer ${current === i ? 'w-5 bg-yellow-300' : 'w-1.5 bg-white/40'}`}
                                 />
                             ))}
                         </div>
@@ -605,7 +640,13 @@
             const [activeNav, setActiveNav] = useState('home');
             const [balance, setBalance] = useState(0.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
+            
+            // Modals
             const [showAvatarModal, setShowAvatarModal] = useState(false);
+            const [customAvatarUrl, setCustomAvatarUrl] = useState('');
+            const [showSecurityModal, setShowSecurityModal] = useState(false);
+            const [oldPass, setOldPass] = useState('');
+            const [newPass, setNewPass] = useState('');
 
             // --- AVIATOR STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
@@ -1048,6 +1089,51 @@
                 });
             };
 
+            const claimDailyCashback = () => {
+                const bonus = 25.00;
+                const newBal = balance + bonus;
+                setBalance(newBal);
+                if (currentUser) {
+                    const san = currentUser.phone.replace(/[^0-9]/g, "");
+                    db.ref('users/' + san).update({ balance: newBal });
+                }
+                soundEngine.playWin();
+                showToast(`৳${bonus} VIP Cashback Claimed!`, 'success');
+            };
+
+            const changePassword = (e) => {
+                e.preventDefault();
+                if (!currentUser) return;
+                if (currentUser.password !== oldPass) {
+                    showToast('বর্তমান পাসওয়ার্ড ভুল!', 'error');
+                    return;
+                }
+                if (!newPass || newPass.length < 4) {
+                    showToast('নতুন পাসওয়ার্ড অন্তত ৪ অক্ষরের হতে হবে!', 'error');
+                    return;
+                }
+
+                const san = currentUser.phone.replace(/[^0-9]/g, "");
+                db.ref('users/' + san).update({ password: newPass }).then(() => {
+                    showToast('পাসওয়ার্ড পরিবর্তন সফল হয়েছে!', 'success');
+                    setShowSecurityModal(false);
+                    setOldPass('');
+                    setNewPass('');
+                });
+            };
+
+            const saveCustomAvatar = () => {
+                if (!customAvatarUrl.trim()) return;
+                if (currentUser) {
+                    const san = currentUser.phone.replace(/[^0-9]/g, "");
+                    db.ref('users/' + san).update({ avatar: customAvatarUrl.trim() });
+                    setCurrentUser(p => ({ ...p, avatar: customAvatarUrl.trim() }));
+                    setShowAvatarModal(false);
+                    setCustomAvatarUrl('');
+                    showToast('কাস্টম অবতার আপডেট হয়েছে!', 'success');
+                }
+            };
+
             const copyToClipboard = (text, label = 'কপি করা হয়েছে!') => {
                 navigator.clipboard.writeText(text);
                 showToast(label, 'success');
@@ -1055,15 +1141,15 @@
 
             if (!isInitialized) {
                 return (
-                    <div className="flex-1 bg-[#030509] flex flex-col justify-center items-center text-white h-full w-full">
+                    <div className="flex-1 bg-[#020408] flex flex-col justify-center items-center text-white h-full w-full">
                         <div className="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-                        <span className="text-xs text-amber-300 font-bold mt-4 tracking-widest font-mono">LOADING STEVEN WIN...</span>
+                        <span className="text-xs text-amber-300 font-bold mt-4 tracking-widest font-mono">LOADING STEVEN WIN VIP...</span>
                     </div>
                 );
             }
 
             return (
-                <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#030509] text-slate-100 overflow-hidden font-sans">
+                <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#020408] text-slate-100 overflow-hidden font-sans">
                     
                     {toast.show && (
                         <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] px-4 py-2.5 rounded-2xl shadow-luxury border text-xs font-bold flex items-center space-x-2 bg-slate-900 text-amber-300 border-amber-500/50 animate-bounce">
@@ -1075,7 +1161,7 @@
                     <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
                         
                         {/* ========================================================================= */}
-                        {/* AUTH VIEW                                                                 */}
+                        {/* 1. AUTH VIEW                                                              */}
                         {/* ========================================================================= */}
                         {view === 'auth' && (
                             <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto min-h-0">
@@ -1128,7 +1214,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* HOME DASHBOARD & VIP PROFILE                                              */}
+                        {/* 2. HOME DASHBOARD & 100% REAL VIP PROFILE                                */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
@@ -1155,16 +1241,11 @@
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 min-h-0 pb-16">
                                     
-                                    {/* 1. HOME TAB */}
+                                    {/* 2.1 HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
-                                            <LuxuryAdsCarousel 
-                                                onAction={(ad) => {
-                                                    if (ad.id === 1) setView('deposit');
-                                                    else if (ad.id === 2) setView('game_aviator');
-                                                    else if (ad.id === 3) setView('game_chicken');
-                                                }}
-                                            />
+                                            {/* REAL 100% HIGH DEF ADS CAROUSEL */}
+                                            <RealAdsCarousel onSelect={(target) => setView(target)} />
 
                                             {/* Games Grid */}
                                             <div 
@@ -1172,7 +1253,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#24030a] via-[#520918] to-[#120205] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-wider animate-pulse">
+                                                    <span className="text-[9px] bg-rose-600 text-white px-2 py-0.5 rounded-full font-black uppercase tracking-wider animate-pulse font-mono">
                                                         🔥 HOT • 1000X MULTIPLIER
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase flex items-center space-x-1">
@@ -1191,7 +1272,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#331c00] via-[#613600] to-[#1a0e00] shadow-luxury border-2 border-amber-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-black uppercase tracking-wider">
+                                                    <span className="text-[9px] bg-amber-500 text-slate-950 px-2 py-0.5 rounded-full font-black uppercase tracking-wider font-mono">
                                                         🍗 NEW • 250X JACKPOT
                                                     </span>
                                                     <h2 className="text-2xl font-black text-amber-300 font-mono uppercase flex items-center space-x-1">
@@ -1210,7 +1291,7 @@
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#082915] via-[#0d4a24] to-[#041a0d] shadow-luxury border border-emerald-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
-                                                    <span className="text-[9px] bg-emerald-900 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase">
+                                                    <span className="text-[9px] bg-emerald-900 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
                                                         30s / 1m / 2m
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo Live</h2>
@@ -1223,7 +1304,7 @@
                                         </>
                                     )}
 
-                                    {/* 2. ACTIVITY TAB */}
+                                    {/* 2.2 ACTIVITY TAB */}
                                     {activeNav === 'activity' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-amber-400 font-mono">🎁 Daily Rewards</h2>
@@ -1232,7 +1313,7 @@
                                         </div>
                                     )}
 
-                                    {/* 3. PROMOTION TAB */}
+                                    {/* 2.3 PROMOTION TAB */}
                                     {activeNav === 'promotion' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-emerald-400 font-mono">👥 Invite Friends</h2>
@@ -1244,12 +1325,12 @@
                                         </div>
                                     )}
 
-                                    {/* 4. REAL VIP PROFILE & ACCOUNT TAB */}
+                                    {/* 2.4 REAL VIP PROFILE & ACCOUNT TAB */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-3.5">
                                             
-                                            {/* 🌟 VIP Member Card */}
-                                            <div className="vip-card-master rounded-3xl p-5 relative overflow-hidden border border-amber-400/50 shadow-2xl">
+                                            {/* 🌟 ULTRA-PREMIUM 24K GOLD VIP CARD */}
+                                            <div className="vip-gold-master rounded-3xl p-5 relative overflow-hidden">
                                                 <div className="flex items-center justify-between z-10 relative">
                                                     <div className="flex items-center space-x-3.5">
                                                         <div 
@@ -1337,6 +1418,23 @@
                                                 </div>
                                             </div>
 
+                                            {/* Daily Cashback & VIP Benefits Bar */}
+                                            <div className="glass-panel-gold rounded-3xl p-3.5 flex items-center justify-between">
+                                                <div className="flex items-center space-x-2.5">
+                                                    <span className="text-2xl">💰</span>
+                                                    <div>
+                                                        <span className="text-xs font-black text-amber-300 block font-mono">Daily VIP Cashback 1.5%</span>
+                                                        <span className="text-[10px] text-slate-300">Earn money on every single round</span>
+                                                    </div>
+                                                </div>
+                                                <button 
+                                                    onClick={claimDailyCashback} 
+                                                    className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs font-mono uppercase shadow-neon-gold active:scale-95 cursor-pointer"
+                                                >
+                                                    Claim
+                                                </button>
+                                            </div>
+
                                             {/* Metrics */}
                                             <div className="grid grid-cols-3 gap-2 font-mono">
                                                 <div className="glass-panel p-3 rounded-2xl border border-slate-800 text-center">
@@ -1348,12 +1446,12 @@
                                                     <span className="text-xs font-black text-emerald-400 mt-0.5 block">{withdrawHistory.length} TXN</span>
                                                 </div>
                                                 <div className="glass-panel p-3 rounded-2xl border border-slate-800 text-center">
-                                                    <span className="text-[9.5px] text-slate-400 uppercase block">VIP Cashback</span>
-                                                    <span className="text-xs font-black text-amber-400 mt-0.5 block">1.5% Daily</span>
+                                                    <span className="text-[9.5px] text-slate-400 uppercase block">Security</span>
+                                                    <span className="text-xs font-black text-amber-400 mt-0.5 block">100% Safe</span>
                                                 </div>
                                             </div>
 
-                                            {/* History List */}
+                                            {/* Profile Actions */}
                                             <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden shadow-luxury">
                                                 <button 
                                                     onClick={() => { setView('deposit'); setDepositTab('history'); }} 
@@ -1382,6 +1480,22 @@
                                                         <div className="text-left">
                                                             <span className="text-xs font-bold text-slate-200 block">Cashout Withdrawal Records</span>
                                                             <span className="text-[9.5px] text-slate-400">উত্তোলন হিস্ট্রি ও অনুমোদন</span>
+                                                        </div>
+                                                    </div>
+                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
+                                                </button>
+
+                                                <button 
+                                                    onClick={() => setShowSecurityModal(true)} 
+                                                    className="w-full p-3.5 flex items-center justify-between hover:bg-slate-800/50 transition-colors"
+                                                >
+                                                    <div className="flex items-center space-x-3">
+                                                        <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
+                                                            <Icon name="shield" className="w-4 h-4" />
+                                                        </div>
+                                                        <div className="text-left">
+                                                            <span className="text-xs font-bold text-slate-200 block">Security Center</span>
+                                                            <span className="text-[9.5px] text-slate-400">পাসওয়ার্ড ও একাউন্ট সুরক্ষা</span>
                                                         </div>
                                                     </div>
                                                     <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
@@ -1442,7 +1556,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* AVIATOR SPRIBE CRASH                                                      */}
+                        {/* 3. AVIATOR SPRIBE CRASH                                                   */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#06080e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1578,7 +1692,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* CHICKEN ROAD (JACKPOT MINI-GAME)                                          */}
+                        {/* 4. CHICKEN ROAD ROYALE                                                    */}
                         {/* ========================================================================= */}
                         {view === 'game_chicken' && (
                             <div className="flex-1 flex flex-col bg-[#06080e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1661,7 +1775,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* WINGO LOTTERY                                                             */}
+                        {/* 5. WINGO LOTTERY                                                          */}
                         {/* ========================================================================= */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#030509] justify-between overflow-hidden min-h-0">
@@ -1698,7 +1812,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* BKASH DEPOSIT VIEW                                                        */}
+                        {/* 6. BKASH RECHARGE (DEPOSIT)                                               */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#04060b] justify-between overflow-hidden min-h-0">
@@ -1846,7 +1960,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* BKASH CASHOUT (WITHDRAWAL)                                                */}
+                        {/* 7. BKASH CASHOUT (WITHDRAWAL)                                             */}
                         {/* ========================================================================= */}
                         {view === 'withdraw' && (
                             <div className="flex-1 flex flex-col bg-[#04060b] justify-between overflow-hidden min-h-0">
@@ -1954,7 +2068,7 @@
 
                     </div>
 
-                    {/* AVATAR PICKER MODAL */}
+                    {/* MODAL 1: AVATAR PICKER MODAL */}
                     {showAvatarModal && (
                         <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md">
                             <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
@@ -1963,7 +2077,7 @@
                                     <button onClick={() => setShowAvatarModal(false)} className="cursor-pointer"><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-2.5 py-2">
+                                <div className="grid grid-cols-3 gap-2.5 py-1">
                                     {PRESET_AVATARS.map((url, i) => (
                                         <div 
                                             key={i} 
@@ -1982,6 +2096,69 @@
                                         </div>
                                     ))}
                                 </div>
+
+                                <div className="pt-2 border-t border-slate-800 space-y-2">
+                                    <label className="text-[10px] font-mono text-slate-400 uppercase block">Or Paste Custom Image URL:</label>
+                                    <div className="flex space-x-2">
+                                        <input 
+                                            type="url" 
+                                            placeholder="https://i.ibb.co/..." 
+                                            value={customAvatarUrl} 
+                                            onChange={e => setCustomAvatarUrl(e.target.value)} 
+                                            className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white"
+                                        />
+                                        <button 
+                                            onClick={saveCustomAvatar} 
+                                            className="px-3 py-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-xs font-black uppercase cursor-pointer"
+                                        >
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL 2: SECURITY CENTER MODAL */}
+                    {showSecurityModal && (
+                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md">
+                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <div className="flex items-center space-x-2">
+                                        <Icon name="shield" className="w-4 h-4 text-amber-400" />
+                                        <h3 className="text-sm font-black text-amber-300 font-mono">Security Center</h3>
+                                    </div>
+                                    <button onClick={() => setShowSecurityModal(false)} className="cursor-pointer"><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
+                                </div>
+
+                                <form onSubmit={changePassword} className="space-y-3 pt-1">
+                                    <div>
+                                        <label className="text-[10px] text-slate-400 uppercase font-mono block mb-1">Old Password</label>
+                                        <input 
+                                            type="password" 
+                                            placeholder="Current password" 
+                                            value={oldPass} 
+                                            onChange={e => setOldPass(e.target.value)} 
+                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-2.5 px-3.5 text-xs text-white"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="text-[10px] text-slate-400 uppercase font-mono block mb-1">New Password</label>
+                                        <input 
+                                            type="password" 
+                                            placeholder="New secure password" 
+                                            value={newPass} 
+                                            onChange={e => setNewPass(e.target.value)} 
+                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-2.5 px-3.5 text-xs text-white"
+                                        />
+                                    </div>
+                                    <button 
+                                        type="submit" 
+                                        className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-wider shadow-neon-gold cursor-pointer"
+                                    >
+                                        Update Password
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     )}
@@ -2009,7 +2186,7 @@
                     {/* BIG WIN CELEBRATION POPUP */}
                     {showResultPopup && (
                         <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md">
-                            <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl space-y-3">
+                            <div className="relative w-full max-w-sm glass-panel-gold border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl space-y-3">
                                 <div className="text-5xl animate-bounce">🏆</div>
                                 <h2 className="text-2xl font-black text-gradient-gold font-mono uppercase">
                                     CASHOUT SUCCESS!
