@@ -138,13 +138,13 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        // --- Firebase Configuration ---
+        // --- NEW FIREBASE CONFIGURATION (stxwin-82a48) ---
         const firebaseConfig = {
-            apiKey: "AIzaSyBchtm5yS1ZuW1b-5DWAIncTysOv09bYX0",
-            authDomain: "stevenx-4ef00.firebaseapp.com",
-            databaseURL: "https://stevenx-4ef00-default-rtdb.firebaseio.com",
-            projectId: "stevenx-4ef00",
-            storageBucket: "stevenx-4ef00.firebasestorage.app"
+            apiKey: "AIzaSyAQOxmY1NL-2-NQmtUKgVWgFZ8SaNxlIN4",
+            authDomain: "stxwin-82a48.firebaseapp.com",
+            databaseURL: "https://stxwin-82a48-default-rtdb.firebaseio.com",
+            projectId: "stxwin-82a48",
+            storageBucket: "stxwin-82a48.firebasestorage.app"
         };
 
         if (!firebase.apps.length) {
@@ -260,11 +260,6 @@
                     <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/>
                     <circle cx="12" cy="13" r="3"/>
                 </svg>
-            ),
-            shield: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
             )
         };
 
@@ -280,16 +275,11 @@
             return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         };
 
-        // 🌟 HD VIP Avatar Presets
         const PRESET_AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=160&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
         ];
 
         const BackButton = ({ onClick, label = "Back" }) => (
@@ -303,17 +293,14 @@
             </button>
         );
 
-        // 🌟 App Main Logo
         const AppLogo = ({ className = "w-8 h-8" }) => (
             <img src="https://i.ibb.co/W43Hdvm3/10736.png" alt="STEVEN WIN Logo" className={`${className} object-contain`} />
         );
 
-        // 🌟 bKash Official Logo
         const BkashLogo = ({ className = "w-14 h-14 rounded-2xl" }) => (
             <img src="https://i.ibb.co/xTgMb9X/11623.jpg" alt="bKash" className={`${className} object-cover shadow-neon-pink border border-pink-500/50`} />
         );
 
-        // 🌟 Aviator Thumbnail Logo
         const AviatorLogo = () => (
             <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
                 <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
@@ -353,8 +340,8 @@
             </div>
         );
 
-        // --- 1000 ROUNDS HISTORY MOCK GENERATORS ---
-        const generateClassicMockHistory = (basePeriod, count = 1000) => {
+        // --- HISTORY GENERATORS FOR DIFFERENT PERIODS ---
+        const generateClassicMockHistory = (basePeriod, count = 100) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
                 const period = String(BigInt(basePeriod) - BigInt(i));
@@ -366,7 +353,20 @@
             return history;
         };
 
-        const generateK3MockHistory = (basePeriod, count = 1000) => {
+        const generateTrxMockHistory = (basePeriod, count = 100) => {
+            const history = [];
+            for (let i = 1; i <= count; i++) {
+                const period = String(BigInt(basePeriod) - BigInt(i));
+                const digit = Math.floor(Math.random() * 10);
+                const size = digit >= 5 ? 'Big' : 'Small';
+                const color = digit === 0 ? 'violet-red' : (digit === 5 ? 'violet-green' : ([1,3,7,9].includes(digit) ? 'green' : 'red'));
+                const shortHash = '**' + Math.random().toString(16).substring(2, 6);
+                history.push({ period, shortHash, number: digit, size, color });
+            }
+            return history;
+        };
+
+        const generateK3MockHistory = (basePeriod, count = 100) => {
             const history = [];
             for (let i = 1; i <= count; i++) {
                 const period = String(BigInt(basePeriod) - BigInt(i));
@@ -405,8 +405,7 @@
         // --- BD PLAYERS LIVE FEED ---
         const BD_PLAYER_NAMES = [
             "Shakib_***75", "Tamim_***28", "Tanvir_***BD", "Rahim_***99", "Sabbir_***07", 
-            "Kaisar_***VIP", "Nayeem_***12", "Fahim_***BD", "Ashiq_***77", "Shohel_***55", 
-            "Mehedi_***91", "Hasan_***BD", "Bijoy_***71", "Rifat_***03", "Alamin_***88"
+            "Kaisar_***VIP", "Nayeem_***12", "Fahim_***BD", "Ashiq_***77", "Shohel_***55"
         ];
 
         const generateAviatorLiveBets = () => {
@@ -420,7 +419,7 @@
             }));
         };
 
-        // 🌟 Web Audio Engine (STRICTLY ISOLATED TO AVIATOR SCREEN)
+        // --- WEB AUDIO SOUND ENGINE FOR AVIATOR ---
         const aviatorAudio = {
             ctx: null,
             flightOsc: null,
@@ -488,32 +487,12 @@
                     osc.start();
                     osc.stop(ctx.currentTime + 0.5);
                 } catch(e) {}
-            },
-            playCashoutSuccess() {
-                this.init();
-                if (!this.ctx) return;
-                try {
-                    const ctx = this.ctx;
-                    const freqs = [523.25, 659.25, 783.99, 1046.50];
-                    freqs.forEach((f, i) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.frequency.value = f;
-                        gain.gain.setValueAtTime(0.08, ctx.currentTime + i * 0.06);
-                        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i * 0.06 + 0.28);
-                        osc.start(ctx.currentTime + i * 0.06);
-                        osc.stop(ctx.currentTime + i * 0.06 + 0.3);
-                    });
-                } catch(e) {}
             }
         };
 
-        // --- 100% SLOW & LOW FLIGHT CANVAS TRAJECTORY ENGINE ---
+        // --- AVIATOR CANVAS ENGINE ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
-            const particlesRef = useRef([]);
 
             useEffect(() => {
                 const canvas = canvasRef.current;
@@ -585,52 +564,11 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Exhaust Particles
-                        if (phase === 'flying') {
-                            if (Math.random() < 0.75) {
-                                particlesRef.current.push({
-                                    x: targetX - 5,
-                                    y: targetY + 5,
-                                    vx: -Math.random() * 2.2 - 0.8,
-                                    vy: Math.random() * 1.8 + 0.4,
-                                    size: Math.random() * 3 + 1.5,
-                                    alpha: 1.0,
-                                    color: Math.random() > 0.4 ? '#f59e0b' : '#ef4444'
-                                });
-                            }
-                        }
-
-                        particlesRef.current.forEach((p, idx) => {
-                            p.x += p.vx;
-                            p.y += p.vy;
-                            p.alpha -= 0.04;
-                            if (p.alpha <= 0) {
-                                particlesRef.current.splice(idx, 1);
-                                return;
-                            }
-                            ctx.save();
-                            ctx.fillStyle = p.color;
-                            ctx.globalAlpha = p.alpha;
-                            ctx.beginPath();
-                            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                            ctx.fill();
-                            ctx.restore();
-                        });
-
-                        // Draw Fighter Jet
+                        // Fighter Jet
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
                             ctx.rotate(-Math.PI / 6.5);
-
-                            const glow = ctx.createRadialGradient(0, 0, 2, 0, 0, 24);
-                            glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
-                            glow.addColorStop(0.3, 'rgba(251, 191, 36, 0.7)');
-                            glow.addColorStop(1, 'rgba(245, 158, 11, 0)');
-                            ctx.fillStyle = glow;
-                            ctx.beginPath();
-                            ctx.arc(0, 0, 24, 0, Math.PI * 2);
-                            ctx.fill();
 
                             ctx.shadowColor = '#fbbf24';
                             ctx.shadowBlur = 14;
@@ -664,7 +602,7 @@
             );
         };
 
-        // 🌟 DYNAMIC ADMIN AD CAROUSEL (Synced from Firebase `admin_ads`)
+        // --- DYNAMIC ADMIN ADS SLIDER ---
         const AdminDynamicAdCarousel = ({ ads }) => {
             const [currentIdx, setCurrentIdx] = useState(0);
 
@@ -681,29 +619,10 @@
             const activeAd = ads[currentIdx];
 
             return (
-                <div className="w-full relative rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 bg-slate-900 group">
+                <div className="w-full relative rounded-3xl overflow-hidden shadow-2xl border border-amber-500/40 bg-slate-900">
                     <a href={activeAd.targetUrl || '#'} target="_blank" rel="noopener noreferrer" className="block relative w-full h-36 sm:h-40 overflow-hidden">
-                        <img src={activeAd.imageUrl} alt={activeAd.title || 'Special Promotion'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20"></div>
-                        {activeAd.title && (
-                            <div className="absolute bottom-2 left-3 right-3 text-left">
-                                <span className="text-[9px] bg-amber-500 text-slate-950 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">OFFICIAL AD</span>
-                                <p className="text-xs font-bold text-white mt-1 truncate">{activeAd.title}</p>
-                            </div>
-                        )}
+                        <img src={activeAd.imageUrl} alt={activeAd.title || 'Special Promotion'} className="w-full h-full object-cover" />
                     </a>
-
-                    {ads.length > 1 && (
-                        <div className="absolute bottom-2 right-3 flex space-x-1 z-10">
-                            {ads.map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => setCurrentIdx(i)}
-                                    className={`h-1.5 rounded-full transition-all ${currentIdx === i ? 'bg-amber-400 w-5' : 'bg-white/40 w-1.5'}`}
-                                />
-                            ))}
-                        </div>
-                    )}
                 </div>
             );
         };
@@ -717,58 +636,59 @@
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             const [isLoading, setIsLoading] = useState(false);
 
-            // 🌟 Dynamic Admin Ads List from Firebase
             const [adminAds, setAdminAds] = useState([]);
-
-            // Profile Customization Modals
             const [showAvatarModal, setShowAvatarModal] = useState(false);
             const [customAvatarUrl, setCustomAvatarUrl] = useState('');
-            const [showPasswordModal, setShowPasswordModal] = useState(false);
-            const [oldPassInput, setOldPassInput] = useState('');
-            const [newPassInput, setNewPassInput] = useState('');
 
             // Games State
             const [gameType, setGameType] = useState('wingo'); 
-            const [activeGameTab, setActiveGameTab] = useState('30sec');
-            const [historyPage, setHistoryPage] = useState(1);
+            const [activeGameTab, setActiveGameTab] = useState('30sec'); // 30sec, 1min, 2min
 
-            // --- AVIATOR STATE ENGINE ---
+            // --- AVIATOR STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
-            const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05, 1.18, 3.45]);
+            const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05]);
             
-            // Dual Bet Decks
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
-            const [autoCashout1, setAutoCashout1] = useState(false);
-            const [autoCashoutVal1, setAutoCashoutVal1] = useState('2.00');
 
             const [betAmount2, setBetAmount2] = useState(20);
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
-            const [autoCashout2, setAutoCashout2] = useState(false);
-            const [autoCashoutVal2, setAutoCashoutVal2] = useState('3.00');
 
             const [aviatorLiveBets, setAviatorLiveBets] = useState(generateAviatorLiveBets());
 
-            // 1,000 Rounds Histories
+            // 🌟 WALL-CLOCK TIMERS (Never stop / accurately synced)
             const [timer30s, setTimer30s] = useState(30);
             const [timer1m, setTimer1m] = useState(60);
             const [timer2m, setTimer2m] = useState(120);
-            const [period30s, setPeriod30s] = useState('20260822100051482');
 
-            const [drawHistory30s, setDrawHistory30s] = useState(() => generateClassicMockHistory('20260822100051482', 1000));
-            const [drawHistoryK330s, setDrawHistoryK330s] = useState(() => generateK3MockHistory('20260822101010572', 1000));
+            // 🌟 DISTINCT INDEPENDENT PERIODS FOR 30s, 1m, and 2m
+            const [period30s, setPeriod30s] = useState('20260822100051482');
+            const [period1m, setPeriod1m] = useState('20260822200031105');
+            const [period2m, setPeriod2m] = useState('20260822300021105');
+
+            // 🌟 DISTINCT HISTORIES FOR ALL MODES
+            const [drawHistory30s, setDrawHistory30s] = useState(() => generateClassicMockHistory('20260822100051482', 50));
+            const [drawHistory1m, setDrawHistory1m] = useState(() => generateClassicMockHistory('20260822200031105', 50));
+            const [drawHistory2m, setDrawHistory2m] = useState(() => generateClassicMockHistory('20260822300021105', 50));
+
+            const [drawHistoryTrx30s, setDrawHistoryTrx30s] = useState(() => generateTrxMockHistory('20260822103010419', 50));
+            const [drawHistoryTrx1m, setDrawHistoryTrx1m] = useState(() => generateTrxMockHistory('20260822203010201', 50));
+            const [drawHistoryTrx2m, setDrawHistoryTrx2m] = useState(() => generateTrxMockHistory('20260822303010101', 50));
+
+            const [drawHistoryK330s, setDrawHistoryK330s] = useState(() => generateK3MockHistory('20260822101010572', 50));
+            const [drawHistoryK31m, setDrawHistoryK31m] = useState(() => generateK3MockHistory('20260822201010344', 50));
+            const [drawHistoryK32m, setDrawHistoryK32m] = useState(() => generateK3MockHistory('20260822301010111', 50));
 
             // Betting Modal
             const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
             const [betValue, setBetValue] = useState(null);
             const [selectedUnit, setSelectedUnit] = useState(10);
             const [multiplier, setMultiplier] = useState(1);
-            const [myBets, setMyBets] = useState([]);
 
             // bKash Exclusive Deposit & Withdrawal State
             const [depositAmount, setDepositAmount] = useState('500');
@@ -806,7 +726,7 @@
                 }
             }, [toast.show]);
 
-            // 🌟 STRICT AVIATOR SOUND ISOLATION: Stop sound whenever user is NOT in `game_aviator`
+            // Sound Isolation
             useEffect(() => {
                 if (view !== 'game_aviator') {
                     aviatorAudio.stopEngineSound();
@@ -814,8 +734,89 @@
             }, [view]);
 
             // =========================================================================
-            // AVIATOR FLIGHT ENGINE LOOP (Slow, 70% Loss)
+            // 🌟 WALL-CLOCK COUNTDOWN TIMER & PERIOD INCREMENT ENGINE
             // =========================================================================
+            useEffect(() => {
+                let lastSeconds = -1;
+                const clockInterval = setInterval(() => {
+                    const now = new Date();
+                    const seconds = now.getSeconds();
+                    const minutes = now.getMinutes();
+
+                    if (seconds === lastSeconds) return;
+                    lastSeconds = seconds;
+
+                    // 30s Countdown
+                    const rem30s = Math.max(0, 29 - (seconds % 30));
+                    setTimer30s(rem30s);
+                    if (seconds % 30 === 0) {
+                        const dig = Math.floor(Math.random() * 10);
+                        const wSize = dig >= 5 ? 'Big' : 'Small';
+                        const wColor = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
+                        
+                        setPeriod30s(prev => {
+                            const nextP = String(BigInt(prev) + 1n);
+                            setDrawHistory30s(h => [{ period: nextP, number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            setDrawHistoryTrx30s(h => [{ period: nextP, shortHash: '**' + Math.random().toString(16).substring(2, 6), number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            
+                            const d1 = Math.floor(Math.random() * 6) + 1;
+                            const d2 = Math.floor(Math.random() * 6) + 1;
+                            const d3 = Math.floor(Math.random() * 6) + 1;
+                            const sum = d1 + d2 + d3;
+                            setDrawHistoryK330s(h => [{ period: nextP, sum, size: sum >= 11 ? 'Big' : 'Small', parity: sum % 2 === 0 ? 'Even' : 'Odd', dice: [d1, d2, d3] }, ...h.slice(0, 99)]);
+                            return nextP;
+                        });
+                    }
+
+                    // 1 Min Countdown
+                    const rem1m = Math.max(0, 59 - seconds);
+                    setTimer1m(rem1m);
+                    if (seconds === 0) {
+                        const dig = Math.floor(Math.random() * 10);
+                        const wSize = dig >= 5 ? 'Big' : 'Small';
+                        const wColor = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
+                        
+                        setPeriod1m(prev => {
+                            const nextP = String(BigInt(prev) + 1n);
+                            setDrawHistory1m(h => [{ period: nextP, number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            setDrawHistoryTrx1m(h => [{ period: nextP, shortHash: '**' + Math.random().toString(16).substring(2, 6), number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            
+                            const d1 = Math.floor(Math.random() * 6) + 1;
+                            const d2 = Math.floor(Math.random() * 6) + 1;
+                            const d3 = Math.floor(Math.random() * 6) + 1;
+                            const sum = d1 + d2 + d3;
+                            setDrawHistoryK31m(h => [{ period: nextP, sum, size: sum >= 11 ? 'Big' : 'Small', parity: sum % 2 === 0 ? 'Even' : 'Odd', dice: [d1, d2, d3] }, ...h.slice(0, 99)]);
+                            return nextP;
+                        });
+                    }
+
+                    // 2 Min Countdown
+                    const rem2m = Math.max(0, 119 - ((minutes % 2) * 60 + seconds));
+                    setTimer2m(rem2m);
+                    if (minutes % 2 === 0 && seconds === 0) {
+                        const dig = Math.floor(Math.random() * 10);
+                        const wSize = dig >= 5 ? 'Big' : 'Small';
+                        const wColor = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
+                        
+                        setPeriod2m(prev => {
+                            const nextP = String(BigInt(prev) + 1n);
+                            setDrawHistory2m(h => [{ period: nextP, number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            setDrawHistoryTrx2m(h => [{ period: nextP, shortHash: '**' + Math.random().toString(16).substring(2, 6), number: dig, size: wSize, color: wColor }, ...h.slice(0, 99)]);
+                            
+                            const d1 = Math.floor(Math.random() * 6) + 1;
+                            const d2 = Math.floor(Math.random() * 6) + 1;
+                            const d3 = Math.floor(Math.random() * 6) + 1;
+                            const sum = d1 + d2 + d3;
+                            setDrawHistoryK32m(h => [{ period: nextP, sum, size: sum >= 11 ? 'Big' : 'Small', parity: sum % 2 === 0 ? 'Even' : 'Odd', dice: [d1, d2, d3] }, ...h.slice(0, 99)]);
+                            return nextP;
+                        });
+                    }
+                }, 250);
+
+                return () => clearInterval(clockInterval);
+            }, []);
+
+            // Aviator Loop
             useEffect(() => {
                 let aviatorInterval;
                 if (aviatorPhase === 'waiting') {
@@ -830,24 +831,14 @@
                                 let nextCrash = 1.00;
 
                                 if (hasUserBet || roll < 70) {
-                                    if (Math.random() < 0.4) {
-                                        nextCrash = 1.02 + Math.random() * 0.15;
-                                    } else {
-                                        nextCrash = 1.18 + Math.random() * 0.42;
-                                    }
+                                    nextCrash = Math.random() < 0.4 ? (1.02 + Math.random() * 0.15) : (1.18 + Math.random() * 0.42);
                                 } else {
-                                    if (roll < 90) {
-                                        nextCrash = 2.20 + Math.random() * 3.5;
-                                    } else {
-                                        nextCrash = 6.00 + Math.random() * 15.0;
-                                    }
+                                    nextCrash = roll < 90 ? (2.20 + Math.random() * 3.5) : (6.00 + Math.random() * 15.0);
                                 }
 
                                 setAviatorCrashPoint(parseFloat(nextCrash.toFixed(2)));
                                 setAviatorLiveBets(generateAviatorLiveBets());
-                                if (view === 'game_aviator') {
-                                    aviatorAudio.startEngineSound();
-                                }
+                                if (view === 'game_aviator') aviatorAudio.startEngineSound();
                                 return 5;
                             }
                             return prev - 1;
@@ -860,17 +851,7 @@
                         const currentMult = parseFloat((1.00 + elapsed * 0.065 + Math.pow(elapsed * 0.045, 1.35)).toFixed(2));
                         setAviatorMult(currentMult);
 
-                        if (view === 'game_aviator') {
-                            aviatorAudio.updateEnginePitch(currentMult);
-                        }
-
-                        // Auto Cashout
-                        if (isBetPlaced1 && !isCashedOut1 && autoCashout1 && currentMult >= parseFloat(autoCashoutVal1)) {
-                            triggerAviatorCashout(1, currentMult);
-                        }
-                        if (isBetPlaced2 && !isCashedOut2 && autoCashout2 && currentMult >= parseFloat(autoCashoutVal2)) {
-                            triggerAviatorCashout(2, currentMult);
-                        }
+                        if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
 
                         // BD Live Players Cashout
                         setAviatorLiveBets(prev => prev.map(ob => {
@@ -880,16 +861,11 @@
                             return ob;
                         }));
 
-                        // Flight Crash
                         if (currentMult >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
-                            if (view === 'game_aviator') {
-                                aviatorAudio.playCrashSound();
-                            } else {
-                                aviatorAudio.stopEngineSound();
-                            }
-                            setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 15));
+                            if (view === 'game_aviator') aviatorAudio.playCrashSound();
+                            setAviatorHistory(prev => [aviatorCrashPoint, ...(prev || [])].slice(0, 10));
 
                             setTimeout(() => {
                                 setIsBetPlaced1(false);
@@ -904,7 +880,7 @@
                 }
 
                 return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isCashedOut1, autoCashout1, autoCashoutVal1, isBetPlaced2, isCashedOut2, autoCashout2, autoCashoutVal2, view]);
+            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isBetPlaced2, view]);
 
             // Sync Dynamic Admin Ads from Firebase
             useEffect(() => {
@@ -920,7 +896,7 @@
                 });
             }, []);
 
-            // Firebase User Sync
+            // Firebase User Real-time Sync & Deposit Status Verification
             useEffect(() => {
                 if (!sessionPhone) {
                     setCurrentUser(null);
@@ -938,6 +914,23 @@
                         const userData = snapshot.val();
                         setCurrentUser(userData);
                         setBalance(Number(userData.balance || 0));
+
+                        // 🌟 Realtime Deposit Records Sync (Only Approved increases balance)
+                        if (userData.deposits) {
+                            const depList = Array.isArray(userData.deposits) ? userData.deposits : Object.values(userData.deposits);
+                            setDepositHistory(depList);
+                        } else {
+                            setDepositHistory([]);
+                        }
+
+                        // 🌟 Realtime Withdrawals Records Sync
+                        if (userData.withdrawals) {
+                            const wList = Array.isArray(userData.withdrawals) ? userData.withdrawals : Object.values(userData.withdrawals);
+                            setWithdrawHistory(wList);
+                        } else {
+                            setWithdrawHistory([]);
+                        }
+
                         setView(prev => prev === 'auth' ? 'home' : prev);
                     } else {
                         setView('auth');
@@ -949,7 +942,7 @@
             const handleAviatorBet = (deckNum) => {
                 const amt = deckNum === 1 ? betAmount1 : betAmount2;
                 if (balance < amt) {
-                    showToast('Insufficient wallet balance!', 'error');
+                    showToast('Insufficient balance!', 'error');
                     return;
                 }
                 const nextBal = balance - amt;
@@ -968,9 +961,11 @@
                 if (deckNum === 1) setIsCashedOut1(true);
                 else setIsCashedOut2(true);
 
-                if (view === 'game_aviator') {
-                    aviatorAudio.playCashoutSuccess();
+                if (currentUser) {
+                    const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                    db.ref('users/' + sanitized).update({ balance: nextBal });
                 }
+
                 setPopupAmount(winPayout);
                 setShowResultPopup(true);
             };
@@ -987,7 +982,7 @@
                         setSessionPhone(fullPhone);
                         setView('home');
                     } else {
-                        showToast('Invalid phone or password', 'error');
+                        showToast('Invalid credentials!', 'error');
                     }
                 });
             };
@@ -995,7 +990,7 @@
             const handleSignupSubmit = (e) => {
                 e.preventDefault();
                 if (!phone || !username || !password || password !== confirmPassword) {
-                    showToast('Please verify all fields!', 'error');
+                    showToast('Please check all fields!', 'error');
                     return;
                 }
                 const fullPhone = `${selectedCountry.code}${phone}`;
@@ -1008,8 +1003,7 @@
                     balance: 0.00,
                     stxId: 'STX-' + Math.floor(1000 + Math.random() * 9000),
                     referralCode: 'STX' + Math.floor(1000 + Math.random() * 9000),
-                    avatar: PRESET_AVATARS[0],
-                    joinDate: new Date().toLocaleDateString()
+                    avatar: PRESET_AVATARS[0]
                 };
 
                 db.ref('users/' + sanitized).set(newUser).then(() => {
@@ -1018,39 +1012,76 @@
                 });
             };
 
-            // Avatar Updating (Preset or Custom URL)
-            const handleUpdateAvatar = (url) => {
-                if (!currentUser || !url) return;
-                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
-                db.ref('users/' + sanitized).update({ avatar: url }).then(() => {
-                    setCurrentUser(prev => ({ ...prev, avatar: url }));
-                    setShowAvatarModal(false);
-                    setCustomAvatarUrl('');
-                    showToast('Profile picture updated!', 'success');
-                });
-            };
-
-            // Password Change
-            const handleChangePassword = (e) => {
+            // 🌟 bKash Manual Deposit System (Pending -> Admin Acceptance)
+            const processDeposit = (e) => {
                 e.preventDefault();
-                if (!currentUser || !oldPassInput || !newPassInput) {
-                    showToast('Please fill all fields!', 'error');
+                if (!currentUser) return;
+                const amt = parseFloat(depositAmount);
+                if (isNaN(amt) || amt < 100) {
+                    showToast('Minimum deposit is ৳100!', 'error');
                     return;
                 }
-                if (currentUser.password !== oldPassInput) {
-                    showToast('Current password does not match!', 'error');
+                if (!senderNumber || !transactionId) {
+                    showToast('Please provide Sender Number & TxID!', 'error');
                     return;
                 }
+
+                const depositId = Date.now().toString();
                 const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
-                db.ref('users/' + sanitized).update({ password: newPassInput }).then(() => {
-                    setCurrentUser(prev => ({ ...prev, password: newPassInput }));
-                    setShowPasswordModal(false);
-                    setOldPassInput('');
-                    setNewPassInput('');
-                    showToast('Password changed successfully!', 'success');
+                const newDeposit = {
+                    id: depositId,
+                    amount: amt,
+                    sender: senderNumber,
+                    txid: transactionId.toUpperCase().trim(),
+                    status: 'Pending', // Pending until admin accepts
+                    timestamp: new Date().toLocaleString(),
+                    username: currentUser.username,
+                    userPhone: currentUser.phone
+                };
+
+                Promise.all([
+                    db.ref(`users/${sanitized}/deposits/${depositId}`).set(newDeposit),
+                    db.ref(`global_deposits/${depositId}`).set(newDeposit)
+                ]).then(() => {
+                    showToast('Deposit submitted! Status is Pending for admin approval.', 'success');
+                    setSenderNumber('');
+                    setTransactionId('');
+                    setDepositTab('history');
+                }).catch(() => {
+                    showToast('Submission error!', 'error');
                 });
             };
 
+            // 🌟 Active Game Mode Details Extractor
+            const getActivePeriod = () => {
+                if (activeGameTab === '30sec') return period30s;
+                if (activeGameTab === '1min') return period1m;
+                return period2m;
+            };
+
+            const getActiveTimer = () => {
+                if (activeGameTab === '30sec') return timer30s;
+                if (activeGameTab === '1min') return timer1m;
+                return timer2m;
+            };
+
+            const getActiveHistory = () => {
+                if (gameType === 'trx_wingo') {
+                    if (activeGameTab === '30sec') return drawHistoryTrx30s;
+                    if (activeGameTab === '1min') return drawHistoryTrx1m;
+                    return drawHistoryTrx2m;
+                } else if (gameType === 'k3_lottery') {
+                    if (activeGameTab === '30sec') return drawHistoryK330s;
+                    if (activeGameTab === '1min') return drawHistoryK31m;
+                    return drawHistoryK32m;
+                } else {
+                    if (activeGameTab === '30sec') return drawHistory30s;
+                    if (activeGameTab === '1min') return drawHistory1m;
+                    return drawHistory2m;
+                }
+            };
+
+            const activeHistoryList = getActiveHistory();
             const activeLiveBetsCount = aviatorLiveBets.filter(b => !b.cashedOut).length + (isBetPlaced1 && !isCashedOut1 ? 1 : 0) + (isBetPlaced2 && !isCashedOut2 ? 1 : 0);
 
             if (!isInitialized) {
@@ -1127,7 +1158,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 2: HOME DASHBOARD                                                    */}
+                        {/* VIEW 2: HOME DASHBOARD & UPGRADED PROFILE                                 */}
                         {/* ========================================================================= */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
@@ -1147,7 +1178,7 @@
                                     
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* 🌟 Dynamic Admin Ad Carousel (Synced from Firebase `admin_ads`) */}
+                                            {/* Dynamic Admin Ads Slider */}
                                             <AdminDynamicAdCarousel ads={adminAds} />
 
                                             {/* 1. AVIATOR CRASH */}
@@ -1218,7 +1249,7 @@
                                     {activeNav === 'activity' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-amber-400">🎁 Daily Rewards</h2>
-                                            <p className="text-xs text-slate-300">Check in every day to claim free balance!</p>
+                                            <p className="text-xs text-slate-300">Check in every day to claim bonus rewards!</p>
                                             <button onClick={() => showToast('Check-in bonus claimed!', 'success')} className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold">Claim Reward</button>
                                         </div>
                                     )}
@@ -1234,14 +1265,12 @@
                                         </div>
                                     )}
 
-                                    {/* 🌟 UPGRADED HIGH-END VIP ACCOUNT PROFILE CENTER */}
+                                    {/* 🌟 PROFESSIONAL VIP PROFILE CENTER */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4">
-                                            {/* Profile Main Card */}
                                             <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
                                                 <div className="flex items-center justify-between z-10 relative">
                                                     <div className="flex items-center space-x-3.5">
-                                                        {/* Avatar with Camera/Edit Button */}
                                                         <div 
                                                             onClick={() => setShowAvatarModal(true)} 
                                                             className="relative w-16 h-16 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group flex-shrink-0"
@@ -1333,21 +1362,8 @@
                                                 </div>
                                             </div>
 
-                                            {/* Account Menu & Settings */}
+                                            {/* Navigation Records & 🌟 REPLACED TELEGRAM SUPPORT: @Ststevenx36 */}
                                             <div className="glass-panel rounded-3xl border border-slate-800 divide-y divide-slate-800/80 overflow-hidden">
-                                                <button onClick={() => setShowPasswordModal(true)} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
-                                                    <div className="flex items-center space-x-3">
-                                                        <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center">
-                                                            <Icon name="lock" className="w-4 h-4" />
-                                                        </div>
-                                                        <div className="text-left">
-                                                            <span className="text-xs font-bold text-slate-200 block">Change Login Password</span>
-                                                            <span className="text-[9px] text-slate-400">Update your security PIN</span>
-                                                        </div>
-                                                    </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
-                                                </button>
-
                                                 <button onClick={() => { setView('deposit'); setDepositTab('history'); }} className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <div className="w-8 h-8 rounded-xl bg-pink-500/20 text-pink-400 flex items-center justify-center">
@@ -1355,7 +1371,7 @@
                                                         </div>
                                                         <div className="text-left">
                                                             <span className="text-xs font-bold text-slate-200 block">bKash Recharge Records</span>
-                                                            <span className="text-[9px] text-slate-400">View transaction slips</span>
+                                                            <span className="text-[9px] text-slate-400">View transaction status</span>
                                                         </div>
                                                     </div>
                                                     <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
@@ -1374,14 +1390,15 @@
                                                     <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </button>
 
-                                                <a href="https://t.me/Kaisarvai007" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                {/* 🌟 24/7 VIP Customer Support updated to @Ststevenx36 */}
+                                                <a href="https://t.me/Ststevenx36" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
                                                     <div className="flex items-center space-x-3">
                                                         <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
                                                             <Icon name="headphones" className="w-4 h-4" />
                                                         </div>
                                                         <div className="text-left">
                                                             <span className="text-xs font-bold text-slate-200 block">24/7 VIP Customer Support</span>
-                                                            <span className="text-[9px] text-sky-400 font-mono">Telegram: @Kaisarvai007</span>
+                                                            <span className="text-[9px] text-sky-400 font-mono">Telegram: @Ststevenx36</span>
                                                         </div>
                                                     </div>
                                                     <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
@@ -1424,7 +1441,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 3: AVIATOR ✈️ (Sound Only Plays in this Screen)                       */}
+                        {/* VIEW 3: AVIATOR ✈️                                                         */}
                         {/* ========================================================================= */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1448,12 +1465,9 @@
                                 </div>
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
-                                    
-                                    {/* Flight Stage */}
                                     <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-slate-800/80 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
-                                        {/* Multiplier + BETS HUD */}
                                         {aviatorPhase === 'flying' && (
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center pointer-events-none z-20">
                                                 <span className="text-4xl sm:text-5xl font-black font-mono tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-yellow-300 drop-shadow-[0_4px_18px_rgba(245,158,11,0.6)]">
@@ -1485,14 +1499,7 @@
                                     {/* Dual Bet Decks */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
-                                                <span>BET DECK 1</span>
-                                                <div className="flex items-center space-x-1">
-                                                    <span>Auto</span>
-                                                    <input type="checkbox" checked={autoCashout1} onChange={e => setAutoCashout1(e.target.checked)} className="accent-amber-400" />
-                                                    {autoCashout1 && <input type="number" value={autoCashoutVal1} onChange={e => setAutoCashoutVal1(e.target.value)} className="w-10 bg-black text-amber-300 text-center rounded" />}
-                                                </div>
-                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 1</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[10, 20, 50, 100].map(amt => (
                                                     <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
@@ -1508,14 +1515,7 @@
                                         </div>
 
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
-                                                <span>BET DECK 2</span>
-                                                <div className="flex items-center space-x-1">
-                                                    <span>Auto</span>
-                                                    <input type="checkbox" checked={autoCashout2} onChange={e => setAutoCashout2(e.target.checked)} className="accent-amber-400" />
-                                                    {autoCashout2 && <input type="number" value={autoCashoutVal2} onChange={e => setAutoCashoutVal2(e.target.value)} className="w-10 bg-black text-amber-300 text-center rounded" />}
-                                                </div>
-                                            </div>
+                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 2</span>
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[50, 100, 200, 500].map(amt => (
                                                     <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-amber-500 text-slate-950 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
@@ -1530,34 +1530,12 @@
                                             )}
                                         </div>
                                     </div>
-
-                                    {/* Live Bangladeshi Players Feed */}
-                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
-                                        <div className="flex justify-between items-center text-xs font-mono border-b border-slate-800 pb-2">
-                                            <span className="text-amber-400 font-bold">🇧🇩 BD LIVE BETS FEED</span>
-                                            <span className="text-slate-400 text-[10px]">Real Players Feed</span>
-                                        </div>
-                                        <div className="space-y-1 max-h-40 overflow-y-auto">
-                                            {aviatorLiveBets.map(bot => (
-                                                <div key={bot.id} className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800 flex justify-between items-center text-xs font-mono">
-                                                    <span className="text-slate-300 font-semibold">{bot.username}</span>
-                                                    <span className="text-slate-400">৳{bot.amount}</span>
-                                                    {bot.cashedOut ? (
-                                                        <span className="text-emerald-400 font-bold">+{bot.cashoutTarget}x (৳{bot.payout})</span>
-                                                    ) : (
-                                                        <span className="text-slate-500 text-[10px]">In Flight...</span>
-                                                    )}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 4: WINGO & TRX WINGO GAME VIEW                                       */}
+                        {/* VIEW 4: WINGO & TRX WINGO (With Distinct 30s/1m/2m Timers & Periods)      */}
                         {/* ========================================================================= */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1570,20 +1548,31 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    
+                                    {/* 30s / 1m / 2m Tabs */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {['30sec', '1min', '2min'].map(tab => (
-                                            <button key={tab} onClick={() => { setActiveGameTab(tab); setHistoryPage(1); }} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>
-                                                {tab}
+                                        {[
+                                            { id: '30sec', label: '30 Sec' },
+                                            { id: '1min', label: '1 Min (60s)' },
+                                            { id: '2min', label: '2 Min' }
+                                        ].map(tab => (
+                                            <button 
+                                                key={tab.id} 
+                                                onClick={() => setActiveGameTab(tab.id)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                            >
+                                                {tab.label}
                                             </button>
                                         ))}
                                     </div>
 
+                                    {/* Distinct Period & Independent Wall-Clock Timer Box */}
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
-                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
-                                            <span className="text-sm font-bold text-amber-300">Draw Countdown</span>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {getActivePeriod()}</span>
+                                            <span className="text-sm font-bold text-amber-300">{activeGameTab.toUpperCase()} Draw Countdown</span>
                                         </div>
-                                        <span className="text-2xl font-black text-yellow-400">{activeGameTab === '30sec' ? timer30s : (activeGameTab === '1min' ? timer1m : timer2m)}s</span>
+                                        <span className="text-2xl font-black text-yellow-400">{getActiveTimer()}s</span>
                                     </div>
 
                                     <div className="grid grid-cols-3 gap-2">
@@ -1605,13 +1594,19 @@
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase shadow-md">SMALL (2X)</button>
                                     </div>
 
+                                    {/* History Table for Selected Distinct Tab */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">Recent 1000 Rounds History</div>
+                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">
+                                            {activeGameTab.toUpperCase()} History
+                                        </div>
                                         <table className="w-full text-[10px] font-mono text-left">
                                             <tbody>
-                                                {drawHistory30s.slice(0, 10).map((item, idx) => (
+                                                {activeHistoryList.slice(0, 10).map((item, idx) => (
                                                     <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
                                                         <td className="py-2.5 pl-3 text-slate-400">{item.period}</td>
+                                                        {gameType === 'trx_wingo' && (
+                                                            <td className="py-2 text-center text-slate-400">{item.shortHash}</td>
+                                                        )}
                                                         <td className="py-2 text-center text-yellow-300 font-bold">{item.number}</td>
                                                         <td className="py-2 text-center text-slate-300">{item.size}</td>
                                                         <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.color}</td>
@@ -1625,7 +1620,7 @@
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 5: K3 3-DICE LOTTERY GAME VIEW                                       */}
+                        {/* VIEW 5: K3 3-DICE LOTTERY                                                 */}
                         {/* ========================================================================= */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
@@ -1636,19 +1631,24 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
+                                        {['30sec', '1min', '2min'].map(tab => (
+                                            <button 
+                                                key={tab} 
+                                                onClick={() => setActiveGameTab(tab)} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                            >
+                                                {tab}
+                                            </button>
+                                        ))}
+                                    </div>
+
                                     <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
-                                        <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
+                                        <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Period: {getActivePeriod()}</span>
                                         <div className="flex space-x-3 justify-center items-center py-1">
                                             <DiceFace value={drawHistoryK330s[0]?.dice[0] || 1} />
                                             <DiceFace value={drawHistoryK330s[0]?.dice[1] || 4} />
                                             <DiceFace value={drawHistoryK330s[0]?.dice[2] || 6} />
-                                        </div>
-                                        <div className="flex space-x-3 text-xs font-mono font-black text-yellow-300">
-                                            <span>Sum: {drawHistoryK330s[0]?.sum || 11}</span>
-                                            <span>•</span>
-                                            <span>{drawHistoryK330s[0]?.size || 'Big'}</span>
-                                            <span>•</span>
-                                            <span>{drawHistoryK330s[0]?.parity || 'Odd'}</span>
                                         </div>
                                     </div>
 
@@ -1658,78 +1658,99 @@
                                         <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Even 2X</button>
                                         <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Odd 2X</button>
                                     </div>
-
-                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800">K3 Result History</div>
-                                        <table className="w-full text-[10px] font-mono text-left">
-                                            <tbody>
-                                                {drawHistoryK330s.slice(0, 10).map((item, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
-                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
-                                                        <td className="py-2 text-center text-yellow-300 font-bold">[{item.dice.join(', ')}]</td>
-                                                        <td className="py-2 text-center text-slate-300">Sum: {item.sum}</td>
-                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.size} / {item.parity}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                         )}
 
                         {/* ========================================================================= */}
-                        {/* VIEW 6: bKash EXCLUSIVE DEPOSIT VIEW                                      */}
+                        {/* VIEW 6: bKash PENDING DEPOSIT SYSTEM (Admin Manual Acceptance)            */}
                         {/* ========================================================================= */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800">
                                     <BackButton onClick={() => setView('home')} label="Back" />
-                                    <h1 className="text-sm font-bold text-slate-100">bKash Fast Deposit</h1>
-                                    <span className="w-10"></span>
+                                    <h1 className="text-sm font-bold text-slate-100">bKash Deposit</h1>
+                                    <div className="flex space-x-1 font-mono text-xs">
+                                        <button onClick={() => setDepositTab('new')} className={`px-2.5 py-1 rounded-xl font-bold ${depositTab === 'new' ? 'bg-pink-600 text-white' : 'bg-slate-800 text-slate-400'}`}>Recharge</button>
+                                        <button onClick={() => setDepositTab('history')} className={`px-2.5 py-1 rounded-xl font-bold ${depositTab === 'history' ? 'bg-pink-600 text-white' : 'bg-slate-800 text-slate-400'}`}>Records</button>
+                                    </div>
                                 </div>
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3 min-h-0 pb-16">
-                                    <div className="p-4 rounded-3xl bg-[#0b101c] border-2 border-pink-500/80 flex flex-col items-center justify-center space-y-2 text-center shadow-neon-pink">
-                                        <BkashLogo className="w-16 h-16 rounded-2xl" />
-                                        <span className="text-xs font-black text-pink-400 uppercase tracking-widest block">Official bKash Gateway</span>
-                                    </div>
-
-                                    <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2">
-                                        <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">
-                                            Official bKash Agent Receiver:
-                                        </span>
-                                        <div className="p-3 bg-slate-900 rounded-2xl border border-slate-800 flex items-center justify-between">
-                                            <div>
-                                                <span className="text-xs sm:text-sm font-black text-amber-300 font-mono select-all">
-                                                    01860909272
-                                                </span>
+                                    {depositTab === 'new' ? (
+                                        <>
+                                            <div className="p-4 rounded-3xl bg-[#0b101c] border-2 border-pink-500/80 flex flex-col items-center justify-center space-y-2 text-center shadow-neon-pink">
+                                                <BkashLogo className="w-16 h-16 rounded-2xl" />
+                                                <span className="text-xs font-black text-pink-400 uppercase tracking-widest block">Official bKash Gateway</span>
                                             </div>
-                                            <button 
-                                                onClick={() => {
-                                                    navigator.clipboard.writeText('01860909272');
-                                                    showToast('bKash Agent Number copied!', 'success');
-                                                }} 
-                                                className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
-                                            >
-                                                Copy
-                                            </button>
-                                        </div>
-                                    </div>
 
-                                    <form onSubmit={(e) => { e.preventDefault(); showToast('Deposit request submitted!', 'success'); }} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
-                                        <div className="grid grid-cols-4 gap-1.5 font-mono">
-                                            {['200', '500', '1000', '5000'].map(val => (
-                                                <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-pink-600 text-white border-pink-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
-                                            ))}
+                                            <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2">
+                                                <span className="text-[9.5px] text-slate-400 font-bold uppercase tracking-wider block">
+                                                    Official bKash Agent Receiver Number:
+                                                </span>
+                                                <div className="p-3 bg-slate-900 rounded-2xl border border-slate-800 flex items-center justify-between">
+                                                    <span className="text-xs sm:text-sm font-black text-amber-300 font-mono select-all">
+                                                        01860909272
+                                                    </span>
+                                                    <button 
+                                                        onClick={() => {
+                                                            navigator.clipboard.writeText('01860909272');
+                                                            showToast('bKash Agent Number copied!', 'success');
+                                                        }} 
+                                                        className="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 rounded-xl text-[10px] font-black shadow-neon-gold"
+                                                    >
+                                                        Copy
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <form onSubmit={processDeposit} className="glass-panel p-3.5 rounded-3xl border border-slate-800 space-y-2.5">
+                                                <div className="grid grid-cols-4 gap-1.5 font-mono">
+                                                    {['200', '500', '1000', '5000'].map(val => (
+                                                        <button type="button" key={val} onClick={() => setDepositAmount(val)} className={`py-1.5 rounded-xl border text-xs font-bold ${depositAmount === val ? 'bg-pink-600 text-white border-pink-400 font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{val}</button>
+                                                    ))}
+                                                </div>
+                                                <input type="number" placeholder="Deposit Amount (Min ৳100)" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
+                                                <input type="tel" placeholder="Sender bKash Number" value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
+                                                <input type="text" placeholder="Transaction ID / TxID" value={transactionId} onChange={e => setTransactionId(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono uppercase text-white"/>
+                                                
+                                                <p className="text-[9.5px] text-amber-300/80 font-sans">
+                                                    ⚠️ ডিপোজিট করার পর অ্যাডমিন কর্তৃক যাচাই শেষে সফল হলে ব্যালেন্স একাউন্টে যুক্ত হবে।
+                                                </p>
+
+                                                <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase shadow-neon-pink">
+                                                    Submit Deposit (৳{depositAmount})
+                                                </button>
+                                            </form>
+                                        </>
+                                    ) : (
+                                        <div className="space-y-2">
+                                            <h3 className="text-xs font-bold text-slate-400 uppercase font-mono">Deposit Records</h3>
+                                            {depositHistory.length === 0 ? (
+                                                <div className="p-8 text-center glass-panel rounded-2xl text-slate-500 text-xs">
+                                                    No recharge records found.
+                                                </div>
+                                            ) : (
+                                                depositHistory.map((item, idx) => (
+                                                    <div key={item.id || idx} className="p-3 bg-slate-900 rounded-2xl border border-slate-800 space-y-1 text-xs font-mono">
+                                                        <div className="flex justify-between items-center">
+                                                            <span className="font-black text-pink-400">৳{formatMoney(item.amount)}</span>
+                                                            <span className={`px-2 py-0.5 rounded-full text-[9.5px] font-bold ${
+                                                                item.status === 'Approved' || item.status === 'Success' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 
+                                                                (item.status === 'Rejected' ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30' : 'bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse')
+                                                            }`}>
+                                                                {item.status}
+                                                            </span>
+                                                        </div>
+                                                        <div className="text-[10px] text-slate-400 flex justify-between">
+                                                            <span>TxID: {item.txid}</span>
+                                                            <span>Sender: {item.sender}</span>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                            )}
                                         </div>
-                                        <input type="number" placeholder="Deposit Amount (Min ৳100)" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
-                                        <input type="tel" placeholder="Sender bKash Number" value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
-                                        <input type="text" placeholder="Transaction ID / TxID" value={transactionId} onChange={e => setTransactionId(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono uppercase text-white"/>
-                                        <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase shadow-neon-pink">
-                                            Submit bKash Recharge (৳{depositAmount})
-                                        </button>
-                                    </form>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -1764,88 +1785,33 @@
 
                     </div>
 
-                    {/* 🌟 PROFILE AVATAR PICKER / CUSTOM URL MODAL */}
+                    {/* AVATAR PICKER MODAL */}
                     {showAvatarModal && (
                         <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md animate-fade-in">
                             <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
                                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                                    <h3 className="text-sm font-black text-amber-300 font-mono">Select or Change Avatar</h3>
+                                    <h3 className="text-sm font-black text-amber-300 font-mono">Select Avatar</h3>
                                     <button onClick={() => setShowAvatarModal(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
                                 </div>
 
-                                {/* Custom Image URL Input */}
-                                <div className="space-y-1.5">
-                                    <label className="text-[10px] text-slate-300 font-bold uppercase">Paste Custom Image URL</label>
-                                    <div className="flex space-x-1.5">
-                                        <input 
-                                            type="text" 
-                                            placeholder="https://example.com/photo.jpg" 
-                                            value={customAvatarUrl} 
-                                            onChange={e => setCustomAvatarUrl(e.target.value)}
-                                            className="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white font-mono focus:outline-none focus:ring-1 focus:ring-amber-400"
-                                        />
-                                        <button 
-                                            onClick={() => handleUpdateAvatar(customAvatarUrl)}
-                                            className="px-3 py-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-xl text-xs"
+                                <div className="grid grid-cols-4 gap-2 py-2">
+                                    {PRESET_AVATARS.map((url, i) => (
+                                        <div 
+                                            key={i} 
+                                            onClick={() => {
+                                                if (currentUser) {
+                                                    const san = currentUser.phone.replace(/[^0-9]/g, "");
+                                                    db.ref('users/' + san).update({ avatar: url });
+                                                    setCurrentUser(p => ({ ...p, avatar: url }));
+                                                    setShowAvatarModal(false);
+                                                }
+                                            }}
+                                            className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-slate-800 hover:border-amber-400 cursor-pointer"
                                         >
-                                            Apply
-                                        </button>
-                                    </div>
+                                            <img src={url} alt={`Avatar ${i}`} className="w-full h-full object-cover" />
+                                        </div>
+                                    ))}
                                 </div>
-
-                                <div className="border-t border-slate-800 pt-2">
-                                    <span className="text-[10px] text-slate-400 font-bold uppercase block mb-2">Or Choose VIP Avatar</span>
-                                    <div className="grid grid-cols-4 gap-2">
-                                        {PRESET_AVATARS.map((url, i) => (
-                                            <div 
-                                                key={i} 
-                                                onClick={() => handleUpdateAvatar(url)}
-                                                className={`w-14 h-14 rounded-2xl overflow-hidden border-2 cursor-pointer transition-all hover:scale-105 ${currentUser?.avatar === url ? 'border-amber-400 shadow-neon-gold' : 'border-slate-800'}`}
-                                            >
-                                                <img src={url} alt={`Avatar ${i}`} className="w-full h-full object-cover" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 🌟 CHANGE PASSWORD MODAL */}
-                    {showPasswordModal && (
-                        <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md animate-fade-in">
-                            <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white shadow-2xl space-y-3.5">
-                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                                    <h3 className="text-sm font-black text-amber-300 font-mono">Change Password</h3>
-                                    <button onClick={() => setShowPasswordModal(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
-                                </div>
-
-                                <form onSubmit={handleChangePassword} className="space-y-3">
-                                    <div>
-                                        <label className="text-[10px] text-slate-400 uppercase font-bold block mb-1">Old Password</label>
-                                        <input 
-                                            type="password" 
-                                            placeholder="Current Password" 
-                                            value={oldPassInput} 
-                                            onChange={e => setOldPassInput(e.target.value)}
-                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:ring-1 focus:ring-amber-400"
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="text-[10px] text-slate-400 uppercase font-bold block mb-1">New Password</label>
-                                        <input 
-                                            type="password" 
-                                            placeholder="New Password" 
-                                            value={newPassInput} 
-                                            onChange={e => setNewPassInput(e.target.value)}
-                                            className="w-full bg-slate-900 border border-slate-800 rounded-2xl px-3.5 py-2.5 text-xs text-white focus:ring-1 focus:ring-amber-400"
-                                        />
-                                    </div>
-
-                                    <button type="submit" className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold">
-                                        Update Password
-                                    </button>
-                                </form>
                             </div>
                         </div>
                     )}
