@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Elite Gaming & Official JILI Money Coming</title>
+    <title>STEVEN WIN - Official JILI Money Coming & Casino</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -31,7 +31,7 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
-                        'neon-aviator': '0 0 25px rgba(229, 30, 56, 0.75)',
+                        'neon-aviator': '0 0 30px rgba(229, 30, 56, 0.85)',
                         'jili-gold': '0 0 35px rgba(234, 179, 8, 0.85)',
                         'jili-glow': '0 0 45px rgba(245, 158, 11, 0.65)',
                         'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
@@ -115,7 +115,7 @@
         .jili-bg-matrix {
             background: radial-gradient(circle at 50% 30%, #3e1605 0%, #1e0901 60%, #080300 100%);
             background-image: 
-                radial-gradient(rgba(245, 158, 11, 0.15) 1px, transparent 1px),
+                radial-gradient(rgba(245, 158, 11, 0.18) 1px, transparent 1px),
                 radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
             background-size: 16px 16px;
             background-position: 0 0, 8px 8px;
@@ -169,7 +169,7 @@
         .jili-spin-btn {
             background: radial-gradient(circle at 35% 35%, #86efac 0%, #22c55e 40%, #15803d 80%, #052e16 100%);
             box-shadow: 
-                0 0 20px rgba(34, 197, 94, 0.7),
+                0 0 22px rgba(34, 197, 94, 0.75),
                 inset 0 4px 6px rgba(255,255,255,0.7),
                 inset 0 -4px 6px rgba(0,0,0,0.8);
             border: 3px solid #fef08a;
@@ -181,12 +181,20 @@
         }
 
         @keyframes slotSpinAnim {
-            0% { transform: translateY(-30%); opacity: 0.5; filter: blur(4px); }
-            50% { transform: translateY(30%); opacity: 1; filter: blur(0px); }
-            100% { transform: translateY(-30%); opacity: 0.5; filter: blur(4px); }
+            0% { transform: translateY(-20%); opacity: 0.7; filter: blur(2px); }
+            50% { transform: translateY(20%); opacity: 1; filter: blur(0px); }
+            100% { transform: translateY(-20%); opacity: 0.7; filter: blur(2px); }
         }
         .anim-slot-spinning {
-            animation: slotSpinAnim 0.07s infinite linear;
+            animation: slotSpinAnim 0.12s infinite linear;
+        }
+
+        .aviator-grid-bg {
+            background-color: #0b0e14;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 32px 32px;
         }
 
         .safe-bottom {
@@ -245,9 +253,6 @@
             chevronLeft: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="15 18 9 12 15 6" /></svg>
             ),
-            chevronRight: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="9 18 15 12 9 6" /></svg>
-            ),
             wallet: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" /></svg>
             ),
@@ -284,9 +289,6 @@
             coin: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}><circle cx="12" cy="12" r="10" fill="#f59e0b"/><circle cx="12" cy="12" r="8" fill="#fbbf24"/><text x="12" y="16" fontSize="11" fontWeight="bold" textAnchor="middle" fill="#78350f">$</text></svg>
             ),
-            refresh: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
-            ),
             x: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
             )
@@ -311,7 +313,7 @@
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
         ];
 
-        // Synthesizer Web Audio Engine
+        // --- SYNTHESIZER SOUND ENGINE (WIN / LOSS / SPIN / CLACK) ---
         const playSoundEffect = (type) => {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -323,39 +325,51 @@
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(460, now);
-                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.35);
+                    osc.frequency.setValueAtTime(380, now);
+                    osc.frequency.exponentialRampToValueAtTime(120, now + 0.4);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } else if (type === 'clack') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(240, now);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.09);
+                } else if (type === 'win') {
+                    const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                    freqs.forEach((f, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(f, now + idx * 0.09);
+                        gain.gain.setValueAtTime(0.28, now + idx * 0.09);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.09 + 0.28);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.09);
+                        osc.stop(now + idx * 0.09 + 0.28);
+                    });
+                } else if (type === 'loss') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(75, now + 0.35);
                     gain.gain.setValueAtTime(0.2, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.35);
-                } else if (type === 'clack') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(260, now);
-                    gain.gain.setValueAtTime(0.22, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.08);
-                } else if (type === 'win') {
-                    const freqs = [523.25, 659.25, 783.99, 1046.50];
-                    freqs.forEach((f, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(f, now + idx * 0.1);
-                        gain.gain.setValueAtTime(0.25, now + idx * 0.1);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.25);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + idx * 0.1);
-                        osc.stop(now + idx * 0.1 + 0.25);
-                    });
                 }
             } catch(e) {}
         };
@@ -405,8 +419,17 @@
             return list;
         };
 
+        const MOCK_PLAYERS = [
+            { user: "Rahim_017", bet: 50, cashout: 1.85, avatar: "🇧🇩" },
+            { user: "Arif_VIP", bet: 200, cashout: null, avatar: "🇧🇩" },
+            { user: "Hasan_77", bet: 100, cashout: 2.40, avatar: "🇧🇩" },
+            { user: "Sabbir_Pro", bet: 500, cashout: null, avatar: "🇧🇩" },
+            { user: "Tanvir_King", bet: 20, cashout: 1.25, avatar: "🇧🇩" }
+        ];
+
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
+            const particlesRef = useRef([]);
 
             useEffect(() => {
                 const canvas = canvasRef.current;
@@ -419,18 +442,19 @@
 
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
-                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 8.0));
+                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 9.0));
                     const startX = 20;
                     const startY = height - 20;
-                    const cpX = width * 0.45;
+                    const cpX = width * 0.42;
                     const cpY = height - 20;
-                    const targetX = startX + (width - 70) * Math.min(1, progress * 1.15 + 0.08);
-                    const targetY = startY - (height - 60) * Math.min(0.92, Math.pow(progress, 0.85) + 0.05);
+                    const targetX = startX + (width - 75) * Math.min(1, progress * 1.12 + 0.08);
+                    const targetY = startY - (height - 65) * Math.min(0.92, Math.pow(progress, 0.85) + 0.05);
 
                     if (phase === 'flying' || phase === 'crashed') {
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.35)');
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.45)');
+                        fillGrad.addColorStop(0.7, 'rgba(229, 30, 56, 0.1)');
                         fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
                         ctx.beginPath();
                         ctx.moveTo(startX, startY);
@@ -444,9 +468,9 @@
 
                         ctx.save();
                         ctx.shadowColor = '#e51e38';
-                        ctx.shadowBlur = 15;
+                        ctx.shadowBlur = 18;
                         ctx.strokeStyle = '#e51e38';
-                        ctx.lineWidth = 3.5;
+                        ctx.lineWidth = 4;
                         ctx.beginPath();
                         ctx.moveTo(startX, startY);
                         ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
@@ -454,21 +478,51 @@
                         ctx.restore();
 
                         if (phase === 'flying') {
+                            if (Math.random() < 0.6) {
+                                particlesRef.current.push({
+                                    x: targetX - 6,
+                                    y: targetY + 4,
+                                    vx: -Math.random() * 2 - 1,
+                                    vy: Math.random() * 1.5 - 0.75,
+                                    size: Math.random() * 3 + 1,
+                                    alpha: 1.0,
+                                    color: Math.random() > 0.3 ? '#e51e38' : '#fbbf24'
+                                });
+                            }
+
+                            particlesRef.current.forEach((p, idx) => {
+                                p.x += p.vx;
+                                p.y += p.vy;
+                                p.alpha -= 0.04;
+                                if (p.alpha <= 0) {
+                                    particlesRef.current.splice(idx, 1);
+                                    return;
+                                }
+                                ctx.save();
+                                ctx.fillStyle = p.color;
+                                ctx.globalAlpha = p.alpha;
+                                ctx.beginPath();
+                                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                                ctx.fill();
+                                ctx.restore();
+                            });
+
                             ctx.save();
                             ctx.translate(targetX, targetY);
-                            ctx.rotate(-Math.PI / 7);
+                            ctx.rotate(-Math.PI / 7.5);
                             ctx.shadowColor = '#e51e38';
-                            ctx.shadowBlur = 12;
+                            ctx.shadowBlur = 15;
                             ctx.fillStyle = '#ffffff';
+
                             ctx.beginPath();
-                            ctx.moveTo(14, 0);
-                            ctx.quadraticCurveTo(5, -6, -7, -5);
-                            ctx.lineTo(-10, -8);
-                            ctx.lineTo(-8, -2);
-                            ctx.lineTo(-10, 2);
-                            ctx.lineTo(-8, 8);
-                            ctx.lineTo(-7, 5);
-                            ctx.quadraticCurveTo(5, 6, 14, 0);
+                            ctx.moveTo(16, 0);
+                            ctx.quadraticCurveTo(6, -7, -8, -6);
+                            ctx.lineTo(-11, -9);
+                            ctx.lineTo(-9, -2);
+                            ctx.lineTo(-11, 2);
+                            ctx.lineTo(-9, 9);
+                            ctx.lineTo(-8, 6);
+                            ctx.quadraticCurveTo(6, 7, 16, 0);
                             ctx.closePath();
                             ctx.fill();
                             ctx.restore();
@@ -494,18 +548,18 @@
             const [balance, setBalance] = useState(1500.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             
-            // --- AVATAR UPLOAD MODAL ---
             const [showAvatarModal, setShowAvatarModal] = useState(false);
             const fileInputRef = useRef(null);
 
-            // --- JILI SPLASH & INTRO MODAL ---
+            // JILI Intro Modal (From Screenshot)
             const [showJiliSplash, setShowJiliSplash] = useState(false);
             const [showIntroPopup, setShowIntroPopup] = useState(false);
 
-            // --- JILI MONEY COMING EXACT REAL STATE ---
+            // JILI Money Coming State
             const [moneyComingBet, setMoneyComingBet] = useState(1);
             const [isBetSelectorOpen, setIsBetSelectorOpen] = useState(false);
             const [isSlotSpinning, setIsSlotSpinning] = useState(false);
+            const [spinningReels, setSpinningReels] = useState([false, false, false, false]);
             const [reels, setReels] = useState(['1', '0', '00']);
             const [specialReel, setSpecialReel] = useState('2X');
             const [lastWinAmount, setLastWinAmount] = useState(0.00);
@@ -514,18 +568,21 @@
             const [isWheelSpinning, setIsWheelSpinning] = useState(false);
             const [isTurbo, setIsTurbo] = useState(false);
 
-            // --- AVIATOR REAL STATE ---
+            // Aviator State
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(1.85);
             const [aviatorHistory200, setAviatorHistory200] = useState(() => generateAviatorInitialHistory(220));
             const [showAviatorHistoryModal, setShowAviatorHistoryModal] = useState(false);
+            
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
+            const [autoCashoutEnabled1, setAutoCashoutEnabled1] = useState(false);
+            const [autoCashoutMult1, setAutoCashoutMult1] = useState(2.00);
 
-            // --- LOTTERY STATE (200+ History & Sync Clocks) ---
+            // Lottery State
             const [gameType, setGameType] = useState('wingo');
             const [activeGameTab, setActiveGameTab] = useState('30sec');
             const [timers, setTimers] = useState({ '30sec': 30, '1min': 60, '2min': 120 });
@@ -553,7 +610,7 @@
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
-            // Deposit & Withdraw State
+            // Deposit & Withdraw
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
@@ -607,17 +664,17 @@
                 });
             }, [sessionPhone]);
 
-            // Launch JILI Game with Splash & Intro
+            // Launch JILI Game with Screenshot Modal
             const launchJiliMoneyComing = () => {
                 setShowJiliSplash(true);
                 setTimeout(() => {
                     setShowJiliSplash(false);
                     setShowIntroPopup(true);
                     setView('game_money_coming');
-                }, 1200);
+                }, 1100);
             };
 
-            // 💵 JILI MONEY COMING REAL SPIN MECHANISM
+            // JILI Money Coming Spin Logic
             const spinJiliMoneyComing = (isRespin = false) => {
                 if (isSlotSpinning && !isRespin) return;
                 if (!isRespin) {
@@ -628,6 +685,7 @@
                 }
 
                 setIsSlotSpinning(true);
+                setSpinningReels([true, true, true, true]);
                 playSoundEffect('spin');
 
                 const r1Pool = ['', '', '1', '5', '10', ''];
@@ -644,17 +702,37 @@
                         r3Pool[Math.floor(Math.random() * r3Pool.length)]
                     ]);
                     setSpecialReel(sPool[Math.floor(Math.random() * sPool.length)]);
-                }, 60);
+                }, 75);
+
+                const endR1 = r1Pool[Math.floor(Math.random() * r1Pool.length)];
+                const endR2 = r2Pool[Math.floor(Math.random() * r2Pool.length)];
+                const endR3 = r3Pool[Math.floor(Math.random() * r3Pool.length)];
+                const endS = sPool[Math.floor(Math.random() * sPool.length)];
+
+                const baseTime = isTurbo ? 350 : 900;
+
+                setTimeout(() => {
+                    playSoundEffect('clack');
+                    setSpinningReels(prev => [false, prev[1], prev[2], prev[3]]);
+                    setReels(prev => [endR1, prev[1], prev[2]]);
+                }, baseTime);
+
+                setTimeout(() => {
+                    playSoundEffect('clack');
+                    setSpinningReels(prev => [false, false, prev[2], prev[3]]);
+                    setReels(prev => [endR1, endR2, prev[2]]);
+                }, baseTime + (isTurbo ? 250 : 500));
+
+                setTimeout(() => {
+                    playSoundEffect('clack');
+                    setSpinningReels(prev => [false, false, false, prev[3]]);
+                    setReels([endR1, endR2, endR3]);
+                }, baseTime + (isTurbo ? 500 : 1000));
 
                 setTimeout(() => {
                     clearInterval(spinInterval);
                     playSoundEffect('clack');
-
-                    const endR1 = r1Pool[Math.floor(Math.random() * r1Pool.length)];
-                    const endR2 = r2Pool[Math.floor(Math.random() * r2Pool.length)];
-                    const endR3 = r3Pool[Math.floor(Math.random() * r3Pool.length)];
-                    const endS = sPool[Math.floor(Math.random() * sPool.length)];
-
+                    setSpinningReels([false, false, false, false]);
                     setReels([endR1, endR2, endR3]);
                     setSpecialReel(endS);
                     setIsSlotSpinning(false);
@@ -668,7 +746,7 @@
                         return;
                     } else if (endS === 'RESPIN' && basePoints > 0) {
                         showToast('🔄 FREE RE-SPIN ACTIVATED!', 'success');
-                        setTimeout(() => spinJiliMoneyComing(true), 750);
+                        setTimeout(() => spinJiliMoneyComing(true), 800);
                         return;
                     } else if (basePoints > 0) {
                         let mult = endS === '2X' ? 2 : endS === '5X' ? 5 : endS === '10X' ? 10 : 1;
@@ -684,9 +762,10 @@
                         setPopupAmount(roundWin);
                         setShowResultPopup(true);
                     } else {
+                        playSoundEffect('loss');
                         setLastWinAmount(0.00);
                     }
-                }, isTurbo ? 450 : 1100);
+                }, baseTime + (isTurbo ? 750 : 1500));
             };
 
             const triggerLuckyWheelFeature = () => {
@@ -721,7 +800,7 @@
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
                                 const roll = Math.random() * 100;
-                                const nextCrash = roll < 70 ? parseFloat((1.08 + Math.random() * 0.40).toFixed(2)) : parseFloat((1.60 + Math.random() * 3.50).toFixed(2));
+                                const nextCrash = roll < 68 ? parseFloat((1.08 + Math.random() * 0.42).toFixed(2)) : parseFloat((1.65 + Math.random() * 3.80).toFixed(2));
                                 setAviatorCrashPoint(nextCrash);
                                 return 5;
                             }
@@ -732,8 +811,21 @@
                     const start = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - start) / 1000;
-                        const cur = parseFloat((1.00 + elapsed * 0.12).toFixed(2));
+                        const cur = parseFloat((1.00 + elapsed * 0.11 + Math.pow(elapsed * 0.03, 1.4)).toFixed(2));
                         setAviatorMult(cur);
+
+                        if (isBetPlaced1 && !isCashedOut1 && autoCashoutEnabled1 && cur >= autoCashoutMult1) {
+                            const winAmt = parseFloat((betAmount1 * autoCashoutMult1).toFixed(2));
+                            setIsCashedOut1(true);
+                            setBalance(b => {
+                                const nb = b + winAmt;
+                                if (currentUser) db.ref('users/' + currentUser.phone.replace(/[^0-9]/g, "")).update({ balance: nb });
+                                return nb;
+                            });
+                            setPopupAmount(winAmt);
+                            setShowResultPopup(true);
+                        }
+
                         if (cur >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
@@ -746,14 +838,14 @@
                                 setIsCashedOut1(false);
                                 setAviatorPhase('waiting');
                                 setAviatorCountdown(5);
-                            }, 3000);
+                            }, 3200);
                         }
-                    }, 50);
+                    }, 45);
                 }
                 return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint]);
+            }, [aviatorPhase, aviatorCrashPoint, isBetPlaced1, isCashedOut1, autoCashoutEnabled1, autoCashoutMult1, betAmount1, currentUser]);
 
-            // 🎲 3 INDEPENDENT SYNCHRONOUS TIMERS WITH 200+ HISTORY LOG
+            // Lottery Sync Timers
             useEffect(() => {
                 const clockInterval = setInterval(() => {
                     const now = new Date();
@@ -1063,7 +1155,7 @@
                                     {/* 1. HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* 💵 JILI MONEY COMING */}
+                                            {/* 💵 OFFICIAL JILI MONEY COMING WITH EXACT CARD LOGO */}
                                             <div 
                                                 onClick={launchJiliMoneyComing}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#211202] via-[#4d2800] to-[#120800] shadow-luxury border-2 border-yellow-400 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1078,9 +1170,18 @@
                                                     </h2>
                                                     <span className="text-[10.5px] text-amber-200 block font-medium">JILI Official 3x1 Drum + Top Wheel</span>
                                                 </div>
-                                                <div className="w-16 h-16 rounded-2xl bg-[#063816] border-2 border-yellow-400 flex flex-col items-center justify-center p-1 shadow-neon-gold flex-shrink-0">
-                                                    <span className="text-xl font-black text-yellow-300 font-mono">$</span>
-                                                    <span className="text-[8px] font-black text-amber-300 font-mono">JILI SLOT</span>
+                                                
+                                                {/* Official Money Coming Game Art */}
+                                                <div className="relative w-16 h-20 rounded-2xl overflow-hidden shadow-neon-gold border border-yellow-400/60 flex-shrink-0 bg-black">
+                                                    <img 
+                                                        src="https://odds96.com/en-ie/resizer/egamings/x/rs%3Afit%3A200%3A0/plain/games/jiliasia/money_coming.jpg" 
+                                                        alt="Money Coming JILI" 
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            e.target.onerror = null;
+                                                            e.target.src = "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=200&auto=format&fit=crop&q=80";
+                                                        }}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -1265,7 +1366,6 @@
                                                             <span className="text-[9px] text-slate-400">View transaction status</span>
                                                         </div>
                                                     </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </button>
 
                                                 <a href="https://t.me/Ststevenx36" target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
@@ -1278,7 +1378,6 @@
                                                             <span className="text-[9px] text-sky-400 font-mono">Telegram: @Ststevenx36</span>
                                                         </div>
                                                     </div>
-                                                    <Icon name="chevronRight" className="w-4 h-4 text-slate-500" />
                                                 </a>
                                             </div>
 
@@ -1339,7 +1438,7 @@
                             </div>
                         )}
 
-                        {/* 3. 💵 JILI MONEY COMING HYPER-PREMIUM GAME VIEW (EXACT TO SCREENSHOT) */}
+                        {/* 3. 💵 JILI MONEY COMING HYPER-PREMIUM GAME VIEW */}
                         {view === 'game_money_coming' && (
                             <div className="flex-1 flex flex-col jili-bg-matrix justify-between overflow-hidden min-h-0 font-sans relative select-none">
                                 
@@ -1361,7 +1460,7 @@
                                 {/* Main Stage: Left Sidebar + Cabinet */}
                                 <div className="flex-1 flex overflow-hidden min-h-0 relative p-1.5 sm:p-2">
                                     
-                                    {/* Left Functional Sidebar Icons (From Screenshot) */}
+                                    {/* Left Functional Sidebar Icons */}
                                     <div className="w-12 flex flex-col justify-between py-1 items-center flex-shrink-0 space-y-1 z-10">
                                         {[
                                             { icon: "🎒", label: "Backpack" },
@@ -1417,7 +1516,7 @@
                                                 </div>
                                                 <div className="flex items-center justify-between">
                                                     <span className="text-[11px] font-black text-amber-200 font-mono">
-                                                        Bet <strong className="text-white text-xs">1</strong> unlock
+                                                        Bet <strong className="text-white text-xs">0.5</strong> unlock
                                                     </span>
                                                     <div className="flex space-x-1">
                                                         <span className="bg-emerald-900 border border-emerald-400 text-emerald-300 text-[8px] font-black px-1 rounded">2X</span>
@@ -1435,23 +1534,19 @@
                                             </div>
 
                                             <div className="grid grid-cols-4 gap-1 jili-cabinet-inner p-1.5 rounded-2xl border-2 border-yellow-500/80 shadow-inner">
-                                                {/* Reel 1 */}
-                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${spinningReels[0] ? 'anim-slot-spinning' : ''}`}>
                                                     <span className="text-3xl sm:text-4xl font-black jili-3d-text-gold">{reels[0] || '—'}</span>
                                                 </div>
 
-                                                {/* Reel 2 */}
-                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${spinningReels[1] ? 'anim-slot-spinning' : ''}`}>
                                                     <span className="text-3xl sm:text-4xl font-black jili-3d-text-gold">{reels[1] || '—'}</span>
                                                 </div>
 
-                                                {/* Reel 3 */}
-                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-green flex items-center justify-center ${spinningReels[2] ? 'anim-slot-spinning' : ''}`}>
                                                     <span className="text-3xl sm:text-4xl font-black jili-3d-text-gold">{reels[2] || '—'}</span>
                                                 </div>
 
-                                                {/* Special Reel 4 */}
-                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-gold flex flex-col items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                                <div className={`h-24 sm:h-28 rounded-xl jili-drum-gold flex flex-col items-center justify-center ${spinningReels[3] ? 'anim-slot-spinning' : ''}`}>
                                                     {specialReel === 'SCATTER' ? (
                                                         <div className="flex flex-col items-center animate-bounce">
                                                             <span className="text-2xl">🎡</span>
@@ -1472,14 +1567,12 @@
                                                 </div>
                                             </div>
 
-                                            {/* Laser Payline Center Indicator */}
                                             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-yellow-300 shadow-[0_0_8px_#fde047] pointer-events-none" />
                                         </div>
 
-                                        {/* Bottom Console: Balance, Bet Selector, Win & Spin Button */}
+                                        {/* Bottom Console: Low Bet Selector, WIN Display & 3D JILI Spin Button */}
                                         <div className="bg-gradient-to-r from-black via-[#1f0b00] to-black rounded-2xl border-2 border-yellow-500/60 p-2 flex items-center justify-between flex-shrink-0 shadow-lg relative">
                                             
-                                            {/* Settings Gear & Level Balance */}
                                             <div className="flex items-center space-x-1.5">
                                                 <button onClick={() => showToast('Settings opened')} className="w-7 h-7 rounded-full bg-yellow-950/80 border border-yellow-500/50 flex items-center justify-center text-yellow-400">
                                                     <Icon name="gear" className="w-4 h-4" />
@@ -1493,7 +1586,6 @@
                                                 </div>
                                             </div>
 
-                                            {/* Bet Coin Button with Dropdown Popup */}
                                             <div className="relative">
                                                 <button 
                                                     onClick={() => setIsBetSelectorOpen(!isBetSelectorOpen)} 
@@ -1503,10 +1595,9 @@
                                                     <span>Tk {moneyComingBet}</span>
                                                 </button>
 
-                                                {/* Exact Vertical Bet Selector Box */}
                                                 {isBetSelectorOpen && (
-                                                    <div className="absolute bottom-11 left-1/2 -translate-x-1/2 bg-black/95 border-2 border-yellow-400 rounded-xl p-1 shadow-2xl flex flex-col divide-y divide-slate-800 z-50 w-20 animate-fade-in">
-                                                        {[100, 50, 10, 5, 1].map(bVal => (
+                                                    <div className="absolute bottom-11 left-1/2 -translate-x-1/2 bg-black/95 border-2 border-yellow-400 rounded-xl p-1 shadow-2xl flex flex-col divide-y divide-slate-800 z-50 w-24 animate-fade-in max-h-56 overflow-y-auto">
+                                                        {[100, 50, 20, 10, 5, 2, 1, 0.5].map(bVal => (
                                                             <button 
                                                                 key={bVal} 
                                                                 onClick={() => { setMoneyComingBet(bVal); setIsBetSelectorOpen(false); }} 
@@ -1519,13 +1610,11 @@
                                                 )}
                                             </div>
 
-                                            {/* WIN Display */}
                                             <div className="text-center">
                                                 <span className="text-[9px] text-yellow-300 font-black uppercase tracking-wider block">WIN</span>
                                                 <span className="text-xs font-black text-emerald-400 font-mono">Tk {formatMoney(lastWinAmount)}</span>
                                             </div>
 
-                                            {/* Turbo, Auto & 3D JILI Spin Button */}
                                             <div className="flex items-center space-x-1.5">
                                                 <button 
                                                     onClick={() => setIsTurbo(!isTurbo)} 
@@ -1534,7 +1623,6 @@
                                                     <Icon name="zap" className="w-3.5 h-3.5" />
                                                 </button>
 
-                                                {/* 3D Green/Gold JILI Spin Button */}
                                                 <button 
                                                     onClick={() => spinJiliMoneyComing(false)} 
                                                     disabled={isSlotSpinning} 
@@ -1568,7 +1656,6 @@
                                     </div>
                                 </div>
 
-                                {/* Multiplier Badges Strip */}
                                 <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                     {aviatorHistory200.slice(0, 15).map((item, i) => (
                                         <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border flex-shrink-0 ${item.mult >= 10 ? 'bg-amber-500/20 text-yellow-300 border-amber-500/40' : item.mult >= 2 ? 'bg-purple-600/20 text-purple-300 border-purple-500/30' : 'bg-blue-600/20 text-blue-300 border-blue-500/30'}`}>{Number(item.mult).toFixed(2)}x</span>
@@ -1958,20 +2045,34 @@
                         </div>
                     )}
 
-                    {/* INTRO PROMPT MODAL */}
+                    {/* EXACT SCREENSHOT: INTRO PROMPT MODAL */}
                     {showIntroPopup && (
-                        <div className="absolute inset-0 bg-black/85 z-[1500] flex flex-col items-center justify-center p-4 backdrop-blur-md">
-                            <div className="relative w-full max-w-sm rounded-3xl bg-gradient-to-b from-[#2b1000] via-[#592700] to-[#1a0800] border-2 border-yellow-400 p-5 text-center shadow-2xl space-y-4">
-                                <div className="flex justify-between items-center text-xs text-amber-300 font-bold">
-                                    <span>Volatility: 🌶️🌶️🌶️🌶️🌶️</span>
-                                    <span className="text-red-500 font-black jili-logo-title">Money Coming</span>
+                        <div className="absolute inset-0 bg-black/90 z-[1500] flex flex-col items-center justify-center p-4 backdrop-blur-md">
+                            <div className="relative w-full max-w-sm rounded-[2.2rem] bg-gradient-to-b from-[#1b0900] via-[#3a1602] to-[#120500] border-[2.5px] border-yellow-400 p-5 text-center shadow-2xl space-y-4">
+                                
+                                {/* Header (Volatility & Game Title from Screenshot) */}
+                                <div className="flex justify-between items-center text-xs px-1">
+                                    <span className="text-yellow-300 font-bold flex items-center space-x-1">
+                                        <span>Volatility:</span>
+                                        <span>🌶️ 🌶️ 🌶️ 🌶️ 🌶️</span>
+                                    </span>
+                                    <span className="text-rose-500 font-black font-mono text-sm tracking-wide">Money Coming</span>
                                 </div>
-                                <div className="bg-purple-900/80 rounded-2xl p-4 border border-purple-400/40 flex flex-col items-center space-y-2">
-                                    <h3 className="text-lg font-black text-yellow-300 font-mono uppercase">Free Prizes !</h3>
-                                    <div className="text-4xl">🎁</div>
-                                    <p className="text-xs text-slate-200 font-semibold">Completed Daily mission & Get Rich Card!</p>
+
+                                {/* Main Purple Gift Box Card */}
+                                <div className="bg-[#40126e] rounded-3xl p-5 border border-purple-400/40 flex flex-col items-center justify-center space-y-3 shadow-inner">
+                                    <h3 className="text-lg font-black text-yellow-300 font-mono tracking-wider uppercase drop-shadow">FREE PRIZES !</h3>
+                                    <div className="text-5xl my-1 animate-bounce">🎁</div>
+                                    <p className="text-xs text-slate-100 font-bold tracking-tight">Completed Daily mission & Get Rich Card!</p>
                                 </div>
-                                <button onClick={() => setShowIntroPopup(false)} className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-slate-950 font-black text-xs uppercase rounded-xl shadow-neon-green">Continue</button>
+
+                                {/* Bottom Continue Button (Exact from Screenshot) */}
+                                <button 
+                                    onClick={() => setShowIntroPopup(false)} 
+                                    className="w-full py-4 bg-gradient-to-r from-[#00b050] via-[#10b981] to-[#00b050] text-slate-950 font-black text-sm uppercase rounded-2xl shadow-neon-green tracking-widest font-mono active:scale-95 transition-transform"
+                                >
+                                    CONTINUE
+                                </button>
                             </div>
                         </div>
                     )}
@@ -1982,7 +2083,7 @@
                             <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400 rounded-3xl p-6 text-center shadow-2xl space-y-3">
                                 <div className="text-5xl">🏆</div>
                                 <h2 className="text-2xl font-black text-yellow-400 font-mono">BIG WIN!</h2>
-                                <span className="text-3xl font-black text-white font-mono block">৳{formatMoney(popupAmount)}</span>
+                                <span className="text-3xl font-black text-white font-mono block">Tk {formatMoney(popupAmount)}</span>
                                 <button onClick={() => setShowResultPopup(false)} className="w-full py-3 bg-amber-400 text-slate-950 font-black rounded-xl text-xs uppercase font-mono shadow-neon-gold">Collect Winnings</button>
                             </div>
                         </div>
