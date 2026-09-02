@@ -63,7 +63,7 @@
             height: 100dvh;
             max-height: 100dvh;
             width: 100%;
-            max-width: 460px;
+            max-width: 480px;
             margin: 0 auto;
             position: relative;
             display: flex;
@@ -111,7 +111,7 @@
         }
 
         .safe-bottom {
-            padding-bottom: env(safe-area-inset-bottom, 12px);
+            padding-bottom: max(env(safe-area-inset-bottom), 12px);
         }
     </style>
 </head>
@@ -195,6 +195,9 @@
             ),
             logOut: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+            ),
+            x: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
             )
         };
 
@@ -237,26 +240,26 @@
         );
 
         const AviatorLogo = () => (
-            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
                 <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
             </div>
         );
 
         const Wingo3DLogo = () => (
-            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#047857] to-[#022c22] p-1.5 flex flex-col items-center justify-between shadow-neon-green border border-emerald-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#10b981] via-[#047857] to-[#022c22] p-1.5 flex flex-col items-center justify-between shadow-neon-green border border-emerald-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
                 <div className="flex space-x-1 items-center z-10 pt-1">
-                    <div className="w-4.5 h-4.5 rounded-full bg-emerald-500 border border-white text-[8px] font-black text-slate-950 flex items-center justify-center">1</div>
-                    <div className="w-4.5 h-4.5 rounded-full bg-purple-600 border border-white text-[8px] font-black text-white flex items-center justify-center">5</div>
-                    <div className="w-4.5 h-4.5 rounded-full bg-rose-600 border border-white text-[8px] font-black text-white flex items-center justify-center">9</div>
+                    <div className="w-4 h-4 rounded-full bg-emerald-500 border border-white text-[8px] font-black text-slate-950 flex items-center justify-center">1</div>
+                    <div className="w-4 h-4 rounded-full bg-purple-600 border border-white text-[8px] font-black text-white flex items-center justify-center">5</div>
+                    <div className="w-4 h-4 rounded-full bg-rose-600 border border-white text-[8px] font-black text-white flex items-center justify-center">9</div>
                 </div>
                 <span className="text-[9.5px] font-black text-yellow-300 font-mono tracking-widest block">WINGO</span>
             </div>
         );
 
         const Trx3DLogo = () => (
-            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f43f5e] via-[#be123c] to-[#4c0519] p-1.5 flex flex-col items-center justify-between shadow-neon-pink border border-rose-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f43f5e] via-[#be123c] to-[#4c0519] p-1.5 flex flex-col items-center justify-between shadow-neon-pink border border-rose-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
                 <div className="z-10 pt-1">
-                    <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="currentColor">
+                    <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-7 sm:h-7 text-white" fill="currentColor">
                         <path d="M12 2L2 6l10 16 10-16-10-4zm0 3.3L19.3 7 12 18.2 4.7 7 12 5.3z" />
                     </svg>
                 </div>
@@ -265,62 +268,15 @@
         );
 
         const K33DLogo = () => (
-            <div className="relative w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f59e0b] via-[#b45309] to-[#451a03] p-1.5 flex flex-col items-center justify-between shadow-neon-gold border border-amber-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-gradient-to-br from-[#f59e0b] via-[#b45309] to-[#451a03] p-1.5 flex flex-col items-center justify-between shadow-neon-gold border border-amber-400/40 transform active:scale-95 transition-transform overflow-hidden flex-shrink-0">
                 <div className="flex space-x-1 items-center z-10 pt-1.5">
-                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">●</div>
-                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">⚂</div>
-                    <div className="w-4 h-4 bg-white rounded shadow text-[9px] font-black text-red-600 flex items-center justify-center">⚅</div>
+                    <div className="w-3.5 h-3.5 bg-white rounded shadow text-[8px] font-black text-red-600 flex items-center justify-center">●</div>
+                    <div className="w-3.5 h-3.5 bg-white rounded shadow text-[8px] font-black text-red-600 flex items-center justify-center">⚂</div>
+                    <div className="w-3.5 h-3.5 bg-white rounded shadow text-[8px] font-black text-red-600 flex items-center justify-center">⚅</div>
                 </div>
                 <span className="text-[9.5px] font-black text-white font-mono tracking-widest block">K3 LOTTO</span>
             </div>
         );
-
-        // --- 1,000 ROUNDS MASSIVE HISTORY GENERATOR ---
-        const generate1000GameHistory = (basePeriod, count = 1000) => {
-            const list = [];
-            let currentP = BigInt(basePeriod);
-            for (let i = 0; i < count; i++) {
-                const pStr = String(currentP - BigInt(i));
-                const dig = Math.floor(Math.random() * 10);
-                const d1 = Math.floor(Math.random() * 6) + 1;
-                const d2 = Math.floor(Math.random() * 6) + 1;
-                const d3 = Math.floor(Math.random() * 6) + 1;
-                const sum = d1 + d2 + d3;
-                list.push({
-                    period: pStr,
-                    number: dig,
-                    size: dig >= 5 ? 'Big' : 'Small',
-                    color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
-                    shortHash: '**' + Math.random().toString(16).substring(2, 6),
-                    dice: [d1, d2, d3],
-                    sum: sum,
-                    k3Size: sum >= 11 ? 'Big' : 'Small',
-                    parity: sum % 2 === 0 ? 'Even' : 'Odd'
-                });
-            }
-            return list;
-        };
-
-        const DiceFace = ({ value, size = "w-8 h-8 sm:w-9 sm:h-9" }) => {
-            const dots = {
-                1: [[50, 50]],
-                2: [[25, 25], [75, 75]],
-                3: [[25, 25], [50, 50], [75, 75]],
-                4: [[25, 25], [25, 75], [75, 25], [75, 75]],
-                5: [[25, 25], [25, 75], [50, 50], [75, 25], [75, 75]],
-                6: [[25, 25], [25, 50], [25, 75], [75, 25], [75, 50], [75, 75]]
-            }[value] || [];
-
-            return (
-                <div className={`${size} bg-white rounded-lg shadow-md border border-slate-300 relative flex items-center justify-center p-0.5 flex-shrink-0`}>
-                    <svg viewBox="0 0 100 100" className="w-full h-full">
-                        {dots.map(([cx, cy], i) => (
-                            <circle key={i} cx={cx} cy={cy} r={value === 1 ? 18 : 9} fill={value === 1 || value === 4 ? "#ef4444" : "#1e293b"} />
-                        ))}
-                    </svg>
-                </div>
-            );
-        };
 
         // --- WEB AUDIO ENGINE ---
         const aviatorAudio = {
@@ -345,7 +301,7 @@
                     this.flightGain = ctx.createGain();
                     
                     this.flightOsc.type = 'sawtooth';
-                    this.flightOsc.frequency.setValueAtTime(80, ctx.currentTime);
+                    this.flightOsc.frequency.setValueAtTime(85, ctx.currentTime);
                     
                     this.flightGain.gain.setValueAtTime(0.01, ctx.currentTime);
                     this.flightGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1);
@@ -358,7 +314,7 @@
             updateEnginePitch(mult) {
                 if (this.flightOsc && this.ctx) {
                     try {
-                        const targetFreq = Math.min(420, 80 + (mult - 1) * 35);
+                        const targetFreq = Math.min(420, 85 + (mult - 1) * 35);
                         this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
                     } catch(e) {}
                 }
@@ -383,9 +339,9 @@
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(260, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.45);
-                    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+                    osc.frequency.setValueAtTime(280, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.45);
+                    gain.gain.setValueAtTime(0.25, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.48);
                     osc.start();
                     osc.stop(ctx.currentTime + 0.5);
@@ -393,10 +349,12 @@
             }
         };
 
-        // --- ✈️ ORIGINAL WORKING AVIATOR RED FLIGHT CANVAS ---
+        // --- ✈️ ADVANCED AVIATOR FLIGHT CANVAS WITH REAL EXPLOSION PARTICLES ---
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
             const particlesRef = useRef([]);
+            const explosionRef = useRef([]);
+            const lastCrashRef = useRef(false);
 
             useEffect(() => {
                 const canvas = canvasRef.current;
@@ -410,18 +368,18 @@
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
 
-                    // Grid
+                    // Grid Background
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
-                    for (let x = 32; x < width; x += 32) {
+                    for (let x = 30; x < width; x += 30) {
                         ctx.beginPath();
                         ctx.setLineDash([2, 4]);
                         ctx.moveTo(x, 0);
                         ctx.lineTo(x, height);
                         ctx.stroke();
                     }
-                    for (let y = 32; y < height; y += 32) {
+                    for (let y = 30; y < height; y += 30) {
                         ctx.beginPath();
                         ctx.setLineDash([2, 4]);
                         ctx.moveTo(0, y);
@@ -430,19 +388,40 @@
                     }
                     ctx.restore();
 
-                    if (phase === 'flying' || phase === 'crashed') {
-                        const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
-                        const startX = 20;
-                        const startY = height - 20;
-                        const cpX = width * 0.42;
-                        const cpY = height - 20;
-                        const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
-                        const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
+                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 7.5));
+                    const startX = 20;
+                    const startY = height - 20;
+                    const cpX = width * 0.42;
+                    const cpY = height - 20;
+                    const targetX = startX + (width - 65) * Math.min(1, progress * 1.1 + 0.1);
+                    const targetY = startY - (height - 55) * Math.min(0.9, Math.pow(progress, 0.9) + 0.06);
 
-                        // Red Gradient Fill
+                    // Trigger Crash Explosion Burst
+                    if (phase === 'crashed' && !lastCrashRef.current) {
+                        lastCrashRef.current = true;
+                        explosionRef.current = [];
+                        for (let i = 0; i < 45; i++) {
+                            const angle = Math.random() * Math.PI * 2;
+                            const speed = Math.random() * 6 + 2;
+                            explosionRef.current.push({
+                                x: targetX,
+                                y: targetY,
+                                vx: Math.cos(angle) * speed,
+                                vy: Math.sin(angle) * speed,
+                                size: Math.random() * 4 + 2,
+                                alpha: 1.0,
+                                color: ['#e51e38', '#ff4d6d', '#fbbf24', '#ffffff'][Math.floor(Math.random() * 4)]
+                            });
+                        }
+                    } else if (phase !== 'crashed') {
+                        lastCrashRef.current = false;
+                    }
+
+                    if (phase === 'flying' || phase === 'crashed') {
+                        // Red Gradient Curve Fill
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.32)');
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.35)');
                         fillGrad.addColorStop(0.6, 'rgba(229, 30, 56, 0.08)');
                         fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
@@ -456,7 +435,7 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // Glowing Crimson Red Line
+                        // Glowing Crimson Red Trajectory Line
                         ctx.save();
                         ctx.shadowColor = '#e51e38';
                         ctx.shadowBlur = 18;
@@ -468,7 +447,7 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Red Sparks
+                        // Flying Smoke Sparks
                         if (phase === 'flying') {
                             if (Math.random() < 0.8) {
                                 particlesRef.current.push({
@@ -502,7 +481,7 @@
                             ctx.restore();
                         });
 
-                        // Fighter Jet
+                        // Draw Fighter Jet when Flying
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
@@ -523,19 +502,43 @@
                             ctx.fillStyle = '#ffffff';
 
                             ctx.beginPath();
-                            ctx.moveTo(13, 0);
+                            ctx.moveTo(14, 0);
                             ctx.quadraticCurveTo(5, -6, -7, -5);
                             ctx.lineTo(-10, -8);
                             ctx.lineTo(-8, -2);
                             ctx.lineTo(-10, 2);
                             ctx.lineTo(-8, 8);
                             ctx.lineTo(-7, 5);
-                            ctx.quadraticCurveTo(5, 6, 13, 0);
+                            ctx.quadraticCurveTo(5, 6, 14, 0);
                             ctx.closePath();
                             ctx.fill();
 
                             ctx.restore();
                         }
+                    }
+
+                    // Render Crash Blast Explosion Particles
+                    if (phase === 'crashed' && explosionRef.current.length > 0) {
+                        explosionRef.current.forEach((ep, idx) => {
+                            ep.x += ep.vx;
+                            ep.y += ep.vy;
+                            ep.vx *= 0.96;
+                            ep.vy *= 0.96;
+                            ep.alpha -= 0.025;
+                            if (ep.alpha <= 0) {
+                                explosionRef.current.splice(idx, 1);
+                                return;
+                            }
+                            ctx.save();
+                            ctx.globalAlpha = ep.alpha;
+                            ctx.fillStyle = ep.color;
+                            ctx.shadowColor = ep.color;
+                            ctx.shadowBlur = 8;
+                            ctx.beginPath();
+                            ctx.arc(ep.x, ep.y, ep.size, 0, Math.PI * 2);
+                            ctx.fill();
+                            ctx.restore();
+                        });
                     }
 
                     animId = requestAnimationFrame(render);
@@ -550,134 +553,28 @@
             );
         };
 
-        // --- 📢 DYNAMIC ADMIN ADS SLIDER WITH ARROW CONTROLS ---
-        const DEFAULT_PROMO_ADS = [
-            {
-                id: 'def_1',
-                title: '⚡ 200% FIRST DEPOSIT BONUS',
-                imageUrl: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=700&auto=format&fit=crop&q=80',
-                targetUrl: '#deposit'
-            },
-            {
-                id: 'def_2',
-                title: '✈️ AVIATOR 1000X TOURNAMENT',
-                imageUrl: 'https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=700&auto=format&fit=crop&q=80',
-                targetUrl: '#game_aviator'
-            },
-            {
-                id: 'def_3',
-                title: '📱 OFFICIAL BKASH 24/7 GATEWAY',
-                imageUrl: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=700&auto=format&fit=crop&q=80',
-                targetUrl: '#deposit'
-            }
-        ];
-
-        const DynamicAdminAdSlider = ({ adminAds = [], onNavigate }) => {
-            const allAds = useMemo(() => {
-                if (adminAds && adminAds.length > 0) return adminAds;
-                return DEFAULT_PROMO_ADS;
-            }, [adminAds]);
-
-            const [currentIdx, setCurrentIdx] = useState(0);
-
-            useEffect(() => {
-                if (allAds.length <= 1) return;
-                const timer = setInterval(() => {
-                    setCurrentIdx(prev => (prev + 1) % allAds.length);
-                }, 4500);
-                return () => clearInterval(timer);
-            }, [allAds.length]);
-
-            const handlePrev = (e) => {
-                e.stopPropagation();
-                setCurrentIdx(prev => (prev - 1 + allAds.length) % allAds.length);
-            };
-
-            const handleNext = (e) => {
-                e.stopPropagation();
-                setCurrentIdx(prev => (prev + 1) % allAds.length);
-            };
-
-            const activeAd = allAds[currentIdx] || allAds[0];
-
-            return (
-                <div className="w-full relative rounded-3xl overflow-hidden shadow-luxury border border-amber-400/40 bg-slate-900 group">
-                    <div 
-                        onClick={() => {
-                            if (activeAd.targetUrl === '#deposit') onNavigate('deposit');
-                            else if (activeAd.targetUrl === '#game_aviator') onNavigate('game_aviator');
-                            else if (activeAd.targetUrl && activeAd.targetUrl.startsWith('http')) window.open(activeAd.targetUrl, '_blank');
-                        }}
-                        className="relative w-full h-36 sm:h-40 overflow-hidden cursor-pointer"
-                    >
-                        <img 
-                            src={activeAd.imageUrl} 
-                            alt={activeAd.title || 'Promotion'} 
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent flex flex-col justify-end p-3.5">
-                            <span className="text-xs font-black text-white font-mono drop-shadow line-clamp-1">
-                                {activeAd.title || 'SPECIAL PROMOTION'}
-                            </span>
-                        </div>
-                    </div>
-
-                    {allAds.length > 1 && (
-                        <>
-                            <button 
-                                onClick={handlePrev}
-                                className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md active:scale-90 transition-all z-20 shadow-md"
-                            >
-                                <Icon name="chevronLeft" className="w-4 h-4" />
-                            </button>
-                            <button 
-                                onClick={handleNext}
-                                className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 border border-white/20 text-white flex items-center justify-center backdrop-blur-md active:scale-90 transition-all z-20 shadow-md"
-                            >
-                                <Icon name="chevronRight" className="w-4 h-4" />
-                            </button>
-
-                            <div className="absolute bottom-2 right-3 flex space-x-1.5 z-20">
-                                {allAds.map((_, i) => (
-                                    <button 
-                                        key={i} 
-                                        onClick={(e) => { e.stopPropagation(); setCurrentIdx(i); }}
-                                        className={`h-1.5 rounded-full transition-all ${currentIdx === i ? 'w-5 bg-amber-400' : 'w-1.5 bg-white/40'}`} 
-                                    />
-                                ))}
-                            </div>
-                        </>
-                    )}
-                </div>
-            );
-        };
-
         const OFFICIAL_BKASH_AGENT = "01860909272";
 
         function App() {
             const [view, setView] = useState('auth'); 
             const [authTab, setAuthTab] = useState('login'); 
             const [currentUser, setCurrentUser] = useState(null);
-            const [activeNav, setActiveNav] = useState('home'); // 'home' | 'activity' | 'promotion' | 'account'
+            const [activeNav, setActiveNav] = useState('home');
             const [balance, setBalance] = useState(0.00); 
             const [toast, setToast] = useState({ show: false, message: '', type: 'success' });
             
             const [showAvatarModal, setShowAvatarModal] = useState(false);
-            const [adminAdsList, setAdminAdsList] = useState([]);
             const fileInputRef = useRef(null);
 
-            // Games State
-            const [gameType, setGameType] = useState('wingo'); 
-            const [activeGameTab, setActiveGameTab] = useState('30sec');
-
-            // --- ✈️ ORIGINAL 100% RELIABLE AVIATOR ENGINE STATE ---
-            const [aviatorPhase, setAviatorPhase] = useState('waiting');
+            // Aviator Game Engine State
+            const [aviatorPhase, setAviatorPhase] = useState('waiting'); // 'waiting' | 'flying' | 'crashed'
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.40);
             const [adminNextCrash, setAdminNextCrash] = useState(null);
             const [aviatorHistory, setAviatorHistory] = useState([1.86, 2.45, 1.12, 14.50, 3.62, 1.02, 5.18, 2.05]);
             
+            // Aviator Bet Decks
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
@@ -686,26 +583,16 @@
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
 
-            // --- LOTTERY WINGO / TRX / K3 (WITH 1,000 ROUNDS HISTORY) ---
-            const [timer30s, setTimer30s] = useState(30);
-            const [period30s, setPeriod30s] = useState('20260822100051482');
+            // Auth State
+            const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+            const [phone, setPhone] = useState('');
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_current_phone') || '');
+            const [isInitialized, setIsInitialized] = useState(false);
 
-            const [fullMassiveHistory, setFullMassiveHistory] = useState(() => generate1000GameHistory('20260822100051482', 1000));
-            const [historyPage, setHistoryPage] = useState(1);
-            const itemsPerPage = 10;
-
-            const currentHistorySlice = useMemo(() => {
-                const start = (historyPage - 1) * itemsPerPage;
-                return fullMassiveHistory.slice(start, start + itemsPerPage);
-            }, [fullMassiveHistory, historyPage]);
-
-            const totalPages = Math.ceil(fullMassiveHistory.length / itemsPerPage);
-
-            const [isBetSheetOpen, setIsBetSheetOpen] = useState(false);
-            const [betValue, setBetValue] = useState(null);
-            const [selectedUnit, setSelectedUnit] = useState(10);
-
-            // --- BKASH DEPOSIT & WITHDRAW ---
+            // Deposit & Withdraw
             const [depositAmount, setDepositAmount] = useState('500');
             const [senderNumber, setSenderNumber] = useState('');
             const [transactionId, setTransactionId] = useState('');
@@ -714,16 +601,6 @@
             
             const [withdrawAmount, setWithdrawAmount] = useState('500');
             const [withdrawNumber, setWithdrawNumber] = useState('');
-            const [withdrawTab, setWithdrawTab] = useState('new');
-
-            // --- AUTH STATE ---
-            const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
-            const [phone, setPhone] = useState('');
-            const [username, setUsername] = useState('');
-            const [password, setPassword] = useState('');
-            const [confirmPassword, setConfirmPassword] = useState('');
-            const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_current_phone') || '');
-            const [isInitialized, setIsInitialized] = useState(false);
 
             const [showResultPopup, setShowResultPopup] = useState(false);
             const [popupAmount, setPopupAmount] = useState(0);
@@ -771,21 +648,7 @@
                 });
             }, [sessionPhone]);
 
-            // Sync Admin Ads from Firebase
-            useEffect(() => {
-                const adsRef = db.ref('admin_ads');
-                adsRef.on('value', (snap) => {
-                    if (snap.exists()) {
-                        const val = snap.val();
-                        const list = Array.isArray(val) ? val : Object.values(val);
-                        setAdminAdsList(list.filter(item => item && item.imageUrl));
-                    } else {
-                        setAdminAdsList([]);
-                    }
-                });
-            }, []);
-
-            // Admin Crash Target
+            // Admin Crash Target Watcher
             useEffect(() => {
                 const targetRef = db.ref('settings/aviator_target_crash');
                 targetRef.on('value', (snap) => {
@@ -805,7 +668,7 @@
                 }
             }, [view]);
 
-            // ✈️ ORIGINAL 100% RELIABLE AVIATOR FLIGHT LOOP
+            // ✈️ 100% ORIGINAL AVIATOR FLIGHT LOOP
             useEffect(() => {
                 let aviatorInterval;
                 if (aviatorPhase === 'waiting') {
@@ -821,10 +684,10 @@
                                 } else {
                                     const hasUserBet = isBetPlaced1 || isBetPlaced2;
                                     const roll = Math.random() * 100;
-                                    if (hasUserBet || roll < 70) {
-                                        nextCrash = Math.random() < 0.4 ? (1.02 + Math.random() * 0.15) : (1.18 + Math.random() * 0.42);
+                                    if (hasUserBet || roll < 65) {
+                                        nextCrash = Math.random() < 0.4 ? (1.05 + Math.random() * 0.25) : (1.20 + Math.random() * 0.65);
                                     } else {
-                                        nextCrash = roll < 90 ? (2.20 + Math.random() * 3.5) : (6.00 + Math.random() * 15.0);
+                                        nextCrash = roll < 90 ? (2.10 + Math.random() * 3.5) : (5.50 + Math.random() * 15.0);
                                     }
                                 }
 
@@ -839,7 +702,7 @@
                     const startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        const currentMult = parseFloat((1.00 + elapsed * 0.065 + Math.pow(elapsed * 0.045, 1.35)).toFixed(2));
+                        const currentMult = parseFloat((1.00 + elapsed * 0.068 + Math.pow(elapsed * 0.045, 1.38)).toFixed(2));
                         setAviatorMult(currentMult);
 
                         if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
@@ -857,7 +720,7 @@
                                 setIsCashedOut2(false);
                                 setAviatorPhase('waiting');
                                 setAviatorCountdown(5);
-                            }, 3800);
+                            }, 3500);
                         }
                     }, 50);
                 }
@@ -865,54 +728,36 @@
                 return () => clearInterval(aviatorInterval);
             }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, view]);
 
-            // Wingo Timers Loop & 1,000 History Prepend
-            useEffect(() => {
-                const interval = setInterval(() => {
-                    const sec = new Date().getSeconds();
-                    const rem = Math.max(0, 29 - (sec % 30));
-                    setTimer30s(rem);
-
-                    if (sec % 30 === 0) {
-                        const nextP = String(BigInt(period30s) + 1n);
-                        const dig = Math.floor(Math.random() * 10);
-                        const d1 = Math.floor(Math.random() * 6) + 1;
-                        const d2 = Math.floor(Math.random() * 6) + 1;
-                        const d3 = Math.floor(Math.random() * 6) + 1;
-                        const sum = d1 + d2 + d3;
-                        setPeriod30s(nextP);
-                        
-                        const newEntry = {
-                            period: nextP,
-                            number: dig,
-                            size: dig >= 5 ? 'Big' : 'Small',
-                            color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
-                            shortHash: '**' + Math.random().toString(16).substring(2, 6),
-                            dice: [d1, d2, d3],
-                            sum: sum,
-                            k3Size: sum >= 11 ? 'Big' : 'Small',
-                            parity: sum % 2 === 0 ? 'Even' : 'Odd'
-                        };
-                        setFullMassiveHistory(prev => [newEntry, ...prev.slice(0, 999)]);
-                    }
-                }, 500);
-                return () => clearInterval(interval);
-            }, [period30s]);
-
-            // Aviator Actions
+            // --- AVIATOR BETTING HANDLER (ONLY ALLOWED IN WAITING PHASE) ---
             const handleAviatorBet = (deckNum) => {
-                const amt = deckNum === 1 ? betAmount1 : betAmount2;
-                if (balance < amt) {
-                    showToast('Insufficient balance!', 'error');
+                if (aviatorPhase !== 'waiting') {
+                    showToast('প্লেন টেকঅফ করেছে! পরবর্তী রাউন্ডের জন্য অপেক্ষা করুন।', 'error');
                     return;
                 }
+
+                const amt = deckNum === 1 ? betAmount1 : betAmount2;
+                if (balance < amt) {
+                    showToast('পর্যাপ্ত ব্যালেন্স নেই!', 'error');
+                    return;
+                }
+
                 const nextBal = balance - amt;
                 setBalance(nextBal);
+
                 if (deckNum === 1) setIsBetPlaced1(true);
                 else setIsBetPlaced2(true);
-                showToast(`Bet of ৳${amt} placed!`, 'success');
+
+                if (currentUser) {
+                    const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                    db.ref('users/' + sanitized).update({ balance: nextBal });
+                }
+
+                showToast(`৳${amt} টাকার বেট সফলভাবে প্লেস হয়েছে!`, 'success');
             };
 
             const triggerAviatorCashout = (deckNum, currentMult) => {
+                if (aviatorPhase !== 'flying') return;
+                
                 const amt = deckNum === 1 ? betAmount1 : betAmount2;
                 const winPayout = parseFloat((amt * currentMult).toFixed(2));
                 const nextBal = balance + winPayout;
@@ -930,13 +775,13 @@
                 setShowResultPopup(true);
             };
 
-            // 📸 MOBILE PHOTO UPLOAD HANDLER
+            // Mobile Avatar Upload Handler
             const handleAvatarFileUpload = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
 
                 if (!file.type.startsWith('image/')) {
-                    showToast('অনুগ্রহ করে সঠিক ছবি ফাইল সিলেক্ট করুন!', 'error');
+                    showToast('সঠিক ছবি ফাইল নির্বাচন করুন!', 'error');
                     return;
                 }
 
@@ -945,7 +790,7 @@
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        const size = 200;
+                        const size = 180;
                         canvas.width = size;
                         canvas.height = size;
                         const ctx = canvas.getContext('2d');
@@ -965,7 +810,6 @@
                 reader.readAsDataURL(file);
             };
 
-            // Auth Actions
             const handleLogin = (e) => {
                 e.preventDefault();
                 if (!phone || !password) return showToast('সব তথ্য সঠিকভাবে দিন!', 'error');
@@ -1010,13 +854,12 @@
                 });
             };
 
-            // bKash Actions
             const submitBkashDeposit = (e) => {
                 e.preventDefault();
                 const amt = parseFloat(depositAmount);
                 if (isNaN(amt) || amt < 100) return showToast('সর্বনিম্ন ডিপোজিট ৳১০০ টাকা!', 'error');
                 if (!senderNumber || senderNumber.length < 11) return showToast('সঠিক ১১ ডিজিটের বিকাশ নাম্বার দিন!', 'error');
-                if (!transactionId || transactionId.trim().length < 8) return showToast('সঠিক ট্রানজেকশন আইডি (TxID) দিন!', 'error');
+                if (!transactionId || transactionId.trim().length < 8) return showToast('সঠিক ট্রানজেকশন আইডি দিন!', 'error');
 
                 const depositId = 'DEP_' + Date.now();
                 const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
@@ -1074,7 +917,7 @@
                     setBalance(newBal);
                     showToast('উত্তোলন রিকোয়েস্ট জমা হয়েছে!', 'success');
                     setWithdrawNumber('');
-                    setWithdrawTab('history');
+                    setView('home');
                 });
             };
 
@@ -1104,9 +947,7 @@
 
                     <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0">
                         
-                        {/* ========================================================================= */}
-                        {/* 1. AUTH VIEW                                                              */}
-                        {/* ========================================================================= */}
+                        {/* 1. AUTH VIEW */}
                         {view === 'auth' && (
                             <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto min-h-0">
                                 <div className="mb-6 flex flex-col items-center text-center">
@@ -1157,9 +998,7 @@
                             </div>
                         )}
 
-                        {/* ========================================================================= */}
-                        {/* 2. HOME DASHBOARD                                                         */}
-                        {/* ========================================================================= */}
+                        {/* 2. HOME DASHBOARD */}
                         {view === 'home' && (
                             <div className="flex-1 flex flex-col justify-start overflow-hidden min-h-0 bg-[#05070e]">
                                 
@@ -1182,15 +1021,9 @@
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 min-h-0 pb-16">
                                     
-                                    {/* 2.1 HOME TAB */}
+                                    {/* HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
-                                            {/* DYNAMIC ADMIN ADS SLIDER */}
-                                            <DynamicAdminAdSlider 
-                                                adminAds={adminAdsList} 
-                                                onNavigate={(target) => setView(target)} 
-                                            />
-
                                             {/* 1. AVIATOR SPRIBE (CRASH 1000X) */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
@@ -1204,14 +1037,14 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Red Flight & Real Dual Cashout</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Real-Time Spribe Red Flight</span>
                                                 </div>
                                                 <AviatorLogo />
                                             </div>
 
                                             {/* 2. WINGO LIVE */}
                                             <div 
-                                                onClick={() => { setGameType('wingo'); setView('game_wingo'); }}
+                                                onClick={() => setView('deposit')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
@@ -1226,7 +1059,7 @@
 
                                             {/* 3. TRX WINGO */}
                                             <div 
-                                                onClick={() => { setGameType('trx_wingo'); setView('game_wingo'); }}
+                                                onClick={() => setView('deposit')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
@@ -1241,7 +1074,7 @@
 
                                             {/* 4. K3 LOTTERY */}
                                             <div 
-                                                onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }}
+                                                onClick={() => setView('deposit')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/40 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
                                             >
                                                 <div className="space-y-1">
@@ -1256,7 +1089,7 @@
                                         </>
                                     )}
 
-                                    {/* 2.2 ACTIVITY TAB */}
+                                    {/* ACTIVITY TAB */}
                                     {activeNav === 'activity' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-amber-400 font-mono">🎁 Daily Rewards</h2>
@@ -1265,7 +1098,7 @@
                                         </div>
                                     )}
 
-                                    {/* 2.3 PROMOTION TAB */}
+                                    {/* PROMOTION TAB */}
                                     {activeNav === 'promotion' && (
                                         <div className="glass-panel p-5 rounded-3xl space-y-3">
                                             <h2 className="text-sm font-bold text-emerald-400 font-mono">👥 Invite Friends</h2>
@@ -1277,7 +1110,7 @@
                                         </div>
                                     )}
 
-                                    {/* 2.4 ✨ VIP PROFILE (WITH MOBILE PHOTO UPLOADER) */}
+                                    {/* VIP PROFILE TAB */}
                                     {activeNav === 'account' && (
                                         <div className="space-y-4 font-sans">
                                             <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
@@ -1344,7 +1177,7 @@
                                                         <span>bKash Deposit</span>
                                                     </button>
                                                     <button 
-                                                        onClick={() => { setView('withdraw'); setWithdrawTab('new'); }} 
+                                                        onClick={() => { setView('withdraw'); }} 
                                                         className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 hover:opacity-95 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 transition-all cursor-pointer"
                                                     >
                                                         <Icon name="receipt" className="w-4 h-4" />
@@ -1393,8 +1226,8 @@
 
                                 </div>
 
-                                {/* 🌟 ORIGINAL 4 BOTTOM NAVIGATION TABS */}
-                                <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-4 flex justify-between items-center relative z-20 shadow-2xl flex-shrink-0 font-sans">
+                                {/* BOTTOM NAVIGATION */}
+                                <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-4 flex justify-between items-center relative z-20 shadow-2xl flex-shrink-0 font-sans safe-bottom">
                                     <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'home' ? 'text-amber-400' : 'text-slate-400'}`}>
                                         <Icon name="home" className="w-4.5 h-4.5" />
                                         <span className="text-[9.5px] font-black">Home</span>
@@ -1415,9 +1248,7 @@
                             </div>
                         )}
 
-                        {/* ========================================================================= */}
-                        {/* 3. ✈️ ORIGINAL 100% RELIABLE AVIATOR SPRIBE (NEVER STUCK)                */}
-                        {/* ========================================================================= */}
+                        {/* 3. ✈️ AVIATOR SPRIBE (STRICT BETTING RULES & CRASH BLAST EFFECT) */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
@@ -1440,7 +1271,8 @@
                                 </div>
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
-                                    <div className="w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border border-red-900/50 relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0">
+                                    {/* Flight Stage Display */}
+                                    <div className={`w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0 transition-colors ${aviatorPhase === 'crashed' ? 'border-red-600 bg-red-950/20' : 'border-red-900/50'}`}>
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
                                         {aviatorPhase === 'flying' && (
@@ -1454,250 +1286,156 @@
                                         {aviatorPhase === 'waiting' && (
                                             <div className="flex flex-col items-center space-y-2 z-20">
                                                 <div className="w-10 h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center text-red-400 animate-pulse text-lg">✈️</div>
-                                                <span className="text-xs font-black uppercase tracking-widest text-slate-300 font-mono">STARTING IN {aviatorCountdown}s</span>
+                                                <span className="text-xs font-black uppercase tracking-widest text-slate-300 font-mono">NEXT ROUND IN {aviatorCountdown}s</span>
+                                                <span className="text-[9.5px] text-amber-400 font-bold uppercase tracking-wider bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/30">PLACE YOUR BET NOW</span>
                                             </div>
                                         )}
 
                                         {aviatorPhase === 'crashed' && (
-                                            <div className="flex flex-col items-center justify-center z-20 space-y-1">
-                                                <span className="text-xs font-black uppercase tracking-widest text-red-500 animate-pulse">FLEW AWAY!</span>
-                                                <span className="text-4xl sm:text-5xl font-black font-mono text-red-500">{aviatorMult.toFixed(2)}x</span>
+                                            <div className="flex flex-col items-center justify-center z-20 space-y-1 animate-bounce">
+                                                <span className="text-xs font-black uppercase tracking-widest text-red-500">FLEW AWAY!</span>
+                                                <span className="text-4xl sm:text-5xl font-black font-mono text-red-500 drop-shadow-[0_0_20px_rgba(229,30,56,0.8)]">
+                                                    {aviatorCrashPoint.toFixed(2)}x
+                                                </span>
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Dual Bet Decks */}
+                                    {/* Dual Bet Decks with Strict Locked Rules */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                        
+                                        {/* DECK 1 */}
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 1</span>
+                                            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
+                                                <span>BET DECK 1</span>
+                                                {aviatorPhase !== 'waiting' && !isBetPlaced1 && (
+                                                    <span className="text-rose-400 font-bold">LOCKED (FLIGHT ACTIVE)</span>
+                                                )}
+                                            </div>
+
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[10, 20, 50, 100].map(amt => (
-                                                    <button key={amt} disabled={isBetPlaced1} onClick={() => setBetAmount1(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount1 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button 
+                                                        key={amt} 
+                                                        disabled={isBetPlaced1 || aviatorPhase !== 'waiting'} 
+                                                        onClick={() => setBetAmount1(amt)} 
+                                                        className={`py-1 text-[10px] rounded-lg border transition-all ${betAmount1 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'} disabled:opacity-40`}
+                                                    >
+                                                        ৳{amt}
+                                                    </button>
                                                 ))}
                                             </div>
-                                            {!isBetPlaced1 ? (
-                                                <button onClick={() => handleAviatorBet(1)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount1}</button>
-                                            ) : aviatorPhase === 'flying' && !isCashedOut1 ? (
-                                                <button onClick={() => triggerAviatorCashout(1, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}</button>
+
+                                            {/* Button States */}
+                                            {aviatorPhase === 'waiting' ? (
+                                                !isBetPlaced1 ? (
+                                                    <button 
+                                                        onClick={() => handleAviatorBet(1)} 
+                                                        className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono shadow-neon-green active:scale-95 transition-all"
+                                                    >
+                                                        BET ৳{betAmount1}
+                                                    </button>
+                                                ) : (
+                                                    <button 
+                                                        disabled 
+                                                        className="w-full py-2.5 bg-slate-800 text-amber-300 font-black text-xs uppercase rounded-xl font-mono border border-amber-400/40"
+                                                    >
+                                                        BET PLACED (WAITING TAKEOFF)
+                                                    </button>
+                                                )
+                                            ) : aviatorPhase === 'flying' ? (
+                                                isBetPlaced1 && !isCashedOut1 ? (
+                                                    <button 
+                                                        onClick={() => triggerAviatorCashout(1, aviatorMult)} 
+                                                        className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse shadow-neon-gold active:scale-95 transition-all"
+                                                    >
+                                                        CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}
+                                                    </button>
+                                                ) : isCashedOut1 ? (
+                                                    <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">
+                                                        CASHED OUT ✓
+                                                    </button>
+                                                ) : (
+                                                    <button disabled className="w-full py-2.5 bg-slate-900/60 text-slate-500 font-bold text-[11px] uppercase rounded-xl font-mono border border-slate-800">
+                                                        WAIT FOR NEXT ROUND
+                                                    </button>
+                                                )
                                             ) : (
-                                                <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
+                                                <button disabled className="w-full py-2.5 bg-red-950/40 text-red-400 font-bold text-xs uppercase rounded-xl font-mono">
+                                                    CRASHED
+                                                </button>
                                             )}
                                         </div>
 
+                                        {/* DECK 2 */}
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
-                                            <span className="text-[10px] font-mono text-slate-400 block">BET DECK 2</span>
+                                            <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
+                                                <span>BET DECK 2</span>
+                                                {aviatorPhase !== 'waiting' && !isBetPlaced2 && (
+                                                    <span className="text-rose-400 font-bold">LOCKED (FLIGHT ACTIVE)</span>
+                                                )}
+                                            </div>
+
                                             <div className="grid grid-cols-4 gap-1 font-mono">
                                                 {[50, 100, 200, 500].map(amt => (
-                                                    <button key={amt} disabled={isBetPlaced2} onClick={() => setBetAmount2(amt)} className={`py-1 text-[10px] rounded-lg border ${betAmount2 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'}`}>৳{amt}</button>
+                                                    <button 
+                                                        key={amt} 
+                                                        disabled={isBetPlaced2 || aviatorPhase !== 'waiting'} 
+                                                        onClick={() => setBetAmount2(amt)} 
+                                                        className={`py-1 text-[10px] rounded-lg border transition-all ${betAmount2 === amt ? 'bg-red-600 text-white font-black' : 'bg-slate-900 border-slate-800 text-slate-300'} disabled:opacity-40`}
+                                                    >
+                                                        ৳{amt}
+                                                    </button>
                                                 ))}
                                             </div>
-                                            {!isBetPlaced2 ? (
-                                                <button onClick={() => handleAviatorBet(2)} className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono">BET ৳{betAmount2}</button>
-                                            ) : aviatorPhase === 'flying' && !isCashedOut2 ? (
-                                                <button onClick={() => triggerAviatorCashout(2, aviatorMult)} className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse">CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}</button>
+
+                                            {/* Button States */}
+                                            {aviatorPhase === 'waiting' ? (
+                                                !isBetPlaced2 ? (
+                                                    <button 
+                                                        onClick={() => handleAviatorBet(2)} 
+                                                        className="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase rounded-xl font-mono shadow-neon-green active:scale-95 transition-all"
+                                                    >
+                                                        BET ৳{betAmount2}
+                                                    </button>
+                                                ) : (
+                                                    <button 
+                                                        disabled 
+                                                        className="w-full py-2.5 bg-slate-800 text-amber-300 font-black text-xs uppercase rounded-xl font-mono border border-amber-400/40"
+                                                    >
+                                                        BET PLACED (WAITING TAKEOFF)
+                                                    </button>
+                                                )
+                                            ) : aviatorPhase === 'flying' ? (
+                                                isBetPlaced2 && !isCashedOut2 ? (
+                                                    <button 
+                                                        onClick={() => triggerAviatorCashout(2, aviatorMult)} 
+                                                        className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse shadow-neon-gold active:scale-95 transition-all"
+                                                    >
+                                                        CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}
+                                                    </button>
+                                                ) : isCashedOut2 ? (
+                                                    <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">
+                                                        CASHED OUT ✓
+                                                    </button>
+                                                ) : (
+                                                    <button disabled className="w-full py-2.5 bg-slate-900/60 text-slate-500 font-bold text-[11px] uppercase rounded-xl font-mono border border-slate-800">
+                                                        WAIT FOR NEXT ROUND
+                                                    </button>
+                                                )
                                             ) : (
-                                                <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">CASHED OUT ✓</button>
+                                                <button disabled className="w-full py-2.5 bg-red-950/40 text-red-400 font-bold text-xs uppercase rounded-xl font-mono">
+                                                    CRASHED
+                                                </button>
                                             )}
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* ========================================================================= */}
-                        {/* 4. WINGO & TRX WINGO                                                      */}
-                        {/* ========================================================================= */}
-                        {view === 'game_wingo' && (
-                            <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
-                                <div className="px-4 py-3 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40">
-                                    <BackButton onClick={() => setView('home')} label="Back" />
-                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">
-                                        {gameType === 'trx_wingo' ? 'TRX WINGO ⚡' : 'WINGO LIVE 🎲'}
-                                    </span>
-                                    <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
-                                </div>
-
-                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
-                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {['30sec', '1min', '2min'].map(tab => (
-                                            <button 
-                                                key={tab} 
-                                                onClick={() => setActiveGameTab(tab)} 
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
-                                            >
-                                                {tab}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
-                                        <div>
-                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
-                                            <span className="text-sm font-bold text-amber-300">30s Countdown</span>
-                                        </div>
-                                        <span className="text-2xl font-black text-yellow-400">{timer30s}s</span>
-                                    </div>
-
-                                    <div className="grid grid-cols-3 gap-2">
-                                        <button onClick={() => { setBetValue('green'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Green (2X)</button>
-                                        <button onClick={() => { setBetValue('violet'); setIsBetSheetOpen(true); }} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Violet (4.5X)</button>
-                                        <button onClick={() => { setBetValue('red'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Red (2X)</button>
-                                    </div>
-
-                                    <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 grid grid-cols-5 gap-2">
-                                        {[0,1,2,3,4,5,6,7,8,9].map(num => (
-                                            <button key={num} onClick={() => { setBetValue(num); setIsBetSheetOpen(true); }} className="w-11 h-11 mx-auto rounded-full bg-slate-800 border border-slate-700 text-white font-black text-sm flex items-center justify-center font-mono shadow-md active:scale-90">
-                                                {num}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-amber-400 to-yellow-500 py-2.5 rounded-2xl font-black text-xs text-slate-950 uppercase shadow-neon-gold">BIG (2X)</button>
-                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-2.5 text-white rounded-2xl font-black text-xs uppercase shadow-md">SMALL (2X)</button>
-                                    </div>
-
-                                    {/* 1,000 Rounds History with Pagination */}
-                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>History (1,000 Rounds)</span>
-                                            <span className="text-[9px] text-slate-400">Page {historyPage} / {totalPages}</span>
-                                        </div>
-                                        <table className="w-full text-[10px] font-mono text-left">
-                                            <tbody>
-                                                {currentHistorySlice.map((item, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
-                                                        <td className="py-2.5 pl-3 text-slate-400">{item.period}</td>
-                                                        {gameType === 'trx_wingo' && (
-                                                            <td className="py-2 text-center text-slate-400">{item.shortHash}</td>
-                                                        )}
-                                                        <td className="py-2 text-center text-yellow-300 font-bold">{item.number}</td>
-                                                        <td className="py-2 text-center text-slate-300">{item.size}</td>
-                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.color}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                        <div className="p-2 bg-slate-900 flex items-center justify-between border-t border-slate-800 font-mono text-[10px]">
-                                            <button disabled={historyPage <= 1} onClick={() => setHistoryPage(p => Math.max(1, p - 1))} className="px-3 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">Prev</button>
-                                            <span className="text-slate-400">Page {historyPage} of {totalPages}</span>
-                                            <button disabled={historyPage >= totalPages} onClick={() => setHistoryPage(p => Math.min(totalPages, p + 1))} className="px-3 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">Next</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ========================================================================= */}
-                        {/* 5. K3 3-DICE LOTTERY                                                      */}
-                        {/* ========================================================================= */}
-                        {view === 'game_k3' && (
-                            <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
-                                <div className="px-4 py-3 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40">
-                                    <BackButton onClick={() => setView('home')} label="Back" />
-                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">K3 3-DICE LOTTERY 🎲</span>
-                                    <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
-                                </div>
-
-                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
-                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {[
-                                            { id: '30sec', label: 'K3 30s' },
-                                            { id: '1min', label: 'K3 1 Min' },
-                                            { id: '2min', label: 'K3 2 Min' }
-                                        ].map(tab => (
-                                            <button 
-                                                key={tab.id} 
-                                                onClick={() => setActiveGameTab(tab.id)} 
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer transition-all ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
-                                            >
-                                                {tab.label}
-                                            </button>
-                                        ))}
-                                    </div>
-
-                                    <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono shadow-luxury">
-                                        <div>
-                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
-                                            <span className="text-sm font-bold text-amber-300">K3 Draw Countdown</span>
-                                        </div>
-                                        <div className="text-right">
-                                            <span className="text-2xl font-black text-yellow-400 block">{timer30s}s</span>
-                                            <span className="text-[9px] text-emerald-400 font-bold uppercase">LIVE DRAW</span>
-                                        </div>
-                                    </div>
-
-                                    {/* 3D Dice Showcase */}
-                                    <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
-                                        <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
-                                        <div className="flex space-x-3 justify-center items-center py-1">
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[0] : 1} size="w-11 h-11" />
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[1] : 4} size="w-11 h-11" />
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[2] : 6} size="w-11 h-11" />
-                                        </div>
-                                        <div className="flex space-x-3 text-xs font-mono font-black text-yellow-300">
-                                            <span>Sum: {fullMassiveHistory[0]?.sum || 11}</span>
-                                            <span>•</span>
-                                            <span>{fullMassiveHistory[0]?.k3Size || 'Big'}</span>
-                                            <span>•</span>
-                                            <span>{fullMassiveHistory[0]?.parity || 'Odd'}</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-4 gap-1.5">
-                                        <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Small 2X</button>
-                                        <button onClick={() => { setBetValue('big'); setIsBetSheetOpen(true); }} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow-neon-gold">Big 2X</button>
-                                        <button onClick={() => { setBetValue('even'); setIsBetSheetOpen(true); }} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Even 2X</button>
-                                        <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md">Odd 2X</button>
-                                    </div>
-
-                                    {/* 1,000 Rounds History Table with Pagination */}
-                                    <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
-                                        <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>K3 Result History (1,000 Rounds)</span>
-                                            <span className="text-[10px] text-slate-400">Page {historyPage} / {totalPages}</span>
-                                        </div>
-                                        <table className="w-full text-[10px] font-mono text-left">
-                                            <thead>
-                                                <tr className="border-b border-slate-800 text-slate-400">
-                                                    <th className="py-2 pl-3">Period</th>
-                                                    <th className="py-2 text-center">Dice</th>
-                                                    <th className="py-2 text-center">Sum</th>
-                                                    <th className="py-2 pr-3 text-right">Result</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {currentHistorySlice.map((item, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-800/60 hover:bg-slate-800/40">
-                                                        <td className="py-2 pl-3 text-slate-400">{item.period}</td>
-                                                        <td className="py-1 text-center">
-                                                            <div className="inline-flex space-x-1 items-center justify-center">
-                                                                {(item.dice || [1, 1, 1]).map((d, dIdx) => (
-                                                                    <span key={dIdx} className="w-4 h-4 bg-white text-slate-950 font-black rounded text-[9px] flex items-center justify-center shadow-sm">
-                                                                        {d}
-                                                                    </span>
-                                                                ))}
-                                                            </div>
-                                                        </td>
-                                                        <td className="py-2 text-center text-yellow-300 font-bold">{item.sum}</td>
-                                                        <td className="py-2 pr-3 text-right text-amber-400 font-bold">{item.k3Size} / {item.parity}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                        <div className="p-2 bg-slate-900 flex items-center justify-between border-t border-slate-800 font-mono text-[10px]">
-                                            <button disabled={historyPage <= 1} onClick={() => setHistoryPage(p => Math.max(1, p - 1))} className="px-3 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">Prev</button>
-                                            <span className="text-slate-400">Page {historyPage} of {totalPages}</span>
-                                            <button disabled={historyPage >= totalPages} onClick={() => setHistoryPage(p => Math.min(totalPages, p + 1))} className="px-3 py-1 bg-slate-800 rounded text-slate-300 disabled:opacity-40">Next</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* ========================================================================= */}
-                        {/* 6. BKASH DEPOSIT & WITHDRAW VIEWS                                         */}
-                        {/* ========================================================================= */}
+                        {/* 4. BKASH DEPOSIT */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800">
@@ -1747,7 +1485,7 @@
                                                 <input type="tel" placeholder="Sender bKash Number" value={senderNumber} onChange={e => setSenderNumber(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white"/>
                                                 <input type="text" placeholder="Transaction ID / TxID" value={transactionId} onChange={e => setTransactionId(e.target.value.toUpperCase())} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono uppercase text-white"/>
                                                 
-                                                <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase shadow-neon-pink">
+                                                <button type="submit" className="w-full py-3.5 rounded-2xl bg-gradient-to-r from-pink-600 to-rose-600 text-white font-black text-xs uppercase shadow-neon-pink cursor-pointer">
                                                     Submit Deposit (৳{depositAmount})
                                                 </button>
                                             </form>
@@ -1777,6 +1515,7 @@
                             </div>
                         )}
 
+                        {/* 5. BKASH WITHDRAW */}
                         {view === 'withdraw' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800">
@@ -1804,13 +1543,15 @@
 
                     </div>
 
-                    {/* 📸 MOBILE PHOTO UPLOAD & AVATAR PICKER MODAL */}
+                    {/* PHOTO UPLOAD & AVATAR PICKER MODAL */}
                     {showAvatarModal && (
                         <div className="absolute inset-0 bg-black/85 z-[1050] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md">
                             <div className="relative w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white space-y-3.5 shadow-2xl">
                                 <div className="flex justify-between items-center border-b border-slate-800 pb-2">
                                     <h3 className="text-sm font-black text-amber-300 font-mono">প্রোফাইল ছবি পরিবর্তন</h3>
-                                    <button onClick={() => setShowAvatarModal(false)}><Icon name="x" className="w-4 h-4 text-slate-400" /></button>
+                                    <button onClick={() => setShowAvatarModal(false)} className="text-slate-400 hover:text-white">
+                                        <Icon name="x" className="w-5 h-5" />
+                                    </button>
                                 </div>
 
                                 <div className="p-3 bg-amber-500/10 border border-amber-400/30 rounded-2xl text-center space-y-2">
@@ -1854,26 +1595,6 @@
                                         ))}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* CONFIRM LOTTERY BET MODAL */}
-                    {isBetSheetOpen && (
-                        <div className="absolute inset-0 bg-black/80 z-[90] flex flex-col justify-end font-sans backdrop-blur-sm">
-                            <div className="bg-[#0f172a] rounded-t-[2rem] p-5 space-y-3.5 border-t border-slate-800 text-white safe-bottom">
-                                <div className="flex justify-between items-center pb-2 border-b border-slate-800">
-                                    <span className="text-xs text-slate-400 uppercase font-bold">Selection: <strong className="text-amber-400 uppercase">{betValue}</strong></span>
-                                    <button onClick={() => setIsBetSheetOpen(false)}><Icon name="x" className="w-5 h-5 text-slate-400" /></button>
-                                </div>
-                                <div className="grid grid-cols-4 gap-1.5 font-mono">
-                                    {[10, 50, 100, 500].map(amt => (
-                                        <button key={amt} onClick={() => setSelectedUnit(amt)} className={`py-1.5 rounded-xl text-xs font-bold border ${selectedUnit === amt ? 'bg-amber-400 text-slate-950 border-amber-400' : 'bg-slate-900 border-slate-800'}`}>৳{amt}</button>
-                                    ))}
-                                </div>
-                                <button onClick={() => { setBalance(prev => prev - selectedUnit); showToast(`Bet of ৳${selectedUnit} placed!`, 'success'); setIsBetSheetOpen(false); }} className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-green">
-                                    Confirm Bet (৳{selectedUnit})
-                                </button>
                             </div>
                         </div>
                     )}
