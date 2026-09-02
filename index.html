@@ -223,6 +223,89 @@
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
         ];
 
+        // 💰 ১০ টাকা বেটে ১.xx রেঞ্জে মাত্র ২০ পয়সা (০.২০ টাকা) প্রফিট ক্যালকুলেটর
+        const calculateAviatorPayout = (amt, mult) => {
+            if (mult <= 1.0) return parseFloat(amt.toFixed(2));
+            if (mult < 2.0) {
+                // ১০ টাকায় ১.১০x এ লাভ আসবে ০.২০ টাকা
+                const netProfit = amt * (mult - 1) * 0.20;
+                return parseFloat((amt + netProfit).toFixed(2));
+            }
+            // ২.xx বা তার বেশিতে নিয়ন্ত্রিত প্রফিট
+            const netProfit = (amt * (mult - 1)) * 0.65;
+            return parseFloat((amt + netProfit).toFixed(2));
+        };
+
+        // --- 📢 PROMO BANNER ADS SLIDER ---
+        const PROMO_ADS = [
+            {
+                id: 1,
+                title: "⚡ 200% FIRST DEPOSIT BONUS",
+                subtitle: "Instant Deposit & Fast Cashout with bKash Gateway",
+                tag: "PROMO",
+                image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=700&auto=format&fit=crop&q=80",
+                badge: "bKash 24/7"
+            },
+            {
+                id: 2,
+                title: "✈️ AVIATOR 1000X MEGA TOURNAMENT",
+                subtitle: "Fly High & Win Up To ৳50,000 Daily Prize Pool",
+                tag: "HOT",
+                image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=700&auto=format&fit=crop&q=80",
+                badge: "AVIATOR"
+            },
+            {
+                id: 3,
+                title: "🎲 WINGO & TRX LIVE JACKPOT",
+                subtitle: "Decentralized Blockchain 30s Fast Color Draw",
+                tag: "JACKPOT",
+                image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=700&auto=format&fit=crop&q=80",
+                badge: "WINGO"
+            }
+        ];
+
+        const PromoBannerSlider = ({ onNavigate }) => {
+            const [cur, setCur] = useState(0);
+
+            useEffect(() => {
+                const timer = setInterval(() => {
+                    setCur(c => (c + 1) % PROMO_ADS.length);
+                }, 4000);
+                return () => clearInterval(timer);
+            }, []);
+
+            return (
+                <div className="relative w-full h-36 rounded-3xl overflow-hidden border border-amber-500/40 shadow-luxury group flex-shrink-0">
+                    {PROMO_ADS.map((ad, idx) => (
+                        <div
+                            key={ad.id}
+                            className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${idx === cur ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+                            onClick={() => onNavigate('deposit')}
+                        >
+                            <img src={ad.image} alt={ad.title} className="w-full h-full object-cover brightness-50" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-4 flex flex-col justify-end">
+                                <div className="flex items-center space-x-2 mb-1">
+                                    <span className="bg-amber-400 text-slate-950 text-[9px] font-black font-mono px-2 py-0.5 rounded-full">{ad.tag}</span>
+                                    <span className="bg-rose-600/80 text-white text-[9px] font-bold font-mono px-2 py-0.5 rounded-full">{ad.badge}</span>
+                                </div>
+                                <h3 className="text-xs sm:text-sm font-black text-amber-300 font-mono tracking-wide">{ad.title}</h3>
+                                <p className="text-[10px] text-slate-300 font-medium">{ad.subtitle}</p>
+                            </div>
+                        </div>
+                    ))}
+                    <div className="absolute bottom-2 right-3 z-20 flex space-x-1">
+                        {PROMO_ADS.map((_, i) => (
+                            <button
+                                key={i}
+                                onClick={(e) => { e.stopPropagation(); setCur(i); }}
+                                className={`h-1.5 rounded-full transition-all ${i === cur ? 'w-4 bg-amber-400' : 'w-1.5 bg-white/40'}`}
+                            />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
         const BackButton = ({ onClick, label = "Back" }) => (
             <button 
                 type="button" 
@@ -302,10 +385,8 @@
             );
         };
 
-        // --- 100+ ROUNDS REALISTIC HISTORY GENERATORS ---
         const generateGameHistoryList = (prefix, baseCount = 120) => {
             const list = [];
-            const now = Date.now();
             for (let i = 0; i < baseCount; i++) {
                 const pStr = `20260902${prefix}${String(100000 + baseCount - i)}`;
                 const dig = Math.floor(Math.random() * 10);
@@ -328,32 +409,40 @@
             return list;
         };
 
-        // ✈️ COMPLETELY RANDOM HIGH-MULTIPLIER GENERATOR (2X+, 20X+, 50X+, 100X+)
-        const generateRealisticAviatorCrash = () => {
-            const roll = Math.random() * 100;
-            if (roll < 10) {
-                // 10% Low 1.05x - 1.95x
-                return parseFloat((1.05 + Math.random() * 0.90).toFixed(2));
-            } else if (roll < 45) {
-                // 35% Regular 2.00x - 6.50x
-                return parseFloat((2.00 + Math.random() * 4.50).toFixed(2));
-            } else if (roll < 75) {
-                // 30% High 6.50x - 20.00x
-                return parseFloat((6.50 + Math.random() * 13.50).toFixed(2));
-            } else if (roll < 93) {
-                // 18% Mega 20.00x - 65.00x
-                return parseFloat((20.00 + Math.random() * 45.00).toFixed(2));
+        // ✈️ ANTI-PROFIT MULTIPLIER CONTROLLER
+        const calculateAviatorCrashPoint = (hasUserBet, cooldownRounds) => {
+            if (cooldownRounds > 0) {
+                return parseFloat((1.01 + Math.random() * 0.22).toFixed(2));
+            }
+
+            if (hasUserBet) {
+                const roll = Math.random() * 100;
+                if (roll < 78) {
+                    return parseFloat((1.04 + Math.random() * 0.34).toFixed(2));
+                } else if (roll < 94) {
+                    return parseFloat((1.40 + Math.random() * 0.70).toFixed(2));
+                } else {
+                    return parseFloat((2.10 + Math.random() * 2.40).toFixed(2));
+                }
+            }
+
+            const idleRoll = Math.random() * 100;
+            if (idleRoll < 40) {
+                return parseFloat((1.15 + Math.random() * 0.65).toFixed(2));
+            } else if (idleRoll < 80) {
+                return parseFloat((1.80 + Math.random() * 2.20).toFixed(2));
+            } else if (idleRoll < 95) {
+                return parseFloat((4.00 + Math.random() * 4.50).toFixed(2));
             } else {
-                // 7% Super Mega 65.00x - 350.00x+
-                return parseFloat((65.00 + Math.random() * 285.00).toFixed(2));
+                return parseFloat((8.50 + Math.random() * 12.50).toFixed(2));
             }
         };
 
-        const generateAviator120History = (count = 120) => {
+        const generateAviatorInitialHistory = (count = 120) => {
             const list = [];
             let baseId = 849200;
             for (let i = 0; i < count; i++) {
-                const mult = generateRealisticAviatorCrash();
+                const mult = calculateAviatorCrashPoint(false, 0);
                 list.push({
                     id: '#' + (baseId - i),
                     mult: mult,
@@ -399,7 +488,7 @@
             updateEnginePitch(mult) {
                 if (this.flightOsc && this.ctx) {
                     try {
-                        const targetFreq = Math.min(520, 85 + (mult - 1) * 12);
+                        const targetFreq = Math.min(520, 85 + (mult - 1) * 15);
                         this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
                     } catch(e) {}
                 }
@@ -453,7 +542,6 @@
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
 
-                    // Grid
                     ctx.save();
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
                     ctx.lineWidth = 1;
@@ -473,7 +561,7 @@
                     }
                     ctx.restore();
 
-                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 18.0));
+                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 10.0));
                     const startX = 20;
                     const startY = height - 20;
                     const cpX = width * 0.45;
@@ -571,7 +659,7 @@
                             glow.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
                             glow.addColorStop(0.3, 'rgba(229, 30, 56, 0.8)');
                             glow.addColorStop(0.7, 'rgba(229, 30, 56, 0.25)');
-                            glow.addColorStop(1, 'rgba(229, 30, 56, 0)');
+                            glow.addColorStop(1, 'rgba(229, 30, 56, 0.0)');
                             ctx.fillStyle = glow;
                             ctx.beginPath();
                             ctx.arc(0, 0, 26, 0, Math.PI * 2);
@@ -647,16 +735,17 @@
 
             // Games Routing State
             const [gameType, setGameType] = useState('wingo');
-            const [activeGameTab, setActiveGameTab] = useState('30sec'); // '30sec' | '1min' | '2min'
+            const [activeGameTab, setActiveGameTab] = useState('30sec');
 
-            // --- AVIATOR STATE ---
+            // --- AVIATOR STATE & ANTI-PROFIT RISK ENGINE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
-            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(4.20);
+            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(1.85);
             const [adminNextCrash, setAdminNextCrash] = useState(null);
-            const [aviatorHistory100, setAviatorHistory100] = useState(() => generateAviator120History(120));
+            const [aviatorHistory100, setAviatorHistory100] = useState(() => generateAviatorInitialHistory(120));
             const [showAviatorHistoryModal, setShowAviatorHistoryModal] = useState(false);
+            const [aviatorCrashCooldown, setAviatorCrashCooldown] = useState(0);
             
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
@@ -666,7 +755,7 @@
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
 
-            // --- INDEPENDENT TIMERS & HISTORIES (30s, 1m, 2m) ---
+            // --- INDEPENDENT PRECISE CLOCKS & HISTORIES (30s, 1m, 2m) ---
             const [timers, setTimers] = useState({ '30sec': 30, '1min': 60, '2min': 120 });
             const [periods, setPeriods] = useState({
                 '30sec': '2026090230S100120',
@@ -771,7 +860,7 @@
                 }
             }, [view]);
 
-            // ✈️ AVIATOR CONTINUOUS DYNAMIC FLIGHT (NO STUCK 1.20X)
+            // ✈️ AVIATOR CRASH ENGINE
             useEffect(() => {
                 let aviatorInterval;
                 if (aviatorPhase === 'waiting') {
@@ -785,7 +874,14 @@
                                 if (adminNextCrash !== null && adminNextCrash > 1.0) {
                                     nextCrash = adminNextCrash;
                                 } else {
-                                    nextCrash = generateRealisticAviatorCrash();
+                                    const hasUserBet = isBetPlaced1 || isBetPlaced2;
+                                    nextCrash = calculateAviatorCrashPoint(hasUserBet, aviatorCrashCooldown);
+                                }
+
+                                if (nextCrash >= 5.00) {
+                                    setAviatorCrashCooldown(3);
+                                } else {
+                                    setAviatorCrashCooldown(c => Math.max(0, c - 1));
                                 }
 
                                 setAviatorCrashPoint(nextCrash);
@@ -799,7 +895,7 @@
                     const startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        const currentMult = parseFloat((1.00 + elapsed * 0.08 + Math.pow(elapsed * 0.038, 1.48)).toFixed(2));
+                        const currentMult = parseFloat((1.00 + elapsed * 0.082 + Math.pow(elapsed * 0.04, 1.45)).toFixed(2));
                         setAviatorMult(currentMult);
 
                         if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
@@ -831,9 +927,9 @@
                 }
 
                 return () => clearInterval(aviatorInterval);
-            }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, view]);
+            }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, aviatorCrashCooldown, view]);
 
-            // 🎲 3 INDEPENDENT REAL CLOCK INTERVALS (30s, 1m, 2m)
+            // 🎲 3 INDEPENDENT SYNCHRONOUS TIMERS
             useEffect(() => {
                 const clockInterval = setInterval(() => {
                     const now = new Date();
@@ -850,12 +946,10 @@
                         '2min': rem2m
                     });
 
-                    // Check End-of-Round triggers for each duration separately
                     ['30sec', '1min', '2min'].forEach(tabKey => {
                         const currentRem = tabKey === '30sec' ? rem30 : (tabKey === '1min' ? rem1m : rem2m);
                         if (currentRem === 0) {
                             const prefix = tabKey === '30sec' ? '30S' : (tabKey === '1min' ? '1M' : '2M');
-                            const currentPStr = periods[tabKey];
                             const nextPStr = `20260902${prefix}${Date.now().toString().slice(-6)}`;
 
                             const dig = Math.floor(Math.random() * 10);
@@ -886,7 +980,6 @@
                                 [tabKey]: [newEntry, ...(h[tabKey] || []).slice(0, 149)]
                             }));
 
-                            // Settle user bets for active tab
                             if (tabKey === activeGameTab && userActiveBets.length > 0) {
                                 let totalWin = 0;
                                 userActiveBets.forEach(bet => {
@@ -990,7 +1083,7 @@
                 if (aviatorPhase !== 'flying') return;
                 
                 const amt = deckNum === 1 ? betAmount1 : betAmount2;
-                const winPayout = parseFloat((amt * currentMult).toFixed(2));
+                const winPayout = calculateAviatorPayout(amt, currentMult);
                 const nextBal = balance + winPayout;
                 setBalance(nextBal);
 
@@ -1253,6 +1346,9 @@
                                     
                                     {activeNav === 'home' && (
                                         <>
+                                            {/* 📢 PROMO ADS SLIDER */}
+                                            <PromoBannerSlider onNavigate={(dest) => setView(dest)} />
+
                                             {/* 1. AVIATOR SPRIBE (CRASH 1000X) */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
@@ -1266,7 +1362,7 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Random 2X, 20X, 50X+ & 100+ History</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Red Flight & 100+ History</span>
                                                 </div>
                                                 <AviatorLogo />
                                             </div>
@@ -1477,7 +1573,7 @@
                             </div>
                         )}
 
-                        {/* 3. ✈️ AVIATOR SPRIBE (RANDOM 2X, 20X, 50X+ & 100+ ROUNDS HISTORY) */}
+                        {/* 3. ✈️ AVIATOR SPRIBE (LOW 1X PROFIT & CONTROLLED PAYOUT) */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
@@ -1590,7 +1686,7 @@
                                                         onClick={() => triggerAviatorCashout(1, aviatorMult)} 
                                                         className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse shadow-neon-gold active:scale-95 transition-all cursor-pointer"
                                                     >
-                                                        CASHOUT ৳{formatMoney(betAmount1 * aviatorMult)}
+                                                        CASHOUT ৳{formatMoney(calculateAviatorPayout(betAmount1, aviatorMult))}
                                                     </button>
                                                 ) : isCashedOut1 ? (
                                                     <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">
@@ -1651,7 +1747,7 @@
                                                         onClick={() => triggerAviatorCashout(2, aviatorMult)} 
                                                         className="w-full py-2.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl font-mono animate-pulse shadow-neon-gold active:scale-95 transition-all cursor-pointer"
                                                     >
-                                                        CASHOUT ৳{formatMoney(betAmount2 * aviatorMult)}
+                                                        CASHOUT ৳{formatMoney(calculateAviatorPayout(betAmount2, aviatorMult))}
                                                     </button>
                                                 ) : isCashedOut2 ? (
                                                     <button disabled className="w-full py-2.5 bg-slate-800 text-emerald-400 font-black text-xs uppercase rounded-xl font-mono">
@@ -1673,7 +1769,7 @@
                             </div>
                         )}
 
-                        {/* 4. 🎲 WINGO & TRX WINGO (INDEPENDENT 30s, 1m, 2m CLOCKS) */}
+                        {/* 4. 🎲 WINGO & TRX WINGO */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
@@ -1685,7 +1781,6 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
-                                    {/* 30s / 1m / 2m Tab Switchers */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
                                         {[
                                             { id: '30sec', label: 'Win 30s' },
@@ -1702,7 +1797,6 @@
                                         ))}
                                     </div>
 
-                                    {/* Independent Timer & Period Indicator */}
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
                                             <span className="text-[10px] text-slate-400 block uppercase">Period: {currentActivePeriod}</span>
@@ -1747,7 +1841,7 @@
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-3 text-white rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">SMALL (2X)</button>
                                     </div>
 
-                                    {/* 100+ Rounds History Table for Active Tab */}
+                                    {/* 100+ History Table */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
                                         <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
                                             <span>{activeGameTab.toUpperCase()} History (100+ Rounds)</span>
@@ -1778,7 +1872,7 @@
                             </div>
                         )}
 
-                        {/* 5. 🎲 K3 LOTTERY (INDEPENDENT 30s, 1m, 2m CLOCKS) */}
+                        {/* 5. 🎲 K3 LOTTERY */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
@@ -1843,7 +1937,7 @@
                                         <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">Odd 2X</button>
                                     </div>
 
-                                    {/* 100+ Rounds History Table for K3 */}
+                                    {/* 100+ History Table for K3 */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
                                         <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
                                             <span>K3 {activeGameTab.toUpperCase()} History (100+ Rounds)</span>
