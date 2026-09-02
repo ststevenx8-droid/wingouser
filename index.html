@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Elite Gaming & Aviator Platform</title>
+    <title>STEVEN WIN - Elite Gaming & Money Coming Platform</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -113,6 +113,16 @@
         .safe-bottom {
             padding-bottom: max(env(safe-area-inset-bottom), 10px);
         }
+
+        /* Money Coming 3D Slot Cylinders */
+        .slot-drum-green {
+            background: radial-gradient(circle, #0e8544 0%, #064e24 70%, #022410 100%);
+            box-shadow: inset 0 10px 15px rgba(0,0,0,0.8), inset 0 -10px 15px rgba(0,0,0,0.8);
+        }
+        .slot-drum-gold {
+            background: radial-gradient(circle, #f59e0b 0%, #b45309 70%, #451a03 100%);
+            box-shadow: inset 0 10px 15px rgba(0,0,0,0.8), inset 0 -10px 15px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body class="flex justify-center items-center h-full w-full">
@@ -201,6 +211,9 @@
             ),
             history: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ),
+            zap: (props) => (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             )
         };
 
@@ -223,6 +236,66 @@
             "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
         ];
 
+        // --- 🎰 WEB AUDIO SYNTHESIZER ---
+        const playSlotSound = (type) => {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                if (type === 'spin') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(320, now);
+                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.25);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'stop') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(220, now);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'win') {
+                    const notes = [440, 554.37, 659.25, 880];
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+                        gain.gain.setValueAtTime(0.15, now + idx * 0.12);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.12);
+                        osc.stop(now + idx * 0.12 + 0.25);
+                    });
+                } else if (type === 'wheel') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                }
+            } catch(e) {}
+        };
+
         const calculateAviatorPayout = (amt, mult) => {
             if (mult <= 1.0) return parseFloat(amt.toFixed(2));
             if (mult < 2.0) {
@@ -237,28 +310,18 @@
         const PROMO_ADS = [
             {
                 id: 1,
-                title: "🎰 IGAMING VIP BANNER • FLY & WIN",
-                subtitle: "30 Free Bets • Aviator Take Off • 100% CashBack Instant",
-                tag: "IGAMING PRO",
-                badge: "IPL 2026",
-                jackpot: "৳1,500,000",
+                title: "🎰 JILI MONEY COMING • 10,000X JACKPOT",
+                subtitle: "Unlock Lucky Wheel & Multipliers • Cashout Instant to bKash",
+                tag: "JILI ORIGINAL",
+                badge: "HOT SLOT",
+                jackpot: "৳2,500,000",
                 image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&auto=format&fit=crop&q=85",
-                gradient: "from-red-950/90 via-black/75 to-transparent"
+                gradient: "from-amber-950/90 via-black/75 to-transparent"
             },
             {
                 id: 2,
-                title: "👑 CASINO & GOOD FUN NEVER STOPS!",
-                subtitle: "Royal European Roulette • VIP Poker Live • 24/7 Tables",
-                tag: "ROYAL VIP",
-                badge: "ROULETTE",
-                jackpot: "৳850,000",
-                image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&auto=format&fit=crop&q=85",
-                gradient: "from-emerald-950/90 via-black/75 to-transparent"
-            },
-            {
-                id: 3,
                 title: "✈️ AVIATOR 1000X SPRIBE JACKPOT",
-                subtitle: "Daily ৳50,000 Live Tournament • Cashout Anytime to bKash",
+                subtitle: "Daily ৳50,000 Live Tournament • Cashout Anytime",
                 tag: "HOT LIVE",
                 badge: "1000X MULTI",
                 jackpot: "৳1,000,000",
@@ -266,14 +329,14 @@
                 gradient: "from-rose-950/90 via-black/70 to-transparent"
             },
             {
-                id: 4,
-                title: "🎲 WINGO & TRX MEGA BLOCKCHAIN DRAW",
-                subtitle: "Instant 30s Draws • 9X Payout On Numbers • Safe & Instant",
-                tag: "JACKPOT",
-                badge: "TRON LIVE",
-                jackpot: "৳500,000",
-                image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&auto=format&fit=crop&q=85",
-                gradient: "from-amber-950/90 via-black/70 to-transparent"
+                id: 3,
+                title: "👑 CASINO & GOOD FUN NEVER STOPS!",
+                subtitle: "Royal European Roulette • VIP Poker Live • 24/7 Tables",
+                tag: "ROYAL VIP",
+                badge: "ROULETTE",
+                jackpot: "৳850,000",
+                image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&auto=format&fit=crop&q=85",
+                gradient: "from-emerald-950/90 via-black/75 to-transparent"
             }
         ];
 
@@ -356,6 +419,15 @@
         const AviatorLogo = () => (
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-aviator border border-rose-500/50 transform active:scale-95 transition-transform flex-shrink-0">
                 <img src="https://i.ibb.co/qYQN5b99/12595.jpg" alt="Aviator" className="w-full h-full object-cover" />
+            </div>
+        );
+
+        const JiliMoneyComingBannerLogo = () => (
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden shadow-neon-gold border-2 border-yellow-400 transform active:scale-95 transition-transform flex-shrink-0 bg-[#063816] flex flex-col items-center justify-center p-1">
+                <div className="w-8 h-8 bg-gradient-to-tr from-yellow-500 to-amber-300 rounded-full flex items-center justify-center shadow-lg border border-yellow-200 text-slate-950 font-black text-sm">
+                    $
+                </div>
+                <span className="text-[9px] font-black text-amber-300 uppercase font-mono tracking-tighter mt-1">JILI SLOT</span>
             </div>
         );
 
@@ -452,31 +524,18 @@
         };
 
         const calculateAviatorCrashPoint = (hasUserBet, cooldownRounds) => {
-            if (cooldownRounds > 0) {
-                return parseFloat((1.01 + Math.random() * 0.22).toFixed(2));
-            }
-
+            if (cooldownRounds > 0) return parseFloat((1.01 + Math.random() * 0.22).toFixed(2));
             if (hasUserBet) {
                 const roll = Math.random() * 100;
-                if (roll < 78) {
-                    return parseFloat((1.04 + Math.random() * 0.34).toFixed(2));
-                } else if (roll < 94) {
-                    return parseFloat((1.40 + Math.random() * 0.70).toFixed(2));
-                } else {
-                    return parseFloat((2.10 + Math.random() * 2.40).toFixed(2));
-                }
+                if (roll < 78) return parseFloat((1.04 + Math.random() * 0.34).toFixed(2));
+                else if (roll < 94) return parseFloat((1.40 + Math.random() * 0.70).toFixed(2));
+                else return parseFloat((2.10 + Math.random() * 2.40).toFixed(2));
             }
-
             const idleRoll = Math.random() * 100;
-            if (idleRoll < 40) {
-                return parseFloat((1.15 + Math.random() * 0.65).toFixed(2));
-            } else if (idleRoll < 80) {
-                return parseFloat((1.80 + Math.random() * 2.20).toFixed(2));
-            } else if (idleRoll < 95) {
-                return parseFloat((4.00 + Math.random() * 4.50).toFixed(2));
-            } else {
-                return parseFloat((8.50 + Math.random() * 12.50).toFixed(2));
-            }
+            if (idleRoll < 40) return parseFloat((1.15 + Math.random() * 0.65).toFixed(2));
+            else if (idleRoll < 80) return parseFloat((1.80 + Math.random() * 2.20).toFixed(2));
+            else if (idleRoll < 95) return parseFloat((4.00 + Math.random() * 4.50).toFixed(2));
+            else return parseFloat((8.50 + Math.random() * 12.50).toFixed(2));
         };
 
         const generateAviatorInitialHistory = (count = 120) => {
@@ -491,76 +550,6 @@
                 });
             }
             return list;
-        };
-
-        const aviatorAudio = {
-            ctx: null,
-            flightOsc: null,
-            flightGain: null,
-            init() {
-                if (!this.ctx) {
-                    try {
-                        const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                        if (AudioCtx) this.ctx = new AudioCtx();
-                    } catch (e) {}
-                }
-            },
-            startEngineSound() {
-                this.init();
-                if (!this.ctx) return;
-                try {
-                    this.stopEngineSound();
-                    const ctx = this.ctx;
-                    this.flightOsc = ctx.createOscillator();
-                    this.flightGain = ctx.createGain();
-                    
-                    this.flightOsc.type = 'sawtooth';
-                    this.flightOsc.frequency.setValueAtTime(85, ctx.currentTime);
-                    
-                    this.flightGain.gain.setValueAtTime(0.01, ctx.currentTime);
-                    this.flightGain.gain.linearRampToValueAtTime(0.04, ctx.currentTime + 1);
-
-                    this.flightOsc.connect(this.flightGain);
-                    this.flightGain.connect(ctx.destination);
-                    this.flightOsc.start();
-                } catch(e) {}
-            },
-            updateEnginePitch(mult) {
-                if (this.flightOsc && this.ctx) {
-                    try {
-                        const targetFreq = Math.min(520, 85 + (mult - 1) * 15);
-                        this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
-                    } catch(e) {}
-                }
-            },
-            stopEngineSound() {
-                if (this.flightOsc) {
-                    try {
-                        this.flightOsc.stop();
-                        this.flightOsc.disconnect();
-                    } catch(e) {}
-                    this.flightOsc = null;
-                }
-            },
-            playCrashSound() {
-                this.stopEngineSound();
-                this.init();
-                if (!this.ctx) return;
-                try {
-                    const ctx = this.ctx;
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(280, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 0.45);
-                    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.005, ctx.currentTime + 0.48);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.5);
-                } catch(e) {}
-            }
         };
 
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
@@ -793,6 +782,20 @@
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
 
+            // --- 🎰 JILI MONEY COMING STATE ---
+            const [moneyComingBet, setMoneyComingBet] = useState(1);
+            const [showBetSelector, setShowBetSelector] = useState(false);
+            const [isSlotSpinning, setIsSlotSpinning] = useState(false);
+            const [reels, setReels] = useState(['10', '0', '00']);
+            const [specialReel, setSpecialReel] = useState('2X');
+            const [lastSlotWin, setLastSlotWin] = useState(0.00);
+            const [showLuckyWheel, setShowLuckyWheel] = useState(false);
+            const [wheelAngle, setWheelAngle] = useState(0);
+            const [isWheelSpinning, setIsWheelSpinning] = useState(false);
+            const [isTurbo, setIsTurbo] = useState(false);
+            const [isAutoSpin, setIsAutoSpin] = useState(false);
+            const [slotHistory, setSlotHistory] = useState([]);
+
             // --- TIMERS ---
             const [timers, setTimers] = useState({ '30sec': 30, '1min': 60, '2min': 120 });
             const [periods, setPeriods] = useState({
@@ -891,12 +894,150 @@
                 });
             }, [sessionPhone]);
 
-            // Sound Isolation
-            useEffect(() => {
-                if (view !== 'game_aviator') {
-                    aviatorAudio.stopEngineSound();
+            // 🎰 JILI MONEY COMING ENGINE
+            const spinMoneyComing = (forceRespin = false) => {
+                if (isSlotSpinning && !forceRespin) return;
+                if (!forceRespin) {
+                    if (balance < moneyComingBet) {
+                        showToast('পর্যাপ্ত ব্যালেন্স নেই!', 'error');
+                        setIsAutoSpin(false);
+                        return;
+                    }
+                    const newBal = balance - moneyComingBet;
+                    setBalance(newBal);
+                    if (currentUser) {
+                        const san = currentUser.phone.replace(/[^0-9]/g, "");
+                        db.ref('users/' + san).update({ balance: newBal });
+                    }
                 }
-            }, [view]);
+
+                setIsSlotSpinning(true);
+                playSlotSound('spin');
+
+                const r1Pool = ['', '', '1', '5', '10', ''];
+                const r2Pool = ['', '0', '00', '1', '5', ''];
+                const r3Pool = ['', '0', '00', '5', '10', ''];
+
+                // Special Reel based on Bet level
+                let sPool = ['BLANK', 'BLANK', '2X', '5X', 'RESPIN'];
+                if (moneyComingBet >= 5) {
+                    sPool.push('SCATTER', 'SCATTER');
+                }
+                if (moneyComingBet >= 10) {
+                    sPool.push('10X', '10X');
+                }
+
+                const spinInterval = setInterval(() => {
+                    setReels([
+                        r1Pool[Math.floor(Math.random() * r1Pool.length)],
+                        r2Pool[Math.floor(Math.random() * r2Pool.length)],
+                        r3Pool[Math.floor(Math.random() * r3Pool.length)]
+                    ]);
+                    setSpecialReel(sPool[Math.floor(Math.random() * sPool.length)]);
+                }, 70);
+
+                const spinDuration = isTurbo ? 600 : 1300;
+
+                setTimeout(() => {
+                    clearInterval(spinInterval);
+                    playSlotSound('stop');
+
+                    const finalR1 = r1Pool[Math.floor(Math.random() * r1Pool.length)];
+                    const finalR2 = r2Pool[Math.floor(Math.random() * r2Pool.length)];
+                    const finalR3 = r3Pool[Math.floor(Math.random() * r3Pool.length)];
+                    const finalS = sPool[Math.floor(Math.random() * sPool.length)];
+
+                    setReels([finalR1, finalR2, finalR3]);
+                    setSpecialReel(finalS);
+                    setIsSlotSpinning(false);
+
+                    // Payout Calculation
+                    const comboStr = `${finalR1}${finalR2}${finalR3}`.replace(/[^0-9]/g, '');
+                    const basePoints = comboStr ? parseInt(comboStr, 10) : 0;
+                    let roundWin = 0;
+
+                    if (finalS === 'SCATTER' && moneyComingBet >= 5) {
+                        triggerLuckyWheelSpin();
+                        return;
+                    } else if (finalS === 'RESPIN' && basePoints > 0) {
+                        showToast('🔄 ALL RE-SPIN ACTIVATED!', 'success');
+                        setTimeout(() => spinMoneyComing(true), 800);
+                        return;
+                    } else if (basePoints > 0) {
+                        let mult = 1;
+                        if (finalS === '2X') mult = 2;
+                        if (finalS === '5X') mult = 5;
+                        if (finalS === '10X' && moneyComingBet >= 10) mult = 10;
+
+                        roundWin = (basePoints * (moneyComingBet / 1)) * mult;
+                    }
+
+                    if (roundWin > 0) {
+                        playSlotSound('win');
+                        setLastSlotWin(roundWin);
+                        const nextBal = balance + roundWin;
+                        setBalance(nextBal);
+                        if (currentUser) {
+                            const san = currentUser.phone.replace(/[^0-9]/g, "");
+                            db.ref('users/' + san).update({ balance: nextBal });
+                        }
+                        setPopupAmount(roundWin);
+                        setShowResultPopup(true);
+                    } else {
+                        setLastSlotWin(0.00);
+                    }
+
+                    setSlotHistory(h => [{
+                        id: Date.now().toString().slice(-6),
+                        bet: moneyComingBet,
+                        combo: comboStr || '0',
+                        special: finalS,
+                        win: roundWin
+                    }, ...h.slice(0, 20)]);
+
+                }, spinDuration);
+            };
+
+            // Lucky Wheel Bonus Feature
+            const triggerLuckyWheelSpin = () => {
+                setShowLuckyWheel(true);
+                setIsWheelSpinning(true);
+                playSlotSound('wheel');
+
+                const wheelPrizes = [50, 100, 200, 500, 1000, 2500, 5000, 10000];
+                const selectedPrize = wheelPrizes[Math.floor(Math.random() * wheelPrizes.length)];
+                const sliceIndex = wheelPrizes.indexOf(selectedPrize);
+                const randomRot = 1440 + sliceIndex * 45;
+                setWheelAngle(randomRot);
+
+                setTimeout(() => {
+                    setIsWheelSpinning(false);
+                    const totalWheelWin = selectedPrize * (moneyComingBet / 5);
+                    playSlotSound('win');
+                    
+                    const nextBal = balance + totalWheelWin;
+                    setBalance(nextBal);
+                    if (currentUser) {
+                        const san = currentUser.phone.replace(/[^0-9]/g, "");
+                        db.ref('users/' + san).update({ balance: nextBal });
+                    }
+
+                    setPopupAmount(totalWheelWin);
+                    setShowResultPopup(true);
+                    setTimeout(() => setShowLuckyWheel(false), 2500);
+                }, 3200);
+            };
+
+            // Auto spin effect
+            useEffect(() => {
+                let autoTimer;
+                if (isAutoSpin && view === 'game_money_coming' && !isSlotSpinning && !showLuckyWheel && !showResultPopup) {
+                    autoTimer = setTimeout(() => {
+                        spinMoneyComing();
+                    }, 1000);
+                }
+                return () => clearTimeout(autoTimer);
+            }, [isAutoSpin, view, isSlotSpinning, showLuckyWheel, showResultPopup, balance, moneyComingBet]);
 
             // AVIATOR ENGINE
             useEffect(() => {
@@ -923,7 +1064,6 @@
                                 }
 
                                 setAviatorCrashPoint(nextCrash);
-                                if (view === 'game_aviator') aviatorAudio.startEngineSound();
                                 return 5;
                             }
                             return prev - 1;
@@ -936,12 +1076,9 @@
                         const currentMult = parseFloat((1.00 + elapsed * 0.082 + Math.pow(elapsed * 0.04, 1.45)).toFixed(2));
                         setAviatorMult(currentMult);
 
-                        if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
-
                         if (currentMult >= aviatorCrashPoint) {
                             clearInterval(aviatorInterval);
                             setAviatorPhase('crashed');
-                            if (view === 'game_aviator') aviatorAudio.playCrashSound();
                             
                             setAviatorHistory100(prev => [
                                 {
@@ -1353,7 +1490,25 @@
                                             {/* PROMO ADS SLIDER */}
                                             <PromoBannerSlider onNavigate={(dest) => setView(dest)} />
 
-                                            {/* 1. AVIATOR SPRIBE */}
+                                            {/* 1. 🎰 JILI MONEY COMING */}
+                                            <div 
+                                                onClick={() => setView('game_money_coming')}
+                                                className="relative rounded-3xl bg-gradient-to-r from-[#211202] via-[#4d2800] to-[#120800] shadow-luxury border-2 border-yellow-400 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                            >
+                                                <div className="space-y-1">
+                                                    <span className="text-[9px] bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
+                                                        ⚡ 10,000X LUCKY WHEEL
+                                                    </span>
+                                                    <h2 className="text-2xl font-black text-white font-mono uppercase flex items-center space-x-1">
+                                                        <span>Money Coming</span>
+                                                        <span className="text-lg">💵</span>
+                                                    </h2>
+                                                    <span className="text-[10.5px] text-amber-200 block font-medium">JILI Official 3x1 Slot + Lucky Wheel</span>
+                                                </div>
+                                                <JiliMoneyComingBannerLogo />
+                                            </div>
+
+                                            {/* 2. AVIATOR SPRIBE */}
                                             <div 
                                                 onClick={() => setView('game_aviator')}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#29030c] via-[#5e0c1c] to-[#140206] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1371,7 +1526,7 @@
                                                 <AviatorLogo />
                                             </div>
 
-                                            {/* 2. WINGO LIVE */}
+                                            {/* 3. WINGO LIVE */}
                                             <div 
                                                 onClick={() => { setGameType('wingo'); setView('game_wingo'); }}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1386,7 +1541,7 @@
                                                 <Wingo3DLogo />
                                             </div>
 
-                                            {/* 3. TRX WINGO */}
+                                            {/* 4. TRX WINGO */}
                                             <div 
                                                 onClick={() => { setGameType('trx_wingo'); setView('game_wingo'); }}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4d0716] via-[#7d0f26] to-[#2e030c] shadow-luxury border border-rose-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1401,7 +1556,7 @@
                                                 <Trx3DLogo />
                                             </div>
 
-                                            {/* 4. K3 LOTTERY */}
+                                            {/* 5. K3 LOTTERY */}
                                             <div 
                                                 onClick={() => { setGameType('k3_lottery'); setView('game_k3'); }}
                                                 className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
@@ -1600,13 +1755,164 @@
                             </div>
                         )}
 
-                        {/* 3. ✈️ AVIATOR SPRIBE */}
+                        {/* 3. 🎰 JILI MONEY COMING GAME VIEW */}
+                        {view === 'game_money_coming' && (
+                            <div className="flex-1 flex flex-col bg-[#07130a] justify-between overflow-hidden min-h-0 font-sans relative">
+                                
+                                {/* Game Header */}
+                                <div className="px-3.5 py-2.5 bg-[#0a1f11] border-b border-yellow-600/40 flex items-center justify-between flex-shrink-0 shadow-md">
+                                    <div className="flex items-center space-x-2">
+                                        <BackButton onClick={() => { setIsAutoSpin(false); setView('home'); }} label="Back" />
+                                        <span className="text-yellow-400 font-black text-sm tracking-wider font-mono">MONEY COMING</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-xs font-black text-amber-300 bg-black/60 px-2.5 py-1 rounded-xl border border-amber-500/30 font-mono">
+                                            ৳{formatMoney(balance)}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Main Slot Stage */}
+                                <div className="flex-1 flex flex-col p-3 space-y-3 overflow-y-auto min-h-0 justify-between">
+                                    
+                                    {/* Top Feature Unlocks / Lucky Wheel Mini Box */}
+                                    <div className="grid grid-cols-2 gap-2 flex-shrink-0">
+                                        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-amber-950/80 to-yellow-950/80 border border-yellow-500/40 flex items-center space-x-2">
+                                            <div className="w-8 h-8 rounded-full bg-yellow-400 text-slate-950 font-black flex items-center justify-center text-xs shadow-md">🎡</div>
+                                            <div>
+                                                <span className="text-[9.5px] font-black text-yellow-300 block font-mono">Bet ৳5 Up</span>
+                                                <span className="text-[8px] text-slate-300 uppercase">Unlock Lucky Wheel</span>
+                                            </div>
+                                        </div>
+                                        <div className="p-2.5 rounded-2xl bg-gradient-to-r from-emerald-950/80 to-green-950/80 border border-emerald-500/40 flex items-center space-x-2">
+                                            <div className="w-8 h-8 rounded-full bg-emerald-400 text-slate-950 font-black flex items-center justify-center text-xs shadow-md">⚡</div>
+                                            <div>
+                                                <span className="text-[9.5px] font-black text-emerald-300 block font-mono">Bet ৳10 Up</span>
+                                                <span className="text-[8px] text-slate-300 uppercase">Unlock 10X Multi</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 3+1 3D Reels Frame */}
+                                    <div className="relative rounded-3xl p-3 bg-gradient-to-b from-[#2b1900] via-[#5c3702] to-[#1a0e00] border-4 border-yellow-400 shadow-2xl flex flex-col justify-center">
+                                        <div className="text-center pb-2">
+                                            <span className="text-xs font-black text-yellow-300 uppercase font-mono tracking-widest drop-shadow">
+                                                JILI SINGLE PAYLINE
+                                            </span>
+                                        </div>
+
+                                        <div className="grid grid-cols-4 gap-1.5 bg-black/85 p-2 rounded-2xl border-2 border-yellow-500/60 shadow-inner">
+                                            {/* Reel 1 */}
+                                            <div className="h-28 rounded-xl slot-drum-green border border-emerald-400/40 flex items-center justify-center overflow-hidden">
+                                                <span className="text-3xl sm:text-4xl font-black text-yellow-300 font-mono drop-shadow-[0_2px_10px_rgba(251,191,36,0.8)]">
+                                                    {reels[0] || '—'}
+                                                </span>
+                                            </div>
+
+                                            {/* Reel 2 */}
+                                            <div className="h-28 rounded-xl slot-drum-green border border-emerald-400/40 flex items-center justify-center overflow-hidden">
+                                                <span className="text-3xl sm:text-4xl font-black text-yellow-300 font-mono drop-shadow-[0_2px_10px_rgba(251,191,36,0.8)]">
+                                                    {reels[1] || '—'}
+                                                </span>
+                                            </div>
+
+                                            {/* Reel 3 */}
+                                            <div className="h-28 rounded-xl slot-drum-green border border-emerald-400/40 flex items-center justify-center overflow-hidden">
+                                                <span className="text-3xl sm:text-4xl font-black text-yellow-300 font-mono drop-shadow-[0_2px_10px_rgba(251,191,36,0.8)]">
+                                                    {reels[2] || '—'}
+                                                </span>
+                                            </div>
+
+                                            {/* Special Reel 4 */}
+                                            <div className="h-28 rounded-xl slot-drum-gold border-2 border-yellow-300 flex flex-col items-center justify-center overflow-hidden">
+                                                {specialReel === 'SCATTER' ? (
+                                                    <div className="flex flex-col items-center text-center animate-bounce">
+                                                        <span className="text-2xl">🎡</span>
+                                                        <span className="text-[9px] font-black text-slate-950 bg-yellow-300 px-1 rounded font-mono">SCATTER</span>
+                                                    </div>
+                                                ) : specialReel === 'RESPIN' ? (
+                                                    <div className="flex flex-col items-center text-center animate-pulse">
+                                                        <span className="text-2xl">🔄</span>
+                                                        <span className="text-[9px] font-black text-white bg-blue-600 px-1 rounded font-mono">RESPIN</span>
+                                                    </div>
+                                                ) : specialReel === 'BLANK' ? (
+                                                    <span className="text-xs text-amber-200 font-bold font-mono">BLANK</span>
+                                                ) : (
+                                                    <span className="text-2xl font-black text-white font-mono bg-purple-700/80 px-2 py-1 rounded-xl shadow-md border border-purple-300">
+                                                        {specialReel}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Center Payline Indicator */}
+                                        <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-0.5 bg-yellow-400/40 pointer-events-none" />
+                                    </div>
+
+                                    {/* Win and Status Bar */}
+                                    <div className="glass-panel p-3 rounded-2xl border border-yellow-500/30 flex justify-between items-center font-mono">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 uppercase block">Selected Bet</span>
+                                            <span className="text-base font-black text-yellow-300">৳{moneyComingBet}.00</span>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-[10px] text-slate-400 uppercase block">Win Payout</span>
+                                            <span className="text-base font-black text-emerald-400">৳{formatMoney(lastSlotWin)}</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Control Panel: Bet Selection & Spin Controls */}
+                                    <div className="space-y-2">
+                                        <div className="grid grid-cols-5 gap-1.5 font-mono">
+                                            {[1, 5, 10, 50, 100].map(amt => (
+                                                <button
+                                                    key={amt}
+                                                    onClick={() => setMoneyComingBet(amt)}
+                                                    disabled={isSlotSpinning}
+                                                    className={`py-2 rounded-xl text-xs font-black border transition-all ${moneyComingBet === amt ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 border-yellow-300 shadow-neon-gold' : 'bg-slate-900 border-slate-800 text-slate-300'} disabled:opacity-50 cursor-pointer`}
+                                                >
+                                                    ৳{amt}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        <div className="flex items-center space-x-2 pt-1">
+                                            <button
+                                                onClick={() => setIsTurbo(!isTurbo)}
+                                                className={`px-3 py-3 rounded-2xl border font-bold text-xs flex items-center justify-center space-x-1 cursor-pointer transition-all ${isTurbo ? 'bg-amber-400 text-slate-950 border-amber-300' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
+                                            >
+                                                <Icon name="zap" className="w-4 h-4" />
+                                                <span>Turbo</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => setIsAutoSpin(!isAutoSpin)}
+                                                className={`px-3 py-3 rounded-2xl border font-bold text-xs flex items-center justify-center space-x-1 cursor-pointer transition-all ${isAutoSpin ? 'bg-rose-600 text-white border-rose-400' : 'bg-slate-900 border-slate-800 text-slate-400'}`}
+                                            >
+                                                <span>{isAutoSpin ? 'Stop Auto' : 'Auto'}</span>
+                                            </button>
+
+                                            <button
+                                                onClick={() => spinMoneyComing(false)}
+                                                disabled={isSlotSpinning}
+                                                className="flex-1 py-4 bg-gradient-to-r from-green-500 via-emerald-500 to-green-600 text-slate-950 font-black text-sm uppercase rounded-2xl font-mono shadow-neon-green active:scale-95 transition-all disabled:opacity-50 cursor-pointer flex items-center justify-center space-x-2"
+                                            >
+                                                <span>SPIN (৳{moneyComingBet})</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        )}
+
+                        {/* 4. ✈️ AVIATOR SPRIBE */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
                                 <div className="px-3.5 py-2.5 bg-[#0e111a] border-b border-slate-800 flex items-center justify-between flex-shrink-0 shadow-md">
                                     <div className="flex items-center space-x-2">
-                                        <BackButton onClick={() => { aviatorAudio.stopEngineSound(); setView('home'); }} label="Back" />
+                                        <BackButton onClick={() => setView('home')} label="Back" />
                                         <span className="text-red-500 font-black text-sm tracking-wider font-mono">AVIATOR</span>
                                     </div>
                                     <div className="flex items-center space-x-2">
@@ -1796,7 +2102,7 @@
                             </div>
                         )}
 
-                        {/* 4. 🎲 WINGO & TRX WINGO */}
+                        {/* 5. 🎲 WINGO & TRX WINGO */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
@@ -1899,7 +2205,7 @@
                             </div>
                         )}
 
-                        {/* 5. 🎲 K3 LOTTERY */}
+                        {/* 6. 🎲 K3 LOTTERY */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
@@ -2008,7 +2314,7 @@
                             </div>
                         )}
 
-                        {/* 6. BKASH DEPOSIT */}
+                        {/* 7. BKASH DEPOSIT */}
                         {view === 'deposit' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800 flex-shrink-0">
@@ -2088,7 +2394,7 @@
                             </div>
                         )}
 
-                        {/* 7. BKASH WITHDRAW */}
+                        {/* 8. BKASH WITHDRAW */}
                         {view === 'withdraw' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="bg-[#0b101c] px-4 py-3 flex items-center justify-between border-b border-slate-800 flex-shrink-0">
@@ -2115,6 +2421,42 @@
                         )}
 
                     </div>
+
+                    {/* LUCKY WHEEL BONUS MODAL */}
+                    {showLuckyWheel && (
+                        <div className="absolute inset-0 bg-black/90 z-[1200] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md">
+                            <div className="relative w-full max-w-sm glass-panel border-2 border-yellow-400 rounded-3xl p-5 text-white flex flex-col items-center space-y-4 shadow-2xl">
+                                <span className="text-xs font-black text-yellow-300 uppercase font-mono tracking-widest bg-yellow-400/20 px-3 py-1 rounded-full border border-yellow-400/40 animate-pulse">
+                                    🎡 LUCKY WHEEL BONUS!
+                                </span>
+
+                                <div className="relative w-56 h-56 flex items-center justify-center">
+                                    {/* Pointer */}
+                                    <div className="absolute top-0 z-30 -mt-2 w-0 h-0 border-l-[12px] border-l-transparent border-r-[12px] border-r-transparent border-t-[20px] border-t-yellow-400 filter drop-shadow-md" />
+
+                                    {/* Wheel */}
+                                    <div 
+                                        style={{ transform: `rotate(${wheelAngle}deg)`, transition: isWheelSpinning ? 'transform 3.2s cubic-bezier(0.15, 0.9, 0.2, 1)' : 'none' }}
+                                        className="w-full h-full rounded-full border-4 border-yellow-400 shadow-neon-gold bg-gradient-to-tr from-amber-600 via-yellow-500 to-amber-700 relative overflow-hidden flex items-center justify-center"
+                                    >
+                                        <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                                            <div className="bg-red-700/80 border border-yellow-300/30 flex items-center justify-center text-xs font-black font-mono">10,000X</div>
+                                            <div className="bg-emerald-700/80 border border-yellow-300/30 flex items-center justify-center text-xs font-black font-mono">500X</div>
+                                            <div className="bg-purple-700/80 border border-yellow-300/30 flex items-center justify-center text-xs font-black font-mono">2,500X</div>
+                                            <div className="bg-amber-700/80 border border-yellow-300/30 flex items-center justify-center text-xs font-black font-mono">1,000X</div>
+                                        </div>
+                                        <div className="w-14 h-14 rounded-full bg-slate-950 border-2 border-yellow-400 z-20 flex items-center justify-center font-mono font-black text-yellow-300 text-xs shadow-lg">
+                                            JILI
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span className="text-[11px] font-mono font-bold text-amber-200 text-center">
+                                    {isWheelSpinning ? 'SPINNING WHEEL OF FORTUNE...' : 'CONGRATULATIONS!'}
+                                </span>
+                            </div>
+                        </div>
+                    )}
 
                     {/* AVIATOR HISTORY MODAL */}
                     {showAviatorHistoryModal && (
@@ -2237,7 +2579,7 @@
 
                     {/* BIG WIN POPUP */}
                     {showResultPopup && (
-                        <div className="absolute inset-0 bg-black/85 z-[1000] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md animate-fade-in">
+                        <div className="absolute inset-0 bg-black/85 z-[1300] flex flex-col items-center justify-center p-5 font-sans backdrop-blur-md animate-fade-in">
                             <div className="relative w-full max-w-sm glass-panel-glow border-2 border-amber-400/80 rounded-3xl p-6 text-center shadow-2xl overflow-hidden">
                                 <div className="text-5xl mb-2">🏆</div>
                                 <h2 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-500 font-mono">
