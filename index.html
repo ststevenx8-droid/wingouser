@@ -302,12 +302,12 @@
             );
         };
 
-        // --- 1000+ ROUNDS HISTORY GENERATORS ---
-        const generate1000GameHistory = (basePeriod, count = 1000) => {
+        // --- 100+ ROUNDS REALISTIC HISTORY GENERATORS ---
+        const generateGameHistoryList = (prefix, baseCount = 120) => {
             const list = [];
-            let currentP = BigInt(basePeriod);
-            for (let i = 0; i < count; i++) {
-                const pStr = String(currentP - BigInt(i));
+            const now = Date.now();
+            for (let i = 0; i < baseCount; i++) {
+                const pStr = `20260902${prefix}${String(100000 + baseCount - i)}`;
                 const dig = Math.floor(Math.random() * 10);
                 const d1 = Math.floor(Math.random() * 6) + 1;
                 const d2 = Math.floor(Math.random() * 6) + 1;
@@ -328,19 +328,32 @@
             return list;
         };
 
-        // Realistic Aviator Crash History Generator (120+ Rounds)
+        // ✈️ COMPLETELY RANDOM HIGH-MULTIPLIER GENERATOR (2X+, 20X+, 50X+, 100X+)
+        const generateRealisticAviatorCrash = () => {
+            const roll = Math.random() * 100;
+            if (roll < 10) {
+                // 10% Low 1.05x - 1.95x
+                return parseFloat((1.05 + Math.random() * 0.90).toFixed(2));
+            } else if (roll < 45) {
+                // 35% Regular 2.00x - 6.50x
+                return parseFloat((2.00 + Math.random() * 4.50).toFixed(2));
+            } else if (roll < 75) {
+                // 30% High 6.50x - 20.00x
+                return parseFloat((6.50 + Math.random() * 13.50).toFixed(2));
+            } else if (roll < 93) {
+                // 18% Mega 20.00x - 65.00x
+                return parseFloat((20.00 + Math.random() * 45.00).toFixed(2));
+            } else {
+                // 7% Super Mega 65.00x - 350.00x+
+                return parseFloat((65.00 + Math.random() * 285.00).toFixed(2));
+            }
+        };
+
         const generateAviator120History = (count = 120) => {
             const list = [];
             let baseId = 849200;
             for (let i = 0; i < count; i++) {
-                const r = Math.random() * 100;
-                let mult = 1.00;
-                if (r < 8) mult = parseFloat((1.01 + Math.random() * 0.18).toFixed(2));
-                else if (r < 50) mult = parseFloat((1.25 + Math.random() * 2.25).toFixed(2));
-                else if (r < 80) mult = parseFloat((3.50 + Math.random() * 6.50).toFixed(2));
-                else if (r < 95) mult = parseFloat((10.00 + Math.random() * 25.00).toFixed(2));
-                else mult = parseFloat((35.00 + Math.random() * 115.00).toFixed(2));
-
+                const mult = generateRealisticAviatorCrash();
                 list.push({
                     id: '#' + (baseId - i),
                     mult: mult,
@@ -348,15 +361,6 @@
                 });
             }
             return list;
-        };
-
-        const generateRealisticAviatorCrash = () => {
-            const r = Math.random() * 100;
-            if (r < 8) return parseFloat((1.01 + Math.random() * 0.18).toFixed(2));
-            if (r < 50) return parseFloat((1.25 + Math.random() * 2.25).toFixed(2));
-            if (r < 80) return parseFloat((3.50 + Math.random() * 6.50).toFixed(2));
-            if (r < 95) return parseFloat((10.00 + Math.random() * 25.00).toFixed(2));
-            return parseFloat((35.00 + Math.random() * 115.00).toFixed(2));
         };
 
         // --- AUDIO ENGINE ---
@@ -395,7 +399,7 @@
             updateEnginePitch(mult) {
                 if (this.flightOsc && this.ctx) {
                     try {
-                        const targetFreq = Math.min(480, 85 + (mult - 1) * 20);
+                        const targetFreq = Math.min(520, 85 + (mult - 1) * 12);
                         this.flightOsc.frequency.setValueAtTime(targetFreq, this.ctx.currentTime);
                     } catch(e) {}
                 }
@@ -469,7 +473,7 @@
                     }
                     ctx.restore();
 
-                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 12.0));
+                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 18.0));
                     const startX = 20;
                     const startY = height - 20;
                     const cpX = width * 0.45;
@@ -498,7 +502,6 @@
                     }
 
                     if (phase === 'flying' || phase === 'crashed') {
-                        // Curve Fill
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
                         fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.35)');
@@ -515,7 +518,6 @@
                         ctx.fill();
                         ctx.restore();
 
-                        // Glowing Line
                         ctx.save();
                         ctx.shadowColor = '#e51e38';
                         ctx.shadowBlur = 18;
@@ -527,7 +529,6 @@
                         ctx.stroke();
                         ctx.restore();
 
-                        // Sparks
                         if (phase === 'flying') {
                             if (Math.random() < 0.8) {
                                 particlesRef.current.push({
@@ -561,7 +562,6 @@
                             ctx.restore();
                         });
 
-                        // Fighter Jet
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
@@ -597,7 +597,6 @@
                         }
                     }
 
-                    // Crash Blast
                     if (phase === 'crashed' && explosionRef.current.length > 0) {
                         explosionRef.current.forEach((ep, idx) => {
                             ep.x += ep.vx;
@@ -648,18 +647,17 @@
 
             // Games Routing State
             const [gameType, setGameType] = useState('wingo');
-            const [activeGameTab, setActiveGameTab] = useState('30sec');
+            const [activeGameTab, setActiveGameTab] = useState('30sec'); // '30sec' | '1min' | '2min'
 
-            // --- AVIATOR STATE (WITH 100+ ROUNDS HISTORY) ---
+            // --- AVIATOR STATE ---
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(5);
             const [aviatorMult, setAviatorMult] = useState(1.00);
-            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(3.40);
+            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(4.20);
             const [adminNextCrash, setAdminNextCrash] = useState(null);
             const [aviatorHistory100, setAviatorHistory100] = useState(() => generateAviator120History(120));
             const [showAviatorHistoryModal, setShowAviatorHistoryModal] = useState(false);
             
-            // Dual Bet Decks
             const [betAmount1, setBetAmount1] = useState(10);
             const [isBetPlaced1, setIsBetPlaced1] = useState(false);
             const [isCashedOut1, setIsCashedOut1] = useState(false);
@@ -668,10 +666,20 @@
             const [isBetPlaced2, setIsBetPlaced2] = useState(false);
             const [isCashedOut2, setIsCashedOut2] = useState(false);
 
-            // --- WINGO, TRX & K3 LOTTERY STATE (1,000 ROUNDS HISTORY) ---
-            const [timer30s, setTimer30s] = useState(30);
-            const [period30s, setPeriod30s] = useState('20260902100051482');
-            const [fullMassiveHistory, setFullMassiveHistory] = useState(() => generate1000GameHistory('20260902100051482', 1000));
+            // --- INDEPENDENT TIMERS & HISTORIES (30s, 1m, 2m) ---
+            const [timers, setTimers] = useState({ '30sec': 30, '1min': 60, '2min': 120 });
+            const [periods, setPeriods] = useState({
+                '30sec': '2026090230S100120',
+                '1min': '202609021M100120',
+                '2min': '202609022M100120'
+            });
+
+            const [histories, setHistories] = useState({
+                '30sec': generateGameHistoryList('30S', 120),
+                '1min': generateGameHistoryList('1M', 120),
+                '2min': generateGameHistoryList('2M', 120)
+            });
+
             const [historyPage, setHistoryPage] = useState(1);
             const itemsPerPage = 10;
 
@@ -702,12 +710,16 @@
             const [showResultPopup, setShowResultPopup] = useState(false);
             const [popupAmount, setPopupAmount] = useState(0);
 
+            const activeHistoryList = useMemo(() => {
+                return histories[activeGameTab] || histories['30sec'];
+            }, [histories, activeGameTab]);
+
             const currentHistorySlice = useMemo(() => {
                 const start = (historyPage - 1) * itemsPerPage;
-                return fullMassiveHistory.slice(start, start + itemsPerPage);
-            }, [fullMassiveHistory, historyPage]);
+                return activeHistoryList.slice(start, start + itemsPerPage);
+            }, [activeHistoryList, historyPage]);
 
-            const totalPages = Math.ceil(fullMassiveHistory.length / itemsPerPage);
+            const totalPages = Math.ceil(activeHistoryList.length / itemsPerPage);
 
             const showToast = (message, type = 'success') => {
                 setToast({ show: true, message, type });
@@ -752,19 +764,6 @@
                 });
             }, [sessionPhone]);
 
-            // Admin Crash Target Watcher
-            useEffect(() => {
-                const targetRef = db.ref('settings/aviator_target_crash');
-                targetRef.on('value', (snap) => {
-                    if (snap.exists() && snap.val() !== null) {
-                        const val = parseFloat(snap.val());
-                        setAdminNextCrash(!isNaN(val) && val > 1.0 ? val : null);
-                    } else {
-                        setAdminNextCrash(null);
-                    }
-                });
-            }, []);
-
             // Sound Isolation
             useEffect(() => {
                 if (view !== 'game_aviator') {
@@ -772,7 +771,7 @@
                 }
             }, [view]);
 
-            // ✈️ AVIATOR FLIGHT LOOP
+            // ✈️ AVIATOR CONTINUOUS DYNAMIC FLIGHT (NO STUCK 1.20X)
             useEffect(() => {
                 let aviatorInterval;
                 if (aviatorPhase === 'waiting') {
@@ -800,7 +799,7 @@
                     const startTime = Date.now();
                     aviatorInterval = setInterval(() => {
                         const elapsed = (Date.now() - startTime) / 1000;
-                        const currentMult = parseFloat((1.00 + elapsed * 0.08 + Math.pow(elapsed * 0.035, 1.45)).toFixed(2));
+                        const currentMult = parseFloat((1.00 + elapsed * 0.08 + Math.pow(elapsed * 0.038, 1.48)).toFixed(2));
                         setAviatorMult(currentMult);
 
                         if (view === 'game_aviator') aviatorAudio.updateEnginePitch(currentMult);
@@ -810,7 +809,6 @@
                             setAviatorPhase('crashed');
                             if (view === 'game_aviator') aviatorAudio.playCrashSound();
                             
-                            // Prepend to Aviator 100+ rounds history
                             setAviatorHistory100(prev => [
                                 {
                                     id: '#' + (Date.now() % 1000000),
@@ -835,89 +833,113 @@
                 return () => clearInterval(aviatorInterval);
             }, [aviatorPhase, aviatorCrashPoint, adminNextCrash, isBetPlaced1, isBetPlaced2, view]);
 
-            // 🎲 WINGO, TRX, K3 ROUND LOOP & AUTO WIN/LOSS PAYOUT
+            // 🎲 3 INDEPENDENT REAL CLOCK INTERVALS (30s, 1m, 2m)
             useEffect(() => {
-                const interval = setInterval(() => {
-                    const sec = new Date().getSeconds();
-                    const rem = Math.max(0, 29 - (sec % 30));
-                    setTimer30s(rem);
+                const clockInterval = setInterval(() => {
+                    const now = new Date();
+                    const sec = now.getSeconds();
+                    const totalSec = now.getMinutes() * 60 + sec;
 
-                    if (sec % 30 === 0) {
-                        const nextP = String(BigInt(period30s) + 1n);
-                        const dig = Math.floor(Math.random() * 10);
-                        const d1 = Math.floor(Math.random() * 6) + 1;
-                        const d2 = Math.floor(Math.random() * 6) + 1;
-                        const d3 = Math.floor(Math.random() * 6) + 1;
-                        const sum = d1 + d2 + d3;
-                        const size = dig >= 5 ? 'Big' : 'Small';
-                        const color = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
-                        const k3Size = sum >= 11 ? 'Big' : 'Small';
-                        const parity = sum % 2 === 0 ? 'Even' : 'Odd';
+                    const rem30 = Math.max(0, 29 - (sec % 30));
+                    const rem1m = Math.max(0, 59 - (sec % 60));
+                    const rem2m = Math.max(0, 119 - (totalSec % 120));
 
-                        const newEntry = {
-                            period: nextP,
-                            number: dig,
-                            size: size,
-                            color: color,
-                            shortHash: '**' + Math.random().toString(16).substring(2, 6),
-                            dice: [d1, d2, d3],
-                            sum: sum,
-                            k3Size: k3Size,
-                            parity: parity
-                        };
+                    setTimers({
+                        '30sec': rem30,
+                        '1min': rem1m,
+                        '2min': rem2m
+                    });
 
-                        setPeriod30s(nextP);
-                        setFullMassiveHistory(prev => [newEntry, ...prev.slice(0, 999)]);
+                    // Check End-of-Round triggers for each duration separately
+                    ['30sec', '1min', '2min'].forEach(tabKey => {
+                        const currentRem = tabKey === '30sec' ? rem30 : (tabKey === '1min' ? rem1m : rem2m);
+                        if (currentRem === 0) {
+                            const prefix = tabKey === '30sec' ? '30S' : (tabKey === '1min' ? '1M' : '2M');
+                            const currentPStr = periods[tabKey];
+                            const nextPStr = `20260902${prefix}${Date.now().toString().slice(-6)}`;
 
-                        // Settle User Active Bets for this round
-                        if (userActiveBets.length > 0) {
-                            let totalWin = 0;
-                            userActiveBets.forEach(bet => {
-                                const bVal = String(bet.val).toLowerCase();
-                                const amt = bet.amount;
+                            const dig = Math.floor(Math.random() * 10);
+                            const d1 = Math.floor(Math.random() * 6) + 1;
+                            const d2 = Math.floor(Math.random() * 6) + 1;
+                            const d3 = Math.floor(Math.random() * 6) + 1;
+                            const sum = d1 + d2 + d3;
+                            const size = dig >= 5 ? 'Big' : 'Small';
+                            const color = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
+                            const k3Size = sum >= 11 ? 'Big' : 'Small';
+                            const parity = sum % 2 === 0 ? 'Even' : 'Odd';
 
-                                if (bVal === 'green' && (color === 'green' || color === 'violet-green')) {
-                                    totalWin += color === 'violet-green' ? amt * 1.5 : amt * 2.0;
-                                } else if (bVal === 'red' && (color === 'red' || color === 'violet-red')) {
-                                    totalWin += color === 'violet-red' ? amt * 1.5 : amt * 2.0;
-                                } else if (bVal === 'violet' && (color === 'violet-red' || color === 'violet-green')) {
-                                    totalWin += amt * 4.5;
-                                } else if (bVal === 'big' && size === 'Big') {
-                                    totalWin += amt * 2.0;
-                                } else if (bVal === 'small' && size === 'Small') {
-                                    totalWin += amt * 2.0;
-                                } else if (bVal === String(dig)) {
-                                    totalWin += amt * 9.0;
-                                }
+                            const newEntry = {
+                                period: nextPStr,
+                                number: dig,
+                                size: size,
+                                color: color,
+                                shortHash: '**' + Math.random().toString(16).substring(2, 6),
+                                dice: [d1, d2, d3],
+                                sum: sum,
+                                k3Size: k3Size,
+                                parity: parity
+                            };
 
-                                if (bVal === 'even' && parity === 'Even') totalWin += amt * 2.0;
-                                if (bVal === 'odd' && parity === 'Odd') totalWin += amt * 2.0;
-                                if (bVal === 'k3_big' && k3Size === 'Big') totalWin += amt * 2.0;
-                                if (bVal === 'k3_small' && k3Size === 'Small') totalWin += amt * 2.0;
-                            });
+                            setPeriods(p => ({ ...p, [tabKey]: nextPStr }));
+                            setHistories(h => ({
+                                ...h,
+                                [tabKey]: [newEntry, ...(h[tabKey] || []).slice(0, 149)]
+                            }));
 
-                            if (totalWin > 0) {
-                                setBalance(prev => {
-                                    const nextBal = prev + totalWin;
-                                    if (currentUser) {
-                                        const san = currentUser.phone.replace(/[^0-9]/g, "");
-                                        db.ref('users/' + san).update({ balance: nextBal });
+                            // Settle user bets for active tab
+                            if (tabKey === activeGameTab && userActiveBets.length > 0) {
+                                let totalWin = 0;
+                                userActiveBets.forEach(bet => {
+                                    const bVal = String(bet.val).toLowerCase();
+                                    const amt = bet.amount;
+
+                                    if (bVal === 'green' && (color === 'green' || color === 'violet-green')) {
+                                        totalWin += color === 'violet-green' ? amt * 1.5 : amt * 2.0;
+                                    } else if (bVal === 'red' && (color === 'red' || color === 'violet-red')) {
+                                        totalWin += color === 'violet-red' ? amt * 1.5 : amt * 2.0;
+                                    } else if (bVal === 'violet' && (color === 'violet-red' || color === 'violet-green')) {
+                                        totalWin += amt * 4.5;
+                                    } else if (bVal === 'big' && size === 'Big') {
+                                        totalWin += amt * 2.0;
+                                    } else if (bVal === 'small' && size === 'Small') {
+                                        totalWin += amt * 2.0;
+                                    } else if (bVal === String(dig)) {
+                                        totalWin += amt * 9.0;
                                     }
-                                    return nextBal;
+
+                                    if (bVal === 'even' && parity === 'Even') totalWin += amt * 2.0;
+                                    if (bVal === 'odd' && parity === 'Odd') totalWin += amt * 2.0;
+                                    if (bVal === 'k3_big' && k3Size === 'Big') totalWin += amt * 2.0;
+                                    if (bVal === 'k3_small' && k3Size === 'Small') totalWin += amt * 2.0;
                                 });
-                                setPopupAmount(totalWin);
-                                setShowResultPopup(true);
+
+                                if (totalWin > 0) {
+                                    setBalance(prev => {
+                                        const nextBal = prev + totalWin;
+                                        if (currentUser) {
+                                            const san = currentUser.phone.replace(/[^0-9]/g, "");
+                                            db.ref('users/' + san).update({ balance: nextBal });
+                                        }
+                                        return nextBal;
+                                    });
+                                    setPopupAmount(totalWin);
+                                    setShowResultPopup(true);
+                                }
+                                setUserActiveBets([]);
                             }
-                            setUserActiveBets([]);
                         }
-                    }
+                    });
                 }, 1000);
-                return () => clearInterval(interval);
-            }, [period30s, userActiveBets, currentUser]);
+
+                return () => clearInterval(clockInterval);
+            }, [periods, activeGameTab, userActiveBets, currentUser]);
+
+            const currentActiveTimer = timers[activeGameTab] !== undefined ? timers[activeGameTab] : 30;
+            const currentActivePeriod = periods[activeGameTab] || periods['30sec'];
 
             const handleConfirmLotteryBet = () => {
                 const totalBetAmt = selectedUnit * betMultiplier;
-                if (timer30s <= 5) {
+                if (currentActiveTimer <= 5) {
                     showToast('রাউন্ড শেষ হতে ৫ সেকেন্ড বাকি, বেট লক!', 'error');
                     return;
                 }
@@ -933,7 +955,7 @@
                     db.ref('users/' + san).update({ balance: nextBal });
                 }
 
-                setUserActiveBets(prev => [...prev, { val: betValue, amount: totalBetAmt, period: period30s }]);
+                setUserActiveBets(prev => [...prev, { val: betValue, amount: totalBetAmt, period: currentActivePeriod }]);
                 setIsBetSheetOpen(false);
                 showToast(`৳${totalBetAmt} টাকার বেট সফলভাবে প্লেস হয়েছে!`, 'success');
             };
@@ -1229,7 +1251,6 @@
 
                                 <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 min-h-0 pb-16">
                                     
-                                    {/* HOME TAB */}
                                     {activeNav === 'home' && (
                                         <>
                                             {/* 1. AVIATOR SPRIBE (CRASH 1000X) */}
@@ -1245,7 +1266,7 @@
                                                         <span>Aviator</span>
                                                         <span className="text-lg">✈️</span>
                                                     </h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Red Flight & 100+ History</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">Random 2X, 20X, 50X+ & 100+ History</span>
                                                 </div>
                                                 <AviatorLogo />
                                             </div>
@@ -1260,7 +1281,7 @@
                                                         30s / 1m / 2m
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo</h2>
-                                                    <span className="text-[10.5px] text-emerald-200 block font-medium">Classic Color & 100+ Rounds History</span>
+                                                    <span className="text-[10.5px] text-emerald-200 block font-medium">Independent 30s/1m/2m Clocks & 100+ History</span>
                                                 </div>
                                                 <Wingo3DLogo />
                                             </div>
@@ -1275,7 +1296,7 @@
                                                         BLOCKCHAIN HASH
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">TRX Wingo</h2>
-                                                    <span className="text-[10.5px] text-rose-200 block font-medium">TRON Live Block Draw & 100+ History</span>
+                                                    <span className="text-[10.5px] text-rose-200 block font-medium">TRON Live Decentralized Block & 100+ History</span>
                                                 </div>
                                                 <Trx3DLogo />
                                             </div>
@@ -1290,7 +1311,7 @@
                                                         3 DICE UP TO 207X
                                                     </span>
                                                     <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery</h2>
-                                                    <span className="text-[10.5px] text-amber-200 block font-medium">3-Dice Sum, Big/Small & 100+ History</span>
+                                                    <span className="text-[10.5px] text-amber-200 block font-medium">Independent 30s/1m/2m Clocks & 100+ History</span>
                                                 </div>
                                                 <K33DLogo />
                                             </div>
@@ -1456,7 +1477,7 @@
                             </div>
                         )}
 
-                        {/* 3. ✈️ AVIATOR SPRIBE (100+ ROUNDS HISTORY INCLUDED) */}
+                        {/* 3. ✈️ AVIATOR SPRIBE (RANDOM 2X, 20X, 50X+ & 100+ ROUNDS HISTORY) */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
@@ -1479,7 +1500,6 @@
                                     </div>
                                 </div>
 
-                                {/* Top Multiplier Scrollbar (Last 15) */}
                                 <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                     {aviatorHistory100.slice(0, 15).map((item, i) => (
                                         <span 
@@ -1496,7 +1516,6 @@
                                 </div>
 
                                 <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto min-h-0">
-                                    {/* Flight Stage Display */}
                                     <div className={`w-full h-52 sm:h-56 bg-[#0b0e14] rounded-3xl border relative flex flex-col items-center justify-center overflow-hidden shadow-2xl flex-shrink-0 transition-colors ${aviatorPhase === 'crashed' ? 'border-red-600 bg-red-950/20' : 'border-red-900/50'}`}>
                                         <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
 
@@ -1528,8 +1547,6 @@
 
                                     {/* Dual Bet Decks */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                        
-                                        {/* DECK 1 */}
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
                                             <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
                                                 <span>BET DECK 1</span>
@@ -1591,7 +1608,6 @@
                                             )}
                                         </div>
 
-                                        {/* DECK 2 */}
                                         <div className="bg-[#10141f] p-2.5 rounded-2xl border border-slate-800 space-y-2">
                                             <div className="flex justify-between items-center text-[10px] font-mono text-slate-400">
                                                 <span>BET DECK 2</span>
@@ -1652,13 +1668,12 @@
                                                 </button>
                                             )}
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         )}
 
-                        {/* 4. 🎲 WINGO & TRX WINGO (100+ ROUNDS HISTORY) */}
+                        {/* 4. 🎲 WINGO & TRX WINGO (INDEPENDENT 30s, 1m, 2m CLOCKS) */}
                         {view === 'game_wingo' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
@@ -1670,41 +1685,46 @@
                                 </div>
 
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto pb-16 min-h-0">
+                                    {/* 30s / 1m / 2m Tab Switchers */}
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900/90 p-1.5 rounded-2xl border border-slate-800">
-                                        {['30sec', '1min', '2min'].map(tab => (
+                                        {[
+                                            { id: '30sec', label: 'Win 30s' },
+                                            { id: '1min', label: 'Win 1 Min' },
+                                            { id: '2min', label: 'Win 2 Min' }
+                                        ].map(tab => (
                                             <button 
-                                                key={tab} 
-                                                onClick={() => setActiveGameTab(tab)} 
-                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${activeGameTab === tab ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
+                                                key={tab.id} 
+                                                onClick={() => { setActiveGameTab(tab.id); setHistoryPage(1); }} 
+                                                className={`py-2 text-[11px] font-black rounded-xl cursor-pointer transition-all ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
                                             >
-                                                {tab}
+                                                {tab.label}
                                             </button>
                                         ))}
                                     </div>
 
-                                    {/* Timer and Period */}
+                                    {/* Independent Timer & Period Indicator */}
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
                                         <div>
-                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {currentActivePeriod}</span>
                                             <span className="text-xs font-bold text-amber-300">
-                                                {timer30s <= 5 ? '⚠️ BETTING LOCKED' : '30s Countdown'}
+                                                {currentActiveTimer <= 5 ? '⚠️ BETTING LOCKED' : `${activeGameTab === '30sec' ? '30s' : activeGameTab === '1min' ? '1 Min' : '2 Min'} Countdown`}
                                             </span>
                                         </div>
                                         <div className="text-right">
-                                            <span className={`text-3xl font-black ${timer30s <= 5 ? 'text-red-500 animate-pulse' : 'text-yellow-400'}`}>
-                                                00:{timer30s < 10 ? '0' + timer30s : timer30s}
+                                            <span className={`text-3xl font-black ${currentActiveTimer <= 5 ? 'text-red-500 animate-pulse' : 'text-yellow-400'}`}>
+                                                {Math.floor(currentActiveTimer / 60)}:{String(currentActiveTimer % 60).padStart(2, '0')}
                                             </span>
                                         </div>
                                     </div>
 
-                                    {/* Colors (Green / Violet / Red) */}
+                                    {/* Colors */}
                                     <div className="grid grid-cols-3 gap-2">
                                         <button onClick={() => { setBetValue('green'); setIsBetSheetOpen(true); }} className="bg-emerald-600 hover:bg-emerald-500 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">Green (2X)</button>
                                         <button onClick={() => { setBetValue('violet'); setIsBetSheetOpen(true); }} className="bg-purple-600 hover:bg-purple-500 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">Violet (4.5X)</button>
                                         <button onClick={() => { setBetValue('red'); setIsBetSheetOpen(true); }} className="bg-rose-600 hover:bg-rose-500 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">Red (2X)</button>
                                     </div>
 
-                                    {/* 0-9 Numbers Grid */}
+                                    {/* 0-9 Numbers */}
                                     <div className="glass-panel p-3.5 rounded-3xl border border-slate-800 grid grid-cols-5 gap-2">
                                         {[0,1,2,3,4,5,6,7,8,9].map(num => (
                                             <button 
@@ -1727,10 +1747,10 @@
                                         <button onClick={() => { setBetValue('small'); setIsBetSheetOpen(true); }} className="bg-gradient-to-r from-sky-500 to-blue-600 py-3 text-white rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">SMALL (2X)</button>
                                     </div>
 
-                                    {/* 1,000+ Rounds History with Pagination */}
+                                    {/* 100+ Rounds History Table for Active Tab */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
                                         <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>History (1,000+ Rounds)</span>
+                                            <span>{activeGameTab.toUpperCase()} History (100+ Rounds)</span>
                                             <span className="text-[9px] text-slate-400">Page {historyPage} / {totalPages}</span>
                                         </div>
                                         <table className="w-full text-[10px] font-mono text-left">
@@ -1758,7 +1778,7 @@
                             </div>
                         )}
 
-                        {/* 5. 🎲 K3 3-DICE LOTTERY (100+ ROUNDS HISTORY) */}
+                        {/* 5. 🎲 K3 LOTTERY (INDEPENDENT 30s, 1m, 2m CLOCKS) */}
                         {view === 'game_k3' && (
                             <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                                 <div className="px-4 py-3 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
@@ -1776,7 +1796,7 @@
                                         ].map(tab => (
                                             <button 
                                                 key={tab.id} 
-                                                onClick={() => setActiveGameTab(tab.id)} 
+                                                onClick={() => { setActiveGameTab(tab.id); setHistoryPage(1); }} 
                                                 className={`py-2 text-[11px] font-black rounded-xl cursor-pointer transition-all ${activeGameTab === tab.id ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}
                                             >
                                                 {tab.label}
@@ -1786,14 +1806,14 @@
 
                                     <div className="glass-panel-glow p-3.5 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono shadow-luxury">
                                         <div>
-                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {period30s}</span>
+                                            <span className="text-[10px] text-slate-400 block uppercase">Period: {currentActivePeriod}</span>
                                             <span className="text-xs font-bold text-amber-300">
-                                                {timer30s <= 5 ? '⚠️ BETTING LOCKED' : 'K3 Draw Countdown'}
+                                                {currentActiveTimer <= 5 ? '⚠️ BETTING LOCKED' : `K3 ${activeGameTab === '30sec' ? '30s' : activeGameTab === '1min' ? '1 Min' : '2 Min'} Draw`}
                                             </span>
                                         </div>
                                         <div className="text-right">
-                                            <span className={`text-3xl font-black ${timer30s <= 5 ? 'text-red-500 animate-pulse' : 'text-yellow-400'}`}>
-                                                00:{timer30s < 10 ? '0' + timer30s : timer30s}
+                                            <span className={`text-3xl font-black ${currentActiveTimer <= 5 ? 'text-red-500 animate-pulse' : 'text-yellow-400'}`}>
+                                                {Math.floor(currentActiveTimer / 60)}:{String(currentActiveTimer % 60).padStart(2, '0')}
                                             </span>
                                         </div>
                                     </div>
@@ -1802,16 +1822,16 @@
                                     <div className="glass-panel-glow rounded-3xl p-4 border border-amber-500/40 shadow-luxury flex flex-col items-center justify-center space-y-2">
                                         <span className="text-[9.5px] uppercase font-black text-amber-300 font-mono">Last Round Result</span>
                                         <div className="flex space-x-3 justify-center items-center py-1">
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[0] : 1} size="w-11 h-11" />
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[1] : 4} size="w-11 h-11" />
-                                            <DiceFace value={fullMassiveHistory[0]?.dice ? fullMassiveHistory[0].dice[2] : 6} size="w-11 h-11" />
+                                            <DiceFace value={activeHistoryList[0]?.dice ? activeHistoryList[0].dice[0] : 1} size="w-11 h-11" />
+                                            <DiceFace value={activeHistoryList[0]?.dice ? activeHistoryList[0].dice[1] : 4} size="w-11 h-11" />
+                                            <DiceFace value={activeHistoryList[0]?.dice ? activeHistoryList[0].dice[2] : 6} size="w-11 h-11" />
                                         </div>
                                         <div className="flex space-x-3 text-xs font-mono font-black text-yellow-300">
-                                            <span>Sum: {fullMassiveHistory[0]?.sum || 11}</span>
+                                            <span>Sum: {activeHistoryList[0]?.sum || 11}</span>
                                             <span>•</span>
-                                            <span>{fullMassiveHistory[0]?.k3Size || 'Big'}</span>
+                                            <span>{activeHistoryList[0]?.k3Size || 'Big'}</span>
                                             <span>•</span>
-                                            <span>{fullMassiveHistory[0]?.parity || 'Odd'}</span>
+                                            <span>{activeHistoryList[0]?.parity || 'Odd'}</span>
                                         </div>
                                     </div>
 
@@ -1823,10 +1843,10 @@
                                         <button onClick={() => { setBetValue('odd'); setIsBetSheetOpen(true); }} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow-md active:scale-95 cursor-pointer">Odd 2X</button>
                                     </div>
 
-                                    {/* 1,000+ Rounds History Table */}
+                                    {/* 100+ Rounds History Table for K3 */}
                                     <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden shadow-luxury">
                                         <div className="p-2.5 bg-slate-900 text-xs font-bold font-mono text-amber-400 border-b border-slate-800 flex justify-between items-center">
-                                            <span>K3 Result History (1,000+ Rounds)</span>
+                                            <span>K3 {activeGameTab.toUpperCase()} History (100+ Rounds)</span>
                                             <span className="text-[10px] text-slate-400">Page {historyPage} / {totalPages}</span>
                                         </div>
                                         <table className="w-full text-[10px] font-mono text-left">
