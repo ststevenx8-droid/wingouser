@@ -111,7 +111,7 @@
         }
 
         .safe-bottom {
-            padding-bottom: max(env(safe-area-inset-bottom), 12px);
+            padding-bottom: max(env(safe-area-inset-bottom), 10px);
         }
     </style>
 </head>
@@ -152,16 +152,16 @@
 
         const Icons = {
             checkCircle: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
             ),
             user: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
             ),
             lock: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
             ),
             gift: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect x="2" y="7" width="20" height="5" /><line x1="12" y1="22" x2="12" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect x="2" y="7" width="20" height="5" /><line x1="12" y1="22" x2="12" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></svg>
             ),
             chevronLeft: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="15 18 9 12 15 6" /></svg>
@@ -179,10 +179,10 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
             ),
             home: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
             ),
             percent: (props) => (
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="19" y1="5" x2="5" y2="19" /><circle cx="6.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="19" y1="5" x2="5" y2="19" /><circle cx="6.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" /></svg>
             ),
             copy: (props) => (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
@@ -227,11 +227,9 @@
         const calculateAviatorPayout = (amt, mult) => {
             if (mult <= 1.0) return parseFloat(amt.toFixed(2));
             if (mult < 2.0) {
-                // ১০ টাকায় ১.১০x এ লাভ আসবে ০.২০ টাকা
                 const netProfit = amt * (mult - 1) * 0.20;
                 return parseFloat((amt + netProfit).toFixed(2));
             }
-            // ২.xx বা তার বেশিতে নিয়ন্ত্রিত প্রফিট
             const netProfit = (amt * (mult - 1)) * 0.65;
             return parseFloat((amt + netProfit).toFixed(2));
         };
@@ -1551,29 +1549,52 @@
 
                                 </div>
 
-                                {/* BOTTOM NAVIGATION */}
-                                <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-4 flex justify-between items-center relative z-20 shadow-2xl flex-shrink-0 font-sans safe-bottom">
-                                    <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'home' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="home" className="w-4.5 h-4.5" />
-                                        <span className="text-[9.5px] font-black">Home</span>
+                                {/* ⭐ PERFECTED COMPACT & BALANCED BOTTOM NAVIGATION ⭐ */}
+                                <div className="bg-[#0b101c] border-t border-slate-800/80 py-2 px-1 grid grid-cols-4 items-center relative z-20 shadow-2xl flex-shrink-0 font-sans safe-bottom">
+                                    <button 
+                                        onClick={() => setActiveNav('home')} 
+                                        className={`flex flex-col items-center justify-center space-y-1 cursor-pointer transition-all duration-200 active:scale-90 ${activeNav === 'home' ? 'text-amber-400 font-black' : 'text-slate-400 hover:text-slate-200 font-semibold'}`}
+                                    >
+                                        <div className="w-5 h-5 flex items-center justify-center">
+                                            <Icon name="home" className="w-4.5 h-4.5" />
+                                        </div>
+                                        <span className="text-[10px] tracking-tight text-center leading-none">Home</span>
                                     </button>
-                                    <button onClick={() => setActiveNav('activity')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'activity' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="gift" className="w-4.5 h-4.5" />
-                                        <span className="text-[9.5px] font-black">Activity</span>
+
+                                    <button 
+                                        onClick={() => setActiveNav('activity')} 
+                                        className={`flex flex-col items-center justify-center space-y-1 cursor-pointer transition-all duration-200 active:scale-90 ${activeNav === 'activity' ? 'text-amber-400 font-black' : 'text-slate-400 hover:text-slate-200 font-semibold'}`}
+                                    >
+                                        <div className="w-5 h-5 flex items-center justify-center">
+                                            <Icon name="gift" className="w-4.5 h-4.5" />
+                                        </div>
+                                        <span className="text-[10px] tracking-tight text-center leading-none">Activity</span>
                                     </button>
-                                    <button onClick={() => setActiveNav('promotion')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'promotion' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="percent" className="w-4.5 h-4.5" />
-                                        <span className="text-[9.5px] font-black">Promo</span>
+
+                                    <button 
+                                        onClick={() => setActiveNav('promotion')} 
+                                        className={`flex flex-col items-center justify-center space-y-1 cursor-pointer transition-all duration-200 active:scale-90 ${activeNav === 'promotion' ? 'text-amber-400 font-black' : 'text-slate-400 hover:text-slate-200 font-semibold'}`}
+                                    >
+                                        <div className="w-5 h-5 flex items-center justify-center">
+                                            <Icon name="percent" className="w-4.5 h-4.5" />
+                                        </div>
+                                        <span className="text-[10px] tracking-tight text-center leading-none">Promo</span>
                                     </button>
-                                    <button onClick={() => setActiveNav('account')} className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === 'account' ? 'text-amber-400' : 'text-slate-400'}`}>
-                                        <Icon name="user" className="w-4.5 h-4.5" />
-                                        <span className="text-[9.5px] font-black">VIP</span>
+
+                                    <button 
+                                        onClick={() => setActiveNav('account')} 
+                                        className={`flex flex-col items-center justify-center space-y-1 cursor-pointer transition-all duration-200 active:scale-90 ${activeNav === 'account' ? 'text-amber-400 font-black' : 'text-slate-400 hover:text-slate-200 font-semibold'}`}
+                                    >
+                                        <div className="w-5 h-5 flex items-center justify-center">
+                                            <Icon name="user" className="w-4.5 h-4.5" />
+                                        </div>
+                                        <span className="text-[10px] tracking-tight text-center leading-none">VIP</span>
                                     </button>
                                 </div>
                             </div>
                         )}
 
-                        {/* 3. ✈️ AVIATOR SPRIBE (LOW 1X PROFIT & CONTROLLED PAYOUT) */}
+                        {/* 3. ✈️ AVIATOR SPRIBE */}
                         {view === 'game_aviator' && (
                             <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                                 
