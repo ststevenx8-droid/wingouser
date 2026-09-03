@@ -1,10 +1,10 @@
 // --- FIREBASE CONFIGURATION & INITIALIZATION ---
 const firebaseConfig = {
-    apiKey: "AIzaSyAQOxmY1NL-2-NQmtUKgVWgFZ8SaNxlIN4",
-    authDomain: "stxwin-82a48.firebaseapp.com",
-    databaseURL: "https://stxwin-82a48-default-rtdb.firebaseio.com",
-    projectId: "stxwin-82a48",
-    storageBucket: "stxwin-82a48.firebasestorage.app"
+    apiKey: "AIzaSyBncaOFVPMcr23GFl3Wx0O-0rI7ALKxmBg",
+    authDomain: "stxwin-eade6.firebaseapp.com",
+    databaseURL: "https://stxwin-eade6-default-rtdb.firebaseio.com",
+    projectId: "stxwin-eade6",
+    storageBucket: "stxwin-eade6.firebasestorage.app"
 };
 
 // Initialize Firebase
