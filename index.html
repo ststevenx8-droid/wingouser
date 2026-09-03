@@ -38,7 +38,7 @@
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
                         'neon-aviator': '0 0 30px rgba(229, 30, 56, 0.85)',
-                        'phone-frame': '0 0 50px -10px rgba(0, 0, 0, 0.95), 0 0 0 10px #1e293b'
+                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
                     }
                 }
             }
@@ -51,30 +51,38 @@
     <style>
         html, body {
             height: 100%;
+            height: 100dvh;
             width: 100%;
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #020408;
+            background-color: #05070e;
             font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
             color: #f8fafc;
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* Realistic Phone Frame Container */
+        /* 100% Screen Fitted Phone Layout */
         #phone-wrapper {
             height: 100%;
             height: 100dvh;
-            max-height: 100dvh;
             width: 100%;
-            max-width: 440px;
+            max-width: 460px;
             margin: 0 auto;
             position: relative;
             display: flex;
             flex-direction: column;
             overflow: hidden;
             background-color: #05070e;
-            box-shadow: 0 0 45px rgba(0, 0, 0, 0.9);
+        }
+
+        @media (max-width: 640px) {
+            #phone-wrapper {
+                max-width: 100% !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+            }
         }
 
         #root {
@@ -116,7 +124,7 @@
         }
 
         @keyframes confettiFall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
         }
         .confetti-piece {
@@ -128,10 +136,10 @@
         }
     </style>
 </head>
-<body class="flex justify-center items-center h-full w-full bg-[#010204]">
+<body class="flex justify-center items-center h-full w-full">
 
-    <!-- Real Phone Mobile Viewport Wrapper -->
-    <div id="phone-wrapper" class="md:border-x md:border-slate-800 md:rounded-[36px] overflow-hidden">
+    <!-- 100% Mobile Viewport Container -->
+    <div id="phone-wrapper" class="sm:border-x sm:border-slate-800/80 shadow-2xl">
         <div id="root"></div>
     </div>
 
@@ -145,23 +153,75 @@
 
         const db = window.db;
 
-        // GLOBAL CONSTANTS
+        // GLOBAL CONSTANTS & LOGOS
         const OFFICIAL_BKASH_NUMBER = "01860909272";
         const BKASH_LOGO_URL = "https://i.ibb.co/xTgMb9X/11623.jpg";
         const STEVEN_MAIN_LOGO = "https://i.ibb.co/W43Hdvm3/10736.png";
         const TELEGRAM_SUPPORT_URL = "https://t.me/Ststevenx36";
         const OFFICIAL_WEB_PROMO_URL = "https://ststevenx8-droid.github.io/wingouser/";
 
-        // 25+ Masked Bettors Pool (Half-hidden names)
+        // Real Graphic Game Logos
+        const GameLogos = {
+            wingo: () => (
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-800 p-1 flex items-center justify-center shadow-neon-green flex-shrink-0 border border-emerald-400/40">
+                    <div className="text-center font-black leading-none font-mono">
+                        <span className="text-[10px] text-yellow-300 block tracking-tighter">WIN</span>
+                        <span className="text-xs text-white block">GO</span>
+                    </div>
+                </div>
+            ),
+            trx: () => (
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-700 via-rose-700 to-indigo-900 p-1.5 flex items-center justify-center shadow-luxury flex-shrink-0 border border-purple-400/50">
+                    <svg viewBox="0 0 32 32" className="w-6 h-6 drop-shadow">
+                        <path fill="#ffffff" d="M29.5 7.6L16.2 2 1.5 8.7l13.9 21.6 14.1-22.7zm-14.7 3L5.4 9.1l8.7-3.7 10.7 4.6-10 1.6zm.6 1.7l10-1.7-8.8 15.6-1.2-13.9zm-1.4 0l1.2 13.9-8.8-15.6 7.6 1.7z"/>
+                    </svg>
+                </div>
+            ),
+            k3: () => (
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-800 p-1 flex items-center justify-center shadow-neon-gold flex-shrink-0 border border-amber-400/50 text-xl">
+                    🎲
+                </div>
+            ),
+            aviator: () => (
+                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-600 via-red-600 to-rose-900 p-1 flex items-center justify-center shadow-neon-aviator flex-shrink-0 border border-rose-400/50 text-xl">
+                    🚀
+                </div>
+            )
+        };
+
+        // Real Interactive Dice Pip Renderer for K3
+        const DicePip = ({ value }) => {
+            const pipMap = {
+                1: [4],
+                2: [0, 8],
+                3: [0, 4, 8],
+                4: [0, 2, 6, 8],
+                5: [0, 2, 4, 6, 8],
+                6: [0, 2, 3, 5, 6, 8]
+            };
+            const activePips = pipMap[value] || [4];
+            return (
+                <div className="w-8 h-8 rounded-xl bg-white p-1 shadow-md grid grid-cols-3 grid-rows-3 gap-0.5 border border-slate-300">
+                    {[...Array(9)].map((_, i) => (
+                        <div key={i} className="flex items-center justify-center">
+                            {activePips.includes(i) && (
+                                <span className={`w-1.5 h-1.5 rounded-full ${value === 1 || value === 4 ? 'bg-red-600' : 'bg-slate-900'}`}></span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        // 25+ Masked Bettors Pool (Half-hidden usernames)
         const MASKED_BOT_NAMES = [
             "sha***bd", "tan***07", "sab***99", "meh***win", "al_***pro",
             "rak***88", "nah***36", "far***stx", "jah***bd", "shi***vip",
             "soj***01", "soh***bd", "rub***365", "joy***pro", "mar***win",
-            "ari***99", "has***bdt", "sai***007", "tam***win", "sia***gold",
-            "bab***raj", "sum***v8", "hab***stx", "mon***boss", "fah***bd"
+            "ari***99", "has***bdt", "sai***007", "tam***win", "sia***gold"
         ];
 
-        // Web Audio Synthesizer Engine (Aviator & Casino Sounds)
+        // Web Audio Synthesizer Engine
         const playAudioSound = (type) => {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -193,7 +253,7 @@
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.5);
-                } else if (type === 'win' || type === 'aviator_cashout') {
+                } else if (type === 'win') {
                     [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
@@ -283,7 +343,7 @@
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
         };
 
-        // Generate 110+ Independent Realtime History Rounds with exact intervals
+        // Generate 115+ Realtime History Rounds with exact mode timestamps
         const generate100PlusHistory = (prefix, durationSec, count = 115) => {
             const list = [];
             const now = Date.now();
@@ -413,8 +473,11 @@
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
+            // FULL SCREEN HISTORY TOGGLE (PER GAME)
+            const [fullScreenHistory, setFullScreenHistory] = useState(false);
+
             // LUXURY WIN POPUP MODAL
-            const [winCelebration, setWinCelebration] = useState({ show: false, amount: 0, game: '', period: '' });
+            const [winCelebration, setWinCelebration] = useState({ show: false, amount: 0, game: '' });
 
             // AVATAR MODAL
             const [showAvatarModal, setShowAvatarModal] = useState(false);
@@ -446,7 +509,7 @@
             const [cashoutAmount, setCashoutAmount] = useState('');
 
             // --- AVIATOR STATES & STRICT LOCKING ENGINE ---
-            const [aviatorPhase, setAviatorPhase] = useState('waiting'); // 'waiting' | 'flying' | 'crashed'
+            const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(8);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.20);
@@ -507,13 +570,11 @@
                 }
             };
 
-            // Trigger Win Celebration Modal
             const triggerWinPopup = (amount, gameName) => {
                 setWinCelebration({ show: true, amount, game: gameName });
                 playAudioSound('win');
             };
 
-            // Robot Verification Handler
             const handleTriggerRobotCheck = () => {
                 if (robotChecking || isRobotVerified) return;
                 setRobotChecking(true);
@@ -521,7 +582,7 @@
                     setRobotChecking(false);
                     setIsRobotVerified(true);
                     sessionStorage.setItem('robot_verified_pass', 'true');
-                }, 1600);
+                }, 1500);
             };
 
             // Firebase User Listener
@@ -568,36 +629,9 @@
                 };
             }, [sessionPhone]);
 
-            // Realtime Aviator Admin Listener
-            useEffect(() => {
-                if (!db) return;
-
-                const targetRef = db.ref('settings/aviator_target_crash');
-                targetRef.on('value', snap => {
-                    adminTargetRef.current = snap.exists() && snap.val() !== null ? parseFloat(snap.val()) : null;
-                });
-
-                const forceRef = db.ref('settings/aviator_force_crash');
-                forceRef.on('value', snap => {
-                    if (snap.exists() && snap.val()) {
-                        const timestamp = snap.val();
-                        if (timestamp > lastForceCrashTimeRef.current) {
-                            lastForceCrashTimeRef.current = timestamp;
-                            setAviatorPhase(curr => curr === 'flying' ? 'crashed' : curr);
-                            playAudioSound('aviator_crash');
-                        }
-                    }
-                });
-
-                return () => {
-                    targetRef.off();
-                    forceRef.off();
-                };
-            }, []);
-
-            // Generate Aviator Live Bettors with Half-hidden Names
+            // Aviator Live Bettors Generator
             const generateNewRoundBettors = () => {
-                const count = Math.floor(Math.random() * 6) + 16;
+                const count = Math.floor(Math.random() * 5) + 16;
                 const shuffled = [...MASKED_BOT_NAMES].sort(() => 0.5 - Math.random());
                 const list = [];
                 for (let i = 0; i < count; i++) {
@@ -613,7 +647,7 @@
                 setLiveBettors(list);
             };
 
-            // Aviator Flight Engine with Strict Lock and Sounds
+            // Aviator Game Loop with Strict Flight Lock
             useEffect(() => {
                 let avInterval;
                 if (aviatorPhase === 'waiting') {
@@ -652,7 +686,6 @@
                         const cur = parseFloat((1.00 + (elapsedSec * 0.055) + Math.pow(elapsedSec * 0.022, 1.35)).toFixed(2));
                         setAviatorMult(cur);
 
-                        // Live bot bettors auto cashout as multiplier climbs
                         setLiveBettors(prev => prev.map(b => {
                             if (!b.cashedOut && cur >= b.targetCashout) {
                                 return { ...b, cashedOut: true };
@@ -677,7 +710,7 @@
                 return () => clearInterval(avInterval);
             }, [aviatorPhase, aviatorCrashPoint, isAviatorBetPlaced, aviatorStake]);
 
-            // Independent Realtime Clock Engine for 100+ History
+            // Independent Timers Engine for Games
             useEffect(() => {
                 const interval = setInterval(() => {
                     const nowSec = Math.floor(Date.now() / 1000);
@@ -692,7 +725,6 @@
                     };
                     setTimers(newTimers);
 
-                    // Settle each game mode when timer hits 1 second
                     Object.keys(newTimers).forEach(key => {
                         if (newTimers[key] === 1) {
                             handleIndependentGameSettlement(key);
@@ -703,7 +735,7 @@
                 return () => clearInterval(interval);
             }, [wingoHistories, trxHistories, k3Histories, activeBets, balance]);
 
-            // Settlement Handler & 100+ History Appender
+            // Game Round Settlement & 100+ History
             const handleIndependentGameSettlement = (gameKey) => {
                 const d = new Date();
                 const timeStr = formatClockTime(d.getTime());
@@ -798,7 +830,7 @@
                 const win = parseFloat((aviatorStake * aviatorMult).toFixed(2));
                 updateBalanceInFirebase(balance + win);
                 setIsAviatorCashedOut(true);
-                playAudioSound('aviator_cashout');
+                playAudioSound('win');
                 triggerWinPopup(win, `Aviator (${aviatorMult.toFixed(2)}x)`);
             };
 
@@ -838,7 +870,7 @@
                 });
             };
 
-            // Place Game Bet (Wingo, TRX, K3)
+            // Place Bet (Wingo, TRX, K3)
             const handleConfirmBet = () => {
                 const total = betModal.baseStake * betModal.multiplier;
                 if (balance < total) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
@@ -906,7 +938,7 @@
                 });
             };
 
-            // GOOGLE LOGIN (Mobile Gmail Picker)
+            // Google Login
             const handleGoogleLogin = () => {
                 try {
                     if (window.firebase && firebase.auth) {
@@ -1021,7 +1053,6 @@
                 });
             };
 
-            // Start 3-step Loader Flow
             const start3StepDepositProcess = () => {
                 setDepositStep('step3Loader');
                 setStepProgress(1);
@@ -1036,9 +1067,7 @@
                 }, 1000);
             };
 
-            // =========================================================================
-            // 1. ROBOT VERIFICATION ENTRY GUARD
-            // =========================================================================
+            // Entry Robot Verification Guard
             if (!isRobotVerified) {
                 return (
                     <div className="h-full w-full bg-[#0b0f19] flex flex-col items-center justify-center p-5 select-none font-sans text-slate-100">
@@ -1088,19 +1117,7 @@
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#05070e] text-slate-100 overflow-hidden font-sans">
                     
-                    {/* PHONE SIMULATED TOP STATUS BAR */}
-                    <div className="px-5 pt-2 pb-1 bg-[#080d1a] flex justify-between items-center text-[11px] font-mono text-slate-400 select-none border-b border-slate-900/60 flex-shrink-0">
-                        <span>{formatClockTime(Date.now()).slice(0, 5)}</span>
-                        <div className="flex items-center space-x-2">
-                            <span>5G</span>
-                            <span>📶</span>
-                            <span>100% 🔋</span>
-                        </div>
-                    </div>
-
-                    {/* ========================================================================= */}
-                    {/* AUTH VIEW (REGISTER & LOGIN WITH BIG STX MAIN LOGO) */}
-                    {/* ========================================================================= */}
+                    {/* AUTH VIEW */}
                     {view === 'auth' && (
                         <div className="flex-1 flex flex-col bg-[#f2f4f7] text-slate-800 overflow-y-auto select-none">
                             <div className="bg-[#f4bc18] px-4 py-3.5 flex items-center justify-between shadow-md flex-shrink-0">
@@ -1113,7 +1130,7 @@
                                 </div>
                             </div>
 
-                            {/* SCREEN 1: REGISTER TAB */}
+                            {/* REGISTER TAB */}
                             {authTab === 'signup' && (
                                 <div className="flex-1 p-5 space-y-4 max-w-md mx-auto w-full">
                                     <div className="flex flex-col items-center justify-center pb-2">
@@ -1216,7 +1233,7 @@
                                 </div>
                             )}
 
-                            {/* SCREEN 2: LOGIN TAB */}
+                            {/* LOGIN TAB */}
                             {authTab === 'login' && (
                                 <div className="flex-1 flex flex-col">
                                     <div className="bg-[#f4bc18] px-5 pt-1 pb-6 text-white space-y-1">
@@ -1318,7 +1335,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* MAIN USER DASHBOARD */}
+                    {/* MAIN USER DASHBOARD (WITH OFFICIAL GAME LOGOS) */}
                     {/* ========================================================================= */}
                     {view === 'home' && (
                         <div className="flex-1 flex flex-col overflow-hidden min-h-0 bg-[#05070e]">
@@ -1362,63 +1379,55 @@
                                                 <span className="text-[9px] bg-rose-600 text-white px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
                                                     ⚡ STRICT LOCK & LIVE CASHOUTS
                                                 </span>
-                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Aviator Spribe ✈️</h2>
-                                                <span className="text-[10.5px] text-rose-200 block font-medium">Full Audio, Masked Bets & Payouts</span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Aviator Spribe</h2>
+                                                <span className="text-[10.5px] text-rose-200 block font-medium">Audio, Masked Bettors & Live Payouts</span>
                                             </div>
-                                            <div className="w-16 h-16 rounded-2xl bg-rose-600 flex items-center justify-center text-3xl shadow-neon-aviator flex-shrink-0">
-                                                🚀
-                                            </div>
+                                            <GameLogos.aviator />
                                         </div>
 
-                                        {/* Wingo Live Card */}
+                                        {/* Wingo Live Card with Logo */}
                                         <div 
-                                            onClick={() => setView('game_wingo')}
+                                            onClick={() => { setView('game_wingo'); setFullScreenHistory(false); }}
                                             className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/50 cursor-pointer overflow-hidden p-4 flex items-center justify-between"
                                         >
                                             <div className="space-y-1">
                                                 <span className="text-[9px] bg-emerald-950 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
-                                                    100+ ROUNDS HISTORY LIVE
+                                                    115+ ROUNDS HISTORY LIVE
                                                 </span>
-                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo Live 🎲</h2>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo Live</h2>
                                                 <span className="text-[10.5px] text-emerald-200 block font-medium">30S / 1M / 2M Exact Interval Times</span>
                                             </div>
-                                            <div className="w-16 h-16 rounded-2xl bg-emerald-600 flex items-center justify-center text-2xl font-black text-white font-mono shadow-neon-green flex-shrink-0">
-                                                WINGO
-                                            </div>
+                                            <GameLogos.wingo />
                                         </div>
 
-                                        {/* TRX Hash Card */}
+                                        {/* TRX Hash Card with Logo */}
                                         <div 
-                                            onClick={() => setView('game_trx')}
+                                            onClick={() => { setView('game_trx'); setFullScreenHistory(false); }}
                                             className="relative rounded-3xl bg-gradient-to-r from-[#170a3d] via-[#2d1470] to-[#0d0526] shadow-luxury border border-purple-500/50 cursor-pointer overflow-hidden p-4 flex items-center justify-between"
                                         >
                                             <div className="space-y-1">
                                                 <span className="text-[9px] bg-purple-950 border border-purple-400 text-purple-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
-                                                    100+ BLOCKCHAIN HASH ROUNDS
+                                                    115+ BLOCKCHAIN DRAWS
                                                 </span>
-                                                <h2 className="text-2xl font-black text-white font-mono uppercase">TRX Hash Live ⚡</h2>
-                                                <span className="text-[10.5px] text-purple-200 block font-medium">1M / 3M Decentralized Draw Record</span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">TRX Hash Live</h2>
+                                                <span className="text-[10.5px] text-purple-200 block font-medium">1M / 3M Decentralized Hash Record</span>
                                             </div>
-                                            <div className="w-16 h-16 rounded-2xl bg-purple-600 flex items-center justify-center text-2xl font-black text-white font-mono shadow-luxury flex-shrink-0">
-                                                TRX
-                                            </div>
+                                            <GameLogos.trx />
                                         </div>
 
-                                        {/* K3 Lottery Card */}
+                                        {/* K3 Lottery Card with Logo */}
                                         <div 
-                                            onClick={() => setView('game_k3')}
+                                            onClick={() => { setView('game_k3'); setFullScreenHistory(false); }}
                                             className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/50 cursor-pointer overflow-hidden p-4 flex items-center justify-between"
                                         >
                                             <div className="space-y-1">
                                                 <span className="text-[9px] bg-amber-950 border border-amber-400 text-amber-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
-                                                    100+ 3-DICE DRAWS HISTORY
+                                                    115+ 3-DICE DRAWS RECORD
                                                 </span>
-                                                <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery 🎲</h2>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery</h2>
                                                 <span className="text-[10.5px] text-amber-200 block font-medium">1M / 3M Dice Sums & Timing Precision</span>
                                             </div>
-                                            <div className="w-16 h-16 rounded-2xl bg-[#451a03] border border-amber-400 flex items-center justify-center text-2xl font-mono text-amber-300 shadow-neon-gold flex-shrink-0">
-                                                🎲 K3
-                                            </div>
+                                            <GameLogos.k3 />
                                         </div>
                                     </>
                                 )}
@@ -1592,7 +1601,7 @@
                             </div>
 
                             {/* BOTTOM NAVIGATION */}
-                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[440px] mx-auto z-30 shadow-2xl safe-bottom">
+                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[460px] mx-auto z-30 shadow-2xl safe-bottom">
                                 <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center justify-center space-y-1 ${activeNav === 'home' ? 'text-amber-400 font-black' : 'text-slate-400'}`}>
                                     <Icons.home className="w-5 h-5" />
                                     <span className="text-[10px]">Home</span>
@@ -1614,17 +1623,19 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* AVIATOR SPRIBE VIEW (STRICT LOCK DURING FLIGHT & MASKED LIVE BETS) */}
+                    {/* AVIATOR SPRIBE VIEW */}
                     {/* ========================================================================= */}
                     {view === 'game_aviator' && (
                         <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#0e111a] border-b border-slate-800 flex items-center justify-between flex-shrink-0">
                                 <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 cursor-pointer">◀ Back</button>
-                                <span className="text-red-500 font-black text-sm font-mono">AVIATOR SPRIBE ✈️</span>
+                                <div className="flex items-center space-x-2">
+                                    <span className="text-red-500 font-black text-sm font-mono">AVIATOR SPRIBE</span>
+                                    <GameLogos.aviator />
+                                </div>
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            {/* Multiplier Past History */}
                             <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                 {aviatorHistory.map((item, i) => (
                                     <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border ${item.mult >= 2 ? 'bg-purple-600/20 text-purple-300 border-purple-500/30' : 'bg-blue-600/20 text-blue-300 border-blue-500/30'}`}>{Number(item.mult).toFixed(2)}x</span>
@@ -1654,7 +1665,6 @@
                                     )}
                                 </div>
 
-                                {/* STAKE & BET CONTROLS (STRICTLY LOCKED DURING FLIGHT) */}
                                 <div className="bg-[#10141f] p-3 rounded-2xl border border-slate-800 space-y-2.5">
                                     <div className="flex justify-between items-center text-xs font-mono text-slate-400">
                                         <span>Stake: ৳{aviatorStake}</span>
@@ -1672,7 +1682,6 @@
                                         </div>
                                     </div>
                                     
-                                    {/* Action Button States */}
                                     {aviatorPhase === 'waiting' ? (
                                         <button 
                                             onClick={handleAviatorBet} 
@@ -1691,7 +1700,6 @@
                                                 {isAviatorCashedOut ? '✓ CASHED OUT' : `CASHOUT ৳${formatMoney(aviatorStake * aviatorMult)}`}
                                             </button>
                                         ) : (
-                                            /* Locked during flight if user hasn't bet */
                                             <button 
                                                 disabled={true}
                                                 className="w-full py-3.5 font-black text-xs rounded-xl uppercase font-mono tracking-wider bg-slate-900/90 border border-slate-800 text-slate-500 cursor-not-allowed"
@@ -1700,7 +1708,6 @@
                                             </button>
                                         )
                                     ) : (
-                                        /* Crashed state */
                                         <button 
                                             disabled={true}
                                             className="w-full py-3.5 font-black text-xs rounded-xl uppercase font-mono tracking-wider bg-rose-950/60 border border-rose-900 text-rose-400 cursor-not-allowed"
@@ -1710,7 +1717,6 @@
                                     )}
                                 </div>
 
-                                {/* LIVE BETTORS WITH HALF-HIDDEN NAMES & LIVE STOPS */}
                                 <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
                                     <div className="flex justify-between items-center text-xs font-mono border-b border-slate-800/80 pb-1.5">
                                         <span className="text-slate-300 font-bold flex items-center gap-1.5">
@@ -1721,7 +1727,6 @@
                                     </div>
 
                                     <div className="space-y-1.5 max-h-48 overflow-y-auto font-mono text-[11px]">
-                                        {/* User's bet row */}
                                         {isAviatorBetPlaced && (
                                             <div className="flex justify-between items-center bg-amber-950/40 border border-amber-500/50 p-2 rounded-xl text-amber-300 font-bold">
                                                 <div className="flex items-center space-x-2">
@@ -1737,7 +1742,6 @@
                                             </div>
                                         )}
 
-                                        {/* Masked bot bettors */}
                                         {liveBettors.map((b, i) => (
                                             <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/60 rounded-xl border border-slate-800/40">
                                                 <div className="flex items-center space-x-2">
@@ -1765,167 +1769,277 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* WINGO VIEW (100+ ROUNDS HISTORIES & TIMERS) */}
+                    {/* WINGO VIEW (WITH LOGO & FULL-SCREEN HISTORY TOGGLE) */}
                     {/* ========================================================================= */}
                     {view === 'game_wingo' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
                                 <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 cursor-pointer">◀ Back</button>
-                                <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">WINGO LIVE 🎲</span>
+                                <div className="flex items-center space-x-2">
+                                    <GameLogos.wingo />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">WINGO LIVE</span>
+                                </div>
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
-                                <div className="grid grid-cols-3 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
-                                    {['30s', '1m', '2m'].map(t => (
-                                        <button key={t} onClick={() => setWingoTab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${wingoTab === t ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
-                                    ))}
-                                </div>
+                            {/* View Mode Toggle: Betting vs Full Screen History */}
+                            <div className="px-3 pt-2 bg-[#08130c] flex space-x-2 flex-shrink-0 border-b border-slate-800">
+                                <button 
+                                    onClick={() => setFullScreenHistory(false)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-amber-400 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    🎯 Betting Desk
+                                </button>
+                                <button 
+                                    onClick={() => setFullScreenHistory(true)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-amber-400 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    📜 Full Screen History (115+)
+                                </button>
+                            </div>
 
-                                <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono relative overflow-hidden">
-                                    <div>
-                                        <span className="text-[10px] text-slate-400 block uppercase font-mono">WINGO {wingoTab.toUpperCase()}</span>
-                                        <span className="text-xs font-bold text-amber-300">Countdown Timer:</span>
+                            {!fullScreenHistory ? (
+                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
+                                    <div className="grid grid-cols-3 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+                                        {['30s', '1m', '2m'].map(t => (
+                                            <button key={t} onClick={() => setWingoTab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${wingoTab === t ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
+                                        ))}
                                     </div>
-                                    <span className={`text-3xl font-black ${timers[`wingo_${wingoTab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-yellow-400'}`}>
-                                        {Math.floor(timers[`wingo_${wingoTab}`] / 60)}:{String(timers[`wingo_${wingoTab}`] % 60).padStart(2, '0')}
-                                    </span>
-                                </div>
 
-                                <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Green', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Green (2X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Violet', odds: 4.5, baseStake: 10, multiplier: 1 })} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Violet (4.5X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Red', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Red (2X)</button>
-                                </div>
-
-                                <div className="grid grid-cols-2 gap-2 pt-1">
-                                    <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
-                                </div>
-
-                                {/* 100+ ROUNDS HISTORY TABLE */}
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
-                                        <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">100+ Game Records ({wingoTab.toUpperCase()})</span>
-                                        <span className="text-[10px] text-amber-400 font-mono font-bold">Live Synced</span>
+                                    <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono relative overflow-hidden">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase font-mono">WINGO {wingoTab.toUpperCase()}</span>
+                                            <span className="text-xs font-bold text-amber-300">Countdown Timer:</span>
+                                        </div>
+                                        <span className={`text-3xl font-black ${timers[`wingo_${wingoTab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-yellow-400'}`}>
+                                            {Math.floor(timers[`wingo_${wingoTab}`] / 60)}:{String(timers[`wingo_${wingoTab}`] % 60).padStart(2, '0')}
+                                        </span>
                                     </div>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-64 overflow-y-auto">
+
+                                    <div className="grid grid-cols-3 gap-2">
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Green', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Green (2X)</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Violet', odds: 4.5, baseStake: 10, multiplier: 1 })} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Violet (4.5X)</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Red', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Red (2X)</button>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-2 pt-1">
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
+                                    </div>
+
+                                    <button 
+                                        onClick={() => setFullScreenHistory(true)}
+                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-amber-400 rounded-2xl text-xs font-bold text-amber-300 font-mono text-center block shadow-sm"
+                                    >
+                                        ⛶ Open 115+ Rounds Full Screen History &gt;
+                                    </button>
+                                </div>
+                            ) : (
+                                /* FULL SCREEN HISTORY VIEW */
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-amber-400 font-bold">115+ Game Records ({wingoTab.toUpperCase()})</span>
+                                        <div className="flex space-x-1">
+                                            {['30s', '1m', '2m'].map(t => (
+                                                <button key={t} onClick={() => setWingoTab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${wingoTab === t ? 'bg-amber-400 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
                                         {(wingoHistories[wingoTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="font-bold text-yellow-300">{h.number}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
-                                                <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-6)}</span>
+                                                </div>
+                                                <span className="font-black text-yellow-300 text-sm">{h.number}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-sky-500/20 text-sky-300 border border-sky-500/40'}`}>{h.size}</span>
+                                                <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500 shadow-neon-green' : 'bg-rose-500'}`}></span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     )}
 
                     {/* ========================================================================= */}
-                    {/* TRX VIEW (100+ ROUNDS HISTORIES) */}
+                    {/* TRX VIEW (WITH LOGO & FULL-SCREEN HISTORY TOGGLE) */}
                     {/* ========================================================================= */}
                     {view === 'game_trx' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#170a3d] text-white flex items-center justify-between border-b border-purple-900/40 flex-shrink-0">
                                 <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 cursor-pointer">◀ Back</button>
-                                <span className="text-xs font-black tracking-widest uppercase font-mono text-purple-300">TRX HASH LIVE ⚡</span>
+                                <div className="flex items-center space-x-2">
+                                    <GameLogos.trx />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-purple-300">TRX HASH LIVE</span>
+                                </div>
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
-                                <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
-                                    {['1m', '3m'].map(t => (
-                                        <button key={t} onClick={() => setTrxTab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${trxTab === t ? 'bg-purple-500 text-white' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
-                                    ))}
-                                </div>
+                            <div className="px-3 pt-2 bg-[#0e0624] flex space-x-2 flex-shrink-0 border-b border-slate-800">
+                                <button 
+                                    onClick={() => setFullScreenHistory(false)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-purple-600 text-white font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    🎯 Betting Desk
+                                </button>
+                                <button 
+                                    onClick={() => setFullScreenHistory(true)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-purple-600 text-white font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    📜 Full Screen History (115+)
+                                </button>
+                            </div>
 
-                                <div className="glass-panel p-4 rounded-3xl border border-purple-500/40 flex justify-between items-center font-mono relative overflow-hidden">
-                                    <div>
-                                        <span className="text-[10px] text-slate-400 block uppercase">TRX HASH {trxTab.toUpperCase()}</span>
-                                        <span className="text-xs font-bold text-purple-300">Hash Countdown:</span>
+                            {!fullScreenHistory ? (
+                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
+                                    <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+                                        {['1m', '3m'].map(t => (
+                                            <button key={t} onClick={() => setTrxTab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${trxTab === t ? 'bg-purple-500 text-white' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
+                                        ))}
                                     </div>
-                                    <span className={`text-3xl font-black ${timers[`trx_${trxTab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-purple-400'}`}>
-                                        {Math.floor(timers[`trx_${trxTab}`] / 60)}:{String(timers[`trx_${trxTab}`] % 60).padStart(2, '0')}
-                                    </span>
-                                </div>
 
-                                <div className="grid grid-cols-2 gap-2">
-                                    <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
-                                </div>
-
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
-                                        <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">100+ TRX History ({trxTab.toUpperCase()})</span>
-                                        <span className="text-[10px] text-purple-400 font-mono font-bold">100+ Draws</span>
+                                    <div className="glass-panel p-4 rounded-3xl border border-purple-500/40 flex justify-between items-center font-mono relative overflow-hidden">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase">TRX HASH {trxTab.toUpperCase()}</span>
+                                            <span className="text-xs font-bold text-purple-300">Hash Countdown:</span>
+                                        </div>
+                                        <span className={`text-3xl font-black ${timers[`trx_${trxTab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-purple-400'}`}>
+                                            {Math.floor(timers[`trx_${trxTab}`] / 60)}:{String(timers[`trx_${trxTab}`] % 60).padStart(2, '0')}
+                                        </span>
                                     </div>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-64 overflow-y-auto">
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
+                                    </div>
+
+                                    <button 
+                                        onClick={() => setFullScreenHistory(true)}
+                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-purple-400 rounded-2xl text-xs font-bold text-purple-300 font-mono text-center block shadow-sm"
+                                    >
+                                        ⛶ Open 115+ TRX Full Screen History &gt;
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-purple-400 font-bold">115+ TRX Draws ({trxTab.toUpperCase()})</span>
+                                        <div className="flex space-x-1">
+                                            {['1m', '3m'].map(t => (
+                                                <button key={t} onClick={() => setTrxTab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${trxTab === t ? 'bg-purple-500 text-white font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
                                         {(trxHistories[trxTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="font-bold text-purple-300">{h.number}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">Block: ...{h.period.slice(-5)}</span>
+                                                </div>
+                                                <span className="font-black text-purple-300 text-sm">{h.number}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     )}
 
                     {/* ========================================================================= */}
-                    {/* K3 LOTTERY VIEW (100+ ROUNDS HISTORIES) */}
+                    {/* K3 LOTTERY VIEW (WITH LOGO, REAL DICE & FULL-SCREEN HISTORY TOGGLE) */}
                     {/* ========================================================================= */}
                     {view === 'game_k3' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
                                 <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 cursor-pointer">◀ Back</button>
-                                <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">K3 LOTTERY 🎲</span>
+                                <div className="flex items-center space-x-2">
+                                    <GameLogos.k3 />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">K3 LOTTERY</span>
+                                </div>
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
-                                <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
-                                    {['1m', '3m'].map(t => (
-                                        <button key={t} onClick={() => setK3Tab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${k3Tab === t ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
-                                    ))}
-                                </div>
+                            <div className="px-3 pt-2 bg-[#1b0d01] flex space-x-2 flex-shrink-0 border-b border-slate-800">
+                                <button 
+                                    onClick={() => setFullScreenHistory(false)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-amber-500 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    🎯 Betting Desk
+                                </button>
+                                <button 
+                                    onClick={() => setFullScreenHistory(true)}
+                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-amber-500 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
+                                >
+                                    📜 Full Screen History (115+)
+                                </button>
+                            </div>
 
-                                <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono relative overflow-hidden">
-                                    <div>
-                                        <span className="text-[10px] text-slate-400 block uppercase">K3 LOTTERY {k3Tab.toUpperCase()}</span>
-                                        <span className="text-xs font-bold text-amber-300">Dice Draw Clock:</span>
+                            {!fullScreenHistory ? (
+                                <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
+                                    <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+                                        {['1m', '3m'].map(t => (
+                                            <button key={t} onClick={() => setK3Tab(t)} className={`py-2 text-[11px] font-black rounded-xl cursor-pointer ${k3Tab === t ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
+                                        ))}
                                     </div>
-                                    <span className={`text-3xl font-black ${timers[`k3_${k3Tab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-yellow-400'}`}>
-                                        {Math.floor(timers[`k3_${k3Tab}`] / 60)}:{String(timers[`k3_${k3Tab}`] % 60).padStart(2, '0')}
-                                    </span>
-                                </div>
 
-                                <div className="grid grid-cols-2 gap-2">
-                                    <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Big (11-18) 2X</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Small (3-10) 2X</button>
-                                </div>
-
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
-                                        <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">100+ Dice History ({k3Tab.toUpperCase()})</span>
-                                        <span className="text-[10px] text-amber-400 font-mono font-bold">100+ Draws</span>
+                                    <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono relative overflow-hidden">
+                                        <div>
+                                            <span className="text-[10px] text-slate-400 block uppercase">K3 LOTTERY {k3Tab.toUpperCase()}</span>
+                                            <span className="text-xs font-bold text-amber-300">Dice Draw Clock:</span>
+                                        </div>
+                                        <span className={`text-3xl font-black ${timers[`k3_${k3Tab}`] <= 5 ? 'text-rose-500 animate-ping' : 'text-yellow-400'}`}>
+                                            {Math.floor(timers[`k3_${k3Tab}`] / 60)}:{String(timers[`k3_${k3Tab}`] % 60).padStart(2, '0')}
+                                        </span>
                                     </div>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-64 overflow-y-auto">
+
+                                    <div className="grid grid-cols-2 gap-2">
+                                        <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Big (11-18) 2X</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Small (3-10) 2X</button>
+                                    </div>
+
+                                    <button 
+                                        onClick={() => setFullScreenHistory(true)}
+                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-amber-400 rounded-2xl text-xs font-bold text-amber-300 font-mono text-center block shadow-sm"
+                                    >
+                                        ⛶ Open 115+ Dice Full Screen History &gt;
+                                    </button>
+                                </div>
+                            ) : (
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-amber-400 font-bold">115+ Dice Draws ({k3Tab.toUpperCase()})</span>
+                                        <div className="flex space-x-1">
+                                            {['1m', '3m'].map(t => (
+                                                <button key={t} onClick={() => setK3Tab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${k3Tab === t ? 'bg-amber-400 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
                                         {(k3Histories[k3Tab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="text-amber-300 font-bold">[{h.dice.join(', ')}]</span>
-                                                <span className="font-black text-white">{h.sum}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-5)}</span>
+                                                </div>
+                                                <div className="flex space-x-1">
+                                                    <DicePip value={h.dice[0]} />
+                                                    <DicePip value={h.dice[1]} />
+                                                    <DicePip value={h.dice[2]} />
+                                                </div>
+                                                <span className="font-black text-white text-base">{h.sum}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     )}
 
@@ -1935,8 +2049,6 @@
                     {winCelebration.show && (
                         <div className="fixed inset-0 z-[6000] bg-black/90 flex flex-col items-center justify-center p-4 select-none backdrop-blur-md">
                             <div className="relative w-full max-w-xs glass-panel border-2 border-yellow-400 rounded-3xl p-6 text-center space-y-4 shadow-neon-gold">
-                                
-                                {/* Confetti Animation Elements */}
                                 <div className="confetti-piece bg-amber-400 left-8"></div>
                                 <div className="confetti-piece bg-emerald-400 left-20"></div>
                                 <div className="confetti-piece bg-pink-500 left-44"></div>
