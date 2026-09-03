@@ -37,6 +37,7 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
+                        'neon-orange': '0 0 25px rgba(247, 148, 29, 0.45)',
                         'neon-aviator': '0 0 30px rgba(229, 30, 56, 0.85)',
                         'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
                     }
@@ -49,6 +50,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         html, body {
             height: 100%;
             height: 100dvh;
@@ -56,18 +62,17 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
-            background-color: #05070e;
+            background-color: #030509;
             font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
             color: #f8fafc;
-            -webkit-tap-highlight-color: transparent;
         }
         
-        /* 100% Screen Fitted Phone Layout */
+        /* 100% Mobile Full Screen Adaptor */
         #phone-wrapper {
             height: 100%;
             height: 100dvh;
             width: 100%;
-            max-width: 460px;
+            max-width: 500px;
             margin: 0 auto;
             position: relative;
             display: flex;
@@ -78,9 +83,9 @@
 
         @media (max-width: 640px) {
             #phone-wrapper {
-                max-width: 100% !important;
+                max-width: 100vw !important;
+                width: 100vw !important;
                 border: none !important;
-                border-radius: 0 !important;
                 box-shadow: none !important;
             }
         }
@@ -122,23 +127,10 @@
         .safe-bottom {
             padding-bottom: max(env(safe-area-inset-bottom), 12px);
         }
-
-        @keyframes confettiFall {
-            0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
-        }
-        .confetti-piece {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
-            animation: confettiFall 1.8s infinite linear;
-        }
     </style>
 </head>
 <body class="flex justify-center items-center h-full w-full">
 
-    <!-- 100% Mobile Viewport Container -->
     <div id="phone-wrapper" class="sm:border-x sm:border-slate-800/80 shadow-2xl">
         <div id="root"></div>
     </div>
@@ -153,17 +145,16 @@
 
         const db = window.db;
 
-        // GLOBAL CONSTANTS & LOGOS
+        // CONSTANTS
         const OFFICIAL_BKASH_NUMBER = "01860909272";
         const BKASH_LOGO_URL = "https://i.ibb.co/xTgMb9X/11623.jpg";
         const STEVEN_MAIN_LOGO = "https://i.ibb.co/W43Hdvm3/10736.png";
         const TELEGRAM_SUPPORT_URL = "https://t.me/Ststevenx36";
         const OFFICIAL_WEB_PROMO_URL = "https://ststevenx8-droid.github.io/wingouser/";
 
-        // Real Graphic Game Logos
         const GameLogos = {
             wingo: () => (
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-800 p-1 flex items-center justify-center shadow-neon-green flex-shrink-0 border border-emerald-400/40">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 via-green-600 to-teal-800 p-1 flex items-center justify-center shadow-neon-green flex-shrink-0 border border-emerald-400/40">
                     <div className="text-center font-black leading-none font-mono">
                         <span className="text-[10px] text-yellow-300 block tracking-tighter">WIN</span>
                         <span className="text-xs text-white block">GO</span>
@@ -171,25 +162,24 @@
                 </div>
             ),
             trx: () => (
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-700 via-rose-700 to-indigo-900 p-1.5 flex items-center justify-center shadow-luxury flex-shrink-0 border border-purple-400/50">
-                    <svg viewBox="0 0 32 32" className="w-6 h-6 drop-shadow">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-purple-700 via-rose-700 to-indigo-900 p-1.5 flex items-center justify-center shadow-luxury flex-shrink-0 border border-purple-400/50">
+                    <svg viewBox="0 0 32 32" className="w-7 h-7 drop-shadow">
                         <path fill="#ffffff" d="M29.5 7.6L16.2 2 1.5 8.7l13.9 21.6 14.1-22.7zm-14.7 3L5.4 9.1l8.7-3.7 10.7 4.6-10 1.6zm.6 1.7l10-1.7-8.8 15.6-1.2-13.9zm-1.4 0l1.2 13.9-8.8-15.6 7.6 1.7z"/>
                     </svg>
                 </div>
             ),
             k3: () => (
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-800 p-1 flex items-center justify-center shadow-neon-gold flex-shrink-0 border border-amber-400/50 text-xl">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-amber-600 via-orange-600 to-yellow-800 p-1 flex items-center justify-center shadow-neon-gold flex-shrink-0 border border-amber-400/50 text-2xl">
                     🎲
                 </div>
             ),
             aviator: () => (
-                <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-rose-600 via-red-600 to-rose-900 p-1 flex items-center justify-center shadow-neon-aviator flex-shrink-0 border border-rose-400/50 text-xl">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-rose-600 via-red-600 to-rose-900 p-1 flex items-center justify-center shadow-neon-aviator flex-shrink-0 border border-rose-400/50 text-2xl">
                     🚀
                 </div>
             )
         };
 
-        // Real Interactive Dice Pip Renderer for K3
         const DicePip = ({ value }) => {
             const pipMap = {
                 1: [4],
@@ -213,35 +203,35 @@
             );
         };
 
-        // 25+ Masked Bettors Pool (Half-hidden usernames)
         const MASKED_BOT_NAMES = [
             "sha***bd", "tan***07", "sab***99", "meh***win", "al_***pro",
             "rak***88", "nah***36", "far***stx", "jah***bd", "shi***vip",
-            "soj***01", "soh***bd", "rub***365", "joy***pro", "mar***win",
-            "ari***99", "has***bdt", "sai***007", "tam***win", "sia***gold"
+            "soj***01", "soh***bd", "rub***365", "joy***pro", "mar***win"
         ];
 
-        // Web Audio Synthesizer Engine
-        const playAudioSound = (type) => {
+        // =========================================================================
+        // AVIATOR-ONLY AUDIO SYNTHESIZER (শুধুমাত্র এভিয়েটরে সাউন্ড বাজবে)
+        // =========================================================================
+        const playAviatorAudio = (type) => {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 if (!AudioCtx) return;
                 const ctx = new AudioCtx();
                 const now = ctx.currentTime;
 
-                if (type === 'aviator_takeoff') {
+                if (type === 'takeoff') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(120, now);
-                    osc.frequency.exponentialRampToValueAtTime(320, now + 1.2);
+                    osc.frequency.exponentialRampToValueAtTime(340, now + 1.2);
                     gain.gain.setValueAtTime(0.08, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 1.2);
-                } else if (type === 'aviator_crash') {
+                } else if (type === 'crash') {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'square';
@@ -253,7 +243,7 @@
                     gain.connect(ctx.destination);
                     osc.start(now);
                     osc.stop(now + 0.5);
-                } else if (type === 'win') {
+                } else if (type === 'cashout') {
                     [523.25, 659.25, 783.99, 1046.50, 1318.51].forEach((freq, idx) => {
                         const osc = ctx.createOscillator();
                         const gain = ctx.createGain();
@@ -266,17 +256,6 @@
                         osc.start(now + idx * 0.07);
                         osc.stop(now + idx * 0.07 + 0.3);
                     });
-                } else if (type === 'tick') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(900, now);
-                    gain.gain.setValueAtTime(0.06, now);
-                    gain.gain.exponentialRampToValueAtTime(0.005, now + 0.04);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.04);
                 }
             } catch(e) {}
         };
@@ -343,7 +322,6 @@
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
         };
 
-        // Generate 115+ Realtime History Rounds with exact mode timestamps
         const generate100PlusHistory = (prefix, durationSec, count = 115) => {
             const list = [];
             const now = Date.now();
@@ -368,7 +346,6 @@
             return list;
         };
 
-        // Aviator Canvas Renderer
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
 
@@ -444,9 +421,7 @@
             return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />;
         };
 
-        // --- MAIN APPLICATION ---
         function App() {
-            // Security Robot Verification Guard
             const [isRobotVerified, setIsRobotVerified] = useState(sessionStorage.getItem('robot_verified_pass') === 'true');
             const [robotChecking, setRobotChecking] = useState(false);
 
@@ -459,7 +434,6 @@
             const [rememberPassword, setRememberPassword] = useState(true);
             const [agreePrivacy, setAgreePrivacy] = useState(true);
 
-            // Auth Input Fields
             const [phone, setPhone] = useState('');
             const [email, setEmail] = useState('');
             const [username, setUsername] = useState('');
@@ -473,42 +447,34 @@
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
-            // FULL SCREEN HISTORY TOGGLE (PER GAME)
             const [fullScreenHistory, setFullScreenHistory] = useState(false);
-
-            // LUXURY WIN POPUP MODAL
             const [winCelebration, setWinCelebration] = useState({ show: false, amount: 0, game: '' });
 
-            // AVATAR MODAL
             const [showAvatarModal, setShowAvatarModal] = useState(false);
             const fileInputRef = useRef(null);
 
-            // USER TRANSACTION HISTORIES
             const [userDeposits, setUserDeposits] = useState([]);
             const [userWithdrawals, setUserWithdrawals] = useState([]);
             const [profileHistoryTab, setProfileHistoryTab] = useState('none');
 
-            // ADMIN NOTICES & BELL
             const [showNoticeModal, setShowNoticeModal] = useState(false);
             const [adminNotices, setAdminNotices] = useState([
                 { id: 1, title: 'Welcome to STEVEN WIN', text: 'রেজিস্ট্রেশন করে খেলুন Aviator, Wingo এবং K3 lottery। শুভকামনা!', time: 'Today' },
                 { id: 2, title: 'ক্যাশআউট ও ডিপোজিট সার্ভিস', text: 'বিকাশ ও নগদে সর্বনিম্ন ১০০ টাকা উত্তোলন করা যাবে। ১০-৩০ মিনিটের মধ্যে পেমেন্ট ক্লিয়ার হয়।', time: 'Notice' }
             ]);
 
-            // DEPOSIT SYSTEM & 3-STEP VERIFICATION LOADER
             const [depositStep, setDepositStep] = useState(null);
             const [depositAmount, setDepositAmount] = useState(120);
             const [customDepInput, setCustomDepInput] = useState('120');
             const [copied, setCopied] = useState(false);
             const [stepProgress, setStepProgress] = useState(1);
 
-            // CASHOUT SYSTEM (MINIMUM ৳100)
             const [showCashoutModal, setShowCashoutModal] = useState(false);
             const [cashoutMethod, setCashoutMethod] = useState('bKash'); 
             const [cashoutNumber, setCashoutNumber] = useState('');
             const [cashoutAmount, setCashoutAmount] = useState('');
 
-            // --- AVIATOR STATES & STRICT LOCKING ENGINE ---
+            // AVIATOR STATES
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
             const [aviatorCountdown, setAviatorCountdown] = useState(8);
             const [aviatorMult, setAviatorMult] = useState(1.00);
@@ -523,7 +489,7 @@
             const adminTargetRef = useRef(null);
             const lastForceCrashTimeRef = useRef(0);
 
-            // --- 100+ ROUNDS HISTORIES FOR WINGO, TRX, K3 ---
+            // WINGO, TRX, K3 STATES
             const [wingoTab, setWingoTab] = useState('30s'); 
             const [trxTab, setTrxTab] = useState('1m'); 
             const [k3Tab, setK3Tab] = useState('1m');
@@ -572,7 +538,6 @@
 
             const triggerWinPopup = (amount, gameName) => {
                 setWinCelebration({ show: true, amount, game: gameName });
-                playAudioSound('win');
             };
 
             const handleTriggerRobotCheck = () => {
@@ -585,7 +550,6 @@
                 }, 1500);
             };
 
-            // Firebase User Listener
             useEffect(() => {
                 if (!sessionPhone || !db) {
                     setCurrentUser(null);
@@ -629,7 +593,37 @@
                 };
             }, [sessionPhone]);
 
-            // Aviator Live Bettors Generator
+            useEffect(() => {
+                if (!db) return;
+
+                const targetRef = db.ref('settings/aviator_target_crash');
+                targetRef.on('value', snap => {
+                    adminTargetRef.current = snap.exists() && snap.val() !== null ? parseFloat(snap.val()) : null;
+                });
+
+                const forceRef = db.ref('settings/aviator_force_crash');
+                forceRef.on('value', snap => {
+                    if (snap.exists() && snap.val()) {
+                        const timestamp = snap.val();
+                        if (timestamp > lastForceCrashTimeRef.current) {
+                            lastForceCrashTimeRef.current = timestamp;
+                            setAviatorPhase(curr => {
+                                if (curr === 'flying') {
+                                    playAviatorAudio('crash');
+                                    return 'crashed';
+                                }
+                                return curr;
+                            });
+                        }
+                    }
+                });
+
+                return () => {
+                    targetRef.off();
+                    forceRef.off();
+                };
+            }, []);
+
             const generateNewRoundBettors = () => {
                 const count = Math.floor(Math.random() * 5) + 16;
                 const shuffled = [...MASKED_BOT_NAMES].sort(() => 0.5 - Math.random());
@@ -647,20 +641,17 @@
                 setLiveBettors(list);
             };
 
-            // Aviator Game Loop with Strict Flight Lock
+            // AVIATOR ENGINE (Audio strictly in Aviator)
             useEffect(() => {
                 let avInterval;
                 if (aviatorPhase === 'waiting') {
                     generateNewRoundBettors();
                     avInterval = setInterval(() => {
                         setAviatorCountdown(prev => {
-                            if (prev <= 4 && prev > 1) {
-                                playAudioSound('tick');
-                            }
                             if (prev <= 1) {
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
-                                playAudioSound('aviator_takeoff');
+                                playAviatorAudio('takeoff');
 
                                 let nextCrash;
                                 if (adminTargetRef.current && adminTargetRef.current >= 1.00) {
@@ -696,7 +687,7 @@
                         if (cur >= aviatorCrashPoint) {
                             clearInterval(avInterval);
                             setAviatorPhase('crashed');
-                            playAudioSound('aviator_crash');
+                            playAviatorAudio('crash');
                             setAviatorHistory(prev => [{ mult: aviatorCrashPoint }, ...prev.slice(0, 15)]);
                             setTimeout(() => {
                                 setIsAviatorBetPlaced(false);
@@ -710,7 +701,6 @@
                 return () => clearInterval(avInterval);
             }, [aviatorPhase, aviatorCrashPoint, isAviatorBetPlaced, aviatorStake]);
 
-            // Independent Timers Engine for Games
             useEffect(() => {
                 const interval = setInterval(() => {
                     const nowSec = Math.floor(Date.now() / 1000);
@@ -735,7 +725,6 @@
                 return () => clearInterval(interval);
             }, [wingoHistories, trxHistories, k3Histories, activeBets, balance]);
 
-            // Game Round Settlement & 100+ History
             const handleIndependentGameSettlement = (gameKey) => {
                 const d = new Date();
                 const timeStr = formatClockTime(d.getTime());
@@ -780,7 +769,6 @@
                     }));
                 }
 
-                // Check Active Bets
                 setActiveBets(prevBets => {
                     let totalWin = 0;
                     const remaining = [];
@@ -815,26 +803,22 @@
                 });
             };
 
-            // Aviator User Bet (Strictly allowed ONLY in waiting phase)
             const handleAviatorBet = () => {
                 if (aviatorPhase !== 'waiting') return;
                 if (balance < aviatorStake) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
                 updateBalanceInFirebase(balance - aviatorStake);
                 setIsAviatorBetPlaced(true);
-                playAudioSound('tick');
             };
 
-            // Aviator Cashout
             const handleAviatorCashout = () => {
                 if (!isAviatorBetPlaced || isAviatorCashedOut || aviatorPhase !== 'flying') return;
                 const win = parseFloat((aviatorStake * aviatorMult).toFixed(2));
                 updateBalanceInFirebase(balance + win);
                 setIsAviatorCashedOut(true);
-                playAudioSound('win');
+                playAviatorAudio('cashout');
                 triggerWinPopup(win, `Aviator (${aviatorMult.toFixed(2)}x)`);
             };
 
-            // Cashout Submission (Minimum ৳100)
             const handleCashoutSubmit = (e) => {
                 e.preventDefault();
                 const amt = parseFloat(cashoutAmount);
@@ -870,13 +854,11 @@
                 });
             };
 
-            // Place Bet (Wingo, TRX, K3)
             const handleConfirmBet = () => {
                 const total = betModal.baseStake * betModal.multiplier;
                 if (balance < total) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
 
                 updateBalanceInFirebase(balance - total);
-                playAudioSound('tick');
 
                 const newBet = {
                     id: Date.now(),
@@ -892,7 +874,6 @@
                 alert(`✅ বেট কনফার্ম হয়েছে! ৳${total} টাকা প্লেস করা হয়েছে।`);
             };
 
-            // Auth Handlers
             const handleLogin = (e) => {
                 e.preventDefault();
                 if (!password) return alert('পাসওয়ার্ড প্রদান করুন!');
@@ -938,7 +919,6 @@
                 });
             };
 
-            // Google Login
             const handleGoogleLogin = () => {
                 try {
                     if (window.firebase && firebase.auth) {
@@ -1067,7 +1047,6 @@
                 }, 1000);
             };
 
-            // Entry Robot Verification Guard
             if (!isRobotVerified) {
                 return (
                     <div className="h-full w-full bg-[#0b0f19] flex flex-col items-center justify-center p-5 select-none font-sans text-slate-100">
@@ -1130,7 +1109,6 @@
                                 </div>
                             </div>
 
-                            {/* REGISTER TAB */}
                             {authTab === 'signup' && (
                                 <div className="flex-1 p-5 space-y-4 max-w-md mx-auto w-full">
                                     <div className="flex flex-col items-center justify-center pb-2">
@@ -1233,7 +1211,6 @@
                                 </div>
                             )}
 
-                            {/* LOGIN TAB */}
                             {authTab === 'login' && (
                                 <div className="flex-1 flex flex-col">
                                     <div className="bg-[#f4bc18] px-5 pt-1 pb-6 text-white space-y-1">
@@ -1334,9 +1311,7 @@
                         </div>
                     )}
 
-                    {/* ========================================================================= */}
-                    {/* MAIN USER DASHBOARD (WITH OFFICIAL GAME LOGOS) */}
-                    {/* ========================================================================= */}
+                    {/* MAIN USER DASHBOARD */}
                     {view === 'home' && (
                         <div className="flex-1 flex flex-col overflow-hidden min-h-0 bg-[#05070e]">
                             <div className="px-4 py-3 bg-[#080d1a] border-b border-slate-800 flex justify-between items-center flex-shrink-0">
@@ -1601,7 +1576,7 @@
                             </div>
 
                             {/* BOTTOM NAVIGATION */}
-                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[460px] mx-auto z-30 shadow-2xl safe-bottom">
+                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[500px] mx-auto z-30 shadow-2xl safe-bottom">
                                 <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center justify-center space-y-1 ${activeNav === 'home' ? 'text-amber-400 font-black' : 'text-slate-400'}`}>
                                     <Icons.home className="w-5 h-5" />
                                     <span className="text-[10px]">Home</span>
@@ -1623,7 +1598,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* AVIATOR SPRIBE VIEW */}
+                    {/* AVIATOR VIEW */}
                     {/* ========================================================================= */}
                     {view === 'game_aviator' && (
                         <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
@@ -1769,8 +1744,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* WINGO VIEW (WITH LOGO & FULL-SCREEN HISTORY TOGGLE) */}
-                    {/* ========================================================================= */}
+                    {/* WINGO VIEW */}
                     {view === 'game_wingo' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
@@ -1782,7 +1756,6 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            {/* View Mode Toggle: Betting vs Full Screen History */}
                             <div className="px-3 pt-2 bg-[#08130c] flex space-x-2 flex-shrink-0 border-b border-slate-800">
                                 <button 
                                     onClick={() => setFullScreenHistory(false)}
@@ -1835,7 +1808,6 @@
                                     </button>
                                 </div>
                             ) : (
-                                /* FULL SCREEN HISTORY VIEW */
                                 <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
                                     <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
                                         <span className="text-amber-400 font-bold">115+ Game Records ({wingoTab.toUpperCase()})</span>
@@ -1865,8 +1837,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* TRX VIEW (WITH LOGO & FULL-SCREEN HISTORY TOGGLE) */}
-                    {/* ========================================================================= */}
+                    {/* TRX VIEW */}
                     {view === 'game_trx' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#170a3d] text-white flex items-center justify-between border-b border-purple-900/40 flex-shrink-0">
@@ -1952,8 +1923,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* K3 LOTTERY VIEW (WITH LOGO, REAL DICE & FULL-SCREEN HISTORY TOGGLE) */}
-                    {/* ========================================================================= */}
+                    {/* K3 VIEW */}
                     {view === 'game_k3' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
@@ -2043,17 +2013,10 @@
                         </div>
                     )}
 
-                    {/* ========================================================================= */}
-                    {/* LUXURY CASINO WIN POPUP CELEBRATION */}
-                    {/* ========================================================================= */}
+                    {/* WIN CELEBRATION */}
                     {winCelebration.show && (
                         <div className="fixed inset-0 z-[6000] bg-black/90 flex flex-col items-center justify-center p-4 select-none backdrop-blur-md">
                             <div className="relative w-full max-w-xs glass-panel border-2 border-yellow-400 rounded-3xl p-6 text-center space-y-4 shadow-neon-gold">
-                                <div className="confetti-piece bg-amber-400 left-8"></div>
-                                <div className="confetti-piece bg-emerald-400 left-20"></div>
-                                <div className="confetti-piece bg-pink-500 left-44"></div>
-                                <div className="confetti-piece bg-yellow-300 left-60"></div>
-
                                 <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-4xl shadow-neon-gold animate-bounce">
                                     🏆
                                 </div>
