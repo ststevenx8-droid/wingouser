@@ -67,12 +67,11 @@
             color: #f8fafc;
         }
         
-        /* 100% Mobile Full Screen Adaptor */
         #phone-wrapper {
             height: 100%;
             height: 100dvh;
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
             margin: 0 auto;
             position: relative;
             display: flex;
@@ -127,6 +126,18 @@
         .safe-bottom {
             padding-bottom: max(env(safe-area-inset-bottom), 12px);
         }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-40px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            animation: confettiFall 1.8s infinite linear;
+        }
     </style>
 </head>
 <body class="flex justify-center items-center h-full w-full">
@@ -145,7 +156,7 @@
 
         const db = window.db;
 
-        // CONSTANTS
+        // CONSTANTS & LOGOS
         const OFFICIAL_BKASH_NUMBER = "01860909272";
         const BKASH_LOGO_URL = "https://i.ibb.co/xTgMb9X/11623.jpg";
         const STEVEN_MAIN_LOGO = "https://i.ibb.co/W43Hdvm3/10736.png";
@@ -191,7 +202,7 @@
             };
             const activePips = pipMap[value] || [4];
             return (
-                <div className="w-8 h-8 rounded-xl bg-white p-1 shadow-md grid grid-cols-3 grid-rows-3 gap-0.5 border border-slate-300">
+                <div className="w-7 h-7 rounded-xl bg-white p-0.5 shadow-md grid grid-cols-3 grid-rows-3 gap-0.5 border border-slate-300">
                     {[...Array(9)].map((_, i) => (
                         <div key={i} className="flex items-center justify-center">
                             {activePips.includes(i) && (
@@ -210,7 +221,7 @@
         ];
 
         // =========================================================================
-        // AVIATOR-ONLY AUDIO SYNTHESIZER (শুধুমাত্র এভিয়েটরে সাউন্ড বাজবে)
+        // ONLY AVIATOR AUDIO SYNTHESIZER (অন্যান্য সব গেম ও ক্লিকে সাউন্ড অফ)
         // =========================================================================
         const playAviatorAudio = (type) => {
             try {
@@ -223,8 +234,8 @@
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(120, now);
-                    osc.frequency.exponentialRampToValueAtTime(340, now + 1.2);
+                    osc.frequency.setValueAtTime(130, now);
+                    osc.frequency.exponentialRampToValueAtTime(360, now + 1.2);
                     gain.gain.setValueAtTime(0.08, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
                     osc.connect(gain);
@@ -322,6 +333,7 @@
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
         };
 
+        // 115+ Independent Rounds Generator
         const generate100PlusHistory = (prefix, durationSec, count = 115) => {
             const list = [];
             const now = Date.now();
@@ -641,7 +653,7 @@
                 setLiveBettors(list);
             };
 
-            // AVIATOR ENGINE (Audio strictly in Aviator)
+            // AVIATOR ENGINE (Only Aviator has sounds)
             useEffect(() => {
                 let avInterval;
                 if (aviatorPhase === 'waiting') {
@@ -1109,6 +1121,7 @@
                                 </div>
                             </div>
 
+                            {/* REGISTER TAB */}
                             {authTab === 'signup' && (
                                 <div className="flex-1 p-5 space-y-4 max-w-md mx-auto w-full">
                                     <div className="flex flex-col items-center justify-center pb-2">
@@ -1211,6 +1224,7 @@
                                 </div>
                             )}
 
+                            {/* LOGIN TAB */}
                             {authTab === 'login' && (
                                 <div className="flex-1 flex flex-col">
                                     <div className="bg-[#f4bc18] px-5 pt-1 pb-6 text-white space-y-1">
@@ -1576,7 +1590,7 @@
                             </div>
 
                             {/* BOTTOM NAVIGATION */}
-                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[500px] mx-auto z-30 shadow-2xl safe-bottom">
+                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-30 shadow-2xl safe-bottom">
                                 <button onClick={() => setActiveNav('home')} className={`flex flex-col items-center justify-center space-y-1 ${activeNav === 'home' ? 'text-amber-400 font-black' : 'text-slate-400'}`}>
                                     <Icons.home className="w-5 h-5" />
                                     <span className="text-[10px]">Home</span>
@@ -1598,8 +1612,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* AVIATOR VIEW */}
-                    {/* ========================================================================= */}
+                    {/* AVIATOR SPRIBE VIEW */}
                     {view === 'game_aviator' && (
                         <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#0e111a] border-b border-slate-800 flex items-center justify-between flex-shrink-0">
@@ -1744,7 +1757,8 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* WINGO VIEW */}
+                    {/* WINGO VIEW (ALWAYS VISIBLE 100+ HISTORY + EXPAND BUTTON) */}
+                    {/* ========================================================================= */}
                     {view === 'game_wingo' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
@@ -1756,22 +1770,34 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="px-3 pt-2 bg-[#08130c] flex space-x-2 flex-shrink-0 border-b border-slate-800">
-                                <button 
-                                    onClick={() => setFullScreenHistory(false)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-amber-400 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    🎯 Betting Desk
-                                </button>
-                                <button 
-                                    onClick={() => setFullScreenHistory(true)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-amber-400 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    📜 Full Screen History (115+)
-                                </button>
-                            </div>
+                            {/* Full Screen History Modal View */}
+                            {fullScreenHistory ? (
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2 bg-[#05070e]">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-amber-400 font-bold">115+ Game Records ({wingoTab.toUpperCase()})</span>
+                                        <button 
+                                            onClick={() => setFullScreenHistory(false)}
+                                            className="px-3 py-1 bg-amber-400 text-slate-950 font-bold rounded-lg text-xs cursor-pointer"
+                                        >
+                                            ✕ Close Full Screen
+                                        </button>
+                                    </div>
 
-                            {!fullScreenHistory ? (
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
+                                        {(wingoHistories[wingoTab] || []).map((h, i) => (
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-6)}</span>
+                                                </div>
+                                                <span className="font-black text-yellow-300 text-sm">{h.number}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-sky-500/20 text-sky-300 border border-sky-500/40'}`}>{h.size}</span>
+                                                <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500 shadow-neon-green' : 'bg-rose-500'}`}></span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
                                     <div className="grid grid-cols-3 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
                                         {['30s', '1m', '2m'].map(t => (
@@ -1800,36 +1826,30 @@
                                         <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
                                     </div>
 
-                                    <button 
-                                        onClick={() => setFullScreenHistory(true)}
-                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-amber-400 rounded-2xl text-xs font-bold text-amber-300 font-mono text-center block shadow-sm"
-                                    >
-                                        ⛶ Open 115+ Rounds Full Screen History &gt;
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
-                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
-                                        <span className="text-amber-400 font-bold">115+ Game Records ({wingoTab.toUpperCase()})</span>
-                                        <div className="flex space-x-1">
-                                            {['30s', '1m', '2m'].map(t => (
-                                                <button key={t} onClick={() => setWingoTab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${wingoTab === t ? 'bg-amber-400 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                    {/* ALWAYS VISIBLE 100+ ROUNDS HISTORY TABLE */}
+                                    <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
+                                        <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
+                                            <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ Game Records ({wingoTab.toUpperCase()})</span>
+                                            <button 
+                                                onClick={() => setFullScreenHistory(true)}
+                                                className="text-[10px] text-amber-400 font-mono font-bold hover:underline cursor-pointer"
+                                            >
+                                                ⛶ Expand Full Screen
+                                            </button>
+                                        </div>
+                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                            {(wingoHistories[wingoTab] || []).map((h, i) => (
+                                                <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
+                                                    <div>
+                                                        <span className="text-[10px] text-slate-400 block">{h.time}</span>
+                                                        <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-6)}</span>
+                                                    </div>
+                                                    <span className="font-bold text-yellow-300 text-sm">{h.number}</span>
+                                                    <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
+                                                    <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
+                                                </div>
                                             ))}
                                         </div>
-                                    </div>
-
-                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
-                                        {(wingoHistories[wingoTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
-                                                <div>
-                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
-                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-6)}</span>
-                                                </div>
-                                                <span className="font-black text-yellow-300 text-sm">{h.number}</span>
-                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' : 'bg-sky-500/20 text-sky-300 border border-sky-500/40'}`}>{h.size}</span>
-                                                <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500 shadow-neon-green' : 'bg-rose-500'}`}></span>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -1837,7 +1857,8 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* TRX VIEW */}
+                    {/* TRX VIEW (ALWAYS VISIBLE 100+ HISTORY) */}
+                    {/* ========================================================================= */}
                     {view === 'game_trx' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#170a3d] text-white flex items-center justify-between border-b border-purple-900/40 flex-shrink-0">
@@ -1849,22 +1870,32 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="px-3 pt-2 bg-[#0e0624] flex space-x-2 flex-shrink-0 border-b border-slate-800">
-                                <button 
-                                    onClick={() => setFullScreenHistory(false)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-purple-600 text-white font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    🎯 Betting Desk
-                                </button>
-                                <button 
-                                    onClick={() => setFullScreenHistory(true)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-purple-600 text-white font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    📜 Full Screen History (115+)
-                                </button>
-                            </div>
+                            {fullScreenHistory ? (
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2 bg-[#05070e]">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-purple-400 font-bold">115+ TRX Draws ({trxTab.toUpperCase()})</span>
+                                        <button 
+                                            onClick={() => setFullScreenHistory(false)}
+                                            className="px-3 py-1 bg-purple-500 text-white font-bold rounded-lg text-xs cursor-pointer"
+                                        >
+                                            ✕ Close Full Screen
+                                        </button>
+                                    </div>
 
-                            {!fullScreenHistory ? (
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
+                                        {(trxHistories[trxTab] || []).map((h, i) => (
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">Block: ...{h.period.slice(-5)}</span>
+                                                </div>
+                                                <span className="font-black text-purple-300 text-sm">{h.number}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
                                     <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
                                         {['1m', '3m'].map(t => (
@@ -1887,35 +1918,29 @@
                                         <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
                                     </div>
 
-                                    <button 
-                                        onClick={() => setFullScreenHistory(true)}
-                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-purple-400 rounded-2xl text-xs font-bold text-purple-300 font-mono text-center block shadow-sm"
-                                    >
-                                        ⛶ Open 115+ TRX Full Screen History &gt;
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
-                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
-                                        <span className="text-purple-400 font-bold">115+ TRX Draws ({trxTab.toUpperCase()})</span>
-                                        <div className="flex space-x-1">
-                                            {['1m', '3m'].map(t => (
-                                                <button key={t} onClick={() => setTrxTab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${trxTab === t ? 'bg-purple-500 text-white font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                    {/* ALWAYS VISIBLE TRX HISTORY TABLE */}
+                                    <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
+                                        <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
+                                            <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ TRX History ({trxTab.toUpperCase()})</span>
+                                            <button 
+                                                onClick={() => setFullScreenHistory(true)}
+                                                className="text-[10px] text-purple-400 font-mono font-bold hover:underline cursor-pointer"
+                                            >
+                                                ⛶ Expand Full Screen
+                                            </button>
+                                        </div>
+                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                            {(trxHistories[trxTab] || []).map((h, i) => (
+                                                <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
+                                                    <div>
+                                                        <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                        <span className="text-slate-500 text-[9px] block">Block: ...{h.period.slice(-5)}</span>
+                                                    </div>
+                                                    <span className="font-bold text-purple-300 text-sm">{h.number}</span>
+                                                    <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
+                                                </div>
                                             ))}
                                         </div>
-                                    </div>
-
-                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
-                                        {(trxHistories[trxTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
-                                                <div>
-                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
-                                                    <span className="text-slate-500 text-[9px] block">Block: ...{h.period.slice(-5)}</span>
-                                                </div>
-                                                <span className="font-black text-purple-300 text-sm">{h.number}</span>
-                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -1923,7 +1948,8 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* K3 VIEW */}
+                    {/* K3 VIEW (ALWAYS VISIBLE 100+ HISTORY & DICE PIPS) */}
+                    {/* ========================================================================= */}
                     {view === 'game_k3' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
                             <div className="px-3.5 py-2.5 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
@@ -1935,22 +1961,37 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            <div className="px-3 pt-2 bg-[#1b0d01] flex space-x-2 flex-shrink-0 border-b border-slate-800">
-                                <button 
-                                    onClick={() => setFullScreenHistory(false)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${!fullScreenHistory ? 'bg-amber-500 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    🎯 Betting Desk
-                                </button>
-                                <button 
-                                    onClick={() => setFullScreenHistory(true)}
-                                    className={`flex-1 py-2 rounded-t-xl text-xs font-bold font-mono transition-all ${fullScreenHistory ? 'bg-amber-500 text-slate-950 font-black shadow' : 'bg-slate-900 text-slate-400'}`}
-                                >
-                                    📜 Full Screen History (115+)
-                                </button>
-                            </div>
+                            {fullScreenHistory ? (
+                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2 bg-[#05070e]">
+                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
+                                        <span className="text-amber-400 font-bold">115+ Dice Draws ({k3Tab.toUpperCase()})</span>
+                                        <button 
+                                            onClick={() => setFullScreenHistory(false)}
+                                            className="px-3 py-1 bg-amber-400 text-slate-950 font-bold rounded-lg text-xs cursor-pointer"
+                                        >
+                                            ✕ Close Full Screen
+                                        </button>
+                                    </div>
 
-                            {!fullScreenHistory ? (
+                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
+                                        {(k3Histories[k3Tab] || []).map((h, i) => (
+                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
+                                                <div>
+                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-5)}</span>
+                                                </div>
+                                                <div className="flex space-x-1.5">
+                                                    <DicePip value={h.dice[0]} />
+                                                    <DicePip value={h.dice[1]} />
+                                                    <DicePip value={h.dice[2]} />
+                                                </div>
+                                                <span className="font-black text-white text-base">{h.sum}</span>
+                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
                                 <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
                                     <div className="grid grid-cols-2 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
                                         {['1m', '3m'].map(t => (
@@ -1973,50 +2014,49 @@
                                         <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Small (3-10) 2X</button>
                                     </div>
 
-                                    <button 
-                                        onClick={() => setFullScreenHistory(true)}
-                                        className="w-full py-2.5 bg-slate-900 border border-slate-700 hover:border-amber-400 rounded-2xl text-xs font-bold text-amber-300 font-mono text-center block shadow-sm"
-                                    >
-                                        ⛶ Open 115+ Dice Full Screen History &gt;
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2">
-                                    <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
-                                        <span className="text-amber-400 font-bold">115+ Dice Draws ({k3Tab.toUpperCase()})</span>
-                                        <div className="flex space-x-1">
-                                            {['1m', '3m'].map(t => (
-                                                <button key={t} onClick={() => setK3Tab(t)} className={`px-2 py-0.5 rounded-lg text-[10px] ${k3Tab === t ? 'bg-amber-400 text-slate-950 font-bold' : 'bg-slate-800 text-slate-400'}`}>{t}</button>
+                                    {/* ALWAYS VISIBLE K3 DICE HISTORY TABLE */}
+                                    <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
+                                        <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
+                                            <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ Dice History ({k3Tab.toUpperCase()})</span>
+                                            <button 
+                                                onClick={() => setFullScreenHistory(true)}
+                                                className="text-[10px] text-amber-400 font-mono font-bold hover:underline cursor-pointer"
+                                            >
+                                                ⛶ Expand Full Screen
+                                            </button>
+                                        </div>
+                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                            {(k3Histories[k3Tab] || []).map((h, i) => (
+                                                <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
+                                                    <div>
+                                                        <span className="text-slate-400 text-[10px] block">{h.time}</span>
+                                                        <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-5)}</span>
+                                                    </div>
+                                                    <div className="flex space-x-1.5">
+                                                        <DicePip value={h.dice[0]} />
+                                                        <DicePip value={h.dice[1]} />
+                                                        <DicePip value={h.dice[2]} />
+                                                    </div>
+                                                    <span className="font-black text-white text-base">{h.sum}</span>
+                                                    <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
+                                                </div>
                                             ))}
                                         </div>
-                                    </div>
-
-                                    <div className="flex-1 overflow-y-auto space-y-1.5 font-mono text-xs pr-1">
-                                        {(k3Histories[k3Tab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/60 rounded-xl border border-slate-800/50">
-                                                <div>
-                                                    <span className="text-slate-400 text-[10px] block">{h.time}</span>
-                                                    <span className="text-slate-500 text-[9px] block">P: {h.period.slice(-5)}</span>
-                                                </div>
-                                                <div className="flex space-x-1">
-                                                    <DicePip value={h.dice[0]} />
-                                                    <DicePip value={h.dice[1]} />
-                                                    <DicePip value={h.dice[2]} />
-                                                </div>
-                                                <span className="font-black text-white text-base">{h.sum}</span>
-                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
-                                            </div>
-                                        ))}
                                     </div>
                                 </div>
                             )}
                         </div>
                     )}
 
-                    {/* WIN CELEBRATION */}
+                    {/* LUXURY WIN CELEBRATION MODAL */}
                     {winCelebration.show && (
                         <div className="fixed inset-0 z-[6000] bg-black/90 flex flex-col items-center justify-center p-4 select-none backdrop-blur-md">
                             <div className="relative w-full max-w-xs glass-panel border-2 border-yellow-400 rounded-3xl p-6 text-center space-y-4 shadow-neon-gold">
+                                <div className="confetti-piece bg-amber-400 left-8"></div>
+                                <div className="confetti-piece bg-emerald-400 left-20"></div>
+                                <div className="confetti-piece bg-pink-500 left-44"></div>
+                                <div className="confetti-piece bg-yellow-300 left-60"></div>
+
                                 <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-4xl shadow-neon-gold animate-bounce">
                                     🏆
                                 </div>
