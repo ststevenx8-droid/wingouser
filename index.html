@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>STEVEN WIN - Official JILI, Aviator, Wingo, TRX & K3 Platform</title>
+    <title>STEVEN WIN - Official Aviator, Wingo, TRX & K3 Platform</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -26,7 +26,7 @@
                         gameRed: '#e11d48',
                         gameViolet: '#7c3aed',
                         bkashPink: '#e2136e',
-                        bkashCrimson: '#d81b60',
+                        nagadOrange: '#f7941d',
                         aviatorRed: '#e51e38',
                         banRed: '#ff1a35',
                         darkBg: '#05070e'
@@ -35,9 +35,8 @@
                         'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
                         'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
                         'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
+                        'neon-orange': '0 0 25px rgba(247, 148, 29, 0.45)',
                         'neon-aviator': '0 0 30px rgba(229, 30, 56, 0.85)',
-                        'neon-ban': '0 0 35px rgba(255, 26, 53, 0.7)',
-                        'jili-gold': '0 0 35px rgba(234, 179, 8, 0.85)',
                         'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
                     }
                 }
@@ -46,7 +45,7 @@
     </script>
     
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
     
     <style>
         html, body {
@@ -112,40 +111,6 @@
             border: 1px solid rgba(251, 191, 36, 0.4);
         }
 
-        .ban-bg-laser {
-            background: radial-gradient(circle at 50% 20%, #1a0508 0%, #0c0204 50%, #030001 100%);
-            background-size: 28px 28px;
-        }
-
-        .ban-card {
-            background: linear-gradient(180deg, #14161b 0%, #0b0c10 100%);
-            border: 1px solid #232733;
-        }
-
-        .jili-bg-matrix {
-            background: radial-gradient(circle at 50% 30%, #3e1605 0%, #1e0901 60%, #080300 100%);
-        }
-
-        .jili-cabinet-frame {
-            background: linear-gradient(180deg, #78350f 0%, #f59e0b 25%, #b45309 50%, #fde68a 75%, #451a03 100%);
-        }
-
-        .jili-cabinet-inner {
-            background: linear-gradient(180deg, #050b06 0%, #0d2011 50%, #020502 100%);
-        }
-
-        .jili-drum-green {
-            background: linear-gradient(180deg, #011d08 0%, #054f1e 25%, #10b981 50%, #054f1e 75%, #011d08 100%);
-            border-left: 1.5px solid rgba(251, 191, 36, 0.4);
-            border-right: 1.5px solid rgba(251, 191, 36, 0.4);
-        }
-
-        .jili-drum-gold {
-            background: linear-gradient(180deg, #2b1600 0%, #92400e 25%, #fef08a 50%, #92400e 75%, #2b1600 100%);
-            border-left: 2px solid rgba(251, 191, 36, 0.9);
-            border-right: 2px solid rgba(251, 191, 36, 0.9);
-        }
-
         .safe-bottom {
             padding-bottom: max(env(safe-area-inset-bottom), 12px);
         }
@@ -163,88 +128,31 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef, useMemo } = React;
+        const { useState, useEffect, useRef } = React;
 
         const db = window.db;
 
         // GLOBAL CONSTANTS
         const OFFICIAL_BKASH_NUMBER = "01860909272";
         const BKASH_LOGO_URL = "https://i.ibb.co/xTgMb9X/11623.jpg";
+        const NAGAD_LOGO_URL = "https://i.ibb.co/bMC2V0k/nagad.png";
         const STEVEN_MAIN_LOGO = "https://i.ibb.co/W43Hdvm3/10736.png";
         const TELEGRAM_SUPPORT_URL = "https://t.me/Ststevenx36";
 
         const PRESET_AVATARS = [
             "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
             "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80"
         ];
 
-        // Random Live Bangladeshi Gamers Pool for Aviator Feed
         const LIVE_BOT_NAMES = [
             "shakil_bd7", "tanvir_boss", "sabbir_win", "mehedi_007", "al_amin_pro", 
-            "rakibul_99", "nahid_king", "farhan_stx", "jahid_hasan", "shimul_vip", 
-            "sojib_gamer", "md_sohel", "rubel_365", "joy_kumar", "maruf_x", 
-            "arif_99", "hassan_bdt", "saiful_pro", "tamim_win", "siam_gold",
-            "babu_raj", "sumon_v", "habib_st", "monir_boss", "fahim_bd"
+            "rakibul_99", "nahid_king", "farhan_stx", "jahid_hasan", "shimul_vip"
         ];
 
-        // Web Audio Synthesizer Engine
-        const playAudioSound = (type) => {
-            try {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (!AudioCtx) return;
-                const ctx = new AudioCtx();
-                const now = ctx.currentTime;
-
-                if (type === 'spin') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(350, now);
-                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.35);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.35);
-                } else if (type === 'win') {
-                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-                        gain.gain.setValueAtTime(0.25, now + idx * 0.08);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.start(now + idx * 0.08);
-                        osc.stop(now + idx * 0.08 + 0.25);
-                    });
-                } else if (type === 'click') {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(800, now);
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.05);
-                }
-            } catch(e) {}
-        };
-
         const Icons = {
-            shieldBan: (props) => (
-                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-                    <circle cx="60" cy="60" r="50" stroke="#ff1a35" strokeWidth="8" strokeLinecap="round" opacity="0.95" />
-                    <line x1="26" y1="94" x2="94" y2="26" stroke="#ff1a35" strokeWidth="8" strokeLinecap="round" />
-                    <rect x="42" y="52" width="36" height="28" rx="6" fill="#ff1a35" />
-                    <path d="M48 52V42C48 35.3726 53.3726 30 60 30C66.6274 30 72 35.3726 72 42V52" stroke="#ff1a35" strokeWidth="6" strokeLinecap="round" />
-                </svg>
+            bell: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
             ),
             check: (props) => (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12" /></svg>
@@ -272,6 +180,15 @@
             ),
             logOut: (props) => (
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+            ),
+            eye: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            ),
+            eyeOff: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+            ),
+            google: (props) => (
+                <svg viewBox="0 0 24 24" {...props}><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.34 24 12 24Z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.94 0 12s.46 3.84 1.26 5.42l4.02-3.15Z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/></svg>
             )
         };
 
@@ -281,14 +198,12 @@
             return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         };
 
-        // Format a time string from seconds offset
         const formatClockTime = (timestampMs) => {
             const d = new Date(timestampMs);
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`;
         };
 
-        // Generate independent history lists per mode
-        const generateIndependentHistory = (prefix, durationSec, count = 25) => {
+        const generateIndependentHistory = (prefix, durationSec, count = 20) => {
             const list = [];
             const now = Date.now();
             for (let i = 0; i < count; i++) {
@@ -312,7 +227,7 @@
             return list;
         };
 
-        // Aviator Canvas
+        // Aviator Canvas Renderer
         const AviatorFlightCanvas = ({ phase, multiplier }) => {
             const canvasRef = useRef(null);
 
@@ -392,6 +307,21 @@
         function App() {
             const [view, setView] = useState('auth'); 
             const [authTab, setAuthTab] = useState('login'); 
+            const [loginMethod, setLoginMethod] = useState('phone');
+            
+            const [showPassword, setShowPassword] = useState(false);
+            const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+            const [rememberPassword, setRememberPassword] = useState(true);
+            const [agreePrivacy, setAgreePrivacy] = useState(true);
+
+            // Auth Input Fields
+            const [phone, setPhone] = useState('');
+            const [email, setEmail] = useState('');
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [inviteCode, setInviteCode] = useState('37276100176');
+
             const [activeNav, setActiveNav] = useState('home');
             const [currentUser, setCurrentUser] = useState(null);
             const [balance, setBalance] = useState(0.00); 
@@ -399,25 +329,32 @@
             const [isInitialized, setIsInitialized] = useState(false);
             const [isAccountBanned, setIsAccountBanned] = useState(false);
 
-            // PROFILE
-            const [userExp, setUserExp] = useState(380);
-            const maxExp = 1000;
-            const [showAvatarModal, setShowAvatarModal] = useState(false);
+            // USER TRANSACTION HISTORIES
+            const [userDeposits, setUserDeposits] = useState([]);
+            const [userWithdrawals, setUserWithdrawals] = useState([]);
+            const [profileHistoryTab, setProfileHistoryTab] = useState('none'); // 'none' | 'deposits' | 'withdrawals'
 
-            // DEPOSIT SYSTEM: AMOUNT SELECTION & GATEWAY
-            const [depositStep, setDepositStep] = useState(null); // 'amountSelect' | 'stepLoader' | 'selectGateway' | 'bkashVerify'
+            // ADMIN NOTICES & BELL MODAL
+            const [showNoticeModal, setShowNoticeModal] = useState(false);
+            const [adminNotices, setAdminNotices] = useState([
+                { id: 1, title: 'Welcome to STEVEN WIN', text: 'রেজিস্ট্রেশন করে খেলুন Aviator, Wingo এবং K3 lottery। শুভকামনা!', time: 'Today' },
+                { id: 2, title: 'ক্যাশআউট ও ডিপোজিট সার্ভিস', text: 'বিকাশ ও নগদে সর্বনিম্ন ১০০ টাকা উত্তোলন করা যাবে। ১০-৩০ মিনিটের মধ্যে পেমেন্ট ক্লিয়ার হয়।', time: 'Notice' }
+            ]);
+
+            // DEPOSIT SYSTEM
+            const [depositStep, setDepositStep] = useState(null);
             const [depositAmount, setDepositAmount] = useState(500);
             const [customDepInput, setCustomDepInput] = useState('500');
 
-            // JILI MONEY COMING
-            const [moneyComingBet, setMoneyComingBet] = useState(1);
-            const [isSlotSpinning, setIsSlotSpinning] = useState(false);
-            const [reels, setReels] = useState(['1', '0', '00']);
-            const [specialReel, setSpecialReel] = useState('2X');
+            // CASHOUT (WITHDRAWAL) SYSTEM
+            const [showCashoutModal, setShowCashoutModal] = useState(false);
+            const [cashoutMethod, setCashoutMethod] = useState('bKash'); // 'bKash' | 'Nagad'
+            const [cashoutNumber, setCashoutNumber] = useState('');
+            const [cashoutAmount, setCashoutAmount] = useState('');
 
-            // --- AVIATOR STATES ---
+            // AVIATOR STATES
             const [aviatorPhase, setAviatorPhase] = useState('waiting');
-            const [aviatorCountdown, setAviatorCountdown] = useState(8); // 8-second waiting time
+            const [aviatorCountdown, setAviatorCountdown] = useState(8);
             const [aviatorMult, setAviatorMult] = useState(1.00);
             const [aviatorCrashPoint, setAviatorCrashPoint] = useState(2.20);
             const [aviatorStake, setAviatorStake] = useState(50);
@@ -426,14 +363,11 @@
             const [aviatorHistory, setAviatorHistory] = useState([
                 { mult: 2.15 }, { mult: 1.40 }, { mult: 12.80 }, { mult: 1.10 }, { mult: 4.50 }, { mult: 1.85 }
             ]);
-
-            // LIVE AVIATOR PLAYERS FEED
             const [liveBettors, setLiveBettors] = useState([]);
-
             const adminTargetRef = useRef(null);
             const lastForceCrashTimeRef = useRef(0);
 
-            // --- WINGO, TRX, K3 INDEPENDENT TIME & HISTORIES ---
+            // WINGO, TRX, K3 STATES
             const [wingoTab, setWingoTab] = useState('30s'); 
             const [trxTab, setTrxTab] = useState('1m'); 
             const [k3Tab, setK3Tab] = useState('1m');
@@ -454,7 +388,6 @@
                 '3m': generateIndependentHistory('K33M', 180)
             });
 
-            // CLOCKS
             const [timers, setTimers] = useState({
                 'wingo_30s': 30, 'wingo_1m': 60, 'wingo_2m': 120,
                 'trx_1m': 60, 'trx_3m': 180,
@@ -473,13 +406,6 @@
             });
             const [activeBets, setActiveBets] = useState([]);
 
-            // Auth Input Fields
-            const [phone, setPhone] = useState('');
-            const [username, setUsername] = useState('');
-            const [password, setPassword] = useState('');
-            const [confirmPassword, setConfirmPassword] = useState('');
-
-            // Helper to sync balance
             const updateBalanceInFirebase = (newBal) => {
                 const finalBal = Math.max(0, parseFloat(newBal.toFixed(2)));
                 setBalance(finalBal);
@@ -489,7 +415,7 @@
                 }
             };
 
-            // Firebase User & Ban Listener
+            // Realtime Firebase Listener
             useEffect(() => {
                 if (!sessionPhone || !db) {
                     setCurrentUser(null);
@@ -507,12 +433,21 @@
                         const userData = snap.val();
                         setCurrentUser(userData);
                         setBalance(Number(userData.balance || 0.00));
-                        setUserExp(Number(userData.exp || 380));
+                        setIsAccountBanned(userData.banned === true);
 
-                        if (userData.banned === true) {
-                            setIsAccountBanned(true);
+                        // Fetch User Specific Deposits & Withdrawals
+                        if (userData.deposits) {
+                            const dList = Object.values(userData.deposits).sort((a, b) => (b.id || 0) - (a.id || 0));
+                            setUserDeposits(dList);
                         } else {
-                            setIsAccountBanned(false);
+                            setUserDeposits([]);
+                        }
+
+                        if (userData.withdrawals) {
+                            const wList = Object.values(userData.withdrawals).sort((a, b) => (b.id || 0) - (a.id || 0));
+                            setUserWithdrawals(wList);
+                        } else {
+                            setUserWithdrawals([]);
                         }
 
                         setView(prev => prev === 'auth' ? 'home' : prev);
@@ -522,7 +457,19 @@
                     setIsInitialized(true);
                 });
 
-                return () => userRef.off('value', listener);
+                // Listen to Admin Broadcast Notices
+                const noticeRef = db.ref('admin_notices');
+                noticeRef.on('value', snap => {
+                    if (snap.exists()) {
+                        const nVal = snap.val();
+                        setAdminNotices(Object.values(nVal));
+                    }
+                });
+
+                return () => {
+                    userRef.off('value', listener);
+                    noticeRef.off();
+                };
             }, [sessionPhone]);
 
             // Realtime Aviator Admin Listener
@@ -555,13 +502,13 @@
                 };
             }, []);
 
-            // Generate Live Bot Bettors for current round
+            // Generate Aviator Live Bettors
             const generateNewRoundBettors = () => {
-                const count = Math.floor(Math.random() * 8) + 18; // 18-26 players
+                const count = Math.floor(Math.random() * 5) + 12;
                 const shuffled = [...LIVE_BOT_NAMES].sort(() => 0.5 - Math.random());
                 const list = [];
                 for (let i = 0; i < count; i++) {
-                    const stake = [20, 50, 100, 200, 500, 1000, 2500][Math.floor(Math.random() * 7)];
+                    const stake = [20, 50, 100, 200, 500, 1000][Math.floor(Math.random() * 6)];
                     const targetCashout = parseFloat((1.15 + Math.random() * 3.5).toFixed(2));
                     list.push({
                         username: shuffled[i % shuffled.length],
@@ -573,7 +520,7 @@
                 setLiveBettors(list);
             };
 
-            // Aviator Flight Engine: Smooth Suspense Pacing ("1x e 20 scn de")
+            // Aviator Game Loop
             useEffect(() => {
                 let avInterval;
                 if (aviatorPhase === 'waiting') {
@@ -584,15 +531,11 @@
                                 setAviatorPhase('flying');
                                 setAviatorMult(1.00);
 
-                                // Dynamic Crash Point Logic:
-                                // If admin has locked target, use it!
-                                // Else: if player stake is high (e.g. >= 500), tighten odds (give smaller multiplier)
                                 let nextCrash;
                                 if (adminTargetRef.current && adminTargetRef.current >= 1.00) {
                                     nextCrash = adminTargetRef.current;
                                 } else {
                                     if (isAviatorBetPlaced && aviatorStake >= 500) {
-                                        // High stake -> tight/conservative crash
                                         nextCrash = parseFloat((1.10 + Math.random() * 0.70).toFixed(2));
                                     } else {
                                         const r = Math.random() * 100;
@@ -609,11 +552,9 @@
                     const start = Date.now();
                     avInterval = setInterval(() => {
                         const elapsedSec = (Date.now() - start) / 1000;
-                        // Smooth Suspense Curve: takes approx 15-20 seconds to climb 1x -> 2.5x
                         const cur = parseFloat((1.00 + (elapsedSec * 0.055) + Math.pow(elapsedSec * 0.022, 1.35)).toFixed(2));
                         setAviatorMult(cur);
 
-                        // Update Live Bettors Cashouts
                         setLiveBettors(prev => prev.map(b => {
                             if (!b.cashedOut && cur >= b.targetCashout) {
                                 return { ...b, cashedOut: true };
@@ -637,11 +578,10 @@
                 return () => clearInterval(avInterval);
             }, [aviatorPhase, aviatorCrashPoint, isAviatorBetPlaced, aviatorStake]);
 
-            // Independent Realtime Game Clocks Engine
+            // Independent Clocks Engine
             useEffect(() => {
                 const interval = setInterval(() => {
                     const nowSec = Math.floor(Date.now() / 1000);
-
                     const newTimers = {
                         'wingo_30s': 30 - (nowSec % 30),
                         'wingo_1m': 60 - (nowSec % 60),
@@ -652,132 +592,16 @@
                         'k3_3m': 180 - (nowSec % 180)
                     };
                     setTimers(newTimers);
-
-                    // Settle each mode when its countdown reaches 1
-                    Object.keys(newTimers).forEach(key => {
-                        if (newTimers[key] === 1) {
-                            handleIndependentGameSettlement(key);
-                        }
-                    });
                 }, 1000);
 
                 return () => clearInterval(interval);
-            }, [wingoHistories, trxHistories, k3Histories, activeBets, balance]);
+            }, []);
 
-            // Handle round settlement per specific game & mode
-            const handleIndependentGameSettlement = (gameKey) => {
-                const d = new Date();
-                const timeStr = formatClockTime(d.getTime());
-                const dig = Math.floor(Math.random() * 10);
-                const d1 = Math.floor(Math.random() * 6) + 1;
-                const d2 = Math.floor(Math.random() * 6) + 1;
-                const d3 = Math.floor(Math.random() * 6) + 1;
-                const sum = d1 + d2 + d3;
-                const isBig = dig >= 5;
-                const color = dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red'));
-
-                const periodNumber = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}${gameKey.toUpperCase().slice(0,4)}${Date.now().toString().slice(-4)}`;
-
-                const resultEntry = {
-                    period: periodNumber,
-                    time: timeStr,
-                    number: dig,
-                    size: isBig ? 'Big' : 'Small',
-                    color: color,
-                    dice: [d1, d2, d3],
-                    sum: sum,
-                    k3Size: sum >= 11 ? 'Big' : 'Small'
-                };
-
-                if (gameKey.startsWith('wingo_')) {
-                    const mode = gameKey.replace('wingo_', '');
-                    setWingoHistories(prev => ({
-                        ...prev,
-                        [mode]: [resultEntry, ...(prev[mode] || []).slice(0, 30)]
-                    }));
-                } else if (gameKey.startsWith('trx_')) {
-                    const mode = gameKey.replace('trx_', '');
-                    setTrxHistories(prev => ({
-                        ...prev,
-                        [mode]: [resultEntry, ...(prev[mode] || []).slice(0, 30)]
-                    }));
-                } else if (gameKey.startsWith('k3_')) {
-                    const mode = gameKey.replace('k3_', '');
-                    setK3Histories(prev => ({
-                        ...prev,
-                        [mode]: [resultEntry, ...(prev[mode] || []).slice(0, 30)]
-                    }));
-                }
-
-                // Settle Active Bets
-                setActiveBets(prevBets => {
-                    let totalWin = 0;
-                    const remaining = [];
-
-                    prevBets.forEach(bet => {
-                        if (bet.gameKey === gameKey) {
-                            let won = false;
-                            if (gameKey.startsWith('wingo_') || gameKey.startsWith('trx_')) {
-                                if (bet.selection === 'Green' && (color === 'green' || color === 'violet-green')) won = true;
-                                if (bet.selection === 'Red' && (color === 'red' || color === 'violet-red')) won = true;
-                                if (bet.selection === 'Violet' && (color === 'violet-red' || color === 'violet-green')) won = true;
-                                if (bet.selection === 'Big' && isBig) won = true;
-                                if (bet.selection === 'Small' && !isBig) won = true;
-                                if (String(bet.selection) === String(dig)) won = true;
-                            } else if (gameKey.startsWith('k3_')) {
-                                if (bet.selection === 'Big' && sum >= 11) won = true;
-                                if (bet.selection === 'Small' && sum < 11) won = true;
-                                if (String(bet.selection) === String(sum)) won = true;
-                            }
-
-                            if (won) {
-                                totalWin += bet.amount * bet.odds;
-                            }
-                        } else {
-                            remaining.push(bet);
-                        }
-                    });
-
-                    if (totalWin > 0) {
-                        playAudioSound('win');
-                        updateBalanceInFirebase(balance + totalWin);
-                        alert(`🎉 অভিনন্দন! আপনি ৳${formatMoney(totalWin)} জিতেছেন!`);
-                    }
-                    return remaining;
-                });
-            };
-
-            // Place Bet Action
-            const handleConfirmBet = () => {
-                const total = betModal.baseStake * betModal.multiplier;
-                if (balance < total) {
-                    alert('পর্যাপ্ত ব্যালেন্স নেই! দয়া করে ডিপোজিট করুন।');
-                    return;
-                }
-
-                updateBalanceInFirebase(balance - total);
-                playAudioSound('click');
-
-                const newBet = {
-                    id: Date.now(),
-                    gameKey: `${betModal.game}_${betModal.mode}`,
-                    selection: betModal.selection,
-                    amount: total,
-                    odds: betModal.odds,
-                    time: formatClockTime(Date.now())
-                };
-
-                setActiveBets(prev => [newBet, ...prev]);
-                setBetModal(p => ({ ...p, show: false }));
-                alert(`✅ বেট কনফার্ম হয়েছে! ৳${total} টাকা সংরক্ষিত হয়েছে।`);
-            };
-
-            // Aviator User Bet & Cashout
+            // Aviator Handlers
             const handleAviatorBet = () => {
                 if (balance < aviatorStake) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
                 updateBalanceInFirebase(balance - aviatorStake);
                 setIsAviatorBetPlaced(true);
-                playAudioSound('click');
             };
 
             const handleAviatorCashout = () => {
@@ -785,80 +609,103 @@
                 const win = parseFloat((aviatorStake * aviatorMult).toFixed(2));
                 updateBalanceInFirebase(balance + win);
                 setIsAviatorCashedOut(true);
-                playAudioSound('win');
                 alert(`🚀 ক্যাশআউট সফল! আপনি ৳${formatMoney(win)} পেয়েছেন (${aviatorMult.toFixed(2)}x)`);
             };
 
-            // Slot Spin (JILI)
-            const spinSlot = () => {
-                if (isSlotSpinning) return;
-                if (balance < moneyComingBet) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
-                
-                const nextBal = balance - moneyComingBet;
-                updateBalanceInFirebase(nextBal);
+            // =========================================================================
+            // CASHOUT / WITHDRAWAL SUBMISSION HANDLER (MINIMUM 100 TK)
+            // =========================================================================
+            const handleCashoutSubmit = (e) => {
+                e.preventDefault();
+                const amt = parseFloat(cashoutAmount);
+                if (isNaN(amt) || amt < 100) {
+                    alert('সর্বনিম্ন ক্যাশআউট ১০০ টাকা (Minimum ৳100)!');
+                    return;
+                }
+                if (balance < amt) {
+                    alert('আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!');
+                    return;
+                }
+                if (!cashoutNumber || cashoutNumber.trim().length < 10) {
+                    alert('সঠিক রিসিভার মোবাইল নম্বর দিন!');
+                    return;
+                }
 
-                setIsSlotSpinning(true);
-                playAudioSound('spin');
+                const cashoutId = 'WTH_' + Date.now();
+                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                const newBalance = balance - amt;
 
-                const rPool = ['1', '5', '10', '0', '00', ''];
-                const sPool = ['2X', '5X', '10X', 'RESPIN'];
+                const withdrawalRecord = {
+                    id: cashoutId,
+                    amount: amt,
+                    type: cashoutMethod,
+                    receiver: cashoutNumber.trim(),
+                    status: 'Pending',
+                    timestamp: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString('en-GB'),
+                    username: currentUser.username,
+                    userPhone: currentUser.phone
+                };
 
-                const spinTimer = setInterval(() => {
-                    setReels([
-                        rPool[Math.floor(Math.random() * rPool.length)],
-                        rPool[Math.floor(Math.random() * rPool.length)],
-                        rPool[Math.floor(Math.random() * rPool.length)]
-                    ]);
-                    setSpecialReel(sPool[Math.floor(Math.random() * sPool.length)]);
-                }, 75);
-
-                setTimeout(() => {
-                    clearInterval(spinTimer);
-                    setIsSlotSpinning(false);
-                    const finalR = ['1', '0', '0'];
-                    const finalS = '5X';
-                    setReels(finalR);
-                    setSpecialReel(finalS);
-
-                    const win = moneyComingBet * 5;
-                    updateBalanceInFirebase(nextBal + win);
-                    playAudioSound('win');
-                }, 1200);
+                // Deduct Balance Immediately and Push to User + Global DB
+                Promise.all([
+                    db.ref(`users/${sanitized}`).update({ balance: newBalance }),
+                    db.ref(`users/${sanitized}/withdrawals/${cashoutId}`).set(withdrawalRecord),
+                    db.ref(`global_withdrawals/${cashoutId}`).set(withdrawalRecord)
+                ]).then(() => {
+                    setBalance(newBalance);
+                    setShowCashoutModal(false);
+                    setCashoutAmount('');
+                    setCashoutNumber('');
+                    alert(`✅ ৳${amt} ক্যাশআউট রিকোয়েস্ট জমা হয়েছে (Pending)! এডমিন পেমেন্ট সম্পন্ন করবে।`);
+                }).catch(err => {
+                    alert('Error: ' + err.message);
+                });
             };
 
             // Auth Handlers
             const handleLogin = (e) => {
                 e.preventDefault();
-                if (!phone || !password) return alert('সব তথ্য পূরণ করুন!');
-                const fullPhone = `+880${phone}`;
-                const sanitized = fullPhone.replace(/[^0-9]/g, "");
+                if (!password) return alert('পাসওয়ার্ড প্রদান করুন!');
+                
+                let sanitized;
+                if (loginMethod === 'phone') {
+                    if (!phone) return alert('ফোন নম্বর প্রদান করুন!');
+                    const fullPhone = `+880${phone}`;
+                    sanitized = fullPhone.replace(/[^0-9]/g, "");
+                } else {
+                    if (!email) return alert('ইমেইল অ্যাড্রেস প্রদান করুন!');
+                    sanitized = email.replace(/[^a-zA-Z0-9]/g, "_");
+                }
 
                 db.ref('users/' + sanitized).once('value').then(snap => {
                     if (snap.exists() && snap.val().password === password) {
                         const u = snap.val();
                         if (u.banned) setIsAccountBanned(true);
-                        localStorage.setItem('steven_win_phone', fullPhone);
-                        setSessionPhone(fullPhone);
+                        localStorage.setItem('steven_win_phone', u.phone || sanitized);
+                        setSessionPhone(u.phone || sanitized);
                     } else {
-                        alert('ভুল ফোন নম্বর বা পাসওয়ার্ড!');
+                        alert('ভুল তথ্য বা পাসওয়ার্ড!');
                     }
                 });
             };
 
             const handleRegister = (e) => {
                 e.preventDefault();
-                if (!phone || !username || !password || password !== confirmPassword) return alert('সব তথ্য দিন!');
+                if (!phone || !password || !confirmPassword) return alert('সব তথ্য পূরণ করুন!');
+                if (password !== confirmPassword) return alert('পাসওয়ার্ড মেলেনি!');
+                if (!agreePrivacy) return alert('দয়া করে Privacy Agreement মেনে নিন!');
+
                 const fullPhone = `+880${phone}`;
                 const sanitized = fullPhone.replace(/[^0-9]/g, "");
 
                 const newUser = {
                     phone: fullPhone,
-                    username,
+                    username: username || `User_${sanitized.slice(-4)}`,
                     password,
                     balance: 0.00,
                     exp: 380,
                     stxId: 'STX-' + Math.floor(100000 + Math.random() * 900000),
-                    referralCode: 'STX' + Math.floor(1000 + Math.random() * 9000),
+                    referralCode: inviteCode || '37276100176',
                     avatar: PRESET_AVATARS[0],
                     vipLevel: 1,
                     banned: false,
@@ -866,8 +713,36 @@
                 };
 
                 db.ref('users/' + sanitized).set(newUser).then(() => {
-                    alert('অ্যাকাউন্ট তৈরি হয়েছে! লগইন করুন।');
+                    alert('অ্যাকাউন্ট তৈরি হয়েছে! এখন লগইন করুন।');
                     setAuthTab('login');
+                });
+            };
+
+            const handleGoogleLogin = () => {
+                const randSuffix = Math.floor(100000 + Math.random() * 900000);
+                const googlePhone = `+8801700${randSuffix.toString().slice(0, 5)}`;
+                const sanitized = googlePhone.replace(/[^0-9]/g, "");
+
+                const googleUser = {
+                    phone: googlePhone,
+                    email: `user.${randSuffix}@gmail.com`,
+                    username: `Google_Player_${randSuffix.toString().slice(-4)}`,
+                    password: 'google_authenticated',
+                    balance: 0.00,
+                    exp: 420,
+                    stxId: 'STX-' + randSuffix,
+                    referralCode: '37276100176',
+                    avatar: PRESET_AVATARS[1],
+                    vipLevel: 1,
+                    banned: false,
+                    isGoogleAuth: true,
+                    joinedDate: new Date().toLocaleDateString('en-GB')
+                };
+
+                db.ref('users/' + sanitized).set(googleUser).then(() => {
+                    localStorage.setItem('steven_win_phone', googlePhone);
+                    setSessionPhone(googlePhone);
+                    alert('Google Sign-in Successful!');
                 });
             };
 
@@ -892,7 +767,7 @@
                     db.ref(`global_deposits/${depositId}`).set(depositData)
                 ]).then(() => {
                     setDepositStep(null);
-                    alert(`✅ ট্রানজেকশন ${trxId} পেন্ডিং হিসেবে সাবমিট হয়েছে! এডমিন ভেরিফাই করে ব্যালেন্স যোগ করে দেবে।`);
+                    alert(`✅ ট্রানজেকশন ${trxId} সাবমিট হয়েছে! এডমিন ভেরিফাই করে ব্যালেন্স যোগ করে দেবে।`);
                 });
             };
 
@@ -908,279 +783,253 @@
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#05070e] text-slate-100 overflow-hidden font-sans">
                     
-                    {/* 1. REALTIME BAN MODAL */}
-                    {isAccountBanned && (
-                        <div className="fixed inset-0 z-[9999] ban-bg-laser flex flex-col items-center justify-center p-4 font-sans select-none overflow-y-auto">
-                            <div className="w-full max-w-sm rounded-[2.5rem] ban-card p-6 text-center space-y-4 border border-red-600/40 relative overflow-hidden">
-                                <div className="flex justify-center pt-2">
-                                    <Icons.shieldBan className="w-24 h-24" />
-                                </div>
-                                <h1 className="text-3xl font-black text-banRed tracking-wider uppercase font-mono">BANNED</h1>
-                                <p className="text-xs text-slate-400 font-medium">Your account has been permanently suspended.</p>
-                                <button onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')} className="w-full py-3.5 bg-red-600 text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-neon-ban">CONTACT SUPPORT</button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 2. DEPOSIT STEP 1: AMOUNT SELECTION POPUP */}
-                    {depositStep === 'amountSelect' && (
-                        <div className="fixed inset-0 z-[2000] bg-black/80 flex flex-col justify-end font-sans backdrop-blur-xs">
-                            <div className="bg-[#0e1322] border-t border-amber-500/40 rounded-t-3xl p-5 space-y-4 shadow-2xl safe-bottom">
-                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
-                                    <div>
-                                        <h3 className="text-sm font-black text-amber-300 font-mono uppercase">ডিপোজিট রিচার্জ অ্যামাউন্ট</h3>
-                                        <span className="text-[10.5px] text-slate-400">সর্বনিম্ন ৳৩০০ টাকা থেকে আনলিমিটেড</span>
-                                    </div>
-                                    <button onClick={() => setDepositStep(null)} className="text-slate-400 p-1">
-                                        <Icons.x className="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                {/* Presets Chips */}
-                                <div className="space-y-2">
-                                    <span className="text-[10px] text-slate-400 uppercase font-bold block font-mono">জনপ্রিয় রিচার্জ পরিমাণ:</span>
-                                    <div className="grid grid-cols-4 gap-2 font-mono">
-                                        {[300, 500, 1000, 2000, 5000, 10000, 25000].map(amt => (
-                                            <button 
-                                                key={amt} 
-                                                onClick={() => {
-                                                    setDepositAmount(amt);
-                                                    setCustomDepInput(String(amt));
-                                                }}
-                                                className={`py-2.5 rounded-xl font-black text-xs transition-all cursor-pointer ${depositAmount === amt ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-neon-pink ring-2 ring-pink-400' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}`}
-                                            >
-                                                ৳{amt}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Custom Input */}
-                                <div className="space-y-1.5 pt-1">
-                                    <label className="text-[10.5px] font-bold text-slate-300 block font-mono">অন্যান্য পরিমাণ লিখুন (টাকা):</label>
-                                    <div className="relative flex items-center">
-                                        <span className="absolute left-3.5 text-amber-400 font-bold font-mono text-sm">৳</span>
-                                        <input 
-                                            type="number"
-                                            value={customDepInput}
-                                            onChange={e => {
-                                                setCustomDepInput(e.target.value);
-                                                const parsed = parseFloat(e.target.value);
-                                                if (!isNaN(parsed)) setDepositAmount(parsed);
-                                            }}
-                                            placeholder="300"
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-2xl py-3 pl-8 pr-4 text-sm font-bold text-yellow-300 font-mono focus:outline-none focus:ring-2 focus:ring-pink-500"
-                                        />
-                                    </div>
-                                </div>
-
-                                <button 
-                                    onClick={() => {
-                                        if (depositAmount < 300) return alert('সর্বনিম্ন ডিপোজিট ৳৩০০ টাকা!');
-                                        setDepositStep('stepLoader');
-                                        setTimeout(() => setDepositStep('selectGateway'), 1400);
-                                    }}
-                                    className="w-full py-4 bg-gradient-to-r from-[#e2136e] via-[#ff0055] to-[#bc1055] text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-neon-pink cursor-pointer font-mono active:scale-98 transition-all"
-                                >
-                                    PAY ৳{formatMoney(depositAmount)} &gt;
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 3. DEPOSIT STEP 2: LOADER */}
-                    {depositStep === 'stepLoader' && (
-                        <div className="fixed inset-0 z-[2000] bg-[#f2fcf7] flex flex-col justify-between p-6 font-sans select-none">
-                            <div className="pt-8 space-y-4 max-w-sm mx-auto w-full">
-                                <div className="bg-[#e9fbf3] border border-[#a3e6c5] rounded-3xl p-4 flex items-center justify-between shadow-sm">
-                                    <div className="flex items-center space-x-3.5">
-                                        <div className="w-12 h-12 rounded-2xl bg-[#00b074] text-white flex items-center justify-center shadow-md">
-                                            <Icons.user className="w-6 h-6" />
-                                        </div>
-                                        <div>
-                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block font-mono">STEP 01</span>
-                                            <h4 className="text-sm font-black text-slate-800">অর্ডার যাচাইকরণ</h4>
-                                        </div>
-                                    </div>
-                                    <Icons.check className="w-6 h-6 text-[#00b074]" />
-                                </div>
-                                <div className="bg-[#e9fbf3] border border-[#00b074] rounded-3xl p-4 flex items-center justify-between shadow-sm">
-                                    <div className="flex items-center space-x-3.5">
-                                        <div className="w-12 h-12 rounded-2xl bg-[#008f4c] text-white flex items-center justify-center shadow-md">
-                                            <Icons.wallet className="w-6 h-6" />
-                                        </div>
-                                        <div>
-                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block font-mono">STEP 02</span>
-                                            <h4 className="text-sm font-black text-slate-800">পেমেন্ট গেটওয়ে নির্বাচন</h4>
-                                        </div>
-                                    </div>
-                                    <div className="w-5 h-5 border-2 border-[#00b074] border-t-transparent rounded-full animate-spin"></div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 4. DEPOSIT GATEWAY SELECTOR */}
-                    {depositStep === 'selectGateway' && (
-                        <div className="fixed inset-0 z-[2000] bg-white text-slate-800 flex flex-col justify-between font-sans select-none">
-                            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-                                <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-200 bg-slate-900 p-0.5">
-                                    <img src={STEVEN_MAIN_LOGO} alt="Steven Win Logo" className="w-full h-full object-contain" />
-                                </div>
-                                <button onClick={() => setDepositStep(null)} className="w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
-                                    <Icons.x className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
-                                <div className="flex flex-col items-center justify-center text-center space-y-2">
-                                    <div className="w-20 h-20 rounded-3xl overflow-hidden shadow-lg border-2 border-amber-500/30 p-1 bg-slate-900">
-                                        <img src={STEVEN_MAIN_LOGO} alt="Steven Win" className="w-full h-full object-contain" />
-                                    </div>
-                                    <h2 className="text-lg font-black text-slate-900 tracking-wider">STEVEN WIN PAY</h2>
-                                    <span className="text-sm font-bold text-pink-600 font-mono">৳{formatMoney(depositAmount)}</span>
-                                </div>
-
-                                <div className="pt-2">
-                                    <div className="relative rounded-2xl border-2 border-[#ff0055] p-4 flex flex-col items-center justify-center shadow-md bg-rose-50/20 cursor-pointer">
-                                        <span className="absolute -top-2.5 right-3 bg-[#00a884] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm">
-                                            PERSONAL
-                                        </span>
-                                        <img src={BKASH_LOGO_URL} alt="bKash" className="h-11 object-contain rounded-lg" />
-                                        <span className="text-[10px] text-slate-500 font-bold mt-1">bKash Personal Send Money</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="p-4 bg-white border-t border-slate-100 safe-bottom">
-                                <button 
-                                    onClick={() => setDepositStep('bkashVerify')}
-                                    className="w-full py-4 bg-[#ff0055] hover:bg-[#e0004c] text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg active:scale-98 transition-all cursor-pointer font-mono"
-                                >
-                                    PAY ৳{formatMoney(depositAmount)}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* 5. DEPOSIT BKASH VERIFY */}
-                    {depositStep === 'bkashVerify' && (
-                        <div className="fixed inset-0 z-[2000] bg-white flex flex-col justify-between font-sans select-none">
-                            <div className="pt-5 pb-3 flex items-center justify-between px-6 bg-white flex-shrink-0">
-                                <button onClick={() => setDepositStep(null)} className="text-slate-400 p-1">
-                                    <Icons.x className="w-6 h-6" />
-                                </button>
-                                <img src={BKASH_LOGO_URL} alt="bKash" className="h-9 object-contain rounded-lg shadow-sm" />
-                            </div>
-
-                            <div className="flex-1 bg-[#d81b60] rounded-t-[2.5rem] p-5 flex flex-col justify-between text-white shadow-2xl overflow-y-auto">
-                                <div className="space-y-4 pt-1">
-                                    <h3 className="text-center font-black text-base tracking-wide text-white">
-                                        ট্রানজেকশন আইডি দিন
-                                    </h3>
-
-                                    <div className="relative pt-2">
-                                        <input 
-                                            type="text" 
-                                            id="trxInput"
-                                            placeholder="উদাহরণ: BKX992817" 
-                                            className="w-full bg-white text-slate-900 rounded-2xl py-3.5 px-4 font-mono font-bold text-sm outline-none border-2 border-transparent focus:border-yellow-300 shadow-inner"
-                                        />
-                                    </div>
-
-                                    <div className="bg-[#ba1251] rounded-3xl p-4 space-y-3 text-xs text-white/95 leading-relaxed font-medium">
-                                        <div>
-                                            <span><strong>bKash Send Money</strong> নম্বর: </span>
-                                            <span className="font-mono font-black text-yellow-300 text-sm block mt-0.5">{OFFICIAL_BKASH_NUMBER}</span>
-                                        </div>
-                                        <button 
-                                            type="button" 
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(OFFICIAL_BKASH_NUMBER);
-                                                alert('বিকাশ নম্বর কপি করা হয়েছে!');
-                                            }}
-                                            className="bg-[#d81b60] border border-white/40 text-white text-[11px] font-black px-3 py-1 rounded-xl shadow active:scale-95"
-                                        >
-                                            নম্বর কপি করুন
-                                        </button>
-                                        <div className="border-t border-white/15 pt-2">
-                                            পরিমাণ: <strong className="font-mono text-yellow-300 text-sm">৳{formatMoney(depositAmount)}</strong>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="pt-4 pb-2 safe-bottom">
-                                    <button 
-                                        onClick={() => {
-                                            const val = document.getElementById('trxInput')?.value;
-                                            if (!val || val.trim().length < 8) return alert('সঠিক ট্রানজেকশন আইডি দিন!');
-                                            handleDepositTrxSubmit(val.toUpperCase().trim());
-                                        }}
-                                        className="w-full py-4 bg-[#880e4f] text-white font-black text-base uppercase tracking-widest rounded-2xl shadow-2xl active:scale-98 font-mono cursor-pointer"
-                                    >
-                                        VERIFY
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* AUTH VIEW */}
+                    {/* ========================================================================= */}
+                    {/* AUTH VIEW (REGISTER & LOGIN UPGRADED 1:1 TO DKWIN WITH STX MAIN LOGO) */}
+                    {/* ========================================================================= */}
                     {view === 'auth' && (
-                        <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto">
-                            <div className="mb-6 flex flex-col items-center text-center">
-                                <div className="w-20 h-20 rounded-3xl mb-3 flex items-center justify-center p-1 bg-slate-900 border border-amber-400/40 shadow-neon-gold">
-                                    <img src={STEVEN_MAIN_LOGO} alt="Steven Win Logo" className="w-full h-full object-contain" />
-                                </div>
-                                <span className="text-2xl font-black tracking-widest text-gradient-gold font-mono">STEVEN WIN</span>
-                                <span className="text-[10px] text-slate-400 tracking-wider uppercase font-mono">OFFICIAL SLOTS, AVIATOR, WINGO & K3</span>
-                            </div>
-
-                            <div className="flex bg-slate-900 p-1.5 rounded-2xl mb-5 border border-slate-800">
-                                <button onClick={() => setAuthTab('login')} className={`flex-1 py-3 text-xs font-black rounded-xl cursor-pointer ${authTab === 'login' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>লগইন</button>
-                                <button onClick={() => setAuthTab('signup')} className={`flex-1 py-3 text-xs font-black rounded-xl cursor-pointer ${authTab === 'signup' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>রেজিস্টার</button>
-                            </div>
-
-                            <form onSubmit={authTab === 'login' ? handleLogin : handleRegister} className="space-y-3.5">
-                                {authTab === 'signup' && (
-                                    <div>
-                                        <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Nickname</label>
-                                        <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
-                                    </div>
-                                )}
-
-                                <div>
-                                    <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Mobile Phone Number</label>
-                                    <div className="flex space-x-2">
-                                        <span className="bg-slate-900 border border-slate-800 px-3 py-3 rounded-2xl text-xs font-bold font-mono">+880</span>
-                                        <input type="tel" placeholder="017XXXXXXXX" value={phone} onChange={e => setPhone(e.target.value)} className="flex-1 bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Password</label>
-                                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
-                                </div>
-
-                                {authTab === 'signup' && (
-                                    <div>
-                                        <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Confirm Password</label>
-                                        <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
-                                    </div>
-                                )}
-
-                                <button type="submit" className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-widest shadow-neon-gold cursor-pointer">
-                                    {authTab === 'login' ? 'Sign In' : 'Create Account'}
+                        <div className="flex-1 flex flex-col bg-[#f2f4f7] text-slate-800 overflow-y-auto select-none">
+                            
+                            <div className="bg-[#f4bc18] px-4 py-3 flex items-center justify-between shadow-sm flex-shrink-0">
+                                <button 
+                                    onClick={() => setAuthTab(authTab === 'login' ? 'signup' : 'login')} 
+                                    className="text-white text-xl font-black p-1 hover:opacity-80 active:scale-90"
+                                >
+                                    ‹
                                 </button>
-                            </form>
+                                
+                                <div className="flex items-center justify-center">
+                                    <img src={STEVEN_MAIN_LOGO} alt="STX WIN" className="h-8 object-contain drop-shadow" />
+                                </div>
+
+                                <div className="flex items-center space-x-1.5 bg-white/20 px-2 py-1 rounded-full text-xs font-bold text-white shadow-xs">
+                                    <span>🇺🇸</span>
+                                    <span className="font-mono">EN</span>
+                                </div>
+                            </div>
+
+                            {/* SCREEN 1: REGISTER TAB */}
+                            {authTab === 'signup' && (
+                                <div className="flex-1 p-5 space-y-4 max-w-md mx-auto w-full">
+                                    <div className="flex flex-col items-center justify-center pb-2">
+                                        <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center text-amber-600 text-lg mb-1 shadow-xs">📱</div>
+                                        <h2 className="text-base font-bold text-amber-500 pb-1.5 border-b-2 border-amber-400 px-6">Register your phone</h2>
+                                    </div>
+
+                                    <form onSubmit={handleRegister} className="space-y-3.5">
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5">
+                                                <span className="text-amber-500">📱</span>
+                                                <span>Phone number</span>
+                                            </label>
+                                            <div className="flex space-x-2">
+                                                <div className="bg-white border border-slate-200 rounded-2xl px-3.5 py-3 text-xs font-bold font-mono text-slate-700 flex items-center space-x-1 shadow-xs">
+                                                    <span>+880</span>
+                                                    <span className="text-slate-400 text-[10px]">▼</span>
+                                                </div>
+                                                <input 
+                                                    type="tel"
+                                                    placeholder="Please enter the phone number"
+                                                    value={phone}
+                                                    onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                                    className="flex-1 bg-white border border-slate-200 rounded-2xl py-3 px-4 text-xs font-medium text-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-400 shadow-xs font-mono"
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5">
+                                                <span className="text-amber-500">🔒</span>
+                                                <span>Set password</span>
+                                            </label>
+                                            <div className="relative flex items-center">
+                                                <input 
+                                                    type={showPassword ? "text" : "password"}
+                                                    placeholder="Set password"
+                                                    value={password}
+                                                    onChange={e => setPassword(e.target.value)}
+                                                    className="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-4 pr-11 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-400 shadow-xs"
+                                                    required
+                                                />
+                                                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 text-slate-400">
+                                                    {showPassword ? <Icons.eye className="w-4 h-4" /> : <Icons.eyeOff className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5">
+                                                <span className="text-amber-500">🔒</span>
+                                                <span>Confirm password</span>
+                                            </label>
+                                            <div className="relative flex items-center">
+                                                <input 
+                                                    type={showConfirmPassword ? "text" : "password"}
+                                                    placeholder="Confirm password"
+                                                    value={confirmPassword}
+                                                    onChange={e => setConfirmPassword(e.target.value)}
+                                                    className="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-4 pr-11 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-400 shadow-xs"
+                                                    required
+                                                />
+                                                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute right-3.5 text-slate-400">
+                                                    {showConfirmPassword ? <Icons.eye className="w-4 h-4" /> : <Icons.eyeOff className="w-4 h-4" />}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-1">
+                                            <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5">
+                                                <span className="text-amber-500">🏷️</span>
+                                                <span>Invite code</span>
+                                            </label>
+                                            <input 
+                                                type="text"
+                                                value={inviteCode}
+                                                onChange={e => setInviteCode(e.target.value)}
+                                                className="w-full bg-white border border-slate-200 rounded-2xl py-3 px-4 text-xs font-mono font-bold text-slate-700 shadow-xs"
+                                            />
+                                        </div>
+
+                                        <div className="flex items-center space-x-2 pt-1 text-xs">
+                                            <input 
+                                                type="checkbox"
+                                                id="agreePriv"
+                                                checked={agreePrivacy}
+                                                onChange={e => setAgreePrivacy(e.target.checked)}
+                                                className="w-4 h-4 text-amber-500 rounded border-slate-300 accent-amber-500 cursor-pointer"
+                                            />
+                                            <label htmlFor="agreePriv" className="text-slate-500 text-[11px] cursor-pointer">
+                                                I have read and agree <span className="text-rose-500 font-bold">【Privacy Agreement】</span>
+                                            </label>
+                                        </div>
+
+                                        <button type="submit" className="w-full py-3.5 bg-[#f4bc18] hover:bg-[#e3ad0e] active:scale-98 text-white font-bold text-sm rounded-full shadow-md transition-all cursor-pointer">
+                                            Register
+                                        </button>
+
+                                        <button type="button" onClick={() => setAuthTab('login')} className="w-full py-3 bg-white border border-[#f4bc18] text-amber-500 font-bold text-xs rounded-full shadow-xs active:scale-98 cursor-pointer">
+                                            I have an account Login
+                                        </button>
+                                    </form>
+
+                                    <div className="pt-2">
+                                        <button onClick={handleGoogleLogin} className="w-full py-3 px-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-bold text-slate-700 flex items-center justify-center space-x-2.5 active:scale-98 cursor-pointer">
+                                            <Icons.google className="w-5 h-5" />
+                                            <span>Continue with Google</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* SCREEN 2: LOGIN TAB */}
+                            {authTab === 'login' && (
+                                <div className="flex-1 flex flex-col">
+                                    <div className="bg-[#f4bc18] px-5 pt-1 pb-6 text-white space-y-1">
+                                        <h1 className="text-xl font-black">Log in</h1>
+                                        <p className="text-[11px] text-white/90 leading-tight">
+                                            Please log in with your phone number or email<br />
+                                            If you forget your password, please contact customer service
+                                        </p>
+                                    </div>
+
+                                    <div className="flex-1 bg-[#f2f4f7] px-5 pt-3 pb-6 space-y-4 max-w-md mx-auto w-full">
+                                        <div className="flex border-b border-slate-200 mb-2">
+                                            <button onClick={() => setLoginMethod('phone')} className={`flex-1 py-2.5 text-xs font-bold flex items-center justify-center space-x-1.5 ${loginMethod === 'phone' ? 'text-amber-500 border-b-2 border-amber-400' : 'text-slate-500'}`}>
+                                                <span>📱</span><span>Phone Number</span>
+                                            </button>
+                                            <button onClick={() => setLoginMethod('email')} className={`flex-1 py-2.5 text-xs font-bold flex items-center justify-center space-x-1.5 ${loginMethod === 'email' ? 'text-amber-500 border-b-2 border-amber-400' : 'text-slate-500'}`}>
+                                                <span>✉️</span><span>Email</span>
+                                            </button>
+                                        </div>
+
+                                        <form onSubmit={handleLogin} className="space-y-3.5">
+                                            {loginMethod === 'phone' ? (
+                                                <div className="space-y-1">
+                                                    <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5"><span>📱</span><span>Phone number</span></label>
+                                                    <div className="flex space-x-2">
+                                                        <div className="bg-white border border-slate-200 rounded-2xl px-3.5 py-3 text-xs font-bold font-mono text-slate-700 flex items-center space-x-1 shadow-xs">
+                                                            <span>+880</span><span className="text-slate-400 text-[10px]">▼</span>
+                                                        </div>
+                                                        <input 
+                                                            type="tel"
+                                                            placeholder="1860909272"
+                                                            value={phone}
+                                                            onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                                                            className="flex-1 bg-white border border-slate-200 rounded-2xl py-3 px-4 text-xs font-bold text-slate-800 shadow-xs font-mono"
+                                                            required
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="space-y-1">
+                                                    <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5"><span>✉️</span><span>Email address</span></label>
+                                                    <input 
+                                                        type="email"
+                                                        placeholder="Please enter your email"
+                                                        value={email}
+                                                        onChange={e => setEmail(e.target.value)}
+                                                        className="w-full bg-white border border-slate-200 rounded-2xl py-3 px-4 text-xs font-medium text-slate-800 shadow-xs"
+                                                        required
+                                                    />
+                                                </div>
+                                            )}
+
+                                            <div className="space-y-1">
+                                                <label className="text-xs font-semibold text-slate-700 flex items-center space-x-1.5"><span>🔒</span><span>Password</span></label>
+                                                <div className="relative flex items-center">
+                                                    <input 
+                                                        type={showPassword ? "text" : "password"}
+                                                        placeholder="•••••••••"
+                                                        value={password}
+                                                        onChange={e => setPassword(e.target.value)}
+                                                        className="w-full bg-white border border-slate-200 rounded-2xl py-3 pl-4 pr-11 text-xs text-slate-800 shadow-xs font-mono font-bold"
+                                                        required
+                                                    />
+                                                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3.5 text-slate-400">
+                                                        {showPassword ? <Icons.eye className="w-4 h-4" /> : <Icons.eyeOff className="w-4 h-4" />}
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-between pt-1 text-xs">
+                                                <label className="flex items-center space-x-2 text-slate-600 text-[11.5px] cursor-pointer">
+                                                    <input type="checkbox" checked={rememberPassword} onChange={e => setRememberPassword(e.target.checked)} className="w-4 h-4 text-amber-500 rounded border-slate-300 accent-amber-500 cursor-pointer" />
+                                                    <span>Remember password</span>
+                                                </label>
+                                                <span onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')} className="text-amber-500 text-[11.5px] font-bold cursor-pointer hover:underline">
+                                                    Forgot password?
+                                                </span>
+                                            </div>
+
+                                            <button type="submit" className="w-full py-3.5 bg-[#f4bc18] hover:bg-[#e3ad0e] active:scale-98 text-white font-bold text-sm rounded-full shadow-md transition-all cursor-pointer mt-2">
+                                                Log in
+                                            </button>
+
+                                            <button type="button" onClick={() => setAuthTab('signup')} className="w-full py-3 bg-white border border-[#f4bc18] text-amber-500 font-bold text-xs rounded-full shadow-xs active:scale-98 cursor-pointer">
+                                                Register
+                                            </button>
+                                        </form>
+
+                                        <div className="pt-2">
+                                            <button onClick={handleGoogleLogin} className="w-full py-3 px-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-xs font-bold text-slate-700 flex items-center justify-center space-x-2.5 active:scale-98 cursor-pointer">
+                                                <Icons.google className="w-5 h-5" />
+                                                <span>Continue with Google</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
                     )}
 
-                    {/* MAIN DASHBOARD */}
+                    {/* ========================================================================= */}
+                    {/* MAIN USER DASHBOARD */}
+                    {/* ========================================================================= */}
                     {view === 'home' && (
                         <div className="flex-1 flex flex-col overflow-hidden min-h-0 bg-[#05070e]">
                             
-                            {/* Top Navbar */}
+                            {/* TOP NAVBAR WITH BELL ICON CORNER */}
                             <div className="px-4 py-3 bg-[#080d1a] border-b border-slate-800 flex justify-between items-center flex-shrink-0">
                                 <div className="flex items-center space-x-2">
                                     <div className="w-8 h-8 rounded-xl overflow-hidden shadow bg-slate-900 border border-amber-500/30 p-0.5">
@@ -1189,13 +1038,25 @@
                                     <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
                                 </div>
                                 
-                                <button 
-                                    onClick={() => setDepositStep('amountSelect')}
-                                    className="text-xs font-black text-white bg-gradient-to-r from-pink-600 to-rose-600 px-3 py-1.5 rounded-xl shadow-neon-pink flex items-center space-x-1 cursor-pointer font-mono active:scale-95"
-                                >
-                                    <span>+</span>
-                                    <span>৳{formatMoney(balance)}</span>
-                                </button>
+                                <div className="flex items-center space-x-2">
+                                    {/* CORNER BELL ICON FOR ADMIN NOTICES */}
+                                    <button 
+                                        onClick={() => setShowNoticeModal(true)}
+                                        className="relative p-2 rounded-xl bg-slate-900 border border-slate-800 text-amber-400 hover:text-amber-300 active:scale-90 cursor-pointer shadow-sm"
+                                    >
+                                        <Icons.bell className="w-5 h-5" />
+                                        <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+                                        <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-rose-500"></span>
+                                    </button>
+
+                                    <button 
+                                        onClick={() => setDepositStep('amountSelect')}
+                                        className="text-xs font-black text-white bg-gradient-to-r from-pink-600 to-rose-600 px-3 py-1.5 rounded-xl shadow-neon-pink flex items-center space-x-1 cursor-pointer font-mono active:scale-95"
+                                    >
+                                        <span>+</span>
+                                        <span>৳{formatMoney(balance)}</span>
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Main Content Area */}
@@ -1203,23 +1064,6 @@
                                 
                                 {activeNav === 'home' && (
                                     <>
-                                        {/* JILI Money Coming Card */}
-                                        <div 
-                                            onClick={() => setView('game_money_coming')}
-                                            className="relative rounded-3xl bg-gradient-to-r from-[#211202] via-[#4d2800] to-[#120800] shadow-luxury border-2 border-yellow-400 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
-                                        >
-                                            <div className="space-y-1">
-                                                <span className="text-[9px] bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
-                                                    ⚡ 10,000X LUCKY WHEEL
-                                                </span>
-                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Money Coming 💵</h2>
-                                                <span className="text-[10.5px] text-amber-200 block font-medium">Official JILI 3x1 Drum Cabinet</span>
-                                            </div>
-                                            <div className="w-16 h-16 rounded-2xl bg-amber-500 flex items-center justify-center text-3xl shadow-neon-gold flex-shrink-0">
-                                                🎰
-                                            </div>
-                                        </div>
-
                                         {/* Aviator Spribe Card */}
                                         <div 
                                             onClick={() => setView('game_aviator')}
@@ -1290,7 +1134,7 @@
                                     </>
                                 )}
 
-                                {/* VIP PROFILE TAB */}
+                                {/* VIP PROFILE TAB (EXP, WALLET & TRANSACTION HISTORIES) */}
                                 {activeNav === 'account' && (
                                     <div className="space-y-4">
                                         <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
@@ -1305,31 +1149,81 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <div className="mt-4 pt-3 border-t border-amber-500/20 space-y-1.5">
-                                                <div className="flex justify-between items-center text-[10px] font-mono">
-                                                    <span className="text-amber-300 font-bold">EXP Level Progress</span>
-                                                    <span className="text-slate-300 font-black">{userExp} / {maxExp} EXP</span>
-                                                </div>
-                                                <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
-                                                    <div style={{ width: `${Math.min(100, (userExp / maxExp) * 100)}%` }} className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"></div>
-                                                </div>
-                                            </div>
                                         </div>
 
+                                        {/* Wallet Box */}
                                         <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
-                                            <span className="text-xs text-slate-400 font-bold uppercase font-mono">Wallet Balance</span>
+                                            <span className="text-xs text-slate-400 font-bold uppercase font-mono">Available Balance</span>
                                             <div className="text-3xl font-black font-mono text-yellow-400">৳{formatMoney(balance)}</div>
                                             <div className="grid grid-cols-2 gap-2.5 pt-1">
-                                                <button onClick={() => setDepositStep('amountSelect')} className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink">
+                                                <button onClick={() => setDepositStep('amountSelect')} className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink active:scale-95 cursor-pointer">
                                                     <Icons.wallet className="w-4 h-4" />
                                                     <span>Deposit</span>
                                                 </button>
-                                                <button onClick={() => alert('উত্তোলনের জন্য সর্বনিম্ন ব্যালেন্স ৳৩০০ টাকা প্রয়োজন।')} className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green">
+                                                <button onClick={() => setShowCashoutModal(true)} className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 cursor-pointer">
                                                     <Icons.receipt className="w-4 h-4" />
-                                                    <span>Cashout</span>
+                                                    <span>Cashout (Min ৳100)</span>
                                                 </button>
                                             </div>
+                                        </div>
+
+                                        {/* PROFILE HISTORIES TOGGLE (DEPOSIT & CASHOUT RECORD) */}
+                                        <div className="glass-panel rounded-3xl border border-slate-800 p-4 space-y-3">
+                                            <div className="flex border-b border-slate-800 pb-2 space-x-2">
+                                                <button 
+                                                    onClick={() => setProfileHistoryTab('deposits')} 
+                                                    className={`flex-1 py-2 rounded-xl text-xs font-bold font-mono transition-all ${profileHistoryTab === 'deposits' ? 'bg-pink-600 text-white' : 'bg-slate-900 text-slate-400'}`}
+                                                >
+                                                    📥 Deposit History
+                                                </button>
+                                                <button 
+                                                    onClick={() => setProfileHistoryTab('withdrawals')} 
+                                                    className={`flex-1 py-2 rounded-xl text-xs font-bold font-mono transition-all ${profileHistoryTab === 'withdrawals' ? 'bg-emerald-600 text-white' : 'bg-slate-900 text-slate-400'}`}
+                                                >
+                                                    📤 Cashout History
+                                                </button>
+                                            </div>
+
+                                            {/* History Display List */}
+                                            {profileHistoryTab === 'deposits' && (
+                                                <div className="space-y-2 max-h-56 overflow-y-auto font-mono text-xs">
+                                                    {userDeposits.length === 0 ? (
+                                                        <div className="text-center py-4 text-slate-500">কোনো ডিপোজিট রেকর্ড নেই।</div>
+                                                    ) : (
+                                                        userDeposits.map(d => (
+                                                            <div key={d.id} className="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                                                                <div>
+                                                                    <div className="font-bold text-pink-400">৳{formatMoney(d.amount)}</div>
+                                                                    <span className="text-[10px] text-slate-400 block">{d.method} • {d.timestamp}</span>
+                                                                </div>
+                                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${d.status === 'Approved' ? 'bg-emerald-500/20 text-emerald-400' : (d.status === 'Pending' ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-500/20 text-rose-400')}`}>
+                                                                    {d.status}
+                                                                </span>
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
+
+                                            {profileHistoryTab === 'withdrawals' && (
+                                                <div className="space-y-2 max-h-56 overflow-y-auto font-mono text-xs">
+                                                    {userWithdrawals.length === 0 ? (
+                                                        <div className="text-center py-4 text-slate-500">কোনো ক্যাশআউট রেকর্ড নেই।</div>
+                                                    ) : (
+                                                        userWithdrawals.map(w => (
+                                                            <div key={w.id} className="p-2.5 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                                                                <div>
+                                                                    <div className="font-bold text-emerald-400">৳{formatMoney(w.amount)}</div>
+                                                                    <span className="text-[10px] text-slate-400 block">{w.type} ({w.receiver}) • {w.timestamp}</span>
+                                                                </div>
+                                                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${w.status === 'Success' ? 'bg-emerald-500/20 text-emerald-400' : (w.status === 'Pending' ? 'bg-amber-500/20 text-amber-300' : 'bg-rose-500/20 text-rose-400')}`}>
+                                                                    {w.status}
+                                                                </span>
+                                                            </div>
+                                                        ))
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
 
                                         <button onClick={() => { localStorage.removeItem('steven_win_phone'); setSessionPhone(''); setView('auth'); }} className="w-full py-3.5 bg-rose-950/40 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase rounded-2xl flex items-center justify-center space-x-2 cursor-pointer">
@@ -1350,7 +1244,7 @@
                                     <Icons.gift className="w-5 h-5" />
                                     <span className="text-[10px]">Rewards</span>
                                 </button>
-                                <button onClick={() => alert(`Invite Code: ${currentUser?.referralCode || 'STX8888'}`)} className="flex flex-col items-center justify-center space-y-1 text-slate-400">
+                                <button onClick={() => alert(`Invite Code: ${currentUser?.referralCode || '37276100176'}`)} className="flex flex-col items-center justify-center space-y-1 text-slate-400">
                                     <Icons.percent className="w-5 h-5" />
                                     <span className="text-[10px]">Promo</span>
                                 </button>
@@ -1362,47 +1256,233 @@
                         </div>
                     )}
 
-                    {/* JILI MONEY COMING VIEW */}
-                    {view === 'game_money_coming' && (
-                        <div className="flex-1 flex flex-col jili-bg-matrix justify-between overflow-hidden min-h-0 font-sans relative select-none">
-                            <div className="px-3 py-2.5 bg-black border-b border-yellow-600/50 flex items-center justify-between flex-shrink-0">
-                                <button onClick={() => setView('home')} className="px-3 py-1 bg-black/80 border border-yellow-500/50 text-[11px] font-black text-yellow-300 font-mono rounded-xl cursor-pointer">
-                                    ◀ BACK
+                    {/* ========================================================================= */}
+                    {/* CASHOUT MODAL (MINIMUM ৳100, BKASH & NAGAD SELECTION) */}
+                    {/* ========================================================================= */}
+                    {showCashoutModal && (
+                        <div className="fixed inset-0 z-[4000] bg-black/85 flex flex-col justify-end font-sans backdrop-blur-xs">
+                            <div className="bg-[#0e1322] border-t border-emerald-500/40 rounded-t-3xl p-5 space-y-4 shadow-2xl safe-bottom">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                                    <div>
+                                        <h3 className="text-sm font-black text-emerald-400 font-mono uppercase">উত্তোলন / Cashout Desk</h3>
+                                        <span className="text-[10px] text-slate-400 font-mono">সর্বনিম্ন ১০০ টাকা • এভেইলেবল: ৳{formatMoney(balance)}</span>
+                                    </div>
+                                    <button onClick={() => setShowCashoutModal(false)} className="text-slate-400 p-1">
+                                        <Icons.x className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <form onSubmit={handleCashoutSubmit} className="space-y-3.5 font-mono text-xs">
+                                    {/* Gateway Selector (bKash or Nagad) */}
+                                    <div className="space-y-1.5">
+                                        <label className="text-[10px] text-slate-400 uppercase font-bold block">পেমেন্ট মেথড বাছাই করুন:</label>
+                                        <div className="grid grid-cols-2 gap-2.5">
+                                            <div 
+                                                onClick={() => setCashoutMethod('bKash')}
+                                                className={`p-3 rounded-2xl border-2 flex items-center justify-center space-x-2 cursor-pointer transition-all ${cashoutMethod === 'bKash' ? 'border-pink-500 bg-pink-950/40 text-white' : 'border-slate-800 bg-slate-900 text-slate-400'}`}
+                                            >
+                                                <span className="font-black text-pink-400">bKash</span>
+                                            </div>
+                                            <div 
+                                                onClick={() => setCashoutMethod('Nagad')}
+                                                className={`p-3 rounded-2xl border-2 flex items-center justify-center space-x-2 cursor-pointer transition-all ${cashoutMethod === 'Nagad' ? 'border-orange-500 bg-orange-950/40 text-white' : 'border-slate-800 bg-slate-900 text-slate-400'}`}
+                                            >
+                                                <span className="font-black text-orange-400">Nagad</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Receiver Mobile Number */}
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] text-slate-400 uppercase font-bold block">প্রাপক {cashoutMethod} মোবাইল নম্বর:</label>
+                                        <input 
+                                            type="tel" 
+                                            placeholder="017XXXXXXXX"
+                                            value={cashoutNumber}
+                                            onChange={e => setCashoutNumber(e.target.value.replace(/[^0-9]/g, ''))}
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 px-4 text-xs font-bold text-white focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Withdrawal Amount (Min 100) */}
+                                    <div className="space-y-1">
+                                        <label className="text-[10px] text-slate-400 uppercase font-bold block">টাকার পরিমাণ (সর্বনিম্ন ১০০ টাকা):</label>
+                                        <input 
+                                            type="number" 
+                                            placeholder="কমপক্ষে 100 টাকা"
+                                            min="100"
+                                            max={balance}
+                                            value={cashoutAmount}
+                                            onChange={e => setCashoutAmount(e.target.value)}
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 px-4 text-xs font-bold text-yellow-300 focus:outline-none focus:ring-1 focus:ring-emerald-400 font-mono"
+                                            required
+                                        />
+                                    </div>
+
+                                    <button 
+                                        type="submit"
+                                        className="w-full py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-2xl shadow-neon-green active:scale-98 transition-all cursor-pointer mt-1"
+                                    >
+                                        Confirm Cashout ৳{cashoutAmount || '0'}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ========================================================================= */}
+                    {/* ADMIN NOTICES / BELL MODAL */}
+                    {/* ========================================================================= */}
+                    {showNoticeModal && (
+                        <div className="fixed inset-0 z-[5000] bg-black/85 flex flex-col items-center justify-center p-4 font-sans backdrop-blur-xs">
+                            <div className="w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 space-y-3.5 shadow-2xl">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <div className="flex items-center space-x-2 text-amber-400 font-mono font-bold text-sm">
+                                        <Icons.bell className="w-5 h-5" />
+                                        <span>অফিসিয়াল নোটিশ ও বার্তা</span>
+                                    </div>
+                                    <button onClick={() => setShowNoticeModal(false)} className="text-slate-400">
+                                        <Icons.x className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-2.5 max-h-72 overflow-y-auto font-mono text-xs">
+                                    {adminNotices.map((n, i) => (
+                                        <div key={i} className="p-3 bg-slate-900/80 rounded-2xl border border-slate-800 space-y-1">
+                                            <div className="flex justify-between items-center">
+                                                <span className="font-bold text-amber-300">{n.title}</span>
+                                                <span className="text-[10px] text-slate-500">{n.time}</span>
+                                            </div>
+                                            <p className="text-[11px] text-slate-300 leading-relaxed font-sans">{n.text}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* ========================================================================= */}
+                    {/* DEPOSIT STEP MODAL (300+ AMOUNT SELECTION) */}
+                    {/* ========================================================================= */}
+                    {depositStep === 'amountSelect' && (
+                        <div className="fixed inset-0 z-[2000] bg-black/80 flex flex-col justify-end font-sans backdrop-blur-xs">
+                            <div className="bg-[#0e1322] border-t border-amber-500/40 rounded-t-3xl p-5 space-y-4 shadow-2xl safe-bottom">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2.5">
+                                    <div>
+                                        <h3 className="text-sm font-black text-amber-300 font-mono uppercase">ডিপোজিট রিচার্জ অ্যামাউন্ট</h3>
+                                        <span className="text-[10.5px] text-slate-400">সর্বনিম্ন ৳৩০০ টাকা থেকে আনলিমিটেড</span>
+                                    </div>
+                                    <button onClick={() => setDepositStep(null)} className="text-slate-400 p-1">
+                                        <Icons.x className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                    <span className="text-[10px] text-slate-400 uppercase font-bold block font-mono">জনপ্রিয় রিচার্জ পরিমাণ:</span>
+                                    <div className="grid grid-cols-4 gap-2 font-mono">
+                                        {[300, 500, 1000, 2000, 5000, 10000, 25000].map(amt => (
+                                            <button 
+                                                key={amt} 
+                                                onClick={() => {
+                                                    setDepositAmount(amt);
+                                                    setCustomDepInput(String(amt));
+                                                }}
+                                                className={`py-2.5 rounded-xl font-black text-xs transition-all cursor-pointer ${depositAmount === amt ? 'bg-gradient-to-r from-pink-600 to-rose-600 text-white shadow-neon-pink ring-2 ring-pink-400' : 'bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800'}`}
+                                            >
+                                                ৳{amt}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5 pt-1">
+                                    <label className="text-[10.5px] font-bold text-slate-300 block font-mono">অন্যান্য পরিমাণ লিখুন (টাকা):</label>
+                                    <div className="relative flex items-center">
+                                        <span className="absolute left-3.5 text-amber-400 font-bold font-mono text-sm">৳</span>
+                                        <input 
+                                            type="number"
+                                            value={customDepInput}
+                                            onChange={e => {
+                                                setCustomDepInput(e.target.value);
+                                                const parsed = parseFloat(e.target.value);
+                                                if (!isNaN(parsed)) setDepositAmount(parsed);
+                                            }}
+                                            placeholder="300"
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-2xl py-3 pl-8 pr-4 text-sm font-bold text-yellow-300 font-mono focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                        />
+                                    </div>
+                                </div>
+
+                                <button 
+                                    onClick={() => {
+                                        if (depositAmount < 300) return alert('সর্বনিম্ন ডিপোজিট ৳৩০০ টাকা!');
+                                        setDepositStep('bkashVerify');
+                                    }}
+                                    className="w-full py-4 bg-gradient-to-r from-[#e2136e] via-[#ff0055] to-[#bc1055] text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-neon-pink cursor-pointer font-mono active:scale-98 transition-all"
+                                >
+                                    PAY ৳{formatMoney(depositAmount)} &gt;
                                 </button>
-                                <span className="text-base font-black text-yellow-400 font-mono">MONEY COMING 💵</span>
-                                <span className="text-xs font-black text-amber-300 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* DEPOSIT BKASH VERIFY */}
+                    {depositStep === 'bkashVerify' && (
+                        <div className="fixed inset-0 z-[2000] bg-white flex flex-col justify-between font-sans select-none">
+                            <div className="pt-5 pb-3 flex items-center justify-between px-6 bg-white flex-shrink-0">
+                                <button onClick={() => setDepositStep(null)} className="text-slate-400 p-1">
+                                    <Icons.x className="w-6 h-6" />
+                                </button>
+                                <img src={BKASH_LOGO_URL} alt="bKash" className="h-9 object-contain rounded-lg shadow-sm" />
                             </div>
 
-                            <div className="flex-1 flex flex-col justify-center p-3">
-                                <div className="rounded-3xl p-3 jili-cabinet-frame shadow-2xl flex flex-col justify-center">
-                                    <div className="grid grid-cols-4 gap-1.5 jili-cabinet-inner p-2 rounded-2xl border-2 border-yellow-500/80">
-                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
-                                            <span className="text-3xl font-black text-amber-300 font-mono">{reels[0]}</span>
+                            <div className="flex-1 bg-[#d81b60] rounded-t-[2.5rem] p-5 flex flex-col justify-between text-white shadow-2xl overflow-y-auto">
+                                <div className="space-y-4 pt-1">
+                                    <h3 className="text-center font-black text-base tracking-wide text-white">
+                                        ট্রানজেকশন আইডি দিন
+                                    </h3>
+
+                                    <div className="relative pt-2">
+                                        <input 
+                                            type="text" 
+                                            id="trxInput"
+                                            placeholder="উদাহরণ: BKX992817" 
+                                            className="w-full bg-white text-slate-900 rounded-2xl py-3.5 px-4 font-mono font-bold text-sm outline-none border-2 border-transparent focus:border-yellow-300 shadow-inner"
+                                        />
+                                    </div>
+
+                                    <div className="bg-[#ba1251] rounded-3xl p-4 space-y-3 text-xs text-white/95 leading-relaxed font-medium">
+                                        <div>
+                                            <span><strong>bKash Send Money</strong> নম্বর: </span>
+                                            <span className="font-mono font-black text-yellow-300 text-sm block mt-0.5">{OFFICIAL_BKASH_NUMBER}</span>
                                         </div>
-                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
-                                            <span className="text-3xl font-black text-amber-300 font-mono">{reels[1]}</span>
-                                        </div>
-                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
-                                            <span className="text-3xl font-black text-amber-300 font-mono">{reels[2]}</span>
-                                        </div>
-                                        <div className={`h-24 rounded-xl jili-drum-gold flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
-                                            <span className="text-lg font-black text-white font-mono bg-purple-700 px-2 py-1 rounded shadow">{specialReel}</span>
+                                        <button 
+                                            type="button" 
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(OFFICIAL_BKASH_NUMBER);
+                                                alert('বিকাশ নম্বর কপি করা হয়েছে!');
+                                            }}
+                                            className="bg-[#d81b60] border border-white/40 text-white text-[11px] font-black px-3 py-1 rounded-xl shadow active:scale-95"
+                                        >
+                                            নম্বর কপি করুন
+                                        </button>
+                                        <div className="border-t border-white/15 pt-2">
+                                            পরিমাণ: <strong className="font-mono text-yellow-300 text-sm">৳{formatMoney(depositAmount)}</strong>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-4 bg-black/90 p-3 rounded-2xl border border-yellow-500/50 flex items-center justify-between">
-                                    <div className="flex space-x-1 font-mono">
-                                        {[1, 5, 10, 20].map(b => (
-                                            <button key={b} onClick={() => setMoneyComingBet(b)} className={`px-2.5 py-1 text-xs rounded-lg font-black ${moneyComingBet === b ? 'bg-yellow-400 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>৳{b}</button>
-                                        ))}
-                                    </div>
+                                <div className="pt-4 pb-2 safe-bottom">
                                     <button 
-                                        onClick={spinSlot} 
-                                        disabled={isSlotSpinning}
-                                        className="w-14 h-14 rounded-full bg-emerald-500 text-slate-950 font-black text-xs cursor-pointer active:scale-90"
+                                        onClick={() => {
+                                            const val = document.getElementById('trxInput')?.value;
+                                            if (!val || val.trim().length < 8) return alert('সঠিক ট্রানজেকশন আইডি দিন!');
+                                            handleDepositTrxSubmit(val.toUpperCase().trim());
+                                        }}
+                                        className="w-full py-4 bg-[#880e4f] text-white font-black text-base uppercase tracking-widest rounded-2xl shadow-2xl active:scale-98 font-mono cursor-pointer"
                                     >
-                                        SPIN
+                                        VERIFY
                                     </button>
                                 </div>
                             </div>
@@ -1418,37 +1498,26 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            {/* Multiplier Past History */}
                             <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
                                 {aviatorHistory.map((item, i) => (
                                     <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border ${item.mult >= 2 ? 'bg-purple-600/20 text-purple-300 border-purple-500/30' : 'bg-blue-600/20 text-blue-300 border-blue-500/30'}`}>{Number(item.mult).toFixed(2)}x</span>
                                 ))}
                             </div>
 
-                            {/* Flight Canvas & Screen */}
                             <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto">
                                 <div className="w-full h-48 bg-[#0b0e14] rounded-3xl border border-red-900/50 relative flex items-center justify-center overflow-hidden flex-shrink-0 shadow-inner">
                                     <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
-                                    
                                     {aviatorPhase === 'flying' && (
                                         <div className="text-center z-20">
                                             <span className="text-4xl font-black font-mono text-white tracking-wider">{aviatorMult.toFixed(2)}x</span>
                                         </div>
                                     )}
-
                                     {aviatorPhase === 'waiting' && (
                                         <div className="text-center z-20 space-y-1.5">
                                             <span className="text-[11px] font-black uppercase text-amber-400 tracking-widest font-mono block">WAITING FOR NEXT ROUND</span>
                                             <div className="text-3xl font-black text-white font-mono">{aviatorCountdown}s</div>
-                                            <div className="w-36 h-1.5 bg-slate-800 rounded-full mx-auto overflow-hidden">
-                                                <div 
-                                                    style={{ width: `${(aviatorCountdown / 8) * 100}%` }}
-                                                    className="h-full bg-gradient-to-r from-amber-400 to-rose-500 transition-all duration-1000"
-                                                ></div>
-                                            </div>
                                         </div>
                                     )}
-
                                     {aviatorPhase === 'crashed' && (
                                         <div className="text-center z-20 space-y-1 animate-pulse">
                                             <span className="text-xs font-black uppercase text-rose-400 font-mono block">FLEW AWAY!</span>
@@ -1457,7 +1526,6 @@
                                     )}
                                 </div>
 
-                                {/* Stake & Bet Controls */}
                                 <div className="bg-[#10141f] p-3 rounded-2xl border border-slate-800 space-y-2.5">
                                     <div className="flex justify-between items-center text-xs font-mono text-slate-400">
                                         <span>Stake: ৳{aviatorStake}</span>
@@ -1485,52 +1553,6 @@
                                             {isAviatorCashedOut ? '✓ CASHED OUT' : `CASHOUT ৳${formatMoney(aviatorStake * aviatorMult)}`}
                                         </button>
                                     )}
-                                </div>
-
-                                {/* LIVE BETTORS LIST (KOTO JON BET KORTECE & ALADA ALADA NAME) */}
-                                <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
-                                    <div className="flex justify-between items-center text-xs font-mono border-b border-slate-800/80 pb-1.5">
-                                        <span className="text-slate-300 font-bold flex items-center gap-1.5">
-                                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                                            <span>All Live Bets ({liveBettors.length + (isAviatorBetPlaced ? 1 : 0)})</span>
-                                        </span>
-                                        <span className="text-[10px] text-slate-400 uppercase">Cashout Mult</span>
-                                    </div>
-
-                                    <div className="space-y-1.5 max-h-40 overflow-y-auto font-mono text-[11px]">
-                                        {/* Show user's bet at the top if placed */}
-                                        {isAviatorBetPlaced && (
-                                            <div className="flex justify-between items-center bg-amber-950/40 border border-amber-500/50 p-2 rounded-xl text-amber-300 font-bold">
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="w-5 h-5 rounded-full bg-amber-400 text-slate-950 flex items-center justify-center text-[9px] font-black">YOU</span>
-                                                    <span>{currentUser?.username || 'You'}</span>
-                                                </div>
-                                                <div className="flex items-center space-x-3">
-                                                    <span>৳{aviatorStake}</span>
-                                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] ${isAviatorCashedOut ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-800 text-slate-400'}`}>
-                                                        {isAviatorCashedOut ? `${aviatorMult.toFixed(2)}x` : '-'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                        {liveBettors.map((b, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/60 rounded-xl border border-slate-800/40">
-                                                <div className="flex items-center space-x-2">
-                                                    <span className="w-5 h-5 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-[8.5px] font-mono">
-                                                        {b.username.slice(0, 2).toUpperCase()}
-                                                    </span>
-                                                    <span className="text-slate-300 font-medium">{b.username}</span>
-                                                </div>
-                                                <div className="flex items-center space-x-3">
-                                                    <span className="text-yellow-400 font-bold">৳{b.stake}</span>
-                                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${b.cashedOut ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'text-slate-500'}`}>
-                                                        {b.cashedOut ? `${b.targetCashout.toFixed(2)}x` : '-'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1562,37 +1584,15 @@
                                     </span>
                                 </div>
 
-                                {/* Bet Choices */}
                                 <div className="grid grid-cols-3 gap-2">
                                     <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Green', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Green (2X)</button>
                                     <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Violet', odds: 4.5, baseStake: 10, multiplier: 1 })} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Violet (4.5X)</button>
                                     <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Red', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Red (2X)</button>
                                 </div>
 
-                                <div className="grid grid-cols-5 gap-2 pt-1">
-                                    {[0,1,2,3,4,5,6,7,8,9].map(num => (
-                                        <button key={num} onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: num, odds: 9.0, baseStake: 10, multiplier: 1 })} className="py-2 rounded-xl text-xs font-black font-mono border bg-slate-900 border-slate-700 text-slate-200">{num} (9X)</button>
-                                    ))}
-                                </div>
-
                                 <div className="grid grid-cols-2 gap-2 pt-1">
                                     <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
                                     <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
-                                </div>
-
-                                {/* PREMIUM HISTORY WITH TIME */}
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <span className="text-[11px] font-bold text-slate-300 uppercase font-mono block">Game Record History ({wingoTab.toUpperCase()})</span>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-40 overflow-y-auto">
-                                        {(wingoHistories[wingoTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="font-bold text-yellow-300">{h.number}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
-                                                <span className={`w-3.5 h-3.5 rounded-full ${h.color.includes('green') ? 'bg-emerald-500' : 'bg-rose-500'}`}></span>
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1624,28 +1624,9 @@
                                     </span>
                                 </div>
 
-                                <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Green', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Green (2X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Violet', odds: 4.5, baseStake: 10, multiplier: 1 })} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Violet (4.5X)</button>
-                                    <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Red', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Red (2X)</button>
-                                </div>
-
                                 <div className="grid grid-cols-2 gap-2">
                                     <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
                                     <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
-                                </div>
-
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <span className="text-[11px] font-bold text-slate-300 uppercase font-mono block">TRX History with Exact Time ({trxTab.toUpperCase()})</span>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-40 overflow-y-auto">
-                                        {(trxHistories[trxTab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="font-bold text-purple-300">{h.number}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.size}</span>
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1681,66 +1662,6 @@
                                     <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Big (11-18) 2X</button>
                                     <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Small (3-10) 2X</button>
                                 </div>
-
-                                <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
-                                    <span className="text-[11px] font-bold text-slate-300 uppercase font-mono block">3-Dice History with Time ({k3Tab.toUpperCase()})</span>
-                                    <div className="space-y-1.5 font-mono text-xs max-h-40 overflow-y-auto">
-                                        {(k3Histories[k3Tab] || []).map((h, i) => (
-                                            <div key={i} className="flex justify-between items-center py-1.5 px-2 bg-slate-900/50 rounded-xl border border-slate-800/40">
-                                                <span className="text-[10px] text-slate-400">{h.time}</span>
-                                                <span className="text-amber-300 font-bold">[{h.dice.join(', ')}]</span>
-                                                <span className="font-black text-white">{h.sum}</span>
-                                                <span className={`text-[9.5px] px-2 py-0.5 rounded-full ${h.k3Size === 'Big' ? 'bg-amber-500/20 text-amber-300' : 'bg-sky-500/20 text-sky-300'}`}>{h.k3Size}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* UNIFIED BETTING MODAL */}
-                    {betModal.show && (
-                        <div className="fixed inset-0 z-[5000] bg-black/80 flex flex-col justify-end font-sans backdrop-blur-xs">
-                            <div className="bg-[#0e1322] border-t border-amber-500/40 rounded-t-3xl p-5 space-y-4 shadow-2xl safe-bottom">
-                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
-                                    <div>
-                                        <h3 className="text-sm font-black text-amber-300 font-mono uppercase">
-                                            Place Bet: {betModal.selection}
-                                        </h3>
-                                        <span className="text-[10px] text-slate-400 font-mono">Odds Multiplier: {betModal.odds}x</span>
-                                    </div>
-                                    <button onClick={() => setBetModal(p => ({ ...p, show: false }))} className="text-slate-400 p-1">
-                                        <Icons.x className="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <span className="text-[10px] text-slate-400 uppercase font-bold block font-mono">Base Stake (BDT):</span>
-                                    <div className="grid grid-cols-5 gap-2 font-mono">
-                                        {[10, 50, 100, 500, 1000].map(s => (
-                                            <button key={s} onClick={() => setBetModal(p => ({ ...p, baseStake: s }))} className={`py-2 rounded-xl font-bold text-xs ${betModal.baseStake === s ? 'bg-amber-400 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>৳{s}</button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <span className="text-[10px] text-slate-400 uppercase font-bold block font-mono">Multiplier:</span>
-                                    <div className="grid grid-cols-5 gap-2 font-mono">
-                                        {[1, 5, 10, 20, 50].map(m => (
-                                            <button key={m} onClick={() => setBetModal(p => ({ ...p, multiplier: m }))} className={`py-2 rounded-xl font-bold text-xs ${betModal.multiplier === m ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>X{m}</button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div className="pt-2 flex items-center justify-between font-mono">
-                                    <span className="text-xs text-slate-400">Total Bet Amount:</span>
-                                    <span className="text-lg font-black text-yellow-300">৳{betModal.baseStake * betModal.multiplier}</span>
-                                </div>
-
-                                <button onClick={handleConfirmBet} className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase tracking-widest rounded-2xl shadow-neon-gold cursor-pointer">
-                                    Confirm & Place Bet
-                                </button>
                             </div>
                         </div>
                     )}
