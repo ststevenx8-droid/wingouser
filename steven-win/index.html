@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="bn" class="h-full w-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>STEVEN WIN - Official JILI & Aviator Platform</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <!-- আলাদা করা Firebase কনফিগারেশন ফাইল লিংক -->
+    <script src="firebase.js"></script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981',
+                        gold: '#fbbf24',
+                        goldHover: '#f59e0b',
+                        gameGreen: '#059669',
+                        gameRed: '#e11d48',
+                        gameViolet: '#7c3aed',
+                        bkashPink: '#e2136e',
+                        bkashCrimson: '#d81b60',
+                        aviatorRed: '#e51e38',
+                        banRed: '#ff1a35',
+                        darkBg: '#05070e'
+                    },
+                    boxShadow: {
+                        'neon-gold': '0 0 25px rgba(251, 191, 36, 0.45)',
+                        'neon-green': '0 0 25px rgba(16, 185, 129, 0.45)',
+                        'neon-pink': '0 0 25px rgba(226, 19, 110, 0.45)',
+                        'neon-aviator': '0 0 30px rgba(229, 30, 56, 0.85)',
+                        'neon-ban': '0 0 35px rgba(255, 26, 53, 0.7)',
+                        'jili-gold': '0 0 35px rgba(234, 179, 8, 0.85)',
+                        'jili-glow': '0 0 45px rgba(245, 158, 11, 0.65)',
+                        'luxury': '0 15px 35px -5px rgba(0, 0, 0, 0.85)'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #030509;
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            color: #f8fafc;
+        }
+        
+        #app {
+            height: 100%;
+            height: 100dvh;
+            max-height: 100dvh;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background-color: #05070e;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+        }
+
+        #root {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #fff7c2 0%, #fbbf24 45%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-panel-glow {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+        }
+
+        .vip-card-gradient {
+            background: linear-gradient(135deg, #2b1f07 0%, #4a360d 40%, #171206 100%);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+        }
+
+        /* BAN MODAL STYLES */
+        .ban-bg-laser {
+            background: radial-gradient(circle at 50% 20%, #1a0508 0%, #0c0204 50%, #030001 100%);
+            background-image: 
+                linear-gradient(135deg, rgba(255, 26, 53, 0.12) 1px, transparent 1px),
+                linear-gradient(45deg, rgba(255, 26, 53, 0.08) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        .ban-card {
+            background: linear-gradient(180deg, #14161b 0%, #0b0c10 100%);
+            border: 1px solid #232733;
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 26, 53, 0.15);
+        }
+
+        .ban-icon-glow {
+            filter: drop-shadow(0 0 20px rgba(255, 26, 53, 0.75));
+        }
+
+        .ban-title-glow {
+            text-shadow: 0 0 20px rgba(255, 26, 53, 0.7);
+        }
+
+        /* JILI MONEY COMING STYLES */
+        .jili-bg-matrix {
+            background: radial-gradient(circle at 50% 30%, #3e1605 0%, #1e0901 60%, #080300 100%);
+            background-image: 
+                radial-gradient(rgba(245, 158, 11, 0.18) 1px, transparent 1px),
+                radial-gradient(rgba(245, 158, 11, 0.08) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        .jili-cabinet-frame {
+            background: linear-gradient(180deg, #78350f 0%, #f59e0b 25%, #b45309 50%, #fde68a 75%, #451a03 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.9), inset 0 2px 4px rgba(255,255,255,0.6);
+        }
+
+        .jili-cabinet-inner {
+            background: linear-gradient(180deg, #050b06 0%, #0d2011 50%, #020502 100%);
+        }
+
+        .jili-drum-green {
+            background: linear-gradient(180deg, #011d08 0%, #054f1e 25%, #10b981 50%, #054f1e 75%, #011d08 100%);
+            box-shadow: inset 0 22px 18px -6px rgba(0,0,0,0.98), inset 0 -22px 18px -6px rgba(0,0,0,0.98);
+            border-left: 1.5px solid rgba(251, 191, 36, 0.4);
+            border-right: 1.5px solid rgba(251, 191, 36, 0.4);
+        }
+
+        .jili-drum-gold {
+            background: linear-gradient(180deg, #2b1600 0%, #92400e 25%, #fef08a 50%, #92400e 75%, #2b1600 100%);
+            box-shadow: inset 0 22px 18px -6px rgba(0,0,0,0.98), inset 0 -22px 18px -6px rgba(0,0,0,0.98);
+            border-left: 2px solid rgba(251, 191, 36, 0.9);
+            border-right: 2px solid rgba(251, 191, 36, 0.9);
+        }
+
+        .jili-3d-text-gold {
+            font-family: 'Cinzel', serif;
+            color: #fffbeb;
+            text-shadow: 0 2px 0 #b45309, 0 4px 8px rgba(0,0,0,0.9), 0 0 15px rgba(251, 191, 36, 0.8);
+        }
+
+        .jili-title-banner {
+            font-family: 'Cinzel', sans-serif;
+            text-shadow: -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff, 2px 2px 0 #fff;
+        }
+
+        .jili-spin-btn {
+            background: radial-gradient(circle at 35% 35%, #86efac 0%, #22c55e 40%, #15803d 80%, #052e16 100%);
+            box-shadow: 0 0 22px rgba(34, 197, 94, 0.75), inset 0 4px 6px rgba(255,255,255,0.7);
+            border: 3px solid #fef08a;
+        }
+
+        @keyframes slotSpinAnim {
+            0% { transform: translateY(-20%); opacity: 0.7; filter: blur(2px); }
+            50% { transform: translateY(20%); opacity: 1; filter: blur(0px); }
+            100% { transform: translateY(-20%); opacity: 0.7; filter: blur(2px); }
+        }
+        .anim-slot-spinning {
+            animation: slotSpinAnim 0.12s infinite linear;
+        }
+
+        .safe-bottom {
+            padding-bottom: max(env(safe-area-inset-bottom), 10px);
+        }
+    </style>
+</head>
+<body class="flex justify-center items-center h-full w-full">
+
+    <div id="app" class="border-x border-slate-800/80">
+        <div id="root"></div>
+    </div>
+
+    <!-- React and Babel CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo } = React;
+
+        // Firebase database instance fetched from firebase.js
+        const db = window.db;
+
+        // GLOBAL CONSTANTS
+        const OFFICIAL_BKASH_NUMBER = "01860909272";
+        const BKASH_LOGO_URL = "https://i.ibb.co/xTgMb9X/11623.jpg";
+        const STEVEN_MAIN_LOGO = "https://i.ibb.co/W43Hdvm3/10736.png";
+        const TELEGRAM_SUPPORT_URL = "https://t.me/Ststevenx36";
+
+        const PRESET_AVATARS = [
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=160&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&auto=format&fit=crop&q=80"
+        ];
+
+        // Web Audio Synthesizer Engine
+        const playAudioSound = (type) => {
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                const ctx = new AudioCtx();
+                const now = ctx.currentTime;
+
+                if (type === 'spin') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.exponentialRampToValueAtTime(100, now + 0.35);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'win') {
+                    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.25, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.25);
+                    });
+                }
+            } catch(e) {}
+        };
+
+        const Icons = {
+            shieldBan: (props) => (
+                <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+                    <circle cx="60" cy="60" r="50" stroke="#ff1a35" strokeWidth="8" strokeLinecap="round" opacity="0.95" />
+                    <line x1="26" y1="94" x2="94" y2="26" stroke="#ff1a35" strokeWidth="8" strokeLinecap="round" />
+                    <rect x="42" y="52" width="36" height="28" rx="6" fill="#ff1a35" />
+                    <path d="M48 52V42C48 35.3726 53.3726 30 60 30C66.6274 30 72 35.3726 72 42V52" stroke="#ff1a35" strokeWidth="6" strokeLinecap="round" />
+                    <circle cx="60" cy="64" r="3" fill="#0c0204" />
+                    <path d="M60 67V72" stroke="#0c0204" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
+            ),
+            warningTriangle: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+            ),
+            headphones: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M3 18v-6a9 9 0 0 1 18 0v6" /><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2H3" /></svg>
+            ),
+            mail: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            ),
+            check: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 6 9 17 4 12" /></svg>
+            ),
+            lock: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            ),
+            x: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+            ),
+            copy: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            ),
+            camera: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+            ),
+            upload: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            ),
+            home: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+            ),
+            gift: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="20 12 20 22 4 22 4 12" /><rect x="2" y="7" width="20" height="5" /><line x1="12" y1="22" x2="12" y2="7" /><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" /><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" /></svg>
+            ),
+            percent: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="19" y1="5" x2="5" y2="19" /><circle cx="6.5" cy="6.5" r="2.5" /><circle cx="17.5" cy="17.5" r="2.5" /></svg>
+            ),
+            user: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+            ),
+            wallet: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3" /></svg>
+            ),
+            receipt: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1L4 2Z" /><path d="M16 8H8" /><path d="M16 12H8" /><path d="M13 16H8" /></svg>
+            ),
+            logOut: (props) => (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+            ),
+            zap: (props) => (
+                <svg viewBox="0 0 24 24" fill="currentColor" {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            )
+        };
+
+        const formatMoney = (val) => {
+            const num = Number(val);
+            if (isNaN(num) || !isFinite(num) || num < 0) return '0.00';
+            return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        };
+
+        // Aviator Canvas Renderer
+        const AviatorFlightCanvas = ({ phase, multiplier }) => {
+            const canvasRef = useRef(null);
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                let animId;
+
+                const width = (canvas.width = canvas.parentElement.clientWidth);
+                const height = (canvas.height = canvas.parentElement.clientHeight);
+
+                const render = () => {
+                    ctx.clearRect(0, 0, width, height);
+                    const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 9.0));
+                    const startX = 20;
+                    const startY = height - 20;
+                    const cpX = width * 0.45;
+                    const cpY = height - 20;
+                    const targetX = startX + (width - 70) * Math.min(1, progress * 1.1 + 0.1);
+                    const targetY = startY - (height - 60) * Math.min(0.92, Math.pow(progress, 0.85) + 0.05);
+
+                    if (phase === 'flying' || phase === 'crashed') {
+                        ctx.save();
+                        const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.45)');
+                        fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
+                        ctx.lineTo(targetX, height);
+                        ctx.lineTo(startX, height);
+                        ctx.closePath();
+                        ctx.fillStyle = fillGrad;
+                        ctx.fill();
+                        ctx.restore();
+
+                        ctx.save();
+                        ctx.strokeStyle = '#e51e38';
+                        ctx.shadowColor = '#e51e38';
+                        ctx.shadowBlur = 15;
+                        ctx.lineWidth = 4;
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.quadraticCurveTo(cpX, cpY, targetX, targetY);
+                        ctx.stroke();
+                        ctx.restore();
+
+                        if (phase === 'flying') {
+                            ctx.save();
+                            ctx.translate(targetX, targetY);
+                            ctx.rotate(-Math.PI / 8);
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.moveTo(16, 0);
+                            ctx.quadraticCurveTo(6, -7, -8, -6);
+                            ctx.lineTo(-11, -9);
+                            ctx.lineTo(-9, -2);
+                            ctx.lineTo(-11, 2);
+                            ctx.lineTo(-9, 9);
+                            ctx.lineTo(-8, 6);
+                            ctx.quadraticCurveTo(6, 7, 16, 0);
+                            ctx.closePath();
+                            ctx.fill();
+                            ctx.restore();
+                        }
+                    }
+                    animId = requestAnimationFrame(render);
+                };
+
+                render();
+                return () => cancelAnimationFrame(animId);
+            }, [phase, multiplier]);
+
+            return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-10" />;
+        };
+
+        // History Generator
+        const generateGameHistoryList = (prefix, count = 220) => {
+            const list = [];
+            for (let i = 0; i < count; i++) {
+                const dig = Math.floor(Math.random() * 10);
+                const d1 = Math.floor(Math.random() * 6) + 1;
+                const d2 = Math.floor(Math.random() * 6) + 1;
+                const d3 = Math.floor(Math.random() * 6) + 1;
+                const sum = d1 + d2 + d3;
+                list.push({
+                    period: `20260902${prefix}${String(100000 + count - i)}`,
+                    number: dig,
+                    size: dig >= 5 ? 'Big' : 'Small',
+                    color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
+                    dice: [d1, d2, d3],
+                    sum: sum,
+                    k3Size: sum >= 11 ? 'Big' : 'Small',
+                    parity: sum % 2 === 0 ? 'Even' : 'Odd'
+                });
+            }
+            return list;
+        };
+
+        // --- MAIN COMPONENT ---
+        function App() {
+            const [view, setView] = useState('auth'); 
+            const [authTab, setAuthTab] = useState('login'); 
+            const [activeNav, setActiveNav] = useState('home');
+            const [currentUser, setCurrentUser] = useState(null);
+            const [balance, setBalance] = useState(0.00); 
+            const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_phone') || '');
+            const [isInitialized, setIsInitialized] = useState(false);
+
+            // REALTIME BAN STATE
+            const [isAccountBanned, setIsAccountBanned] = useState(false);
+
+            // PROFILE & EXP STATES
+            const [userExp, setUserExp] = useState(380);
+            const maxExp = 1000;
+            const [showAvatarModal, setShowAvatarModal] = useState(false);
+            const fileInputRef = useRef(null);
+
+            // DEPOSIT 3-STEP FLOW
+            const [depositStep, setDepositStep] = useState(null);
+            const [depositAmount, setDepositAmount] = useState(500.00);
+
+            // JILI MONEY COMING STATES
+            const [moneyComingBet, setMoneyComingBet] = useState(1);
+            const [isSlotSpinning, setIsSlotSpinning] = useState(false);
+            const [reels, setReels] = useState(['1', '0', '00']);
+            const [specialReel, setSpecialReel] = useState('2X');
+            const [lastWinAmount, setLastWinAmount] = useState(0.00);
+            const [isTurbo, setIsTurbo] = useState(false);
+
+            // AVIATOR STATES
+            const [aviatorPhase, setAviatorPhase] = useState('waiting');
+            const [aviatorCountdown, setAviatorCountdown] = useState(5);
+            const [aviatorMult, setAviatorMult] = useState(1.00);
+            const [aviatorCrashPoint, setAviatorCrashPoint] = useState(1.85);
+            const [aviatorStake, setAviatorStake] = useState(50);
+            const [isAviatorBetPlaced, setIsAviatorBetPlaced] = useState(false);
+            const [isAviatorCashedOut, setIsAviatorCashedOut] = useState(false);
+            const [aviatorHistory, setAviatorHistory] = useState([
+                { mult: 2.15 }, { mult: 1.40 }, { mult: 12.80 }, { mult: 1.10 }, { mult: 4.50 }, { mult: 1.85 }
+            ]);
+
+            // WINGO & TRX & K3 STATES
+            const [activeGameTab, setActiveGameTab] = useState('30sec');
+            const [timers, setTimers] = useState({ '30sec': 30, '1min': 60, '2min': 120 });
+            const [periods, setPeriods] = useState({ '30sec': '2026090230S100220', '1min': '202609021M100220', '2min': '202609022M100220' });
+            const [histories, setHistories] = useState({
+                '30sec': generateGameHistoryList('30S', 220),
+                '1min': generateGameHistoryList('1M', 220),
+                '2min': generateGameHistoryList('2M', 220)
+            });
+
+            // Auth Inputs
+            const [phone, setPhone] = useState('');
+            const [username, setUsername] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+
+            // Firebase User Listener
+            useEffect(() => {
+                if (!sessionPhone) {
+                    setCurrentUser(null);
+                    setBalance(0.00);
+                    setIsInitialized(true);
+                    setView('auth');
+                    return;
+                }
+
+                const sanitized = sessionPhone.replace(/[^0-9]/g, "");
+                const userRef = db.ref('users/' + sanitized);
+
+                const listener = userRef.on('value', (snap) => {
+                    if (snap.exists()) {
+                        const userData = snap.val();
+                        setCurrentUser(userData);
+                        setBalance(Number(userData.balance || 0.00));
+                        setUserExp(Number(userData.exp || 380));
+
+                        // REALTIME BAN CHECK (Under 1 second trigger)
+                        if (userData.banned === true) {
+                            setTimeout(() => {
+                                setIsAccountBanned(true);
+                            }, 200);
+                        } else {
+                            setIsAccountBanned(false);
+                        }
+
+                        setView(prev => prev === 'auth' ? 'home' : prev);
+                    } else {
+                        setView('auth');
+                    }
+                    setIsInitialized(true);
+                });
+
+                return () => userRef.off('value', listener);
+            }, [sessionPhone]);
+
+            // Synchronized Countdown Clocks for Wingo & K3
+            useEffect(() => {
+                const interval = setInterval(() => {
+                    const now = new Date();
+                    const sec = now.getSeconds();
+                    const rem30 = Math.max(0, 29 - (sec % 30));
+                    const rem1m = Math.max(0, 59 - (sec % 60));
+                    const rem2m = Math.max(0, 119 - ((now.getMinutes() * 60 + sec) % 120));
+
+                    setTimers({ '30sec': rem30, '1min': rem1m, '2min': rem2m });
+
+                    ['30sec', '1min', '2min'].forEach(key => {
+                        const curRem = key === '30sec' ? rem30 : (key === '1min' ? rem1m : rem2m);
+                        if (curRem === 0) {
+                            const prefix = key === '30sec' ? '30S' : (key === '1min' ? '1M' : '2M');
+                            const nextPStr = `20260902${prefix}${Date.now().toString().slice(-6)}`;
+                            const dig = Math.floor(Math.random() * 10);
+                            const d1 = Math.floor(Math.random() * 6) + 1;
+                            const d2 = Math.floor(Math.random() * 6) + 1;
+                            const d3 = Math.floor(Math.random() * 6) + 1;
+                            const sum = d1 + d2 + d3;
+                            
+                            const newEntry = {
+                                period: nextPStr,
+                                number: dig,
+                                size: dig >= 5 ? 'Big' : 'Small',
+                                color: dig === 0 ? 'violet-red' : (dig === 5 ? 'violet-green' : ([1,3,7,9].includes(dig) ? 'green' : 'red')),
+                                dice: [d1, d2, d3],
+                                sum: sum,
+                                k3Size: sum >= 11 ? 'Big' : 'Small',
+                                parity: sum % 2 === 0 ? 'Even' : 'Odd'
+                            };
+
+                            setPeriods(p => ({ ...p, [key]: nextPStr }));
+                            setHistories(h => ({
+                                ...h,
+                                [key]: [newEntry, ...(h[key] || []).slice(0, 240)]
+                            }));
+                        }
+                    });
+                }, 1000);
+                return () => clearInterval(interval);
+            }, []);
+
+            // Aviator Game Loop
+            useEffect(() => {
+                let avInterval;
+                if (aviatorPhase === 'waiting') {
+                    avInterval = setInterval(() => {
+                        setAviatorCountdown(prev => {
+                            if (prev <= 1) {
+                                setAviatorPhase('flying');
+                                setAviatorMult(1.00);
+                                const roll = Math.random() * 100;
+                                const nextCrash = roll < 65 ? parseFloat((1.12 + Math.random() * 0.45).toFixed(2)) : parseFloat((1.70 + Math.random() * 3.50).toFixed(2));
+                                setAviatorCrashPoint(nextCrash);
+                                return 5;
+                            }
+                            return prev - 1;
+                        });
+                    }, 1000);
+                } else if (aviatorPhase === 'flying') {
+                    const start = Date.now();
+                    avInterval = setInterval(() => {
+                        const elapsed = (Date.now() - start) / 1000;
+                        const cur = parseFloat((1.00 + elapsed * 0.12 + Math.pow(elapsed * 0.03, 1.4)).toFixed(2));
+                        setAviatorMult(cur);
+
+                        if (cur >= aviatorCrashPoint) {
+                            clearInterval(avInterval);
+                            setAviatorPhase('crashed');
+                            setAviatorHistory(prev => [{ mult: aviatorCrashPoint }, ...prev.slice(0, 15)]);
+                            setTimeout(() => {
+                                setIsAviatorBetPlaced(false);
+                                setIsAviatorCashedOut(false);
+                                setAviatorPhase('waiting');
+                                setAviatorCountdown(5);
+                            }, 3000);
+                        }
+                    }, 50);
+                }
+                return () => clearInterval(avInterval);
+            }, [aviatorPhase, aviatorCrashPoint]);
+
+            // Slot Spin Logic (JILI)
+            const spinSlot = () => {
+                if (isSlotSpinning) return;
+                if (balance < moneyComingBet) return alert('পর্যাপ্ত ব্যালেন্স নেই! দয়া করে ডিপোজিট করুন।');
+                
+                const nextBal = balance - moneyComingBet;
+                setBalance(nextBal);
+                if (currentUser) db.ref('users/' + currentUser.phone.replace(/[^0-9]/g, "")).update({ balance: nextBal });
+
+                setIsSlotSpinning(true);
+                playAudioSound('spin');
+
+                const rPool = ['1', '5', '10', '0', '00', ''];
+                const sPool = ['2X', '5X', '10X', 'RESPIN', 'SCATTER'];
+
+                const spinTimer = setInterval(() => {
+                    setReels([
+                        rPool[Math.floor(Math.random() * rPool.length)],
+                        rPool[Math.floor(Math.random() * rPool.length)],
+                        rPool[Math.floor(Math.random() * rPool.length)]
+                    ]);
+                    setSpecialReel(sPool[Math.floor(Math.random() * sPool.length)]);
+                }, 75);
+
+                setTimeout(() => {
+                    clearInterval(spinTimer);
+                    setIsSlotSpinning(false);
+                    const finalR = ['1', '0', '0'];
+                    const finalS = '5X';
+                    setReels(finalR);
+                    setSpecialReel(finalS);
+
+                    const win = moneyComingBet * 5;
+                    setLastWinAmount(win);
+                    const updatedBal = nextBal + win;
+                    setBalance(updatedBal);
+                    playAudioSound('win');
+                    if (currentUser) db.ref('users/' + currentUser.phone.replace(/[^0-9]/g, "")).update({ balance: updatedBal });
+                }, isTurbo ? 600 : 1400);
+            };
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                if (!phone || !password) return alert('সব তথ্য পূরণ করুন!');
+                const fullPhone = `+880${phone}`;
+                const sanitized = fullPhone.replace(/[^0-9]/g, "");
+
+                db.ref('users/' + sanitized).once('value').then(snap => {
+                    if (snap.exists() && snap.val().password === password) {
+                        const u = snap.val();
+                        if (u.banned) setIsAccountBanned(true);
+                        localStorage.setItem('steven_win_phone', fullPhone);
+                        setSessionPhone(fullPhone);
+                    } else {
+                        alert('ভুল ফোন নম্বর বা পাসওয়ার্ড!');
+                    }
+                });
+            };
+
+            const handleRegister = (e) => {
+                e.preventDefault();
+                if (!phone || !username || !password || password !== confirmPassword) return alert('সব তথ্য দিন!');
+                const fullPhone = `+880${phone}`;
+                const sanitized = fullPhone.replace(/[^0-9]/g, "");
+
+                const newUser = {
+                    phone: fullPhone,
+                    username,
+                    password,
+                    balance: 0.00,
+                    exp: 380,
+                    stxId: 'STX-' + Math.floor(100000 + Math.random() * 900000),
+                    referralCode: 'STX' + Math.floor(1000 + Math.random() * 9000),
+                    avatar: PRESET_AVATARS[0],
+                    vipLevel: 1,
+                    banned: false,
+                    joinedDate: new Date().toLocaleDateString('en-GB')
+                };
+
+                db.ref('users/' + sanitized).set(newUser).then(() => {
+                    alert('অ্যাকাউন্ট তৈরি হয়েছে! লগইন করুন (ব্যালেন্স: ৳০.০০)।');
+                    setAuthTab('login');
+                });
+            };
+
+            const handleDepositTrxSubmit = (trxId) => {
+                const depositId = 'DEP_' + Date.now();
+                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+
+                const depositData = {
+                    id: depositId,
+                    method: 'bKash Personal',
+                    amount: depositAmount,
+                    agentNumber: OFFICIAL_BKASH_NUMBER,
+                    txid: trxId,
+                    status: 'Pending',
+                    timestamp: new Date().toLocaleTimeString(),
+                    username: currentUser.username,
+                    userPhone: currentUser.phone
+                };
+
+                Promise.all([
+                    db.ref(`users/${sanitized}/deposits/${depositId}`).set(depositData),
+                    db.ref(`global_deposits/${depositId}`).set(depositData)
+                ]).then(() => {
+                    setDepositStep(null);
+                    alert(`✅ ট্রানজেকশন ${trxId} পেন্ডিং হিসেবে সাবমিট হয়েছে! এডমিন ভেরিফাই করে ব্যালেন্স যোগ করে দেবে।`);
+                });
+            };
+
+            if (!isInitialized) {
+                return (
+                    <div className="flex-1 bg-[#020408] flex flex-col justify-center items-center text-white h-full w-full">
+                        <div className="w-12 h-12 border-4 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-xs text-amber-300 font-bold mt-4 tracking-widest font-mono">LOADING STEVEN WIN...</span>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#05070e] text-slate-100 overflow-hidden font-sans">
+                    
+                    {/* 1. REALTIME BAN MODAL */}
+                    {isAccountBanned && (
+                        <div className="fixed inset-0 z-[9999] ban-bg-laser flex flex-col items-center justify-center p-4 font-sans select-none overflow-y-auto">
+                            <div className="w-full max-w-sm rounded-[2.5rem] ban-card p-6 text-center space-y-4 border border-red-600/40 relative overflow-hidden">
+                                <div className="flex justify-center pt-2">
+                                    <Icons.shieldBan className="w-24 h-24 ban-icon-glow" />
+                                </div>
+                                <div className="space-y-1">
+                                    <h3 className="text-xs font-black tracking-[0.25em] text-slate-300 uppercase font-mono">ACCOUNT</h3>
+                                    <h1 className="text-3xl font-black text-banRed tracking-wider uppercase font-mono ban-title-glow">
+                                        BANNED
+                                    </h1>
+                                    <p className="text-xs text-slate-400 font-medium px-2">
+                                        Your account has been <span className="text-banRed font-bold">permanently banned</span> from this platform.
+                                    </p>
+                                </div>
+
+                                <div className="bg-[#180a0d] border border-red-900/60 rounded-2xl p-3.5 text-left flex items-start space-x-3 shadow-inner">
+                                    <Icons.warningTriangle className="w-6 h-6 text-banRed flex-shrink-0 mt-0.5" />
+                                    <div className="space-y-0.5">
+                                        <span className="text-[11px] font-black text-banRed tracking-wider uppercase block font-mono">REASON:</span>
+                                        <span className="text-[11px] text-slate-300 leading-snug block">
+                                            Violation of our Terms of Service / Community Guidelines.
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <p className="text-[11px] text-slate-400 leading-relaxed px-1">
+                                    You are no longer permitted to access or use this account. Any attempt to bypass this ban may result in further action.
+                                </p>
+
+                                <div className="bg-[#12141a]/90 border border-slate-800/80 rounded-2xl p-3 flex items-center space-x-3 text-left">
+                                    <Icons.headphones className="w-5 h-5 text-banRed flex-shrink-0" />
+                                    <p className="text-[10px] text-slate-300 leading-tight">
+                                        If you believe this ban was issued by mistake, please contact our <span className="text-banRed font-bold underline cursor-pointer" onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')}>Support Team</span> for an appeal.
+                                    </p>
+                                </div>
+
+                                <button 
+                                    onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')}
+                                    className="w-full py-3.5 bg-gradient-to-r from-[#8b0f1d] via-[#b91c2c] to-[#e51e38] text-white font-black text-xs uppercase tracking-widest rounded-2xl shadow-neon-ban active:scale-95 transition-transform flex items-center justify-center space-x-2 border border-red-500/50 cursor-pointer"
+                                >
+                                    <Icons.mail className="w-4 h-4" />
+                                    <span>CONTACT SUPPORT</span>
+                                </button>
+
+                                <div className="pt-2 flex items-center justify-center space-x-1.5 text-[9px] font-bold text-slate-500 font-mono tracking-widest uppercase">
+                                    <span>🛡️</span>
+                                    <span>— ADMINISTRATION —</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 2. DEPOSIT STEP 1: STEP LOADER */}
+                    {depositStep === 'stepLoader' && (
+                        <div className="fixed inset-0 z-[2000] bg-[#f2fcf7] flex flex-col justify-between p-6 font-sans select-none">
+                            <div className="pt-4 space-y-4 max-w-sm mx-auto w-full">
+                                <div className="bg-[#e9fbf3] border border-[#a3e6c5] rounded-3xl p-4 flex items-center justify-between shadow-sm">
+                                    <div className="flex items-center space-x-3.5">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#00b074] text-white flex items-center justify-center shadow-md">
+                                            <Icons.user className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block font-mono">STEP 01</span>
+                                            <h4 className="text-sm font-black text-slate-800">User</h4>
+                                            <span className="text-xs text-slate-500">Verifying your order information</span>
+                                        </div>
+                                    </div>
+                                    <Icons.check className="w-6 h-6 stroke-[3] text-[#00b074]" />
+                                </div>
+
+                                <div className="w-0.5 h-3 bg-[#00b074] ml-10"></div>
+
+                                <div className="bg-[#e9fbf3] border border-[#a3e6c5] rounded-3xl p-4 flex items-center justify-between shadow-sm">
+                                    <div className="flex items-center space-x-3.5">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#00b074] text-white flex items-center justify-center shadow-md">
+                                            <Icons.wallet className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block font-mono">STEP 02</span>
+                                            <h4 className="text-sm font-black text-slate-800">Product Server</h4>
+                                            <span className="text-xs text-slate-500">Sending your data securely</span>
+                                        </div>
+                                    </div>
+                                    <Icons.check className="w-6 h-6 stroke-[3] text-[#00b074]" />
+                                </div>
+
+                                <div className="w-0.5 h-3 bg-[#00b074] ml-10"></div>
+
+                                <div className="bg-[#e9fbf3] border border-[#00b074] rounded-3xl p-4 flex items-center justify-between shadow-sm">
+                                    <div className="flex items-center space-x-3.5">
+                                        <div className="w-12 h-12 rounded-2xl bg-[#008f4c] text-white flex items-center justify-center shadow-md">
+                                            <Icons.check className="w-6 h-6 stroke-[3]" />
+                                        </div>
+                                        <div>
+                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider block font-mono">STEP 03</span>
+                                            <h4 className="text-sm font-black text-slate-800">Complete</h4>
+                                            <span className="text-xs text-slate-500">Finalizing your order</span>
+                                        </div>
+                                    </div>
+                                    <div className="w-5 h-5 border-2 border-[#00b074] border-t-transparent rounded-full animate-spin"></div>
+                                </div>
+                            </div>
+                            <div className="pb-4 text-center">
+                                <div className="inline-flex items-center space-x-1.5 text-xs text-[#00a86b] font-semibold">
+                                    <Icons.lock className="w-4 h-4" />
+                                    <span>Secure processing • Please do not close this page</span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 3. DEPOSIT STEP 2: GATEWAY SELECTOR */}
+                    {depositStep === 'selectGateway' && (
+                        <div className="fixed inset-0 z-[2000] bg-white text-slate-800 flex flex-col justify-between font-sans select-none">
+                            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
+                                <div className="w-10 h-10 rounded-xl overflow-hidden shadow-sm border border-slate-200 bg-slate-900 p-0.5">
+                                    <img src={STEVEN_MAIN_LOGO} alt="Steven Win Logo" className="w-full h-full object-contain" />
+                                </div>
+                                <button onClick={() => setDepositStep(null)} className="w-9 h-9 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold">
+                                    <Icons.x className="w-5 h-5" />
+                                </button>
+                            </div>
+
+                            <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+                                <div className="flex flex-col items-center justify-center text-center space-y-2">
+                                    <div className="w-20 h-20 rounded-3xl overflow-hidden shadow-lg border-2 border-amber-500/30 p-1 bg-slate-900">
+                                        <img src={STEVEN_MAIN_LOGO} alt="Steven Win" className="w-full h-full object-contain" />
+                                    </div>
+                                    <h2 className="text-lg font-black text-slate-900 tracking-wider">STEVEN WIN PAY</h2>
+                                    <div className="flex items-center space-x-3 pt-1">
+                                        <a href={TELEGRAM_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="px-4 py-1.5 rounded-full border border-slate-200 text-xs font-bold text-slate-600 flex items-center space-x-1.5 hover:bg-slate-50">
+                                            <Icons.headphones className="w-4 h-4 text-slate-500" />
+                                            <span>Support</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div className="bg-slate-100 p-1.5 rounded-full flex items-center">
+                                    <button className="flex-1 py-3 text-xs font-black rounded-full bg-[#ff0055] text-white shadow-md">
+                                        Mobile Banking
+                                    </button>
+                                    <button onClick={() => alert('বর্তমানে শুধুমাত্র বিকাশ চালু আছে।')} className="flex-1 py-3 text-xs font-black rounded-full text-slate-500">
+                                        Others
+                                    </button>
+                                </div>
+
+                                <div className="pt-2">
+                                    <div className="relative rounded-2xl border-2 border-[#ff0055] p-4 flex flex-col items-center justify-center shadow-md bg-rose-50/20 cursor-pointer min-h-[100px]">
+                                        <span className="absolute -top-2.5 right-3 bg-[#00a884] text-white text-[8px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm">
+                                            PERSONAL
+                                        </span>
+                                        <img src={BKASH_LOGO_URL} alt="bKash" className="h-11 object-contain rounded-lg" />
+                                        <span className="text-[10px] text-slate-500 font-bold mt-1">bKash Personal Send Money</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="p-4 bg-white border-t border-slate-100 safe-bottom">
+                                <button 
+                                    onClick={() => setDepositStep('bkashVerify')}
+                                    className="w-full py-4 bg-[#ff0055] hover:bg-[#e0004c] text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg active:scale-98 transition-all cursor-pointer font-mono"
+                                >
+                                    PAY ৳{formatMoney(depositAmount)}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 4. DEPOSIT STEP 3: BKASH VERIFY */}
+                    {depositStep === 'bkashVerify' && (
+                        <div className="fixed inset-0 z-[2000] bg-white flex flex-col justify-between font-sans select-none">
+                            <div className="pt-5 pb-3 flex items-center justify-between px-6 bg-white flex-shrink-0">
+                                <button onClick={() => setDepositStep(null)} className="text-slate-400 p-1">
+                                    <Icons.x className="w-6 h-6" />
+                                </button>
+                                <div className="flex items-center justify-center flex-1 pr-6">
+                                    <img src={BKASH_LOGO_URL} alt="bKash" className="h-9 object-contain rounded-lg shadow-sm" />
+                                </div>
+                            </div>
+
+                            <div className="flex-1 bg-[#d81b60] rounded-t-[2.5rem] p-5 flex flex-col justify-between text-white shadow-2xl overflow-y-auto">
+                                <div className="space-y-4 pt-1">
+                                    <h3 className="text-center font-black text-base tracking-wide text-white">
+                                        ট্রানজেকশন আইডি দিন
+                                    </h3>
+
+                                    <div className="relative pt-2">
+                                        <label className="absolute -top-1 left-4 bg-white text-[#d81b60] px-2 py-0.5 rounded text-[11px] font-black z-10 shadow-sm">
+                                            ট্রানজেকশন আইডি লিখুন
+                                        </label>
+                                        <input 
+                                            type="text" 
+                                            id="trxInput"
+                                            placeholder="উদাহরণ: BKX992817" 
+                                            className="w-full bg-white text-slate-900 rounded-2xl py-3.5 px-4 font-mono font-bold text-sm outline-none border-2 border-transparent focus:border-yellow-300 shadow-inner"
+                                        />
+                                    </div>
+
+                                    <div className="bg-[#ba1251] rounded-3xl p-4 space-y-3.5 text-xs text-white/95 leading-relaxed font-medium">
+                                        <div className="flex items-start space-x-2">
+                                            <span className="text-sm">•</span>
+                                            <span><strong>*247#</strong> ডায়াল করে <strong>bKash</strong> মেনু বা অ্যাপে যান।</span>
+                                        </div>
+                                        
+                                        <div className="border-t border-white/15 pt-2 flex items-start justify-between">
+                                            <div className="flex items-start space-x-2">
+                                                <span className="text-sm">•</span>
+                                                <div>
+                                                    <span><strong>"Send Money"</strong> করুন। নম্বর: </span>
+                                                    <span className="font-mono font-black text-yellow-300 text-sm block mt-0.5">{OFFICIAL_BKASH_NUMBER}</span>
+                                                </div>
+                                            </div>
+                                            <button 
+                                                type="button" 
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(OFFICIAL_BKASH_NUMBER);
+                                                    alert('বিকাশ নম্বর কপি করা হয়েছে!');
+                                                }}
+                                                className="bg-[#d81b60] hover:bg-[#a00e43] border border-white/40 text-white text-[11px] font-black px-3 py-1 rounded-xl shadow active:scale-95 transition-all mt-1 flex-shrink-0 cursor-pointer"
+                                            >
+                                                Copy
+                                            </button>
+                                        </div>
+
+                                        <div className="border-t border-white/15 pt-2 flex items-start space-x-2">
+                                            <span className="text-sm">•</span>
+                                            <span>পরিমাণ: <strong className="font-mono text-yellow-300 text-sm">৳{formatMoney(depositAmount)}</strong> দিয়ে পিন দিন।</span>
+                                        </div>
+
+                                        <div className="border-t border-white/15 pt-2 flex items-start space-x-2">
+                                            <span className="text-sm">•</span>
+                                            <span>সবশেষে উপরের বক্সে <strong className="text-yellow-300 font-mono">TrxID</strong> দিয়ে ভেরিফাই করুন।</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="pt-4 pb-2 safe-bottom">
+                                    <button 
+                                        onClick={() => {
+                                            const val = document.getElementById('trxInput')?.value;
+                                            if (!val || val.trim().length < 8) return alert('সঠিক ট্রানজেকশন আইডি দিন!');
+                                            handleDepositTrxSubmit(val.toUpperCase().trim());
+                                        }}
+                                        className="w-full py-4 bg-[#880e4f] hover:bg-[#6a0b3e] text-white font-black text-base uppercase tracking-widest rounded-2xl shadow-2xl active:scale-98 transition-transform font-mono border border-pink-400/40 cursor-pointer"
+                                    >
+                                        VERIFY
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* AUTH VIEW */}
+                    {view === 'auth' && (
+                        <div className="flex-1 flex flex-col justify-center px-6 py-8 overflow-y-auto">
+                            <div className="mb-6 flex flex-col items-center text-center">
+                                <div className="w-20 h-20 rounded-3xl mb-3 flex items-center justify-center p-1 bg-slate-900 border border-amber-400/40 shadow-neon-gold">
+                                    <img src={STEVEN_MAIN_LOGO} alt="Steven Win Logo" className="w-full h-full object-contain" />
+                                </div>
+                                <span className="text-2xl font-black tracking-widest text-gradient-gold font-mono">STEVEN WIN</span>
+                                <span className="text-[10px] text-slate-400 tracking-wider uppercase font-mono">OFFICIAL SLOTS & CASINO PLATFORM</span>
+                            </div>
+
+                            <div className="flex bg-slate-900 p-1.5 rounded-2xl mb-5 border border-slate-800">
+                                <button onClick={() => setAuthTab('login')} className={`flex-1 py-3 text-xs font-black rounded-xl cursor-pointer ${authTab === 'login' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>লগইন</button>
+                                <button onClick={() => setAuthTab('signup')} className={`flex-1 py-3 text-xs font-black rounded-xl cursor-pointer ${authTab === 'signup' ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 shadow-neon-gold' : 'text-slate-400'}`}>রেজিস্টার</button>
+                            </div>
+
+                            <form onSubmit={authTab === 'login' ? handleLogin : handleRegister} className="space-y-3.5">
+                                {authTab === 'signup' && (
+                                    <div>
+                                        <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Nickname</label>
+                                        <input type="text" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
+                                    </div>
+                                )}
+
+                                <div>
+                                    <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Mobile Phone Number</label>
+                                    <div className="flex space-x-2">
+                                        <span className="bg-slate-900 border border-slate-800 px-3 py-3 rounded-2xl text-xs font-bold font-mono">+880</span>
+                                        <input type="tel" placeholder="017XXXXXXXX" value={phone} onChange={e => setPhone(e.target.value)} className="flex-1 bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs font-mono text-white" />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Password</label>
+                                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
+                                </div>
+
+                                {authTab === 'signup' && (
+                                    <div>
+                                        <label className="block text-slate-400 text-[10px] uppercase font-bold mb-1">Confirm Password</label>
+                                        <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full bg-slate-900 border border-slate-800 rounded-2xl py-3 px-4 text-xs text-white" />
+                                    </div>
+                                )}
+
+                                <button type="submit" className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase tracking-widest shadow-neon-gold cursor-pointer">
+                                    {authTab === 'login' ? 'Sign In' : 'Create Account (৳০ ব্যালেন্স)'}
+                                </button>
+                            </form>
+                        </div>
+                    )}
+
+                    {/* MAIN DASHBOARD */}
+                    {view === 'home' && (
+                        <div className="flex-1 flex flex-col overflow-hidden min-h-0 bg-[#05070e]">
+                            
+                            {/* Top Navbar */}
+                            <div className="px-4 py-3 bg-[#080d1a] border-b border-slate-800 flex justify-between items-center flex-shrink-0">
+                                <div className="flex items-center space-x-2">
+                                    <div className="w-8 h-8 rounded-xl overflow-hidden shadow bg-slate-900 border border-amber-500/30 p-0.5">
+                                        <img src={STEVEN_MAIN_LOGO} alt="Steven Win Logo" className="w-full h-full object-contain" />
+                                    </div>
+                                    <span className="text-base font-black tracking-wider text-gradient-gold font-mono">STEVEN WIN</span>
+                                </div>
+                                
+                                <button 
+                                    onClick={() => {
+                                        setDepositAmount(500.00);
+                                        setDepositStep('stepLoader');
+                                        setTimeout(() => setDepositStep('selectGateway'), 1800);
+                                    }}
+                                    className="text-xs font-black text-white bg-gradient-to-r from-pink-600 to-rose-600 px-3 py-1.5 rounded-xl shadow-neon-pink flex items-center space-x-1 cursor-pointer font-mono active:scale-95"
+                                >
+                                    <span>+</span>
+                                    <span>৳{formatMoney(balance)}</span>
+                                </button>
+                            </div>
+
+                            {/* Main Content Area */}
+                            <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 pb-20">
+                                
+                                {/* HOME TAB */}
+                                {activeNav === 'home' && (
+                                    <>
+                                        {/* JILI Money Coming Card */}
+                                        <div 
+                                            onClick={() => setView('game_money_coming')}
+                                            className="relative rounded-3xl bg-gradient-to-r from-[#211202] via-[#4d2800] to-[#120800] shadow-luxury border-2 border-yellow-400 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                        >
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] bg-gradient-to-r from-yellow-400 to-amber-500 text-slate-950 px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
+                                                    ⚡ 10,000X LUCKY WHEEL
+                                                </span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Money Coming 💵</h2>
+                                                <span className="text-[10.5px] text-amber-200 block font-medium">Official JILI 3x1 Drum Cabinet</span>
+                                            </div>
+                                            <div className="w-16 h-16 rounded-2xl bg-amber-500 flex items-center justify-center text-3xl shadow-neon-gold flex-shrink-0">
+                                                🎰
+                                            </div>
+                                        </div>
+
+                                        {/* Aviator Spribe Card */}
+                                        <div 
+                                            onClick={() => setView('game_aviator')}
+                                            className="relative rounded-3xl bg-gradient-to-r from-[#29030c] via-[#5e0c1c] to-[#140206] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                        >
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] bg-rose-600 text-white px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
+                                                    ⚡ 1000X CRASH MULTIPLIER
+                                                </span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Aviator ✈️</h2>
+                                                <span className="text-[10.5px] text-rose-200 block font-medium">Spribe Red Jet Flight Engine</span>
+                                            </div>
+                                            <div className="w-16 h-16 rounded-2xl bg-rose-600 flex items-center justify-center text-3xl shadow-neon-aviator flex-shrink-0">
+                                                🚀
+                                            </div>
+                                        </div>
+
+                                        {/* Wingo Card */}
+                                        <div 
+                                            onClick={() => setView('game_wingo')}
+                                            className="relative rounded-3xl bg-gradient-to-r from-[#0a3d1d] via-[#126b34] to-[#062410] shadow-luxury border border-emerald-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                        >
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] bg-emerald-950 border border-emerald-400 text-emerald-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
+                                                    30s / 1m / 2m
+                                                </span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">Wingo Live 🎲</h2>
+                                                <span className="text-[10.5px] text-emerald-200 block font-medium">Independent Clocks & 200+ History</span>
+                                            </div>
+                                            <div className="w-16 h-16 rounded-2xl bg-emerald-600 flex items-center justify-center text-2xl font-black text-white font-mono shadow-neon-green flex-shrink-0">
+                                                WINGO
+                                            </div>
+                                        </div>
+
+                                        {/* K3 Lottery Card */}
+                                        <div 
+                                            onClick={() => setView('game_k3')}
+                                            className="relative rounded-3xl bg-gradient-to-r from-[#4a2800] via-[#784000] to-[#261400] shadow-luxury border border-amber-500/50 cursor-pointer overflow-hidden p-4 active:scale-98 transition-all flex items-center justify-between"
+                                        >
+                                            <div className="space-y-1">
+                                                <span className="text-[9px] bg-amber-950 border border-amber-400 text-amber-300 px-2.5 py-0.5 rounded-full font-black uppercase font-mono">
+                                                    3 DICE 207X
+                                                </span>
+                                                <h2 className="text-2xl font-black text-white font-mono uppercase">K3 Lottery 🎲</h2>
+                                                <span className="text-[10.5px] text-amber-200 block font-medium">3D Dice Draws & 200+ History</span>
+                                            </div>
+                                            <div className="w-16 h-16 rounded-2xl bg-[#451a03] border border-amber-400 flex items-center justify-center text-2xl font-mono text-amber-300 shadow-neon-gold flex-shrink-0">
+                                                🎲 K3
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                {/* ACTIVITY TAB */}
+                                {activeNav === 'activity' && (
+                                    <div className="glass-panel p-5 rounded-3xl space-y-3">
+                                        <h2 className="text-sm font-bold text-amber-400 font-mono">🎁 Daily Check-in Rewards</h2>
+                                        <p className="text-xs text-slate-300">প্রতিদিন লগইন করে রিওয়ার্ড পয়েন্ট সংগ্রহ করুন।</p>
+                                        <button onClick={() => alert('আজকের বোনাস ক্লেইম করা হয়েছে!')} className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black rounded-2xl text-xs uppercase shadow-neon-gold cursor-pointer">Claim Bonus (৳10)</button>
+                                    </div>
+                                )}
+
+                                {/* PROMOTION TAB */}
+                                {activeNav === 'promotion' && (
+                                    <div className="glass-panel p-5 rounded-3xl space-y-3">
+                                        <h2 className="text-sm font-bold text-emerald-400 font-mono">👥 Invite Friends & Earn</h2>
+                                        <p className="text-xs text-slate-300">আপনার রেফারেল কোড শেয়ার করে আকর্ষণীয় বোনাস উপভোগ করুন।</p>
+                                        <div className="p-3 bg-slate-900 rounded-xl font-mono text-center text-amber-300 text-sm font-bold border border-slate-800">
+                                            {currentUser?.referralCode || 'STX8888'}
+                                        </div>
+                                        <button onClick={() => {
+                                            navigator.clipboard.writeText(currentUser?.referralCode || 'STX8888');
+                                            alert('রেফারেল কোড কপি করা হয়েছে!');
+                                        }} className="w-full py-3 bg-emerald-600 text-white font-black rounded-2xl text-xs uppercase shadow-neon-green cursor-pointer">Copy Referral Code</button>
+                                    </div>
+                                )}
+
+                                {/* ACCOUNT / VIP PROFILE TAB (EXP + AVATAR SYSTEM) */}
+                                {activeNav === 'account' && (
+                                    <div className="space-y-4">
+                                        
+                                        {/* Profile Card */}
+                                        <div className="vip-card-gradient rounded-3xl p-5 shadow-2xl relative overflow-hidden border border-amber-500/40">
+                                            <div className="flex items-center justify-between z-10 relative">
+                                                <div className="flex items-center space-x-3.5">
+                                                    <div 
+                                                        onClick={() => setShowAvatarModal(true)} 
+                                                        className="relative w-16 h-16 rounded-2xl border-2 border-amber-400 overflow-hidden shadow-neon-gold bg-slate-900 cursor-pointer group flex-shrink-0"
+                                                    >
+                                                        <img 
+                                                            src={currentUser?.avatar || PRESET_AVATARS[0]} 
+                                                            alt="Avatar" 
+                                                            className="w-full h-full object-cover group-hover:scale-110 transition-transform" 
+                                                        />
+                                                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-[9px] font-bold text-amber-300 transition-opacity">
+                                                            <Icons.camera className="w-4 h-4 mb-0.5" />
+                                                            <span>Change</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div className="flex items-center space-x-2">
+                                                            <h2 className="text-base font-black text-slate-100">
+                                                                {currentUser?.username || 'VIP Member'}
+                                                            </h2>
+                                                            <span className="bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 px-2 py-0.5 rounded-full font-black text-[9px] font-mono shadow">
+                                                                VIP {currentUser?.vipLevel || 1}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex items-center space-x-2 text-[10px] text-slate-400 mt-1 font-mono">
+                                                            <span>ID: {currentUser?.stxId || 'STX-0000'}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button 
+                                                    onClick={() => setShowAvatarModal(true)}
+                                                    className="px-2.5 py-1.5 rounded-xl bg-amber-400/20 border border-amber-400/50 text-amber-300 text-[10px] font-bold flex items-center space-x-1 cursor-pointer"
+                                                >
+                                                    <Icons.camera className="w-3.5 h-3.5" />
+                                                    <span>ছবি বদলান</span>
+                                                </button>
+                                            </div>
+
+                                            {/* EXP PROGRESS BAR DISPLAY */}
+                                            <div className="mt-4 pt-3 border-t border-amber-500/20 space-y-1.5">
+                                                <div className="flex justify-between items-center text-[10px] font-mono">
+                                                    <span className="text-amber-300 font-bold">EXP Level Progress</span>
+                                                    <span className="text-slate-300 font-black">{userExp} / {maxExp} EXP</span>
+                                                </div>
+                                                <div className="w-full h-2.5 bg-slate-950 rounded-full overflow-hidden border border-amber-500/30 p-0.5">
+                                                    <div 
+                                                        style={{ width: `${Math.min(100, (userExp / maxExp) * 100)}%` }} 
+                                                        className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full transition-all duration-500 shadow-neon-gold"
+                                                    ></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Wallet Box */}
+                                        <div className="glass-panel p-4.5 rounded-3xl border border-slate-800 space-y-3 shadow-xl">
+                                            <span className="text-xs text-slate-400 font-bold uppercase font-mono">Total Wallet Balance</span>
+                                            <div className="text-3xl font-black font-mono text-yellow-400 tracking-tight">
+                                                ৳{formatMoney(balance)}
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-2.5 pt-1">
+                                                <button 
+                                                    onClick={() => {
+                                                        setDepositAmount(500.00);
+                                                        setDepositStep('stepLoader');
+                                                        setTimeout(() => setDepositStep('selectGateway'), 1800);
+                                                    }}
+                                                    className="py-3 rounded-2xl bg-gradient-to-r from-[#e2136e] to-[#bc1055] text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-pink active:scale-95 transition-all cursor-pointer"
+                                                >
+                                                    <Icons.wallet className="w-4 h-4" />
+                                                    <span>bKash Deposit</span>
+                                                </button>
+                                                <button 
+                                                    onClick={() => alert('উত্তোলনের জন্য সর্বনিম্ন ব্যালেন্স ৳৩০০ টাকা প্রয়োজন।')} 
+                                                    className="py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-green-600 text-white font-black text-xs uppercase flex items-center justify-center space-x-2 shadow-neon-green active:scale-95 transition-all cursor-pointer"
+                                                >
+                                                    <Icons.receipt className="w-4 h-4" />
+                                                    <span>Cashout</span>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Telegram Support Link */}
+                                        <div className="glass-panel rounded-3xl border border-slate-800 overflow-hidden">
+                                            <a href={TELEGRAM_SUPPORT_URL} target="_blank" rel="noopener noreferrer" className="w-full p-4 flex items-center justify-between hover:bg-slate-800/50 transition-colors">
+                                                <div className="flex items-center space-x-3">
+                                                    <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-400 flex items-center justify-center">
+                                                        <Icons.headphones className="w-4 h-4" />
+                                                    </div>
+                                                    <div className="text-left">
+                                                        <span className="text-xs font-bold text-slate-200 block">24/7 VIP Customer Support</span>
+                                                        <span className="text-[9px] text-sky-400 font-mono">Telegram: @Ststevenx36</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                        <button 
+                                            onClick={() => { localStorage.removeItem('steven_win_phone'); setSessionPhone(''); setView('auth'); }} 
+                                            className="w-full py-3.5 bg-rose-950/40 hover:bg-rose-950/70 border border-rose-800/50 text-rose-300 font-bold text-xs uppercase tracking-wider rounded-2xl flex items-center justify-center space-x-2 cursor-pointer"
+                                        >
+                                            <Icons.logOut className="w-4 h-4" />
+                                            <span>Sign Out Account</span>
+                                        </button>
+                                    </div>
+                                )}
+
+                            </div>
+
+                            {/* BOTTOM NAVIGATION BAR */}
+                            <div className="bg-[#0b101c] border-t border-slate-800/80 py-2.5 px-2 grid grid-cols-4 items-center fixed bottom-0 left-0 right-0 max-w-[480px] mx-auto z-30 shadow-2xl safe-bottom">
+                                <button 
+                                    onClick={() => setActiveNav('home')} 
+                                    className={`flex flex-col items-center justify-center space-y-1 cursor-pointer active:scale-90 ${activeNav === 'home' ? 'text-amber-400 font-black' : 'text-slate-400'}`}
+                                >
+                                    <Icons.home className="w-5 h-5" />
+                                    <span className="text-[10px] leading-none">Home</span>
+                                </button>
+
+                                <button 
+                                    onClick={() => setActiveNav('activity')} 
+                                    className={`flex flex-col items-center justify-center space-y-1 cursor-pointer active:scale-90 ${activeNav === 'activity' ? 'text-amber-400 font-black' : 'text-slate-400'}`}
+                                >
+                                    <Icons.gift className="w-5 h-5" />
+                                    <span className="text-[10px] leading-none">Activity</span>
+                                </button>
+
+                                <button 
+                                    onClick={() => setActiveNav('promotion')} 
+                                    className={`flex flex-col items-center justify-center space-y-1 cursor-pointer active:scale-90 ${activeNav === 'promotion' ? 'text-amber-400 font-black' : 'text-slate-400'}`}
+                                >
+                                    <Icons.percent className="w-5 h-5" />
+                                    <span className="text-[10px] leading-none">Promo</span>
+                                </button>
+
+                                <button 
+                                    onClick={() => setActiveNav('account')} 
+                                    className={`flex flex-col items-center justify-center space-y-1 cursor-pointer active:scale-90 ${activeNav === 'account' ? 'text-amber-400 font-black' : 'text-slate-400'}`}
+                                >
+                                    <Icons.user className="w-5 h-5" />
+                                    <span className="text-[10px] leading-none">VIP</span>
+                                </button>
+                            </div>
+
+                        </div>
+                    )}
+
+                    {/* JILI MONEY COMING VIEW */}
+                    {view === 'game_money_coming' && (
+                        <div className="flex-1 flex flex-col jili-bg-matrix justify-between overflow-hidden min-h-0 font-sans relative select-none">
+                            <div className="px-3 py-2 bg-black border-b border-yellow-600/50 flex items-center justify-between flex-shrink-0 shadow">
+                                <button onClick={() => setView('home')} className="px-3 py-1 bg-black/80 border border-yellow-500/50 text-[10px] font-black text-yellow-300 font-mono rounded-xl">
+                                    ◀ EXIT
+                                </button>
+                                <span className="text-base font-black text-yellow-400 font-mono">MONEY COMING 💵</span>
+                                <span className="text-xs font-black text-amber-300 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+
+                            <div className="flex-1 flex flex-col justify-center p-3">
+                                <div className="rounded-3xl p-3 jili-cabinet-frame shadow-2xl flex flex-col justify-center">
+                                    <div className="grid grid-cols-4 gap-1.5 jili-cabinet-inner p-2 rounded-2xl border-2 border-yellow-500/80">
+                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                            <span className="text-3xl font-black jili-3d-text-gold">{reels[0] || '1'}</span>
+                                        </div>
+                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                            <span className="text-3xl font-black jili-3d-text-gold">{reels[1] || '0'}</span>
+                                        </div>
+                                        <div className={`h-24 rounded-xl jili-drum-green flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                            <span className="text-3xl font-black jili-3d-text-gold">{reels[2] || '00'}</span>
+                                        </div>
+                                        <div className={`h-24 rounded-xl jili-drum-gold flex items-center justify-center ${isSlotSpinning ? 'anim-slot-spinning' : ''}`}>
+                                            <span className="text-lg font-black text-white font-mono bg-purple-700 px-2 py-1 rounded shadow">{specialReel}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 bg-black/90 p-3 rounded-2xl border border-yellow-500/50 flex items-center justify-between">
+                                    <div className="flex space-x-1 font-mono">
+                                        {[1, 5, 10, 20].map(b => (
+                                            <button key={b} onClick={() => setMoneyComingBet(b)} className={`px-2.5 py-1 text-xs rounded-lg font-black ${moneyComingBet === b ? 'bg-yellow-400 text-slate-950' : 'bg-slate-800 text-slate-300'}`}>৳{b}</button>
+                                        ))}
+                                    </div>
+                                    <button 
+                                        onClick={spinSlot} 
+                                        disabled={isSlotSpinning}
+                                        className="w-14 h-14 rounded-full jili-spin-btn flex flex-col items-center justify-center font-black text-slate-950 text-xs shadow-jili-glow cursor-pointer disabled:opacity-50 active:scale-90"
+                                    >
+                                        SPIN
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* AVIATOR SPRIBE VIEW */}
+                    {view === 'game_aviator' && (
+                        <div className="flex-1 flex flex-col bg-[#080a10] justify-between overflow-hidden min-h-0 font-sans">
+                            <div className="px-3.5 py-2.5 bg-[#0e111a] border-b border-slate-800 flex items-center justify-between flex-shrink-0">
+                                <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400">Back</button>
+                                <span className="text-red-500 font-black text-sm font-mono">AVIATOR SPRIBE ✈️</span>
+                                <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+
+                            <div className="px-3 py-1.5 bg-[#07080d] border-b border-slate-800/60 flex space-x-1.5 overflow-x-auto flex-shrink-0">
+                                {aviatorHistory.map((item, i) => (
+                                    <span key={i} className={`text-[9.5px] font-black font-mono px-2 py-0.5 rounded-full border ${item.mult >= 2 ? 'bg-purple-600/20 text-purple-300 border-purple-500/30' : 'bg-blue-600/20 text-blue-300 border-blue-500/30'}`}>{Number(item.mult).toFixed(2)}x</span>
+                                ))}
+                            </div>
+
+                            <div className="flex-1 flex flex-col p-3 space-y-2.5 overflow-y-auto">
+                                <div className="w-full h-52 bg-[#0b0e14] rounded-3xl border border-red-900/50 relative flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
+                                    {aviatorPhase === 'flying' && (
+                                        <span className="text-4xl font-black font-mono text-white z-20">{aviatorMult.toFixed(2)}x</span>
+                                    )}
+                                    {aviatorPhase === 'waiting' && (
+                                        <span className="text-xs font-black uppercase text-slate-300 font-mono z-20">NEXT ROUND IN {aviatorCountdown}s</span>
+                                    )}
+                                    {aviatorPhase === 'crashed' && (
+                                        <span className="text-4xl font-black font-mono text-red-500 z-20 animate-bounce">{aviatorCrashPoint.toFixed(2)}x</span>
+                                    )}
+                                </div>
+
+                                <div className="bg-[#10141f] p-3 rounded-2xl border border-slate-800 space-y-2">
+                                    <div className="flex justify-between items-center text-xs font-mono text-slate-400">
+                                        <span>Stake: ৳{aviatorStake}</span>
+                                        <div className="flex space-x-1">
+                                            {[10, 50, 100, 500].map(amt => (
+                                                <button key={amt} onClick={() => setAviatorStake(amt)} className="px-2 py-0.5 bg-slate-800 text-slate-200 rounded">৳{amt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {aviatorPhase === 'waiting' ? (
+                                        <button onClick={() => { setIsAviatorBetPlaced(true); setBalance(b => b - aviatorStake); alert('বেট প্লেস হয়েছে!'); }} disabled={isAviatorBetPlaced} className="w-full py-3 bg-emerald-500 text-slate-950 font-black text-xs rounded-xl uppercase font-mono">{isAviatorBetPlaced ? 'WAITING FLIGHT' : 'BET'}</button>
+                                    ) : (
+                                        <button onClick={() => { setIsAviatorCashedOut(true); const w = parseFloat((aviatorStake * aviatorMult).toFixed(2)); setBalance(b => b + w); alert(`৳${w} ক্যাশআউট সফল!`); }} disabled={!isAviatorBetPlaced || isAviatorCashedOut} className="w-full py-3 bg-amber-400 text-slate-950 font-black text-xs rounded-xl uppercase font-mono">{isAviatorCashedOut ? 'DONE ✓' : `CASHOUT ৳${formatMoney(aviatorStake * aviatorMult)}`}</button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* WINGO VIEW */}
+                    {view === 'game_wingo' && (
+                        <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
+                            <div className="px-4 py-3 bg-[#0a2e16] text-white flex items-center justify-between border-b border-emerald-900/40 flex-shrink-0">
+                                <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400">Back</button>
+                                <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">WINGO LIVE 🎲</span>
+                                <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+
+                            <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
+                                <div className="grid grid-cols-3 gap-1.5 bg-slate-900 p-1.5 rounded-2xl border border-slate-800">
+                                    {['30sec', '1min', '2min'].map(t => (
+                                        <button key={t} onClick={() => setActiveGameTab(t)} className={`py-2 text-[11px] font-black rounded-xl ${activeGameTab === t ? 'bg-amber-400 text-slate-950' : 'text-slate-400'}`}>{t.toUpperCase()}</button>
+                                    ))}
+                                </div>
+
+                                <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
+                                    <div>
+                                        <span className="text-[10px] text-slate-400 block uppercase">Period: {periods[activeGameTab]}</span>
+                                        <span className="text-xs font-bold text-amber-300">Countdown</span>
+                                    </div>
+                                    <span className="text-3xl font-black text-yellow-400">{Math.floor(timers[activeGameTab] / 60)}:{String(timers[activeGameTab] % 60).padStart(2, '0')}</span>
+                                </div>
+
+                                <div className="grid grid-cols-3 gap-2">
+                                    <button onClick={() => alert('বেট প্লেস হয়েছে (Green)!')} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow">Green (2X)</button>
+                                    <button onClick={() => alert('বেট প্লেস হয়েছে (Violet)!')} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow">Violet (4.5X)</button>
+                                    <button onClick={() => alert('বেট প্লেস হয়েছে (Red)!')} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow">Red (2X)</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* K3 LOTTERY VIEW */}
+                    {view === 'game_k3' && (
+                        <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
+                            <div className="px-4 py-3 bg-[#2e1502] text-white flex items-center justify-between border-b border-amber-900/40 flex-shrink-0">
+                                <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400">Back</button>
+                                <span className="text-xs font-black tracking-widest uppercase font-mono text-gradient-gold">K3 LOTTERY 🎲</span>
+                                <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+
+                            <div className="flex-1 px-3.5 py-3 space-y-3 overflow-y-auto">
+                                <div className="glass-panel p-4 rounded-3xl border border-amber-500/40 flex justify-between items-center font-mono">
+                                    <div>
+                                        <span className="text-[10px] text-slate-400 block uppercase">Period: {periods[activeGameTab]}</span>
+                                        <span className="text-xs font-bold text-amber-300">K3 Draw</span>
+                                    </div>
+                                    <span className="text-3xl font-black text-yellow-400">{Math.floor(timers[activeGameTab] / 60)}:{String(timers[activeGameTab] % 60).padStart(2, '0')}</span>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-2">
+                                    <button onClick={() => alert('বেট প্লেস হয়েছে (Small)!')} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow">Small (2X)</button>
+                                    <button onClick={() => alert('বেট প্লেস হয়েছে (Big)!')} className="bg-amber-500 text-slate-950 py-3 rounded-2xl font-black text-xs uppercase shadow">Big (2X)</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* PROFILE AVATAR CHANGE MODAL */}
+                    {showAvatarModal && (
+                        <div className="fixed inset-0 bg-black/85 z-[3000] flex flex-col items-center justify-center p-4 font-sans backdrop-blur-md">
+                            <div className="w-full max-w-sm glass-panel border border-amber-500/50 rounded-3xl p-5 text-white space-y-4">
+                                <div className="flex justify-between items-center border-b border-slate-800 pb-2">
+                                    <h3 className="text-sm font-black text-amber-300 font-mono">প্রোফাইল ছবি পরিবর্তন</h3>
+                                    <button onClick={() => setShowAvatarModal(false)} className="text-slate-400">
+                                        <Icons.x className="w-5 h-5" />
+                                    </button>
+                                </div>
+
+                                <div className="space-y-3">
+                                    <span className="text-xs text-slate-400 font-bold block">ডিফল্ট ছবি বাছাই করুন:</span>
+                                    <div className="grid grid-cols-4 gap-2">
+                                        {PRESET_AVATARS.map((imgUrl, idx) => (
+                                            <div 
+                                                key={idx} 
+                                                onClick={() => {
+                                                    if (currentUser) {
+                                                        const san = currentUser.phone.replace(/[^0-9]/g, "");
+                                                        db.ref('users/' + san).update({ avatar: imgUrl });
+                                                        setCurrentUser(p => ({ ...p, avatar: imgUrl }));
+                                                        setShowAvatarModal(false);
+                                                        alert('প্রোফাইল ছবি আপডেট হয়েছে!');
+                                                    }
+                                                }}
+                                                className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-slate-700 hover:border-amber-400 cursor-pointer"
+                                            >
+                                                <img src={imgUrl} alt="Preset" className="w-full h-full object-cover" />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    <div className="pt-2 border-t border-slate-800">
+                                        <input 
+                                            type="file" 
+                                            accept="image/*" 
+                                            ref={fileInputRef} 
+                                            onChange={(e) => {
+                                                const file = e.target.files[0];
+                                                if (!file) return;
+                                                const reader = new FileReader();
+                                                reader.onload = (event) => {
+                                                    const base64Img = event.target.result;
+                                                    if (currentUser) {
+                                                        const san = currentUser.phone.replace(/[^0-9]/g, "");
+                                                        db.ref('users/' + san).update({ avatar: base64Img });
+                                                        setCurrentUser(p => ({ ...p, avatar: base64Img }));
+                                                        setShowAvatarModal(false);
+                                                        alert('গ্যালারি থেকে ছবি সফলভাবে আপলোড হয়েছে!');
+                                                    }
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }} 
+                                            className="hidden" 
+                                        />
+                                        <button 
+                                            type="button" 
+                                            onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                                            className="w-full py-3 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-xl flex items-center justify-center space-x-2 cursor-pointer shadow-neon-gold"
+                                        >
+                                            <Icons.upload className="w-4 h-4" />
+                                            <span>মোবাইল গ্যালারি থেকে ছবি দিন</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </div>
+            );
+        }
+
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+    </script>
+</body>
+</html>
