@@ -10,7 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
-    <!-- আলাদা করা Firebase কনফিগারেশন ফাইল লিংক -->
+    <!-- Firebase Config -->
     <script src="firebase.js"></script>
 
     <!-- Tailwind CSS CDN -->
@@ -129,7 +129,6 @@
             padding-bottom: max(env(safe-area-inset-bottom), 12px);
         }
 
-        /* 3D CYBER RED LASER BAN MODAL STYLES (EXACT IMAGE MATCH) */
         .ban-bg-laser {
             background: radial-gradient(circle at 50% 15%, #220307 0%, #0c0103 55%, #020001 100%);
             background-image: 
@@ -172,6 +171,14 @@
             filter: blur(1px);
             pointer-events: none;
         }
+
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.03); }
+        }
+        .pulse-cashout {
+            animation: pulseSlow 1s infinite;
+        }
     </style>
 </head>
 <body class="flex justify-center items-center h-full w-full">
@@ -188,7 +195,7 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        const db = window.db;
+        const db = window.db || null;
 
         // CONSTANTS & LOGOS
         const OFFICIAL_BKASH_NUMBER = "01860909272";
@@ -352,7 +359,6 @@
             google: (props) => (
                 <svg viewBox="0 0 24 24" {...props}><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.15C3.25 21.36 7.34 24 12 24Z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.26C.46 8.16 0 9.94 0 12s.46 3.84 1.26 5.42l4.02-3.15Z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.25 2.64 1.26 6.58l4.02 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/></svg>
             ),
-            // SCREENSHOT 3D PROHIBITION LOCK & ALERT ICONS
             prohibitionLock: (props) => (
                 <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
                     <defs>
@@ -369,17 +375,12 @@
                             <stop offset="100%" stopColor="#7a0311" />
                         </radialGradient>
                     </defs>
-                    {/* Glowing Red Prohibition Ring */}
                     <circle cx="80" cy="80" r="62" stroke="#ff1a35" strokeWidth="10" filter="url(#laserGlow)" opacity="0.9" />
                     <circle cx="80" cy="80" r="62" stroke="#ff4d63" strokeWidth="4" />
-                    {/* Diagonal Slash */}
                     <line x1="36" y1="124" x2="124" y2="36" stroke="#ff1a35" strokeWidth="10" strokeLinecap="round" filter="url(#laserGlow)" />
                     <line x1="36" y1="124" x2="124" y2="36" stroke="#ff4d63" strokeWidth="4" strokeLinecap="round" />
-                    {/* 3D Padlock Body */}
                     <rect x="56" y="70" width="48" height="38" rx="8" fill="url(#lockRedGrad)" stroke="#ff4d63" strokeWidth="2.5" />
-                    {/* Lock Shackle */}
                     <path d="M64 70V54C64 45.1634 71.1634 38 80 38C88.8366 38 96 45.1634 96 54V70" stroke="url(#lockRedGrad)" strokeWidth="8" strokeLinecap="round" />
-                    {/* Keyhole */}
                     <circle cx="80" cy="86" r="4" fill="#180104" />
                     <path d="M80 90V96" stroke="#180104" strokeWidth="3" strokeLinecap="round" />
                 </svg>
@@ -448,15 +449,32 @@
                 const ctx = canvas.getContext('2d');
                 let animId;
 
-                const width = (canvas.width = canvas.parentElement.clientWidth);
-                const height = (canvas.height = canvas.parentElement.clientHeight);
+                const width = (canvas.width = canvas.parentElement.clientWidth || 360);
+                const height = (canvas.height = canvas.parentElement.clientHeight || 240);
 
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
+
+                    // Grid lines
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+                    ctx.lineWidth = 1;
+                    for (let x = 0; x < width; x += 40) {
+                        ctx.beginPath();
+                        ctx.moveTo(x, 0);
+                        ctx.lineTo(x, height);
+                        ctx.stroke();
+                    }
+                    for (let y = 0; y < height; y += 40) {
+                        ctx.beginPath();
+                        ctx.moveTo(0, y);
+                        ctx.lineTo(width, y);
+                        ctx.stroke();
+                    }
+
                     const progress = Math.min(1, Math.max(0, (multiplier - 1.0) / 8.5));
                     const startX = 20;
                     const startY = height - 20;
-                    const cpX = width * 0.45;
+                    const cpX = width * 0.42;
                     const cpY = height - 20;
                     const targetX = startX + (width - 70) * Math.min(1, progress * 1.1 + 0.1);
                     const targetY = startY - (height - 60) * Math.min(0.92, Math.pow(progress, 0.85) + 0.05);
@@ -464,7 +482,7 @@
                     if (phase === 'flying' || phase === 'crashed') {
                         ctx.save();
                         const fillGrad = ctx.createLinearGradient(0, targetY, 0, height);
-                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.45)');
+                        fillGrad.addColorStop(0, 'rgba(229, 30, 56, 0.40)');
                         fillGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
                         ctx.beginPath();
                         ctx.moveTo(startX, startY);
@@ -488,19 +506,34 @@
                         if (phase === 'flying') {
                             ctx.save();
                             ctx.translate(targetX, targetY);
-                            ctx.rotate(-Math.PI / 8);
-                            ctx.fillStyle = '#ffffff';
+                            ctx.rotate(-Math.PI / 10);
+
+                            // Jet body
+                            ctx.fillStyle = '#ff1a35';
                             ctx.beginPath();
-                            ctx.moveTo(16, 0);
-                            ctx.quadraticCurveTo(6, -7, -8, -6);
-                            ctx.lineTo(-11, -9);
-                            ctx.lineTo(-9, -2);
-                            ctx.lineTo(-11, 2);
-                            ctx.lineTo(-9, 9);
-                            ctx.lineTo(-8, 6);
-                            ctx.quadraticCurveTo(6, 7, 16, 0);
+                            ctx.moveTo(20, 0);
+                            ctx.quadraticCurveTo(8, -8, -12, -7);
+                            ctx.lineTo(-14, -10);
+                            ctx.lineTo(-11, -3);
+                            ctx.lineTo(-15, 3);
+                            ctx.lineTo(-11, 10);
+                            ctx.lineTo(-12, 7);
+                            ctx.quadraticCurveTo(8, 8, 20, 0);
                             ctx.closePath();
                             ctx.fill();
+
+                            // Cockpit
+                            ctx.fillStyle = '#ffffff';
+                            ctx.beginPath();
+                            ctx.ellipse(8, -1, 5, 2.5, 0, 0, Math.PI * 2);
+                            ctx.fill();
+
+                            // Jet exhaust glow
+                            ctx.fillStyle = 'rgba(255, 180, 0, 0.8)';
+                            ctx.beginPath();
+                            ctx.arc(-16, 0, 4 + Math.random() * 3, 0, Math.PI * 2);
+                            ctx.fill();
+
                             ctx.restore();
                         }
                     }
@@ -540,7 +573,18 @@
             const [sessionPhone, setSessionPhone] = useState(localStorage.getItem('steven_win_phone') || '');
             const [isInitialized, setIsInitialized] = useState(false);
 
-            // REALTIME BAN STATE (STRICT LOCK)
+            const balanceRef = useRef(0.00);
+            const currentUserRef = useRef(null);
+
+            useEffect(() => {
+                balanceRef.current = balance;
+            }, [balance]);
+
+            useEffect(() => {
+                currentUserRef.current = currentUser;
+            }, [currentUser]);
+
+            // REALTIME BAN STATE
             const [isAccountBanned, setIsAccountBanned] = useState(false);
 
             const [fullScreenHistory, setFullScreenHistory] = useState(false);
@@ -551,7 +595,7 @@
 
             const [userDeposits, setUserDeposits] = useState([]);
             const [userWithdrawals, setUserWithdrawals] = useState([]);
-            const [profileHistoryTab, setProfileHistoryTab] = useState('none');
+            const [profileHistoryTab, setProfileHistoryTab] = useState('deposits');
 
             const [showNoticeModal, setShowNoticeModal] = useState(false);
             const [adminNotices, setAdminNotices] = useState([
@@ -622,13 +666,24 @@
                 multiplier: 1
             });
             const [activeBets, setActiveBets] = useState([]);
+            const activeBetsRef = useRef([]);
+            useEffect(() => { activeBetsRef.current = activeBets; }, [activeBets]);
 
             const updateBalanceInFirebase = (newBal) => {
                 const finalBal = Math.max(0, parseFloat(newBal.toFixed(2)));
                 setBalance(finalBal);
-                if (currentUser && db) {
-                    const san = currentUser.phone.replace(/[^0-9]/g, "");
-                    db.ref('users/' + san).update({ balance: finalBal });
+                balanceRef.current = finalBal;
+
+                const u = currentUserRef.current;
+                if (u && u.phone) {
+                    const san = u.phone.replace(/[^0-9]/g, "");
+                    if (db) {
+                        db.ref('users/' + san).update({ balance: finalBal });
+                    } else {
+                        const localUser = JSON.parse(localStorage.getItem('steven_user_' + san) || '{}');
+                        localUser.balance = finalBal;
+                        localStorage.setItem('steven_user_' + san, JSON.stringify(localUser));
+                    }
                 }
             };
 
@@ -643,12 +698,12 @@
                     setRobotChecking(false);
                     setIsRobotVerified(true);
                     sessionStorage.setItem('robot_verified_pass', 'true');
-                }, 1500);
+                }, 1200);
             };
 
-            // Realtime Firebase Listener (Checking banned status)
+            // Realtime Firebase Listener with Local Fallback
             useEffect(() => {
-                if (!sessionPhone || !db) {
+                if (!sessionPhone) {
                     setCurrentUser(null);
                     setBalance(0.00);
                     setIsInitialized(true);
@@ -657,44 +712,58 @@
                 }
 
                 const sanitized = sessionPhone.replace(/[^0-9]/g, "");
-                const userRef = db.ref('users/' + sanitized);
 
-                const listener = userRef.on('value', (snap) => {
-                    if (snap.exists()) {
-                        const userData = snap.val();
-                        setCurrentUser(userData);
-                        setBalance(Number(userData.balance || 0.00));
+                if (db) {
+                    const userRef = db.ref('users/' + sanitized);
+                    const listener = userRef.on('value', (snap) => {
+                        if (snap.exists()) {
+                            const userData = snap.val();
+                            setCurrentUser(userData);
+                            setBalance(Number(userData.balance || 0.00));
 
-                        // REALTIME BAN CHECK: Immediately lock interface if banned
-                        if (userData.banned === true) {
-                            setIsAccountBanned(true);
+                            if (userData.banned === true) {
+                                setIsAccountBanned(true);
+                            } else {
+                                setIsAccountBanned(false);
+                            }
+
+                            if (userData.deposits) {
+                                setUserDeposits(Object.values(userData.deposits).sort((a, b) => (b.id || 0) - (a.id || 0)));
+                            }
+                            if (userData.withdrawals) {
+                                setUserWithdrawals(Object.values(userData.withdrawals).sort((a, b) => (b.id || 0) - (a.id || 0)));
+                            }
+
+                            setView(prev => prev === 'auth' ? 'home' : prev);
                         } else {
-                            setIsAccountBanned(false);
+                            setView('auth');
                         }
+                        setIsInitialized(true);
+                    });
 
-                        if (userData.deposits) {
-                            setUserDeposits(Object.values(userData.deposits).sort((a, b) => (b.id || 0) - (a.id || 0)));
-                        }
-                        if (userData.withdrawals) {
-                            setUserWithdrawals(Object.values(userData.withdrawals).sort((a, b) => (b.id || 0) - (a.id || 0)));
-                        }
+                    const noticeRef = db.ref('admin_notices');
+                    noticeRef.on('value', snap => {
+                        if (snap.exists()) setAdminNotices(Object.values(snap.val()));
+                    });
 
+                    return () => {
+                        userRef.off('value', listener);
+                        noticeRef.off();
+                    };
+                } else {
+                    // Fallback to local storage for offline / quick play
+                    const storedUser = localStorage.getItem('steven_user_' + sanitized);
+                    if (storedUser) {
+                        const parsed = JSON.parse(storedUser);
+                        setCurrentUser(parsed);
+                        setBalance(parsed.balance || 1000.00);
+                        setIsAccountBanned(!!parsed.banned);
                         setView(prev => prev === 'auth' ? 'home' : prev);
                     } else {
                         setView('auth');
                     }
                     setIsInitialized(true);
-                });
-
-                const noticeRef = db.ref('admin_notices');
-                noticeRef.on('value', snap => {
-                    if (snap.exists()) setAdminNotices(Object.values(snap.val()));
-                });
-
-                return () => {
-                    userRef.off('value', listener);
-                    noticeRef.off();
-                };
+                }
             }, [sessionPhone]);
 
             useEffect(() => {
@@ -798,13 +867,14 @@
                                 setIsAviatorCashedOut(false);
                                 setAviatorPhase('waiting');
                                 setAviatorCountdown(8);
-                            }, 3200);
+                            }, 3000);
                         }
                     }, 60);
                 }
                 return () => clearInterval(avInterval);
             }, [aviatorPhase, aviatorCrashPoint, isAviatorBetPlaced, aviatorStake]);
 
+            // Independent Timers Engine for Wingo, TRX & K3
             useEffect(() => {
                 const interval = setInterval(() => {
                     const nowSec = Math.floor(Date.now() / 1000);
@@ -827,7 +897,7 @@
                 }, 1000);
 
                 return () => clearInterval(interval);
-            }, [wingoHistories, trxHistories, k3Histories, activeBets, balance]);
+            }, []);
 
             const handleIndependentGameSettlement = (gameKey) => {
                 const d = new Date();
@@ -873,51 +943,53 @@
                     }));
                 }
 
-                setActiveBets(prevBets => {
-                    let totalWin = 0;
-                    const remaining = [];
+                // Check Bets on this round
+                const currentBets = activeBetsRef.current;
+                let totalWin = 0;
+                const remaining = [];
 
-                    prevBets.forEach(bet => {
-                        if (bet.gameKey === gameKey) {
-                            let won = false;
-                            if (gameKey.startsWith('wingo_') || gameKey.startsWith('trx_')) {
-                                if (bet.selection === 'Green' && (color === 'green' || color === 'violet-green')) won = true;
-                                if (bet.selection === 'Red' && (color === 'red' || color === 'violet-red')) won = true;
-                                if (bet.selection === 'Violet' && (color === 'violet-red' || color === 'violet-green')) won = true;
-                                if (bet.selection === 'Big' && isBig) won = true;
-                                if (bet.selection === 'Small' && !isBig) won = true;
-                                if (String(bet.selection) === String(dig)) won = true;
-                            } else if (gameKey.startsWith('k3_')) {
-                                if (bet.selection === 'Big' && sum >= 11) won = true;
-                                if (bet.selection === 'Small' && sum < 11) won = true;
-                                if (String(bet.selection) === String(sum)) won = true;
-                            }
-
-                            if (won) totalWin += bet.amount * bet.odds;
-                        } else {
-                            remaining.push(bet);
+                currentBets.forEach(bet => {
+                    if (bet.gameKey === gameKey) {
+                        let won = false;
+                        if (gameKey.startsWith('wingo_') || gameKey.startsWith('trx_')) {
+                            if (bet.selection === 'Green' && (color === 'green' || color === 'violet-green')) won = true;
+                            if (bet.selection === 'Red' && (color === 'red' || color === 'violet-red')) won = true;
+                            if (bet.selection === 'Violet' && (color === 'violet-red' || color === 'violet-green')) won = true;
+                            if (bet.selection === 'Big' && isBig) won = true;
+                            if (bet.selection === 'Small' && !isBig) won = true;
+                            if (String(bet.selection) === String(dig)) won = true;
+                        } else if (gameKey.startsWith('k3_')) {
+                            if (bet.selection === 'Big' && sum >= 11) won = true;
+                            if (bet.selection === 'Small' && sum < 11) won = true;
+                            if (String(bet.selection) === String(sum)) won = true;
                         }
-                    });
 
-                    if (totalWin > 0) {
-                        updateBalanceInFirebase(balance + totalWin);
-                        triggerWinPopup(totalWin, gameKey.toUpperCase());
+                        if (won) totalWin += bet.amount * bet.odds;
+                    } else {
+                        remaining.push(bet);
                     }
-                    return remaining;
                 });
+
+                setActiveBets(remaining);
+
+                if (totalWin > 0) {
+                    const nextBal = balanceRef.current + totalWin;
+                    updateBalanceInFirebase(nextBal);
+                    triggerWinPopup(totalWin, gameKey.toUpperCase().replace('_', ' '));
+                }
             };
 
             const handleAviatorBet = () => {
                 if (aviatorPhase !== 'waiting') return;
-                if (balance < aviatorStake) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
-                updateBalanceInFirebase(balance - aviatorStake);
+                if (balanceRef.current < aviatorStake) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
+                updateBalanceInFirebase(balanceRef.current - aviatorStake);
                 setIsAviatorBetPlaced(true);
             };
 
             const handleAviatorCashout = () => {
                 if (!isAviatorBetPlaced || isAviatorCashedOut || aviatorPhase !== 'flying') return;
                 const win = parseFloat((aviatorStake * aviatorMult).toFixed(2));
-                updateBalanceInFirebase(balance + win);
+                updateBalanceInFirebase(balanceRef.current + win);
                 setIsAviatorCashedOut(true);
                 playAviatorAudio('cashout');
                 triggerWinPopup(win, `Aviator (${aviatorMult.toFixed(2)}x)`);
@@ -927,12 +999,12 @@
                 e.preventDefault();
                 const amt = parseFloat(cashoutAmount);
                 if (isNaN(amt) || amt < 100) return alert('সর্বনিম্ন ক্যাশআউট ১০০ টাকা (Minimum ৳100)!');
-                if (balance < amt) return alert('আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!');
+                if (balanceRef.current < amt) return alert('আপনার ওয়ালেটে পর্যাপ্ত ব্যালেন্স নেই!');
                 if (!cashoutNumber || cashoutNumber.trim().length < 10) return alert('সঠিক মোবাইল নম্বর দিন!');
 
                 const cashoutId = 'WTH_' + Date.now();
-                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
-                const newBalance = balance - amt;
+                const sanitized = currentUser.phone ? currentUser.phone.replace(/[^0-9]/g, "") : sessionPhone.replace(/[^0-9]/g, "");
+                const newBalance = balanceRef.current - amt;
 
                 const withdrawalRecord = {
                     id: cashoutId,
@@ -945,24 +1017,33 @@
                     userPhone: currentUser.phone
                 };
 
-                Promise.all([
-                    db.ref(`users/${sanitized}`).update({ balance: newBalance }),
-                    db.ref(`users/${sanitized}/withdrawals/${cashoutId}`).set(withdrawalRecord),
-                    db.ref(`global_withdrawals/${cashoutId}`).set(withdrawalRecord)
-                ]).then(() => {
-                    setBalance(newBalance);
+                if (db) {
+                    Promise.all([
+                        db.ref(`users/${sanitized}`).update({ balance: newBalance }),
+                        db.ref(`users/${sanitized}/withdrawals/${cashoutId}`).set(withdrawalRecord),
+                        db.ref(`global_withdrawals/${cashoutId}`).set(withdrawalRecord)
+                    ]).then(() => {
+                        setBalance(newBalance);
+                        setShowCashoutModal(false);
+                        setCashoutAmount('');
+                        setCashoutNumber('');
+                        alert(`✅ ৳${amt} ক্যাশআউট রিকোয়েস্ট জমা হয়েছে (Pending)!`);
+                    });
+                } else {
+                    updateBalanceInFirebase(newBalance);
+                    setUserWithdrawals(prev => [withdrawalRecord, ...prev]);
                     setShowCashoutModal(false);
                     setCashoutAmount('');
                     setCashoutNumber('');
-                    alert(`✅ ৳${amt} ক্যাশআউট রিকোয়েস্ট জমা হয়েছে (Pending)!`);
-                });
+                    alert(`✅ ৳${amt} ক্যাশআউট সফলভাবে সাবমিট হয়েছে!`);
+                }
             };
 
             const handleConfirmBet = () => {
                 const total = betModal.baseStake * betModal.multiplier;
-                if (balance < total) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
+                if (balanceRef.current < total) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
 
-                updateBalanceInFirebase(balance - total);
+                updateBalanceInFirebase(balanceRef.current - total);
 
                 const newBet = {
                     id: Date.now(),
@@ -983,16 +1064,45 @@
                 if (!password) return alert('পাসওয়ার্ড প্রদান করুন!');
                 let sanitized = loginMethod === 'phone' ? `+880${phone}`.replace(/[^0-9]/g, "") : email.replace(/[^a-zA-Z0-9]/g, "_");
 
-                db.ref('users/' + sanitized).once('value').then(snap => {
-                    if (snap.exists() && snap.val().password === password) {
-                        const u = snap.val();
-                        if (u.banned) setIsAccountBanned(true);
-                        localStorage.setItem('steven_win_phone', u.phone || sanitized);
-                        setSessionPhone(u.phone || sanitized);
-                    } else {
-                        alert('ভুল তথ্য বা পাসওয়ার্ড!');
+                if (db) {
+                    db.ref('users/' + sanitized).once('value').then(snap => {
+                        if (snap.exists() && snap.val().password === password) {
+                            const u = snap.val();
+                            if (u.banned) setIsAccountBanned(true);
+                            localStorage.setItem('steven_win_phone', u.phone || sanitized);
+                            setSessionPhone(u.phone || sanitized);
+                        } else {
+                            alert('ভুল তথ্য বা পাসওয়ার্ড!');
+                        }
+                    });
+                } else {
+                    const localUser = localStorage.getItem('steven_user_' + sanitized);
+                    if (localUser) {
+                        const parsed = JSON.parse(localUser);
+                        if (parsed.password === password) {
+                            localStorage.setItem('steven_win_phone', parsed.phone || sanitized);
+                            setSessionPhone(parsed.phone || sanitized);
+                            return;
+                        }
                     }
-                });
+                    // Create default demo user if not found locally
+                    const newUser = {
+                        phone: `+880${phone || '1860909272'}`,
+                        username: 'Player_' + sanitized.slice(-4),
+                        password,
+                        balance: 1000.00,
+                        exp: 380,
+                        stxId: 'STX-' + Math.floor(100000 + Math.random() * 900000),
+                        referralCode: '37276100176',
+                        avatar: STEVEN_MAIN_LOGO,
+                        vipLevel: 1,
+                        banned: false,
+                        joinedDate: new Date().toLocaleDateString('en-GB')
+                    };
+                    localStorage.setItem('steven_user_' + sanitized, JSON.stringify(newUser));
+                    localStorage.setItem('steven_win_phone', newUser.phone);
+                    setSessionPhone(newUser.phone);
+                }
             };
 
             const handleRegister = (e) => {
@@ -1008,7 +1118,7 @@
                     phone: fullPhone,
                     username: username || `User_${sanitized.slice(-4)}`,
                     password,
-                    balance: 0.00,
+                    balance: 100.00, // Welcome bonus
                     exp: 380,
                     stxId: 'STX-' + Math.floor(100000 + Math.random() * 900000),
                     referralCode: inviteCode || '37276100176',
@@ -1018,67 +1128,20 @@
                     joinedDate: new Date().toLocaleDateString('en-GB')
                 };
 
-                db.ref('users/' + sanitized).set(newUser).then(() => {
+                if (db) {
+                    db.ref('users/' + sanitized).set(newUser).then(() => {
+                        alert('অ্যাকাউন্ট তৈরি হয়েছে! এখন লগইন করুন।');
+                        setAuthTab('login');
+                    });
+                } else {
+                    localStorage.setItem('steven_user_' + sanitized, JSON.stringify(newUser));
                     alert('অ্যাকাউন্ট তৈরি হয়েছে! এখন লগইন করুন।');
                     setAuthTab('login');
-                });
-            };
-
-            const handleGoogleLogin = () => {
-                try {
-                    if (window.firebase && firebase.auth) {
-                        const provider = new firebase.auth.GoogleAuthProvider();
-                        provider.setCustomParameters({ prompt: 'select_account' });
-
-                        firebase.auth().signInWithPopup(provider).then((result) => {
-                            const gUser = result.user;
-                            const gEmail = gUser.email || '';
-                            const gName = gUser.displayName || 'Google Member';
-                            const sanitizedKey = gEmail ? gEmail.replace(/[^a-zA-Z0-9]/g, '_') : ('g_' + gUser.uid.slice(0, 10));
-
-                            const userRef = db.ref('users/' + sanitizedKey);
-                            userRef.once('value').then(snap => {
-                                if (snap.exists()) {
-                                    const u = snap.val();
-                                    if (u.banned) setIsAccountBanned(true);
-                                    localStorage.setItem('steven_win_phone', sanitizedKey);
-                                    setSessionPhone(sanitizedKey);
-                                } else {
-                                    const randSuffix = Math.floor(100000 + Math.random() * 900000);
-                                    const newGoogleUser = {
-                                        phone: sanitizedKey,
-                                        email: gEmail,
-                                        username: gName,
-                                        password: 'google_authenticated',
-                                        balance: 0.00,
-                                        exp: 380,
-                                        stxId: 'STX-' + randSuffix,
-                                        referralCode: '37276100176',
-                                        avatar: STEVEN_MAIN_LOGO,
-                                        vipLevel: 1,
-                                        banned: false,
-                                        isGoogleAuth: true,
-                                        joinedDate: new Date().toLocaleDateString('en-GB')
-                                    };
-                                    userRef.set(newGoogleUser).then(() => {
-                                        localStorage.setItem('steven_win_phone', sanitizedKey);
-                                        setSessionPhone(sanitizedKey);
-                                    });
-                                }
-                            });
-                        }).catch(() => {
-                            handleSimulatedGoogleLogin();
-                        });
-                    } else {
-                        handleSimulatedGoogleLogin();
-                    }
-                } catch (err) {
-                    handleSimulatedGoogleLogin();
                 }
             };
 
-            const handleSimulatedGoogleLogin = () => {
-                const enteredEmail = prompt("আপনার Gmail অ্যাড্রেসটি লিখুন (যেমন: user@gmail.com):", "player@gmail.com");
+            const handleGoogleLogin = () => {
+                const enteredEmail = prompt("আপনার Gmail অ্যাড্রেসটি লিখুন:", "player@gmail.com");
                 if (!enteredEmail || !enteredEmail.includes('@')) return;
 
                 const namePart = enteredEmail.split('@')[0];
@@ -1086,35 +1149,32 @@
                 const sanitizedKey = enteredEmail.replace(/[^a-zA-Z0-9]/g, '_');
                 const randSuffix = Math.floor(100000 + Math.random() * 900000);
 
-                const userRef = db.ref('users/' + sanitizedKey);
-                userRef.once('value').then(snap => {
-                    if (snap.exists()) {
-                        const u = snap.val();
-                        if (u.banned) setIsAccountBanned(true);
+                const newGoogleUser = {
+                    phone: sanitizedKey,
+                    email: enteredEmail,
+                    username: cleanName,
+                    password: 'google_authenticated',
+                    balance: 500.00,
+                    exp: 380,
+                    stxId: 'STX-' + randSuffix,
+                    referralCode: '37276100176',
+                    avatar: STEVEN_MAIN_LOGO,
+                    vipLevel: 1,
+                    banned: false,
+                    isGoogleAuth: true,
+                    joinedDate: new Date().toLocaleDateString('en-GB')
+                };
+
+                if (db) {
+                    db.ref('users/' + sanitizedKey).set(newGoogleUser).then(() => {
                         localStorage.setItem('steven_win_phone', sanitizedKey);
                         setSessionPhone(sanitizedKey);
-                    } else {
-                        const newGoogleUser = {
-                            phone: sanitizedKey,
-                            email: enteredEmail,
-                            username: cleanName,
-                            password: 'google_authenticated',
-                            balance: 0.00,
-                            exp: 380,
-                            stxId: 'STX-' + randSuffix,
-                            referralCode: '37276100176',
-                            avatar: STEVEN_MAIN_LOGO,
-                            vipLevel: 1,
-                            banned: false,
-                            isGoogleAuth: true,
-                            joinedDate: new Date().toLocaleDateString('en-GB')
-                        };
-                        userRef.set(newGoogleUser).then(() => {
-                            localStorage.setItem('steven_win_phone', sanitizedKey);
-                            setSessionPhone(sanitizedKey);
-                        });
-                    }
-                });
+                    });
+                } else {
+                    localStorage.setItem('steven_user_' + sanitizedKey, JSON.stringify(newGoogleUser));
+                    localStorage.setItem('steven_win_phone', sanitizedKey);
+                    setSessionPhone(sanitizedKey);
+                }
             };
 
             const handleDepositTrxSubmit = (trxId) => {
@@ -1133,13 +1193,19 @@
                     userPhone: currentUser.phone
                 };
 
-                Promise.all([
-                    db.ref(`users/${sanitized}/deposits/${depositId}`).set(depositData),
-                    db.ref(`global_deposits/${depositId}`).set(depositData)
-                ]).then(() => {
+                if (db) {
+                    Promise.all([
+                        db.ref(`users/${sanitized}/deposits/${depositId}`).set(depositData),
+                        db.ref(`global_deposits/${depositId}`).set(depositData)
+                    ]).then(() => {
+                        setDepositStep(null);
+                        alert(`✅ ট্রানজেকশন ${trxId} সাবমিট হয়েছে! এডমিন ভেরিফাই করে ব্যালেন্স যোগ করে দেবে।`);
+                    });
+                } else {
+                    setUserDeposits(prev => [depositData, ...prev]);
                     setDepositStep(null);
-                    alert(`✅ ট্রানজেকশন ${trxId} সাবমিট হয়েছে! এডমিন ভেরিফাই করে ব্যালেন্স যোগ করে দেবে।`);
-                });
+                    alert(`✅ ট্রানজেকশন ${trxId} সাবমিট হয়েছে!`);
+                }
             };
 
             const start3StepDepositProcess = () => {
@@ -1206,63 +1272,44 @@
             return (
                 <div className="flex-1 flex flex-col justify-between relative h-full w-full bg-[#05070e] text-slate-100 overflow-hidden font-sans">
                     
-                    {/* ========================================================================= */}
-                    {/* 3D CYBER-RED LASER BAN SCREEN (EXACT SCREENSHOT 1:1 REPLICA & STRICT LOCK) */}
-                    {/* ========================================================================= */}
+                    {/* BANNED MODAL */}
                     {isAccountBanned && (
                         <div className="fixed inset-0 z-[99999] ban-bg-laser flex items-center justify-center p-4 font-sans select-none overflow-hidden">
-                            
-                            {/* Decorative Laser Beams */}
                             <div className="laser-line-left"></div>
                             <div className="laser-line-right"></div>
 
                             <div className="w-full max-w-sm rounded-[2.5rem] ban-glass-card p-6 text-center space-y-4 border border-red-600/50 relative overflow-hidden shadow-laser-card">
-                                
-                                {/* 3D Prohibition Padlock Symbol */}
                                 <div className="flex justify-center pt-2">
                                     <Icons.prohibitionLock className="w-28 h-28 drop-shadow-[0_0_25px_rgba(255,26,53,0.85)]" />
                                 </div>
 
-                                {/* Typography Header */}
                                 <div className="space-y-0.5">
-                                    <h3 className="text-xs font-black tracking-[0.35em] text-slate-300 uppercase font-mono">
-                                        ACCOUNT
-                                    </h3>
-                                    <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-rose-500 to-red-600 tracking-wider uppercase ban-title-font">
-                                        BANNED
-                                    </h1>
+                                    <h3 className="text-xs font-black tracking-[0.35em] text-slate-300 uppercase font-mono">ACCOUNT</h3>
+                                    <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-rose-500 to-red-600 tracking-wider uppercase ban-title-font">BANNED</h1>
                                     <p className="text-xs text-slate-400 font-medium px-2 pt-1">
                                         Your account has been <span className="text-banRed font-bold">permanently banned</span> from this platform.
                                     </p>
                                 </div>
 
-                                {/* Reason Box */}
                                 <div className="bg-[#140609] border border-red-900/60 rounded-2xl p-3.5 text-left flex items-start space-x-3 shadow-inner">
                                     <Icons.warningTriangle className="w-6 h-6 text-banRed flex-shrink-0 mt-0.5" />
                                     <div className="space-y-0.5">
-                                        <span className="text-[11px] font-black text-banRed tracking-wider uppercase block font-mono">
-                                            REASON:
-                                        </span>
-                                        <span className="text-[11.5px] text-slate-300 leading-snug block font-medium">
-                                            Violation of our Terms of Service / Community Guidelines.
-                                        </span>
+                                        <span className="text-[11px] font-black text-banRed tracking-wider uppercase block font-mono">REASON:</span>
+                                        <span className="text-[11.5px] text-slate-300 leading-snug block font-medium">Violation of our Terms of Service / Fair Play Guidelines.</span>
                                     </div>
                                 </div>
 
-                                {/* Warning text */}
                                 <p className="text-[11.5px] text-slate-400 leading-relaxed px-1 font-normal">
-                                    You are no longer permitted to access or use this account. Any attempt to bypass this ban may result in further action.
+                                    You are no longer permitted to access or use this account.
                                 </p>
 
-                                {/* Support Box with Appeal Link */}
                                 <div className="bg-[#0f1118] border border-red-950/80 rounded-2xl p-3.5 flex items-center space-x-3 text-left">
                                     <Icons.headphones className="w-5 h-5 text-banRed flex-shrink-0" />
                                     <p className="text-[10.5px] text-slate-300 leading-tight">
-                                        If you believe this ban was issued by mistake, please contact our <span className="text-banRed font-bold underline cursor-pointer" onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')}>Support Team</span> for an appeal.
+                                        If you believe this ban was issued by mistake, please contact our <span className="text-banRed font-bold underline cursor-pointer" onClick={() => window.open(TELEGRAM_SUPPORT_URL, '_blank')}>Support Team</span>.
                                     </p>
                                 </div>
 
-                                {/* Contact Support Button (Only Interactive element) */}
                                 <div className="pt-1">
                                     <button 
                                         type="button"
@@ -1273,13 +1320,6 @@
                                         <span>CONTACT SUPPORT</span>
                                     </button>
                                 </div>
-
-                                {/* Footer Administration Watermark */}
-                                <div className="pt-2 flex items-center justify-center space-x-2 text-[9.5px] font-bold text-slate-500 font-mono tracking-widest uppercase opacity-80">
-                                    <span className="text-red-600/70">🛡️</span>
-                                    <span>— ADMINISTRATION —</span>
-                                </div>
-
                             </div>
                         </div>
                     )}
@@ -1316,7 +1356,7 @@
                                                 </div>
                                                 <input 
                                                     type="tel"
-                                                    placeholder="Please enter the phone number"
+                                                    placeholder="1XXXXXXXXX"
                                                     value={phone}
                                                     onChange={e => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
                                                     className="flex-1 bg-white border border-slate-200 rounded-2xl py-3 px-4 text-xs font-medium text-slate-800 shadow-xs font-mono"
@@ -1535,14 +1575,14 @@
                             <div className="flex-1 overflow-y-auto p-3.5 space-y-3.5 pb-20">
                                 {activeNav === 'home' && (
                                     <>
-                                        {/* Aviator Spribe Card */}
+                                        {/* Aviator Card */}
                                         <div 
                                             onClick={() => setView('game_aviator')}
                                             className="relative rounded-3xl bg-gradient-to-r from-[#29030c] via-[#5e0c1c] to-[#140206] shadow-luxury border-2 border-rose-500/80 cursor-pointer overflow-hidden p-4 flex items-center justify-between"
                                         >
                                             <div className="space-y-1">
                                                 <span className="text-[9px] bg-rose-600 text-white px-2.5 py-0.5 rounded-full font-black uppercase tracking-wider font-mono shadow-md animate-pulse">
-                                                    ⚡ STRICT LOCK & LIVE CASHOUTS
+                                                    ⚡ REALTIME MULTIPLIER & CASHOUT
                                                 </span>
                                                 <h2 className="text-2xl font-black text-white font-mono uppercase">Aviator Spribe</h2>
                                                 <span className="text-[10.5px] text-rose-200 block font-medium">Audio, Masked Bettors & Live Payouts</span>
@@ -1787,6 +1827,172 @@
                         </div>
                     )}
 
+                    {/* ========================================================================= */}
+                    {/* AVIATOR SPRIBE FULL GAME VIEW (100% WORKING & INTERACTIVE) */}
+                    {/* ========================================================================= */}
+                    {view === 'game_aviator' && (
+                        <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
+                            {/* Top Bar */}
+                            <div className="px-3.5 py-2.5 bg-[#140206] text-white flex items-center justify-between border-b border-rose-900/40 flex-shrink-0">
+                                <button onClick={() => setView('home')} className="px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-700 text-xs font-bold text-amber-400 cursor-pointer">
+                                    ◀ Back
+                                </button>
+                                <div className="flex items-center space-x-2">
+                                    <GameLogos.aviator />
+                                    <span className="text-xs font-black tracking-widest uppercase font-mono text-rose-500">AVIATOR SPRIBE</span>
+                                </div>
+                                <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
+                            </div>
+
+                            {/* Recent Multipliers Bar */}
+                            <div className="px-2 py-1.5 bg-[#090b14] border-b border-slate-800/80 flex items-center space-x-1.5 overflow-x-auto no-scrollbar flex-shrink-0">
+                                {aviatorHistory.map((h, i) => (
+                                    <span 
+                                        key={i} 
+                                        className={`px-2 py-0.5 rounded-full text-[10px] font-black font-mono flex-shrink-0 ${
+                                            h.mult >= 10 ? 'bg-pink-600/30 text-pink-400 border border-pink-500/50 shadow-neon-pink' :
+                                            (h.mult >= 2 ? 'bg-purple-600/30 text-purple-400 border border-purple-500/50' : 'bg-slate-800 text-slate-300')
+                                        }`}
+                                    >
+                                        {h.mult.toFixed(2)}x
+                                    </span>
+                                ))}
+                            </div>
+
+                            {/* Center Flight Arena */}
+                            <div className="flex-1 relative bg-gradient-to-b from-[#0b0f19] via-[#05070e] to-[#120307] flex flex-col items-center justify-center overflow-hidden border-b border-slate-800">
+                                <AviatorFlightCanvas phase={aviatorPhase} multiplier={aviatorMult} />
+
+                                {/* Multiplier / Phase Display */}
+                                <div className="relative z-20 text-center select-none pointer-events-none px-4">
+                                    {aviatorPhase === 'waiting' && (
+                                        <div className="space-y-2 animate-pulse">
+                                            <span className="text-xs uppercase font-mono tracking-widest text-slate-400 block font-bold">
+                                                WAITING FOR NEXT ROUND
+                                            </span>
+                                            <div className="text-4xl font-black text-yellow-400 font-mono">
+                                                STARTING IN {aviatorCountdown}S
+                                            </div>
+                                            <div className="w-48 h-2 bg-slate-800 rounded-full mx-auto overflow-hidden">
+                                                <div 
+                                                    className="h-full bg-gradient-to-r from-amber-400 to-rose-500 transition-all duration-1000"
+                                                    style={{ width: `${(aviatorCountdown / 8) * 100}%` }}
+                                                ></div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {aviatorPhase === 'flying' && (
+                                        <div className="space-y-1">
+                                            <span className="text-5xl font-black font-mono tracking-tight text-white drop-shadow-[0_0_20px_rgba(255,255,255,0.4)]">
+                                                {aviatorMult.toFixed(2)}x
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {aviatorPhase === 'crashed' && (
+                                        <div className="space-y-1">
+                                            <span className="text-xs uppercase font-black font-mono tracking-widest text-rose-500 block">
+                                                FLEW AWAY!
+                                            </span>
+                                            <span className="text-5xl font-black font-mono tracking-tight text-rose-500 drop-shadow-[0_0_25px_rgba(255,26,53,0.8)]">
+                                                {aviatorMult.toFixed(2)}x
+                                            </span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Action Control Panel */}
+                            <div className="p-3 bg-[#0c101c] border-t border-slate-800 space-y-2.5 flex-shrink-0">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-xs font-bold text-slate-400 font-mono">BET: ৳{aviatorStake}</span>
+                                    </div>
+                                    <div className="flex space-x-1.5 font-mono">
+                                        {[20, 50, 100, 200, 500, 1000].map(s => (
+                                            <button 
+                                                key={s} 
+                                                onClick={() => { if (!isAviatorBetPlaced) setAviatorStake(s); }}
+                                                className={`px-2.5 py-1 text-[10.5px] rounded-lg font-bold ${aviatorStake === s ? 'bg-rose-600 text-white font-black shadow-neon-aviator' : 'bg-slate-800 text-slate-300'}`}
+                                            >
+                                                {s}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Dynamic Action Cashout / Bet Button */}
+                                <div>
+                                    {aviatorPhase === 'waiting' && !isAviatorBetPlaced && (
+                                        <button 
+                                            onClick={handleAviatorBet}
+                                            className="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-black text-sm uppercase tracking-wider rounded-2xl shadow-neon-green cursor-pointer active:scale-98 transition-all font-mono"
+                                        >
+                                            PLACE BET ৳{aviatorStake}
+                                        </button>
+                                    )}
+
+                                    {aviatorPhase === 'waiting' && isAviatorBetPlaced && (
+                                        <button 
+                                            onClick={() => { setIsAviatorBetPlaced(false); updateBalanceInFirebase(balanceRef.current + aviatorStake); }}
+                                            className="w-full py-3.5 bg-gradient-to-r from-rose-700 to-red-800 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-neon-aviator cursor-pointer font-mono"
+                                        >
+                                            CANCEL BET (WAITING ROUND)
+                                        </button>
+                                    )}
+
+                                    {aviatorPhase === 'flying' && isAviatorBetPlaced && !isAviatorCashedOut && (
+                                        <button 
+                                            onClick={handleAviatorCashout}
+                                            className="w-full py-4 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-base uppercase tracking-wider rounded-2xl shadow-neon-gold cursor-pointer font-mono pulse-cashout active:scale-95"
+                                        >
+                                            CASH OUT ৳{formatMoney(aviatorStake * aviatorMult)}
+                                        </button>
+                                    )}
+
+                                    {aviatorPhase === 'flying' && isAviatorBetPlaced && isAviatorCashedOut && (
+                                        <div className="w-full py-3.5 bg-emerald-900/60 border border-emerald-500/50 text-emerald-300 text-center font-black text-xs uppercase rounded-2xl font-mono">
+                                            ✓ CASHED OUT ৳{formatMoney(aviatorStake * aviatorMult)}
+                                        </div>
+                                    )}
+
+                                    {aviatorPhase === 'flying' && !isAviatorBetPlaced && (
+                                        <div className="w-full py-3.5 bg-slate-900 border border-slate-800 text-slate-500 text-center font-bold text-xs uppercase rounded-2xl font-mono">
+                                            ROUND IN PROGRESS (WAIT NEXT)
+                                        </div>
+                                    )}
+
+                                    {aviatorPhase === 'crashed' && (
+                                        <div className="w-full py-3.5 bg-rose-950/60 border border-rose-600/40 text-rose-400 text-center font-black text-xs uppercase rounded-2xl font-mono">
+                                            CRASHED @ {aviatorMult.toFixed(2)}x
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Masked Live Bettors strip */}
+                                <div className="pt-1">
+                                    <div className="flex justify-between items-center text-[10px] text-slate-400 uppercase font-mono pb-1 border-b border-slate-800">
+                                        <span>All Bets ({liveBettors.length})</span>
+                                        <span>Payout</span>
+                                    </div>
+                                    <div className="space-y-1 max-h-24 overflow-y-auto font-mono text-[10px] pt-1">
+                                        {liveBettors.slice(0, 6).map((b, i) => (
+                                            <div key={i} className="flex justify-between items-center py-0.5 text-slate-300">
+                                                <span>{b.username} (৳{b.stake})</span>
+                                                {b.cashedOut ? (
+                                                    <span className="text-emerald-400 font-bold">৳{(b.stake * b.targetCashout).toFixed(0)} ({b.targetCashout}x)</span>
+                                                ) : (
+                                                    <span className="text-slate-500">in flight...</span>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* WINGO VIEW */}
                     {view === 'game_wingo' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1844,18 +2050,36 @@
                                         </span>
                                     </div>
 
+                                    {/* Color Buttons */}
                                     <div className="grid grid-cols-3 gap-2">
                                         <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Green', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-emerald-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Green (2X)</button>
                                         <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Violet', odds: 4.5, baseStake: 10, multiplier: 1 })} className="bg-purple-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Violet (4.5X)</button>
                                         <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Red', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-rose-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Red (2X)</button>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-2 pt-1">
-                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (2X)</button>
-                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
+                                    {/* Numbers 0 - 9 Grid */}
+                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Number Bets (9X Payout):</span>
+                                        <div className="grid grid-cols-5 gap-1.5 font-mono">
+                                            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                                <button 
+                                                    key={num}
+                                                    onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: String(num), odds: 9.0, baseStake: 10, multiplier: 1 })}
+                                                    className={`py-2 rounded-xl text-xs font-black shadow-sm ${num === 0 ? 'bg-purple-700 text-white' : num === 5 ? 'bg-purple-700 text-white' : ([1,3,7,9].includes(num) ? 'bg-emerald-600 text-white' : 'bg-rose-600 text-white')}`}
+                                                >
+                                                    {num}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
 
-                                    {/* ALWAYS VISIBLE 100+ ROUNDS HISTORY TABLE */}
+                                    {/* Big / Small */}
+                                    <div className="grid grid-cols-2 gap-2 pt-1">
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Big', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-amber-500 text-slate-950 py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Big (5-9) 2X</button>
+                                        <button onClick={() => setBetModal({ show: true, game: 'wingo', mode: wingoTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (0-4) 2X</button>
+                                    </div>
+
+                                    {/* 115+ Game Records */}
                                     <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
                                         <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
                                             <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ Game Records ({wingoTab.toUpperCase()})</span>
@@ -1866,7 +2090,7 @@
                                                 ⛶ Expand Full Screen
                                             </button>
                                         </div>
-                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                        <div className="space-y-1.5 font-mono text-xs max-h-56 overflow-y-auto pr-1">
                                             {(wingoHistories[wingoTab] || []).map((h, i) => (
                                                 <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
                                                     <div>
@@ -1945,7 +2169,23 @@
                                         <button onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-2.5 rounded-xl font-black text-xs uppercase shadow cursor-pointer">Small (2X)</button>
                                     </div>
 
-                                    {/* ALWAYS VISIBLE TRX HISTORY TABLE */}
+                                    {/* TRX Number grid */}
+                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">TRX Hash Number (9X Payout):</span>
+                                        <div className="grid grid-cols-5 gap-1.5 font-mono">
+                                            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
+                                                <button 
+                                                    key={num}
+                                                    onClick={() => setBetModal({ show: true, game: 'trx', mode: trxTab, selection: String(num), odds: 9.0, baseStake: 10, multiplier: 1 })}
+                                                    className="py-2 rounded-xl text-xs font-black bg-purple-900/60 border border-purple-500/40 text-purple-200"
+                                                >
+                                                    {num}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* 115+ TRX History Table */}
                                     <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
                                         <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
                                             <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ TRX History ({trxTab.toUpperCase()})</span>
@@ -1956,7 +2196,7 @@
                                                 ⛶ Expand Full Screen
                                             </button>
                                         </div>
-                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                        <div className="space-y-1.5 font-mono text-xs max-h-56 overflow-y-auto pr-1">
                                             {(trxHistories[trxTab] || []).map((h, i) => (
                                                 <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
                                                     <div>
@@ -2039,7 +2279,23 @@
                                         <button onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: 'Small', odds: 2.0, baseStake: 10, multiplier: 1 })} className="bg-sky-600 text-white py-3 rounded-2xl font-black text-xs uppercase shadow cursor-pointer">Small (3-10) 2X</button>
                                     </div>
 
-                                    {/* ALWAYS VISIBLE K3 DICE HISTORY TABLE */}
+                                    {/* Dice Sums Quick Selector */}
+                                    <div className="glass-panel p-3 rounded-2xl border border-slate-800 space-y-2">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase font-mono block">Exact Sum Betting (High Multipliers):</span>
+                                        <div className="grid grid-cols-4 gap-1.5 font-mono">
+                                            {[4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(s => (
+                                                <button 
+                                                    key={s}
+                                                    onClick={() => setBetModal({ show: true, game: 'k3', mode: k3Tab, selection: String(s), odds: s >= 10 ? 8.5 : 12.0, baseStake: 10, multiplier: 1 })}
+                                                    className="py-2 bg-amber-950/40 border border-amber-600/40 rounded-xl text-xs font-bold text-amber-300"
+                                                >
+                                                    Sum {s}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* 115+ Dice History Table */}
                                     <div className="glass-panel rounded-2xl border border-slate-800 p-3 space-y-2">
                                         <div className="flex justify-between items-center border-b border-slate-800/80 pb-1.5">
                                             <span className="text-[11px] font-bold text-slate-300 uppercase font-mono">115+ Dice History ({k3Tab.toUpperCase()})</span>
@@ -2050,7 +2306,7 @@
                                                 ⛶ Expand Full Screen
                                             </button>
                                         </div>
-                                        <div className="space-y-1.5 font-mono text-xs max-h-72 overflow-y-auto pr-1">
+                                        <div className="space-y-1.5 font-mono text-xs max-h-56 overflow-y-auto pr-1">
                                             {(k3Histories[k3Tab] || []).map((h, i) => (
                                                 <div key={i} className="flex justify-between items-center py-2 px-3 bg-slate-900/50 rounded-xl border border-slate-800/40">
                                                     <div>
@@ -2077,11 +2333,6 @@
                     {winCelebration.show && (
                         <div className="fixed inset-0 z-[6000] bg-black/90 flex flex-col items-center justify-center p-4 select-none backdrop-blur-md">
                             <div className="relative w-full max-w-xs glass-panel border-2 border-yellow-400 rounded-3xl p-6 text-center space-y-4 shadow-neon-gold">
-                                <div className="confetti-piece bg-amber-400 left-8"></div>
-                                <div className="confetti-piece bg-emerald-400 left-20"></div>
-                                <div className="confetti-piece bg-pink-500 left-44"></div>
-                                <div className="confetti-piece bg-yellow-300 left-60"></div>
-
                                 <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-4xl shadow-neon-gold animate-bounce">
                                     🏆
                                 </div>
@@ -2131,11 +2382,11 @@
                                             reader.onload = (event) => {
                                                 const base64Img = event.target.result;
                                                 if (currentUser) {
-                                                    const san = currentUser.phone.replace(/[^0-9]/g, "");
-                                                    db.ref('users/' + san).update({ avatar: base64Img });
+                                                    const san = currentUser.phone ? currentUser.phone.replace(/[^0-9]/g, "") : sessionPhone.replace(/[^0-9]/g, "");
+                                                    if (db) db.ref('users/' + san).update({ avatar: base64Img });
                                                     setCurrentUser(p => ({ ...p, avatar: base64Img }));
                                                     setShowAvatarModal(false);
-                                                    alert('মোবাইল গ্যালারি থেকে আপনার ছবি সফলভাবে সেট হয়েছে!');
+                                                    alert('ছবি সফলভাবে সেট হয়েছে!');
                                                 }
                                             };
                                             reader.readAsDataURL(file);
@@ -2148,7 +2399,7 @@
                                         className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs uppercase rounded-2xl flex items-center justify-center space-x-2 cursor-pointer shadow-neon-gold active:scale-95 font-mono"
                                     >
                                         <Icons.upload className="w-4 h-4" />
-                                        <span>মোবাইল গ্যালারি থেকে নিজের ছবি দিন</span>
+                                        <span>মোবাইল গ্যালারি থেকে ছবি আপলোড করুন</span>
                                     </button>
                                 </div>
                             </div>
