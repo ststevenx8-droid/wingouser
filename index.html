@@ -261,12 +261,15 @@
             "soj***01", "soh***bd", "rub***365", "joy***pro", "mar***win"
         ];
 
-        // AVIATOR-ONLY AUDIO SYNTHESIZER
+        // AVIATOR AUDIO SYNTHESIZER
         const playAviatorAudio = (type) => {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
                 if (!AudioCtx) return;
                 const ctx = new AudioCtx();
+                if (ctx.state === 'suspended') {
+                    ctx.resume();
+                }
                 const now = ctx.currentTime;
 
                 if (type === 'takeoff') {
@@ -449,8 +452,9 @@
                 const ctx = canvas.getContext('2d');
                 let animId;
 
-                const width = (canvas.width = canvas.parentElement.clientWidth || 360);
-                const height = (canvas.height = canvas.parentElement.clientHeight || 240);
+                const parent = canvas.parentElement;
+                const width = (canvas.width = (parent ? parent.clientWidth : 360) || 360);
+                const height = (canvas.height = (parent ? parent.clientHeight : 240) || 240);
 
                 const render = () => {
                     ctx.clearRect(0, 0, width, height);
@@ -675,8 +679,9 @@
                 balanceRef.current = finalBal;
 
                 const u = currentUserRef.current;
-                if (u && u.phone) {
-                    const san = u.phone.replace(/[^0-9]/g, "");
+                const userPhone = u?.phone || sessionPhone;
+                if (userPhone) {
+                    const san = userPhone.replace(/[^0-9]/g, "");
                     if (db) {
                         db.ref('users/' + san).update({ balance: finalBal });
                     } else {
@@ -980,7 +985,7 @@
             };
 
             const handleAviatorBet = () => {
-                if (aviatorPhase !== 'waiting') return;
+                if (aviatorPhase !== 'waiting' || isAviatorBetPlaced) return;
                 if (balanceRef.current < aviatorStake) return alert('পর্যাপ্ত ব্যালেন্স নেই!');
                 updateBalanceInFirebase(balanceRef.current - aviatorStake);
                 setIsAviatorBetPlaced(true);
@@ -1003,7 +1008,8 @@
                 if (!cashoutNumber || cashoutNumber.trim().length < 10) return alert('সঠিক মোবাইল নম্বর দিন!');
 
                 const cashoutId = 'WTH_' + Date.now();
-                const sanitized = currentUser.phone ? currentUser.phone.replace(/[^0-9]/g, "") : sessionPhone.replace(/[^0-9]/g, "");
+                const userPhone = currentUser?.phone || sessionPhone || '';
+                const sanitized = userPhone.replace(/[^0-9]/g, "");
                 const newBalance = balanceRef.current - amt;
 
                 const withdrawalRecord = {
@@ -1013,11 +1019,11 @@
                     receiver: cashoutNumber.trim(),
                     status: 'Pending',
                     timestamp: new Date().toLocaleTimeString() + ' ' + new Date().toLocaleDateString('en-GB'),
-                    username: currentUser.username,
-                    userPhone: currentUser.phone
+                    username: currentUser?.username || 'User',
+                    userPhone: currentUser?.phone || sessionPhone
                 };
 
-                if (db) {
+                if (db && sanitized) {
                     Promise.all([
                         db.ref(`users/${sanitized}`).update({ balance: newBalance }),
                         db.ref(`users/${sanitized}/withdrawals/${cashoutId}`).set(withdrawalRecord),
@@ -1118,7 +1124,7 @@
                     phone: fullPhone,
                     username: username || `User_${sanitized.slice(-4)}`,
                     password,
-                    balance: 100.00, // Welcome bonus
+                    balance: 100.00,
                     exp: 380,
                     stxId: 'STX-' + Math.floor(100000 + Math.random() * 900000),
                     referralCode: inviteCode || '37276100176',
@@ -1179,7 +1185,8 @@
 
             const handleDepositTrxSubmit = (trxId) => {
                 const depositId = 'DEP_' + Date.now();
-                const sanitized = currentUser.phone.replace(/[^0-9]/g, "");
+                const userPhone = currentUser?.phone || sessionPhone || '';
+                const sanitized = userPhone.replace(/[^0-9]/g, "");
 
                 const depositData = {
                     id: depositId,
@@ -1189,11 +1196,11 @@
                     txid: trxId,
                     status: 'Pending',
                     timestamp: new Date().toLocaleTimeString(),
-                    username: currentUser.username,
-                    userPhone: currentUser.phone
+                    username: currentUser?.username || 'User',
+                    userPhone: currentUser?.phone || sessionPhone
                 };
 
-                if (db) {
+                if (db && sanitized) {
                     Promise.all([
                         db.ref(`users/${sanitized}/deposits/${depositId}`).set(depositData),
                         db.ref(`global_deposits/${depositId}`).set(depositData)
@@ -1828,7 +1835,7 @@
                     )}
 
                     {/* ========================================================================= */}
-                    {/* AVIATOR SPRIBE FULL GAME VIEW (100% WORKING & INTERACTIVE) */}
+                    {/* AVIATOR SPRIBE FULL GAME VIEW (FIXED & LOCKED PROPERLY) */}
                     {/* ========================================================================= */}
                     {view === 'game_aviator' && (
                         <div className="flex-1 flex flex-col bg-[#05070e] justify-between overflow-hidden min-h-0 font-sans">
@@ -1908,17 +1915,36 @@
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center space-x-2">
                                         <span className="text-xs font-bold text-slate-400 font-mono">BET: ৳{aviatorStake}</span>
+                                        {isAviatorBetPlaced && (
+                                            <span className="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.5 rounded font-mono font-bold">
+                                                🔒 LOCKED
+                                            </span>
+                                        )}
                                     </div>
                                     <div className="flex space-x-1.5 font-mono">
-                                        {[20, 50, 100, 200, 500, 1000].map(s => (
-                                            <button 
-                                                key={s} 
-                                                onClick={() => { if (!isAviatorBetPlaced) setAviatorStake(s); }}
-                                                className={`px-2.5 py-1 text-[10.5px] rounded-lg font-bold ${aviatorStake === s ? 'bg-rose-600 text-white font-black shadow-neon-aviator' : 'bg-slate-800 text-slate-300'}`}
-                                            >
-                                                {s}
-                                            </button>
-                                        ))}
+                                        {[20, 50, 100, 200, 500, 1000].map(s => {
+                                            const isLocked = isAviatorBetPlaced || aviatorPhase !== 'waiting';
+                                            return (
+                                                <button 
+                                                    key={s} 
+                                                    disabled={isLocked}
+                                                    onClick={() => { 
+                                                        if (!isLocked) setAviatorStake(s); 
+                                                    }}
+                                                    className={`px-2.5 py-1 text-[10.5px] rounded-lg font-bold transition-all ${
+                                                        aviatorStake === s 
+                                                            ? 'bg-rose-600 text-white font-black shadow-neon-aviator' 
+                                                            : 'bg-slate-800 text-slate-300'
+                                                    } ${
+                                                        isLocked 
+                                                            ? 'opacity-40 cursor-not-allowed pointer-events-none' 
+                                                            : 'cursor-pointer hover:bg-slate-700 active:scale-95'
+                                                    }`}
+                                                >
+                                                    {s}
+                                                </button>
+                                            );
+                                        })}
                                     </div>
                                 </div>
 
@@ -1935,7 +1961,10 @@
 
                                     {aviatorPhase === 'waiting' && isAviatorBetPlaced && (
                                         <button 
-                                            onClick={() => { setIsAviatorBetPlaced(false); updateBalanceInFirebase(balanceRef.current + aviatorStake); }}
+                                            onClick={() => { 
+                                                setIsAviatorBetPlaced(false); 
+                                                updateBalanceInFirebase(balanceRef.current + aviatorStake); 
+                                            }}
                                             className="w-full py-3.5 bg-gradient-to-r from-rose-700 to-red-800 text-white font-black text-xs uppercase tracking-wider rounded-2xl shadow-neon-aviator cursor-pointer font-mono"
                                         >
                                             CANCEL BET (WAITING ROUND)
@@ -2005,7 +2034,6 @@
                                 <span className="text-xs font-black text-amber-400 font-mono">৳{formatMoney(balance)}</span>
                             </div>
 
-                            {/* Full Screen History Modal View */}
                             {fullScreenHistory ? (
                                 <div className="flex-1 flex flex-col overflow-hidden p-3 space-y-2 bg-[#05070e]">
                                     <div className="flex justify-between items-center py-1 border-b border-slate-800 text-xs font-mono">
@@ -2381,13 +2409,12 @@
                                             const reader = new FileReader();
                                             reader.onload = (event) => {
                                                 const base64Img = event.target.result;
-                                                if (currentUser) {
-                                                    const san = currentUser.phone ? currentUser.phone.replace(/[^0-9]/g, "") : sessionPhone.replace(/[^0-9]/g, "");
-                                                    if (db) db.ref('users/' + san).update({ avatar: base64Img });
-                                                    setCurrentUser(p => ({ ...p, avatar: base64Img }));
-                                                    setShowAvatarModal(false);
-                                                    alert('ছবি সফলভাবে সেট হয়েছে!');
-                                                }
+                                                const userPhone = currentUser?.phone || sessionPhone || '';
+                                                const san = userPhone.replace(/[^0-9]/g, "");
+                                                if (db && san) db.ref('users/' + san).update({ avatar: base64Img });
+                                                setCurrentUser(p => ({ ...p, avatar: base64Img }));
+                                                setShowAvatarModal(false);
+                                                alert('ছবি সফলভাবে সেট হয়েছে!');
                                             };
                                             reader.readAsDataURL(file);
                                         }} 
